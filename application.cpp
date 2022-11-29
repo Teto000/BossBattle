@@ -84,8 +84,8 @@ HRESULT CApplication::Init(HINSTANCE hInstance, HWND hWnd)
 	//----------------------------
 	// サウンドの生成と初期化
 	//----------------------------
-	m_pSound = new CSound;
-	m_pSound->Init(hWnd);
+	//m_pSound = new CSound;
+	//m_pSound->Init(hWnd);
 
 	//----------------------------
 	// ライトの生成と初期化
@@ -319,7 +319,6 @@ void CApplication::SetMode(MODE mode)
 
 	//オブジェクトの全解放
 	CObject::ReleaseAll(true);
-	//m_pFade->Create2DObject();
 
 	//モードの切り替え
 	m_mode = mode;

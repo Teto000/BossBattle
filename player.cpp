@@ -119,6 +119,8 @@ void CPlayer::Uninit()
 		if (m_pModel[i])
 		{//ƒ‚ƒfƒ‹‚ªnull‚¶‚á‚È‚¢‚È‚ç
 			m_pModel[i]->Uninit();
+			delete m_pModel[i];
+			m_pModel[i] = nullptr;
 		}
 	}
 
