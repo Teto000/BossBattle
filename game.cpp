@@ -21,6 +21,7 @@
 #include "player.h"
 #include "enemy.h"
 #include "meshfield.h"
+#include "fade.h"
 
 //------------------------
 // 静的メンバ変数宣言
@@ -90,8 +91,14 @@ void CGame::Uninit()
 //===========================
 void CGame::Update()
 {
+	//カメラの更新
 	if (m_pCamera != nullptr)
 	{
 		m_pCamera->Update();
+	}
+
+	if (CInputKeyboard::Trigger(DIK_RETURN))
+	{
+		CApplication::GetFade()->SetFade(CApplication::MODE_RESULT);
 	}
 }

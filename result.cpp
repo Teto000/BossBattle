@@ -15,6 +15,8 @@
 #include "input_joypad.h"
 #include "application.h"
 #include "sound.h"
+#include "bg.h"
+#include "fade.h"
 
 //===========================
 // コンストラクタ
@@ -29,7 +31,7 @@ CResult::CResult()
 //===========================
 CResult::~CResult()
 {
-
+	m_pBg = nullptr;	//背景
 }
 
 //===========================
@@ -37,6 +39,11 @@ CResult::~CResult()
 //===========================
 HRESULT CResult::Init()
 {
+	{
+		D3DXVECTOR3 pos(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f);
+		m_pBg = CBg::Create(pos, CBg::BGTYPE_RESULT);
+	}
+
 	return S_OK;
 }
 
@@ -53,5 +60,8 @@ void CResult::Uninit()
 //===========================
 void CResult::Update()
 {
-
+	if (CInputKeyboard::Trigger(DIK_RETURN))
+	{
+		CApplication::GetFade()->SetFade(CApplication::MODE_TITLE);
+	}
 }

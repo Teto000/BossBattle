@@ -20,9 +20,9 @@ class CTexture
 public: /* 定義 */
 	enum TEXTURE
 	{
-		TEXTURE_GROUND = 0,		//地面
-		TEXTURE_SHADOW,			//影
-		TEXTURE_BULLET,			//弾
+		TEXTURE_TITLE = 0,		//タイトル
+		TEXTURE_RESULT,			//リザルト
+		TEXTURE_GROUND,			//地面
 		TEXTURE_MAX,
 		TEXTURE_NONE,			//使用しない
 	};

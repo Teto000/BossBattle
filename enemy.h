@@ -20,8 +20,8 @@ class CModel;	//モデル
 //--------------------------------
 // マクロ定義
 //--------------------------------
-#define MAX_PARTS	(1)		//モデルパーツの最大数
-#define MAX_KEY		(2)		//キーの最大数
+#define MAX_ENEMY_PARTS	(1)		//モデルパーツの最大数
+#define MAX_ENEMY_KEY	(2)		//キーの最大数
 
 //================================
 // プレイヤークラスの定義
@@ -44,7 +44,7 @@ public:
 	struct KEY_SET
 	{
 		int nFrame;	//フレーム数
-		KEY aKey[MAX_PARTS];
+		KEY aKey[MAX_ENEMY_PARTS];
 	};
 
 	CEnemy();			//コンストラクタ
@@ -90,7 +90,7 @@ private:
 	D3DXVECTOR3 m_move;			//移動量
 	D3DXVECTOR3 m_rot;			//向き
 	D3DXVECTOR3 m_rotDest;		//目的の向き
-	CModel*  m_pModel[MAX_PARTS];	//モデル
+	CModel*  m_pModel[MAX_ENEMY_PARTS];	//モデル
 
 	/* ↓ モーション情報 ↓ */
 	int m_nCurrentKey;			//現在のキー番号

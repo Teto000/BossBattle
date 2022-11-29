@@ -77,7 +77,7 @@ void CCamera::Update(void)
 	Turn();
 
 	//ロックオン状態の切り替え
-	if (CInputKeyboard::Trigger(DIK_RETURN))
+	if (CInputKeyboard::Trigger(DIK_SPACE))
 	{
 		//ロックオン状態を切り替え
 		m_bLockOn = !m_bLockOn;

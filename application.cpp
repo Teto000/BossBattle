@@ -22,6 +22,7 @@
 #include "fade.h"
 #include "light.h"
 #include "debug_proc.h"
+#include "camera.h"
 
 //------------------------
 // 静的メンバ変数宣言
@@ -103,8 +104,8 @@ HRESULT CApplication::Init(HINSTANCE hInstance, HWND hWnd)
 	// モードの設定
 	//----------------------------
 	m_pFade = new CFade;
-	SetMode(MODE_GAME);
-	m_pFade->Init(MODE_GAME);
+	SetMode(MODE_TITLE);
+	m_pFade->Init(MODE_TITLE);
 
 	//----------------------------
 	// デバッグ用文字の生成
@@ -347,60 +348,4 @@ void CApplication::SetMode(MODE mode)
 	default:
 		break;
 	}
-}
-
-//===========================
-// モードの取得
-//===========================
-CApplication::MODE CApplication::GetMode()
-{
-	return m_mode;
-}
-
-//===========================
-// レンダリングの取得
-//===========================
-CRenderer *CApplication::GetRenderer()
-{
-	return m_pRenderer;
-}
-
-//===========================
-// インプットの取得
-//===========================
-CInput *CApplication::GetInput()
-{
-	return m_pInput;
-}
-
-//===========================
-// テクスチャの取得
-//===========================
-CTexture *CApplication::GetTexture()
-{
-	return m_pTexture;
-}
-
-//===========================
-// サウンドの取得
-//===========================
-CSound *CApplication::GetSound()
-{
-	return m_pSound;
-}
-
-//===========================
-// ライトの取得
-//===========================
-CLight *CApplication::GetLight()
-{
-	return m_pLight;
-}
-
-//===========================
-// ジョイパッドの取得
-//===========================
-CInputJoypad *CApplication::GetJoypad()
-{
-	return m_pJoypad;
 }

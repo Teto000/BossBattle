@@ -107,6 +107,9 @@
     <ClCompile Include="enemy.cpp">
       <Filter>00_Main\Object\ObjectX</Filter>
     </ClCompile>
+    <ClCompile Include="bg.cpp">
+      <Filter>00_Main\Object\Object2D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -180,6 +183,9 @@
     </ClInclude>
     <ClInclude Include="enemy.h">
       <Filter>00_Main\Object\ObjectX</Filter>
+    </ClInclude>
+    <ClInclude Include="bg.h">
+      <Filter>00_Main\Object\Object2D</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

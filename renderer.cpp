@@ -194,11 +194,14 @@ void CRenderer::Draw()
 	// Direct3Dによる描画の開始
 	if (SUCCEEDED(m_pD3DDevice->BeginScene()))
 	{
-		//カメラの取得
-		m_pCamera = CGame::GetCamera();
+		if (CApplication::GetGame() != nullptr)
+		{
+			//カメラの取得
+			m_pCamera = CGame::GetCamera();
 
-		//カメラの設定
-		m_pCamera->SetCamera(m_pD3DDevice);
+			//カメラの設定
+			m_pCamera->SetCamera(m_pD3DDevice);
+		}
 
 		//オブジェクトの描画
 		CObject::DrawAll();

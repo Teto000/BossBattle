@@ -67,15 +67,16 @@ public:
 	//------------------
 	// 静的メンバ関数
 	//------------------
-	static void SetMode(MODE mode);		//モードの設定
-	static MODE GetMode();				//モードの取得
-
-	static CRenderer *GetRenderer();	//レンダラーの取得
-	static CInput	 *GetInput();		//インプットの取得
-	static CInputJoypad* GetJoypad();	//ジョイパッドの取得
-	static CTexture  *GetTexture();		//テクスチャの取得
-	static CSound	 *GetSound();		//サウンドの取得
-	static CLight	 *GetLight();		//ライトの取得
+	static void SetMode(MODE mode);				//モードの設定
+	static MODE GetMode() { return m_mode; };	//モードの取得
+	static CGame*			GetGame()		{ return m_pGame; };		//ゲームの取得
+	static CFade*			GetFade()		{ return m_pFade; };		//フェードの取得
+	static CRenderer*		GetRenderer()	{ return m_pRenderer; };	//レンダラーの取得
+	static CInput*			GetInput()		{ return m_pInput; };		//インプットの取得
+	static CInputJoypad*	GetJoypad()		{ return m_pJoypad; };		//ジョイパッドの取得
+	static CTexture*		GetTexture()	{ return m_pTexture; };		//テクスチャの取得
+	static CSound*			GetSound()		{ return m_pSound; };		//サウンドの取得
+	static CLight*			GetLight()		{ return m_pLight; };		//ライトの取得
 
 private:
 	//------------------

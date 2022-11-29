@@ -46,7 +46,7 @@ CEnemy::CEnemy() : CObject(0)
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//向き
 
 	/* ↓ モデル情報 ↓ */
-	for (int i = 0; i < MAX_PARTS; i++)
+	for (int i = 0; i < MAX_ENEMY_PARTS; i++)
 	{
 		m_pModel[i] = nullptr;
 	}
@@ -88,7 +88,7 @@ void CEnemy::Uninit()
 	//-------------------------
 	// モデルの終了
 	//-------------------------
-	for (int i = 0; i < MAX_PARTS; i++)
+	for (int i = 0; i < MAX_ENEMY_PARTS; i++)
 	{//モデルパーツ数分回す
 		if (m_pModel[i])
 		{//モデルがnullじゃないなら
@@ -109,7 +109,7 @@ void CEnemy::Update()
 	//-------------------------
 	// モデルの更新
 	//-------------------------
-	for (int i = 0; i < MAX_PARTS; i++)
+	for (int i = 0; i < MAX_ENEMY_PARTS; i++)
 	{//モデルパーツ数分回す
 		if (m_pModel[i])
 		{//モデルがnullじゃないなら
@@ -149,7 +149,7 @@ void CEnemy::Draw()
 	//-------------------------
 	// モデルの描画
 	//-------------------------
-	for (int i = 0; i < MAX_PARTS; i++)
+	for (int i = 0; i < MAX_ENEMY_PARTS; i++)
 	{//モデルパーツ数分回す
 		if (!m_pModel[i])
 		{//モデルがnullなら
@@ -199,7 +199,7 @@ void CEnemy::SetModel()
 //========================
 void CEnemy::SetMotion(bool bLoop)
 {
-	if (m_nCurrentKey + 1 >= MAX_KEY)
+	if (m_nCurrentKey + 1 >= MAX_ENEMY_KEY)
 	{//キーが最大数に達したら
 		if (bLoop)
 		{
@@ -211,7 +211,7 @@ void CEnemy::SetMotion(bool bLoop)
 		}
 	}
 
-	for (int i = 0; i < MAX_PARTS; i++)
+	for (int i = 0; i < MAX_ENEMY_PARTS; i++)
 	{//モデルパーツ数分回す
 	 //-----------------------------------------
 	 // NULLチェック

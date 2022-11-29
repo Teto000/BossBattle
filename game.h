@@ -40,7 +40,7 @@ public:
 	//------------------
 	// ゲッター
 	//------------------
-	static CCamera* GetCamera() { return m_pCamera; };	//カメラの取得
+	static CCamera*	GetCamera() { return m_pCamera; };	//カメラの取得
 	static CPlayer*	GetPlayer() { return m_pPlayer; };	//プレイヤーの取得
 	static CEnemy*	GetEnemy() { return m_pEnemy; };	//エネミーの取得
 	static CMeshField*	GetMeshField()
