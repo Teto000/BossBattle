@@ -146,7 +146,8 @@ void CPlayer::Update()
 	//-------------------------
 	// 移動
 	//-------------------------
-	Move();
+	Move(DIK_W, DIK_S, DIK_A, DIK_D);
+	MoveJoypad();	//ジョイパッド
 
 	//-------------------------
 	// 回転
@@ -397,42 +398,27 @@ void CPlayer::SetMotion(bool bLoop)
 	}
 }
 
-//========================
+//=====================================
 // 移動
-//========================
-void CPlayer::Move()
+// 引数：上キー,下キー,左キー,右キー
+//=====================================
+void CPlayer::Move(int nUpKey, int nDownKey, int nLeftKey, int nRightKey)
 {
 	//カメラの情報取得
 	D3DXVECTOR3 cameraRot = CGame::GetCamera()->GetRot();
 
-	// ジョイパッドでの操作
-	CInputJoypad* joypad = CApplication::GetJoypad();
-	D3DXVECTOR3 stick = joypad->Stick(CInputJoypad::JOYKEY_LEFT_STICK, 0);
-
-	if (stick.x >= 0.5f)
-	{
-		// スティックを倒した方向へ移動する
-		m_pos.x += sinf(cameraRot.y + D3DX_PI * 0.5f) * fPlayerSpeed;	//右移動
-		m_pos.z += cosf(cameraRot.y + D3DX_PI * 0.5f) * fPlayerSpeed;
-	}
-	else if (stick.x <= -0.5f)
-	{
-		m_pos.x -= sinf(cameraRot.y + D3DX_PI * 0.5f) * fPlayerSpeed;	//左移動
-		m_pos.z -= cosf(cameraRot.y + D3DX_PI * 0.5f) * fPlayerSpeed;
-	}
-
 	//-------------------------------
 	// プレイヤーの操作
 	//-------------------------------
-	if (CInputKeyboard::Press(DIK_A))
+	if (CInputKeyboard::Press(nLeftKey))
 	{//Aキーが押された
-		if (CInputKeyboard::Press(DIK_W))
+		if (CInputKeyboard::Press(nUpKey))
 		{//Wキーが押された
 			m_pos.x += sinf(cameraRot.y - D3DX_PI * 0.25f) * fPlayerSpeed;	//左奥移動
 			m_pos.z += cosf(cameraRot.y - D3DX_PI * 0.25f) * fPlayerSpeed;
 			m_rotDest.y = cameraRot.y + D3DX_PI * 0.75f;	//向きの切り替え
 		}
-		else if (CInputKeyboard::Press(DIK_S))
+		else if (CInputKeyboard::Press(nDownKey))
 		{//Sキーが押された
 			m_pos.x += sinf(cameraRot.y - D3DX_PI * 0.75f) * fPlayerSpeed;	//左前移動
 			m_pos.z += cosf(cameraRot.y - D3DX_PI * 0.75f) * fPlayerSpeed;
@@ -445,15 +431,15 @@ void CPlayer::Move()
 			m_rotDest.y = cameraRot.y + D3DX_PI * 0.5f;
 		}
 	}
-	else if (CInputKeyboard::Press(DIK_D))
+	else if (CInputKeyboard::Press(nRightKey))
 	{//Dキーが押された
-		if (CInputKeyboard::Press(DIK_W))
+		if (CInputKeyboard::Press(nUpKey))
 		{//Wキーが押された
 			m_pos.x += sinf(cameraRot.y + D3DX_PI * 0.25f) * fPlayerSpeed;	//右奥移動
 			m_pos.z += cosf(cameraRot.y + D3DX_PI * 0.25f) * fPlayerSpeed;
 			m_rotDest.y = cameraRot.y - D3DX_PI * 0.75f;
 		}
-		else if (CInputKeyboard::Press(DIK_S))
+		else if (CInputKeyboard::Press(nDownKey))
 		{//Sキーが押された
 			m_pos.x += sinf(cameraRot.y + D3DX_PI * 0.75f) * fPlayerSpeed;	//右前移動
 			m_pos.z += cosf(cameraRot.y + D3DX_PI * 0.75f) * fPlayerSpeed;
@@ -466,19 +452,112 @@ void CPlayer::Move()
 			m_rotDest.y = cameraRot.y - D3DX_PI * 0.5f;
 		}
 	}
-	else if (CInputKeyboard::Press(DIK_W))
+	else if (CInputKeyboard::Press(nUpKey))
 	{//Wキーが押された
 		m_pos.x -= sinf(cameraRot.y + D3DX_PI * 1.0f) * fPlayerSpeed;	//奥移動
 		m_pos.z -= cosf(cameraRot.y + D3DX_PI * 1.0f) * fPlayerSpeed;
 		m_rotDest.y = cameraRot.y + D3DX_PI * 1.0f;
 	}
-	else if (CInputKeyboard::Press(DIK_S))
+	else if (CInputKeyboard::Press(nDownKey))
 	{//Sキーが押された
 		m_pos.x -= sinf(cameraRot.y + D3DX_PI * 0.0f) * fPlayerSpeed;	//前移動
 		m_pos.z -= cosf(cameraRot.y + D3DX_PI * 0.0f) * fPlayerSpeed;
 		m_rotDest.y = cameraRot.y + D3DX_PI * 0.0f;
 	}
 
+	//向きを目的の角度に合わせる
+	SetRot();
+}
+
+//===========================
+// ジョイパッドを使った移動
+//===========================
+void CPlayer::MoveJoypad()
+{
+	// ジョイパッドでの操作
+	CInputJoypad* joypad = CApplication::GetJoypad();
+	D3DXVECTOR3 stick = joypad->Stick(CInputJoypad::JOYKEY_LEFT_STICK, 0);
+
+	//カメラの情報取得
+	D3DXVECTOR3 cameraRot = CGame::GetCamera()->GetRot();
+
+	//-----------------------------------
+	// 右移動
+	//-----------------------------------
+	if (stick.x >= 0.5f)
+	{
+		// スティックを倒した方向へ移動する
+		if (stick.y <= -0.5f)
+		{//右奥移動
+			m_pos.x += sinf(cameraRot.y + D3DX_PI * 0.25f) * fPlayerSpeed;
+			m_pos.z += cosf(cameraRot.y + D3DX_PI * 0.25f) * fPlayerSpeed;
+			m_rotDest.y = cameraRot.y - D3DX_PI * 0.75f;	//向きの切り替え
+		}
+		else if (stick.y >= 0.5f)
+		{//右前移動
+			m_pos.x += sinf(cameraRot.y + D3DX_PI * 0.75f) * fPlayerSpeed;
+			m_pos.z += cosf(cameraRot.y + D3DX_PI * 0.75f) * fPlayerSpeed;
+			m_rotDest.y = cameraRot.y - D3DX_PI * 0.25f;
+		}
+		else
+		{
+			m_pos.x += sinf(cameraRot.y + D3DX_PI * 0.5f) * fPlayerSpeed;
+			m_pos.z += cosf(cameraRot.y + D3DX_PI * 0.5f) * fPlayerSpeed;
+			m_rotDest.y = cameraRot.y - D3DX_PI * 0.5f;
+		}
+	}
+	//-----------------------------------
+	// 左移動
+	//-----------------------------------
+	else if (stick.x <= -0.5f)
+	{
+		if (stick.y <= -0.5f)
+		{//左奥移動
+			m_pos.x += sinf(cameraRot.y - D3DX_PI * 0.25f) * fPlayerSpeed;
+			m_pos.z += cosf(cameraRot.y - D3DX_PI * 0.25f) * fPlayerSpeed;
+			m_rotDest.y = cameraRot.y + D3DX_PI * 0.75f;
+		}
+		else if (stick.y >= 0.5f)
+		{//左前移動
+			m_pos.x += sinf(cameraRot.y - D3DX_PI * 0.75f) * fPlayerSpeed;
+			m_pos.z += cosf(cameraRot.y - D3DX_PI * 0.75f) * fPlayerSpeed;
+			m_rotDest.y = cameraRot.y + D3DX_PI * 0.25f;
+		}
+		else
+		{
+			m_pos.x -= sinf(cameraRot.y + D3DX_PI * 0.5f) * fPlayerSpeed;
+			m_pos.z -= cosf(cameraRot.y + D3DX_PI * 0.5f) * fPlayerSpeed;
+			m_rotDest.y = cameraRot.y + D3DX_PI * 0.5f;
+		}
+	}
+	//-----------------------------------
+	// 奥移動
+	//-----------------------------------
+	else if (stick.y <= -0.5f)
+	{
+		m_pos.x -= sinf(cameraRot.y + D3DX_PI * 1.0f) * fPlayerSpeed;
+		m_pos.z -= cosf(cameraRot.y + D3DX_PI * 1.0f) * fPlayerSpeed;
+		m_rotDest.y = cameraRot.y + D3DX_PI * 1.0f;
+	}
+	//-----------------------------------
+	// 前移動
+	//-----------------------------------
+	else if (stick.y >= 0.5f)
+	{
+		m_pos.x -= sinf(cameraRot.y + D3DX_PI * 0.0f) * fPlayerSpeed;
+		m_pos.z -= cosf(cameraRot.y + D3DX_PI * 0.0f) * fPlayerSpeed;
+		m_rotDest.y = cameraRot.y + D3DX_PI * 0.0f;
+	}
+
+	//向きを目的の角度に合わせる
+	SetRot();
+}
+
+//===========================
+// 角度の設定
+//===========================
+void CPlayer::SetRot()
+{
 	//-------------------------------
 	// 目的の角度の正規化
 	//-------------------------------
@@ -490,7 +569,7 @@ void CPlayer::Move()
 	{//回転したい角度が-180以下なら
 		m_rotDest.y += D3DX_PI * 2;
 	}
-	
+
 	//-------------------------------
 	// 目的の角度まで回転する
 	//-------------------------------

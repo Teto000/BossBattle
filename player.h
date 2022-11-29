@@ -80,7 +80,9 @@ public:
 private:
 	void SetModel();			//モデルの設定
 	void SetMotion(bool bLoop);	//モーションの設定
-	void Move();				//移動
+	void Move(int nUpKey, int nDownKey, int nLeftKey, int nRightKey);	//移動
+	void MoveJoypad();	//ジョイパッドを使った移動
+	void SetRot();		//角度の設定
 
 private:
 	//----------------
