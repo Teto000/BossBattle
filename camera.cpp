@@ -14,6 +14,7 @@
 #include "renderer.h"
 #include "game.h"
 #include "player.h"
+#include "enemy.h"
 
 //===========================
 // コンストラクタ
@@ -24,6 +25,9 @@ CCamera::CCamera()
 	m_posR = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_worldPosV = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_worldPosR = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_posVDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_posRDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_rotDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_vecU = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_TSPEED = 0.0f;
 	m_bLockOn = false;
@@ -75,6 +79,7 @@ void CCamera::Update(void)
 	//ロックオン状態の切り替え
 	if (CInputKeyboard::Trigger(DIK_RETURN))
 	{
+		//ロックオン状態を切り替え
 		m_bLockOn = !m_bLockOn;
 	}
 
@@ -129,11 +134,15 @@ void CCamera::Update(void)
 	D3DXVec3TransformCoord(&m_worldPosR, &m_posR, &m_mtxWorld);
 	D3DXVec3TransformCoord(&m_worldPosV, &m_posV, &m_mtxWorld);
 
+	//目的の座標を更新
+	m_posVDest = m_worldPosV;
+	m_posRDest = m_worldPosR;
+
 	//----------------------------------------
 	// ロックオン処理
 	//----------------------------------------
 	//ロックオン位置
-	D3DXVECTOR3 lockOnPos(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3 lockOnPos(CGame::GetEnemy()->GetPosition());
 
 	if (m_bLockOn)
 	{//ロックオン状態なら

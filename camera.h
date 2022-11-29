@@ -43,14 +43,16 @@ private:
 	//------------------
 	// メンバ変数
 	//------------------
-	D3DXVECTOR3 m_posV;		//現在の視点
-	D3DXVECTOR3 m_posR;		//現在の注視点
-	D3DXVECTOR3 m_rot;		//向き
-	D3DXVECTOR3 m_worldPosV;	//目的の視点
-	D3DXVECTOR3 m_worldPosR;	//目的の注視点
-	D3DXVECTOR3 m_rotDest;	//目的の角度
-	D3DXVECTOR3 m_vecU;		//上方向ベクトル
-	D3DXMATRIX  m_mtxWorld;	//ワールドマトリックス
+	D3DXVECTOR3 m_posV;			//現在の視点
+	D3DXVECTOR3 m_posR;			//現在の注視点
+	D3DXVECTOR3 m_rot;			//向き
+	D3DXVECTOR3 m_worldPosV;	//ワールド座標(視点)
+	D3DXVECTOR3 m_worldPosR;	//ワールド座標(注視点)
+	D3DXVECTOR3 m_posVDest;		//目的の視点
+	D3DXVECTOR3 m_posRDest;		//目的の注視点
+	D3DXVECTOR3 m_rotDest;		//目的の角度
+	D3DXVECTOR3 m_vecU;			//上方向ベクトル
+	D3DXMATRIX  m_mtxWorld;		//ワールドマトリックス
 	float m_TSPEED;
 	bool m_bLockOn;
 	D3DXMATRIX m_mtxProjection;	//プロジェクションマトリックス
