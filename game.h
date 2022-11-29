@@ -18,6 +18,7 @@
 //--------------------------------
 class CCamera;		//カメラ
 class CPlayer;		//プレイヤー
+class CEnemy;		//エネミー
 class CMeshField;	//メッシュフィールド
 
 //================================
@@ -41,6 +42,7 @@ public:
 	//------------------
 	static CCamera* GetCamera() { return m_pCamera; };	//カメラの取得
 	static CPlayer*	GetPlayer() { return m_pPlayer; };	//プレイヤーの取得
+	static CEnemy*	GetEnemy() { return m_pEnemy; };	//エネミーの取得
 	static CMeshField*	GetMeshField()
 			{ return m_pMeshField; };	//メッシュフィールドの取得
 
@@ -50,6 +52,7 @@ private:
 	//-------------------
 	static CCamera*		m_pCamera;		//カメラ
 	static CPlayer*		m_pPlayer;		//プレイヤー
+	static CEnemy*		m_pEnemy;		//エネミー
 	static CMeshField*	m_pMeshField;	//メッシュフィールド
 };
 

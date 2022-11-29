@@ -19,6 +19,7 @@
 #include "sound.h"
 #include "camera.h"
 #include "player.h"
+#include "enemy.h"
 #include "meshfield.h"
 
 //------------------------
@@ -26,6 +27,7 @@
 //------------------------
 CCamera*	CGame::m_pCamera = nullptr;		//カメラ
 CPlayer*	CGame::m_pPlayer = nullptr;		//プレイヤー
+CEnemy*		CGame::m_pEnemy = nullptr;		//エネミー
 CMeshField*	CGame::m_pMeshField = nullptr;	//メッシュフィールド
 
 //===========================
@@ -55,6 +57,13 @@ HRESULT CGame::Init()
 
 	//プレイヤーの生成
 	m_pPlayer = CPlayer::Create();
+
+	//エネミーの生成
+	{
+		D3DXVECTOR3 pos(0.0f, 0.0f, 300.0f);
+		D3DXVECTOR3 rot(0.0f, 0.0f, 0.0f);
+		m_pEnemy = CEnemy::Create(pos, rot);
+	}
 
 	//メッシュフィールドの生成
 	m_pMeshField = CMeshField::Create();
