@@ -211,6 +211,28 @@ void CObject3D::SetPos(D3DXVECTOR3 pos)
 }
 
 //===========================
+// 色の設定
+//===========================
+void CObject3D::SetColor(D3DXCOLOR col)
+{
+	VERTEX_3D*pVtx;		//頂点情報へのポインタ
+
+	//頂点バッファをロックし、頂点情報へのポインタを取得
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	//------------------------
+	// 頂点カラーの設定
+	//------------------------
+	pVtx[0].col = col;
+	pVtx[1].col = col;
+	pVtx[2].col = col;
+	pVtx[3].col = col;
+
+	//頂点バッファをアンロックする
+	m_pVtxBuff->Unlock();
+}
+
+//===========================
 // 大きさの設定
 //===========================
 void CObject3D::SetSize(float fWidth, float fHeight, float fDepth)

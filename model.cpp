@@ -59,11 +59,14 @@ HRESULT CModel::Init(D3DXVECTOR3 pos)
 	D3DXLoadMeshFromX(m_modelName,
 					   D3DXMESH_SYSTEMMEM,
 					   pDevice,
-					   NULL,
+					   nullptr,
 					   &m_pBuffMat,
-					   NULL,
+					   nullptr,
 					   &m_nNumMat,
 					   &m_pMesh);
+
+	//ˆÊ’u‚Ìİ’è
+	SetPos(pos);
 
 	//-----------------------
 	// ƒ‚ƒfƒ‹‚Ì‘å‚«‚³‚ğæ“¾

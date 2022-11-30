@@ -37,7 +37,8 @@ public:
 	//----------------
 	// セッター
 	//----------------
-	void SetPos(D3DXVECTOR3 pos);
+	void SetPos(D3DXVECTOR3 pos);	//位置の設定
+	void SetColor(D3DXCOLOR col);	//色の設定
 	void SetSize(float fWidth, float fHeight, float fDepth);
 	void SetVtx(VERTEX_3D* vtx);	//頂点情報の設定
 

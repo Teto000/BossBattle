@@ -29,7 +29,9 @@ public:
 	//------------------------
 	enum EObjType
 	{
-		OBJTYPE_FADE,
+		OBJTYPE_FADE = 0,	//フェード
+		OBJTYPE_PLAYER,		//プレイヤー
+		OBJTYPE_ENEMY,		//エネミー
 		OBJTYPE_MAX,
 	};
 

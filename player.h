@@ -83,6 +83,7 @@ private:
 	void MoveKeyboard(int nUpKey, int nDownKey, int nLeftKey, int nRightKey);	//移動
 	void MoveJoypad();	//ジョイパッドを使った移動
 	void SetRot();		//角度の設定
+	void CollisionPlayer(D3DXVECTOR3 *pPos, D3DXVECTOR3 size);	//プレイヤーの当たり判定
 
 private:
 	//----------------

@@ -11,24 +11,36 @@
 // インクルード
 //--------------------------------
 #include <d3dx9.h>
-#include "object3d.h"
+#include "object.h"
+
+//--------------------------------
+// 前方宣言
+//--------------------------------
+class CObject3D;
 
 //================================
 // ラインクラスの定義
 //================================
-class CLine : public CObject3D
+class CLine : public CObject
 {
 public:
-	CLine();	//コンストラクタ
-	~CLine();	//デストラクタ
+	CLine();			//コンストラクタ
+	~CLine() override;	//デストラクタ
 
 	//--------------------
 	// メンバ関数
 	//--------------------
-	HRESULT Init();
-	void Uninit();
-	void Update();
-	void Draw();
+	HRESULT Init(D3DXVECTOR3 pos) override;
+	void Uninit() override;
+	void Update() override;
+	void Draw() override;
+
+	//-------------------
+	// ゲッター
+	//-------------------
+	D3DXVECTOR3 GetPosition() override { return m_pos; };	//位置の取得
+	float GetWidth() override { return 0.0f; };				//幅の取得
+	float GetHeight() override { return 0.0f; };			//高さの取得
 
 	//--------------------
 	// 静的メンバ関数
@@ -47,6 +59,7 @@ private:
 	D3DXCOLOR	m_col;		//色
 	D3DXMATRIX	m_mtxWorld;	//ワールドマトリックス
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;	//頂点バッファへのポインタ
+	CObject3D*	m_pObject3D;//オブジェクト3D
 };
 
 #endif // !_LINE_H_

@@ -257,7 +257,7 @@ CPlayer* CPlayer::Create()
 	{//NULLチェック
 		//初期化
 		pPlayer->Init(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-		//pPlayer->SetObjType(OBJTYPE_ENEMY);
+		pPlayer->SetObjType(OBJTYPE_PLAYER);
 	}
 
 	return pPlayer;

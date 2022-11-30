@@ -179,6 +179,7 @@ CEnemy* CEnemy::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 
 		//‰Šú‰»
 		pEnemy->Init(pos);
+		pEnemy->SetObjType(OBJTYPE_ENEMY);
 	}
 
 	return pEnemy;
