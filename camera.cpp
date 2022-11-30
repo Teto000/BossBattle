@@ -218,7 +218,7 @@ void CCamera::Turn()
 	//------------------
 	if (CInputKeyboard::Press(DIK_Q))	//左回転
 	{//Qキーが押された
-		m_rot.y -= m_TSPEED;			//回転量の増加
+		m_rot.y -= m_TSPEED;	//回転量の増加
 	}
 	else if (CInputKeyboard::Press(DIK_E))	//右回転
 	{//Eキーが押された

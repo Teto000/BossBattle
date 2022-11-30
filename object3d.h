@@ -12,6 +12,8 @@
 //--------------------------------
 #include <d3dx9.h>
 #include "object.h"
+#include "main.h"
+#include "renderer.h"
 #include "texture.h"
 
 //================================
@@ -37,6 +39,7 @@ public:
 	//----------------
 	void SetPos(D3DXVECTOR3 pos);
 	void SetSize(float fWidth, float fHeight, float fDepth);
+	void SetVtx(VERTEX_3D* vtx);	//頂点情報の設定
 
 	/* ↓テクスチャ↓ */
 	void SetTexCIE(float left, float fRight);	//テクスチャ座標の設定

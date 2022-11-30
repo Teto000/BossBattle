@@ -110,6 +110,9 @@
     <ClCompile Include="input_keyboard.cpp">
       <Filter>00_Main\Application\Input</Filter>
     </ClCompile>
+    <ClCompile Include="line.cpp">
+      <Filter>00_Main\Object\Object3D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -186,6 +189,9 @@
     </ClInclude>
     <ClInclude Include="input_keyboard.h">
       <Filter>00_Main\Application\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="line.h">
+      <Filter>00_Main\Object\Object3D</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

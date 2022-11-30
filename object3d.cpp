@@ -221,6 +221,22 @@ void CObject3D::SetSize(float fWidth, float fHeight, float fDepth)
 }
 
 //===========================
+// 頂点情報の設定
+//===========================
+void CObject3D::SetVtx(VERTEX_3D* vtx)
+{
+	VERTEX_3D*pVtx;		//頂点情報へのポインタ
+
+	//頂点バッファをロックし、頂点情報へのポインタを取得
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	pVtx = vtx;
+
+	//頂点バッファをアンロックする
+	m_pVtxBuff->Unlock();
+}
+
+//===========================
 // テクスチャ座標の設定
 //===========================
 void CObject3D::SetTexCIE(float left, float fRight)

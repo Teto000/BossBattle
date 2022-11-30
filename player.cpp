@@ -269,7 +269,7 @@ CPlayer* CPlayer::Create()
 void CPlayer::SetModel()
 {
 	//ƒ‚ƒfƒ‹0
-	m_pModel[0] = CModel::Create("data\\MODEL\\body.x", D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	m_pModel[0] = CModel::Create("data\\MODEL\\body.x", D3DXVECTOR3(0.0f, 10.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	m_pModel[0]->SetParent(nullptr);
 
 	//ƒ‚ƒfƒ‹1

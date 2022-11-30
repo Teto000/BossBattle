@@ -12,6 +12,11 @@
 //--------------------------------
 #include "object.h"
 
+//--------------------------------
+// 前方宣言
+//--------------------------------
+class CLine;	//ライン
+
 //================================
 // モデルクラスの定義
 //================================
@@ -46,9 +51,16 @@ public:
 	static CModel* Create(LPCTSTR text,D3DXVECTOR3 pos, D3DXVECTOR3 rot);
 
 private:
-	void DrawShadow();
+	void GetModelSize();	//モデルの大きさを取得
+	void SetLine();			//線の設置
+	void DrawShadow();		//影の描画
 
 private:
+	//----------------
+	// 定数
+	//----------------
+	static const int nMaxLine = 32;
+
 	//----------------
 	// メンバ変数
 	//----------------
@@ -56,8 +68,12 @@ private:
 	D3DXMATRIX m_mtxParent;		//親のマトリックス
 	D3DXVECTOR3 m_pos;			//位置
 	D3DXVECTOR3 m_rot;			//向き
+	D3DXVECTOR3 m_vtxMin;		//最小値
+	D3DXVECTOR3 m_vtxMax;		//最大値
+	D3DXVECTOR3 m_size;			//大きさ
 	CModel* m_pModel;			//親モデルへのポインタ
 	LPCTSTR m_modelName;		//モデルのパス
+	CLine* m_pLIne[nMaxLine];	//ラインクラス
 
 	/* ↓ モデル情報 ↓ */
 	LPD3DXMESH m_pMesh;			//メッシュ情報へのポインタ
