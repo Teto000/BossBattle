@@ -41,9 +41,13 @@ CTitle::~CTitle()
 HRESULT CTitle::Init()
 {
 	{
+		//îwåiÇÃê∂ê¨
 		D3DXVECTOR3 pos(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f);
 		m_pBg = CBg::Create(pos, CBg::BGTYPE_TITLE);
 	}
+
+	//BGMÇÃçƒê∂
+	CSound::PlaySound(CSound::SOUND_LABEL_TITLE);
 
 	return S_OK;
 }
@@ -53,7 +57,8 @@ HRESULT CTitle::Init()
 //===========================
 void CTitle::Uninit()
 {
-
+	//BGMÇÃí‚é~
+	CSound::StopSound();
 }
 
 //===========================
@@ -61,8 +66,13 @@ void CTitle::Uninit()
 //===========================
 void CTitle::Update()
 {
+	//âÊñ ëJà⁄
 	if (CInputKeyboard::Trigger(DIK_RETURN))
 	{
+		//ÉQÅ[ÉÄâÊñ Ç…à⁄çs
 		CApplication::GetFade()->SetFade(CApplication::MODE_GAME);
+
+		//SEÇÃçƒê∂
+		CSound::PlaySound(CSound::SOUND_LABEL_SE_BUTTOM);
 	}
 }

@@ -40,9 +40,13 @@ CResult::~CResult()
 HRESULT CResult::Init()
 {
 	{
+		//îwåiÇÃê∂ê¨
 		D3DXVECTOR3 pos(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f);
 		m_pBg = CBg::Create(pos, CBg::BGTYPE_RESULT);
 	}
+
+	//BGMÇÃçƒê∂
+	CSound::PlaySound(CSound::SOUND_LABEL_RESULT);
 
 	return S_OK;
 }
@@ -52,7 +56,8 @@ HRESULT CResult::Init()
 //===========================
 void CResult::Uninit()
 {
-
+	//BGMÇÃí‚é~
+	CSound::StopSound();
 }
 
 //===========================
@@ -60,8 +65,13 @@ void CResult::Uninit()
 //===========================
 void CResult::Update()
 {
+	//âÊñ ëJà⁄
 	if (CInputKeyboard::Trigger(DIK_RETURN))
 	{
+		//É^ÉCÉgÉãâÊñ Ç…à⁄çs
 		CApplication::GetFade()->SetFade(CApplication::MODE_TITLE);
+
+		//SEÇÃçƒê∂
+		CSound::PlaySound(CSound::SOUND_LABEL_SE_BUTTOM);
 	}
 }

@@ -69,6 +69,9 @@ HRESULT CGame::Init()
 	//メッシュフィールドの生成
 	m_pMeshField = CMeshField::Create();
 
+	//BGMの再生
+	CSound::PlaySound(CSound::SOUND_LABEL_GAME);
+
 	return S_OK;
 }
 
@@ -84,6 +87,9 @@ void CGame::Uninit()
 		delete m_pCamera;
 		m_pCamera = nullptr;
 	}
+
+	//BGMの停止
+	CSound::StopSound();
 }
 
 //===========================
@@ -97,8 +103,13 @@ void CGame::Update()
 		m_pCamera->Update();
 	}
 
+	//画面遷移
 	if (CInputKeyboard::Trigger(DIK_RETURN))
 	{
+		//リザルト画面に移行
 		CApplication::GetFade()->SetFade(CApplication::MODE_RESULT);
+
+		//SEの再生
+		CSound::PlaySound(CSound::SOUND_LABEL_SE_BUTTOM);
 	}
 }

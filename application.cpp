@@ -85,8 +85,8 @@ HRESULT CApplication::Init(HINSTANCE hInstance, HWND hWnd)
 	//----------------------------
 	// サウンドの生成と初期化
 	//----------------------------
-	//m_pSound = new CSound;
-	//m_pSound->Init(hWnd);
+	m_pSound = new CSound;
+	m_pSound->Init(hWnd);
 
 	//----------------------------
 	// ライトの生成と初期化
@@ -104,8 +104,8 @@ HRESULT CApplication::Init(HINSTANCE hInstance, HWND hWnd)
 	// モードの設定
 	//----------------------------
 	m_pFade = new CFade;
-	SetMode(MODE_GAME);
-	m_pFade->Init(MODE_GAME);
+	SetMode(MODE_TITLE);
+	m_pFade->Init(MODE_TITLE);
 
 	//----------------------------
 	// デバッグ用文字の生成
@@ -159,12 +159,12 @@ void CApplication::Uninit()
 	//----------------------------
 	// サウンドの終了
 	//----------------------------
-	/*if (m_pSound != nullptr)
+	if (m_pSound != nullptr)
 	{
 		m_pSound->Uninit();
 		delete m_pSound;
 		m_pSound = nullptr;
-	}*/
+	}
 
 	//----------------------------
 	// ライトの終了
@@ -281,12 +281,6 @@ void CApplication::Draw()
 {
 	//レンダリングの描画
 	m_pRenderer->Draw();
-
-	//フェードの描画
-	//m_pFade->Draw();
-
-	//デバッグ用文字の描画
-	//m_pDebugproc->Draw();
 }
 
 //===========================

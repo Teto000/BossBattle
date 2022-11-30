@@ -33,8 +33,13 @@ public:
 	//*****************************************************************************
 	typedef enum
 	{
-		/*↓ BGM ↓*/
-		SOUND_LABEL_GAME = 0,	// ゲーム
+		/* ↓ BGM ↓ */
+		SOUND_LABEL_TITLE = 0,	//タイトル
+		SOUND_LABEL_GAME,		//ゲーム
+		SOUND_LABEL_RESULT,		//リザルト
+
+		/*↓ SE ↓*/
+		SOUND_LABEL_SE_BUTTOM,	// 決定
 
 		SOUND_LABEL_MAX,
 	} SOUND_LABEL;
