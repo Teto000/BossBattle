@@ -56,9 +56,6 @@
     <ClCompile Include="input_joypad.cpp">
       <Filter>00_Main\Application\Input</Filter>
     </ClCompile>
-    <ClCompile Include="input_keybord.cpp">
-      <Filter>00_Main\Application\Input</Filter>
-    </ClCompile>
     <ClCompile Include="application.cpp">
       <Filter>00_Main\Application</Filter>
     </ClCompile>
@@ -110,6 +107,9 @@
     <ClCompile Include="bg.cpp">
       <Filter>00_Main\Object\Object2D</Filter>
     </ClCompile>
+    <ClCompile Include="input_keyboard.cpp">
+      <Filter>00_Main\Application\Input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -131,9 +131,6 @@
       <Filter>00_Main\Application\Input</Filter>
     </ClInclude>
     <ClInclude Include="input_joypad.h">
-      <Filter>00_Main\Application\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="input_keybord.h">
       <Filter>00_Main\Application\Input</Filter>
     </ClInclude>
     <ClInclude Include="application.h">
@@ -186,6 +183,9 @@
     </ClInclude>
     <ClInclude Include="bg.h">
       <Filter>00_Main\Object\Object2D</Filter>
+    </ClInclude>
+    <ClInclude Include="input_keyboard.h">
+      <Filter>00_Main\Application\Input</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -13,7 +13,7 @@
 #include "application.h"
 #include "renderer.h"
 #include "input.h"
-#include "input_keybord.h"
+#include "input_keyboard.h"
 #include "input_joypad.h"
 #include "camera.h"
 #include "debug_proc.h"
@@ -146,7 +146,7 @@ void CPlayer::Update()
 	//-------------------------
 	// 移動
 	//-------------------------
-	Move(DIK_W, DIK_S, DIK_A, DIK_D);
+	MoveKeyboard(DIK_W, DIK_S, DIK_A, DIK_D);	//キーボード
 	MoveJoypad();	//ジョイパッド
 
 	//-------------------------
@@ -154,10 +154,10 @@ void CPlayer::Update()
 	//-------------------------
 	//回転軸の設定
 	/*m_vecAxis.x = sinf(D3DXToRadian(90));
-	m_vecAxis.z = sinf(D3DXToRadian(90));*/
+	m_vecAxis.z = sinf(D3DXToRadian(90));
 
 	//回転角の設定
-	/*if (CInputKeyboard::Press(DIK_A))
+	if (CInputKeyboard::Press(DIK_A))
 	{//Aキーが押された
 		m_fValueRot = D3DXToRadian(fPlayerSpeed);
 	}
@@ -402,7 +402,7 @@ void CPlayer::SetMotion(bool bLoop)
 // 移動
 // 引数：上キー,下キー,左キー,右キー
 //=====================================
-void CPlayer::Move(int nUpKey, int nDownKey, int nLeftKey, int nRightKey)
+void CPlayer::MoveKeyboard(int nUpKey, int nDownKey, int nLeftKey, int nRightKey)
 {
 	//カメラの情報取得
 	D3DXVECTOR3 cameraRot = CGame::GetCamera()->GetRot();

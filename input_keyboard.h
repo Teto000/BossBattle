@@ -5,7 +5,7 @@
 //
 //===================================================
 #ifndef _INPUT_KEYBORD_H_
-#define _INPUT_KEYBORD_H_	
+#define _INPUT_KEYBOARD_H_	
 
 //--------------------------------
 // ƒ‰ƒCƒuƒ‰ƒŠ‚ÌƒŠƒ“ƒN 

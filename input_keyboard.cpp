@@ -9,7 +9,7 @@
 // インクルード
 //---------------------------
 #include <d3dx9.h>
-#include "input_keybord.h"
+#include "input_keyboard.h"
 
 //---------------------------
 // 静的メンバ変数宣言

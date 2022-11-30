@@ -13,7 +13,7 @@
 #include "main.h"
 #include "renderer.h"
 #include "application.h"
-#include "input_keybord.h"
+#include "input_keyboard.h"
 #include "texture.h"
 
 //------------------------

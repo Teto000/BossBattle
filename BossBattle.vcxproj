@@ -157,7 +157,7 @@
     <ClCompile Include="game.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="input_joypad.cpp" />
-    <ClCompile Include="input_keybord.cpp" />
+    <ClCompile Include="input_keyboard.cpp" />
     <ClCompile Include="light.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mesh.cpp" />
@@ -184,7 +184,7 @@
     <ClInclude Include="game.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="input_joypad.h" />
-    <ClInclude Include="input_keybord.h" />
+    <ClInclude Include="input_keyboard.h" />
     <ClInclude Include="light.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="mesh.h" />

@@ -10,7 +10,7 @@
 //------------------------
 #include <assert.h>
 #include "input.h"
-#include "input_keybord.h"
+#include "input_keyboard.h"
 #include "input_joypad.h"
 
 //------------------------
