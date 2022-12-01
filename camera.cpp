@@ -142,7 +142,11 @@ void CCamera::Update(void)
 	// ロックオン処理
 	//----------------------------------------
 	//ロックオン位置
-	D3DXVECTOR3 lockOnPos(CGame::GetEnemy()->GetPosition());
+	D3DXVECTOR3 lockOnPos;
+	if (CGame::GetEnemy())
+	{
+		lockOnPos = CGame::GetEnemy()->GetPosition();
+	}
 
 	if (m_bLockOn)
 	{//ロックオン状態なら

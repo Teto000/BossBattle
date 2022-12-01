@@ -21,7 +21,7 @@ class CModel;	//モデル
 // マクロ定義
 //--------------------------------
 #define MAX_PARTS	(7)		//モデルパーツの最大数
-#define MAX_KEY		(2)		//キーの最大数
+#define MAX_KEY		(3)		//キーの最大数
 
 //================================
 // プレイヤークラスの定義
@@ -71,6 +71,7 @@ public:
 	float GetWidth() override;			//幅の取得
 	float GetHeight() override;			//高さの取得
 	D3DXMATRIX GetmtxWorld();			//ワールドマトリックスの取得
+	CModel* GetModel() { return m_pModel[0]; };	//モデルの取得
 
 	//----------------
 	// 静的メンバ関数

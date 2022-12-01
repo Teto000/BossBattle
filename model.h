@@ -23,6 +23,17 @@ class CLine;	//ライン
 class CModel
 {
 public:
+	//----------------
+	// モデルの種類
+	//----------------
+	enum MODELTYPE
+	{
+		NONE = 0,
+		PLAYER,
+		ENEMY,
+		MAX
+	};
+
 	CModel();	//コンストラクタ
 	~CModel();	//デストラクタ
 
@@ -48,18 +59,20 @@ public:
 	//----------------
 	// 静的メンバ関数
 	//----------------
-	static CModel* Create(LPCTSTR text,D3DXVECTOR3 pos, D3DXVECTOR3 rot);
+	static CModel* Create(
+		LPCTSTR text, CModel* model, D3DXVECTOR3 pos, D3DXVECTOR3 rot);
 
 private:
-	void GetModelSize();	//モデルの大きさを取得
-	void SetLine();			//線の設置
-	void DrawShadow();		//影の描画
+	void GetModelSize();		//モデルの大きさを取得
+	void SetLine();				//線の設置
+	void UpdateLine();			//線の情報の更新
+	void DrawShadow();			//影の描画
 
 private:
 	//----------------
 	// 定数
 	//----------------
-	static const int nMaxLine = 32;
+	static const int nMaxLine = 128;
 
 	//----------------
 	// メンバ変数
@@ -71,9 +84,12 @@ private:
 	D3DXVECTOR3 m_vtxMin;		//最小値
 	D3DXVECTOR3 m_vtxMax;		//最大値
 	D3DXVECTOR3 m_size;			//大きさ
+	D3DXVECTOR3 m_worldMin;		//最大位置
+	D3DXVECTOR3	m_worldMax;		//最小位置
 	CModel* m_pModel;			//親モデルへのポインタ
 	LPCTSTR m_modelName;		//モデルのパス
 	CLine* m_pLIne[nMaxLine];	//ラインクラス
+	MODELTYPE m_type;			//種類
 
 	/* ↓ モデル情報 ↓ */
 	LPD3DXMESH m_pMesh;			//メッシュ情報へのポインタ

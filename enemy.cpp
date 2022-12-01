@@ -191,8 +191,8 @@ CEnemy* CEnemy::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 void CEnemy::SetModel()
 {
 	//ƒ‚ƒfƒ‹0
-	m_pModel[0] = CModel::Create("data\\MODEL\\enemy.x", D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	m_pModel[0]->SetParent(nullptr);
+	m_pModel[0] = CModel::Create("data\\MODEL\\enemy.x", nullptr,
+		D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 }
 
 //========================

@@ -211,6 +211,14 @@ void CObject3D::SetPos(D3DXVECTOR3 pos)
 }
 
 //===========================
+// å¸Ç´ÇÃê›íË
+//===========================
+void CObject3D::SetRot(D3DXVECTOR3 rot)
+{
+	m_rot = rot;
+}
+
+//===========================
 // êFÇÃê›íË
 //===========================
 void CObject3D::SetColor(D3DXCOLOR col)

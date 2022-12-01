@@ -36,6 +36,11 @@ public:
 	void Draw() override;
 
 	//-------------------
+	// セッター
+	//-------------------
+	void SetLine(D3DXVECTOR3 start, D3DXVECTOR3 end);
+
+	//-------------------
 	// ゲッター
 	//-------------------
 	D3DXVECTOR3 GetPosition() override { return m_pos; };	//位置の取得
@@ -49,6 +54,11 @@ public:
 						, D3DXVECTOR3 end, D3DXCOLOR col);
 
 private:
+	//--------------------
+	// 定数
+	//--------------------
+	static const int nMaxLine = 128;	//線の最大数
+
 	//--------------------
 	// メンバ変数
 	//--------------------

@@ -33,7 +33,7 @@ CPlayer::KEY_SET g_aKeySet[] =	//キーセット情報
 	//----------------------
 	// キー1
 	//----------------------
-	{ 40,	//フレーム数
+	{ 80,	//フレーム数
 		//		Pos				Rot
 		{{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	//体
 		{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	//頭
@@ -47,15 +47,29 @@ CPlayer::KEY_SET g_aKeySet[] =	//キーセット情報
 	//----------------------
 	// キー2
 	//----------------------
-	{ 40,	//フレーム数
+	{ 5,	//フレーム数
 		//		Pos				Rot
 		{{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	//体
 		{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	//頭
-		{ 0.0f,0.0f,0.0f , 90.0f,0.0f,0.0f },		//右手
+		{ 0.0f,0.0f,0.0f , 90.0f,0.0f,0.0f },	//右手
 		{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	//左手
 		{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	//右足
 		{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	//左手
 		{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f }},	//剣
+	},
+
+	//----------------------
+	// キー3
+	//----------------------
+	{ 40,	//フレーム数
+	//		Pos				Rot
+	{ { 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	//体
+	{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	//頭
+	{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	//右手
+	{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	//左手
+	{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	//右足
+	{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	//左手
+	{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f } },	//剣
 	},
 };
 
@@ -269,32 +283,32 @@ CPlayer* CPlayer::Create()
 void CPlayer::SetModel()
 {
 	//モデル0
-	m_pModel[0] = CModel::Create("data\\MODEL\\body.x", D3DXVECTOR3(0.0f, 10.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	m_pModel[0]->SetParent(nullptr);
+	m_pModel[0] = CModel::Create("data\\MODEL\\body.x", nullptr,
+		D3DXVECTOR3(0.0f, 10.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	//モデル1
-	m_pModel[1] = CModel::Create("data\\MODEL\\head.x", D3DXVECTOR3(0.0f, 40.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	m_pModel[1]->SetParent(m_pModel[0]);
+	m_pModel[1] = CModel::Create("data\\MODEL\\head.x", m_pModel[0],
+		D3DXVECTOR3(0.0f, 40.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	//モデル2
-	m_pModel[2] = CModel::Create("data\\MODEL\\armR.x", D3DXVECTOR3(-20.0f, 40.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	m_pModel[2]->SetParent(m_pModel[0]);
+	m_pModel[2] = CModel::Create("data\\MODEL\\armR.x", m_pModel[0],
+		D3DXVECTOR3(-20.0f, 40.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	//モデル3
-	m_pModel[3] = CModel::Create("data\\MODEL\\armL.x", D3DXVECTOR3(20.0f, 40.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	m_pModel[3]->SetParent(m_pModel[0]);
+	m_pModel[3] = CModel::Create("data\\MODEL\\armL.x", m_pModel[0],
+		D3DXVECTOR3(20.0f, 40.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	//モデル4
-	m_pModel[4] = CModel::Create("data\\MODEL\\legR.x", D3DXVECTOR3(-7.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	m_pModel[4]->SetParent(m_pModel[0]);
+	m_pModel[4] = CModel::Create("data\\MODEL\\legR.x", m_pModel[0],
+		D3DXVECTOR3(-7.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	//モデル5
-	m_pModel[5] = CModel::Create("data\\MODEL\\legL.x", D3DXVECTOR3(7.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	m_pModel[5]->SetParent(m_pModel[0]);
+	m_pModel[5] = CModel::Create("data\\MODEL\\legL.x", m_pModel[0],
+		D3DXVECTOR3(7.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	//モデル6
-	m_pModel[6] = CModel::Create("data\\MODEL\\sword.x", D3DXVECTOR3(-22.0f, -14.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	m_pModel[6]->SetParent(m_pModel[2]);
+	m_pModel[6] = CModel::Create("data\\MODEL\\sword.x", m_pModel[2],
+		D3DXVECTOR3(-22.0f, -14.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 }
 
 //========================

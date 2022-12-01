@@ -48,6 +48,9 @@ CModel::~CModel()
 //========================
 HRESULT CModel::Init(D3DXVECTOR3 pos)
 {
+	//初期値の設定
+	m_pos = pos;	//位置
+
 	//-----------------------
 	// デバイスの取得
 	//-----------------------
@@ -64,9 +67,6 @@ HRESULT CModel::Init(D3DXVECTOR3 pos)
 					   nullptr,
 					   &m_nNumMat,
 					   &m_pMesh);
-
-	//位置の設定
-	SetPos(pos);
 
 	//-----------------------
 	// モデルの大きさを取得
@@ -110,7 +110,8 @@ void CModel::Uninit()
 //========================
 void CModel::Update()
 {
-
+	//線の情報の更新
+	UpdateLine();
 }
 
 //========================
@@ -121,15 +122,15 @@ void CModel::Draw()
 	LPDIRECT3DDEVICE9 pDevice = CApplication::GetRenderer()->GetDevice();	//デバイスの取得
 
 	D3DXMATRIX mtxRot, mtxTrans;	//計算用マトリックス
-
-	D3DMATERIAL9 matDef;	//現在のマテリアル保存用
-
-	D3DXMATERIAL *pMat;		//マテリアルデータへのポインタ
+	D3DMATERIAL9 matDef;			//現在のマテリアル保存用
+	D3DXMATERIAL *pMat;				//マテリアルデータへのポインタ
 
 	//モデルのワールドマトリックスの初期化
 	D3DXMatrixIdentity(&m_mtxWorld);
 
-	//モデルの向きを反映
+	//---------------------------------
+	// モデルの向きを反映
+	//---------------------------------
 	D3DXMatrixRotationYawPitchRoll(&mtxRot, m_rot.y, m_rot.x, m_rot.z);
 	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxRot);
 
@@ -151,7 +152,6 @@ void CModel::Draw()
 	{
 		//親のマトリックスをプレイヤーにする
 		pDevice->GetTransform(D3DTS_WORLD, &m_mtxParent);
-		//m_mtxParent = CGame::GetPlayer()->GetMatrix();
 	}
 
 	//親のマトリックスとの掛け算
@@ -191,7 +191,7 @@ void CModel::Draw()
 //========================
 // 生成
 //========================
-CModel* CModel::Create(LPCTSTR text, D3DXVECTOR3 pos, D3DXVECTOR3 rot)
+CModel* CModel::Create(LPCTSTR text, CModel* model, D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 {//モデルのパス , 親モデルから見た位置 , 親モデルから見た向き
 	CModel *pModel = nullptr;
 
@@ -204,11 +204,11 @@ CModel* CModel::Create(LPCTSTR text, D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 	{//NULLチェック
 		//メンバ変数に代入
 		pModel->m_modelName = text;
-		pModel->m_pos = pos;
+		pModel->m_pModel = model;
 		pModel->m_rot = rot;
 
 		//初期化
-		pModel->Init(pModel->m_pos);
+		pModel->Init(pos);
 	}
 
 	return pModel;
@@ -232,7 +232,7 @@ void CModel::GetModelSize()
 	//頂点バッファのロック
 	m_pMesh->LockVertexBuffer(D3DLOCK_READONLY, (void**)&pVtxBuff);
 
-	for (int nCntVtx = 0; nCntVtx < nNumVtx; nCntVtx++)
+	for (int i = 0; i < nNumVtx; i++)
 	{
 		//頂点座標の代入
 		D3DXVECTOR3 vtx = *(D3DXVECTOR3*)pVtxBuff;
@@ -288,62 +288,136 @@ void CModel::SetLine()
 	//線の色
 	D3DXCOLOR lineCol(1.0f, 0.0f, 0.0f, 1.0f);
 
+	//ワールド変換行列を使ってMin,Maxを求める
+	D3DXVec3TransformCoord(&m_worldMin, &m_vtxMin, &m_mtxWorld);
+	D3DXVec3TransformCoord(&m_worldMax, &m_vtxMax, &m_mtxWorld);
+
 	//--------------------
 	// 下辺
 	//--------------------
-	D3DXVECTOR3 start = D3DXVECTOR3(m_vtxMin.x, m_vtxMin.y, m_vtxMin.z);
-	D3DXVECTOR3 end = D3DXVECTOR3(m_vtxMax.x, m_vtxMin.y, m_vtxMin.z);
+	D3DXVECTOR3 start = D3DXVECTOR3(m_worldMin.x, m_worldMin.y, m_worldMin.z);
+	D3DXVECTOR3 end = D3DXVECTOR3(m_worldMax.x, m_worldMin.y, m_worldMin.z);
 	m_pLIne[0] = CLine::Create(m_pos, start, end, lineCol);
 
-	start = D3DXVECTOR3(m_vtxMin.x, m_vtxMin.y, m_vtxMin.z);
-	end = D3DXVECTOR3(m_vtxMin.x, m_vtxMin.y, m_vtxMax.z);
+	start = D3DXVECTOR3(m_worldMin.x, m_worldMin.y, m_worldMin.z);
+	end = D3DXVECTOR3(m_worldMin.x, m_worldMin.y, m_worldMax.z);
 	m_pLIne[1] = CLine::Create(m_pos, start, end, lineCol);
 
-	start = D3DXVECTOR3(m_vtxMax.x, m_vtxMin.y, m_vtxMin.z);
-	end = D3DXVECTOR3(m_vtxMax.x, m_vtxMin.y, m_vtxMax.z);
+	start = D3DXVECTOR3(m_worldMax.x, m_worldMin.y, m_worldMin.z);
+	end = D3DXVECTOR3(m_worldMax.x, m_worldMin.y, m_worldMax.z);
 	m_pLIne[2] = CLine::Create(m_pos, start, end, lineCol);
 
-	start = D3DXVECTOR3(m_vtxMin.x, m_vtxMin.y, m_vtxMax.z);
-	end = D3DXVECTOR3(m_vtxMax.x, m_vtxMin.y, m_vtxMax.z);
+	start = D3DXVECTOR3(m_worldMin.x, m_worldMin.y, m_worldMax.z);
+	end = D3DXVECTOR3(m_worldMax.x, m_worldMin.y, m_worldMax.z);
 	m_pLIne[3] = CLine::Create(m_pos, start, end, lineCol);
 
 	//--------------------
 	// 上辺
 	//--------------------
-	start = D3DXVECTOR3(m_vtxMin.x, m_vtxMax.y, m_vtxMin.z);
-	end = D3DXVECTOR3(m_vtxMax.x, m_vtxMax.y, m_vtxMin.z);
+	start = D3DXVECTOR3(m_worldMin.x, m_worldMax.y, m_worldMin.z);
+	end = D3DXVECTOR3(m_worldMax.x, m_worldMax.y, m_worldMin.z);
 	m_pLIne[4] = CLine::Create(m_pos, start, end, lineCol);
 
-	start = D3DXVECTOR3(m_vtxMin.x, m_vtxMax.y, m_vtxMin.z);
-	end = D3DXVECTOR3(m_vtxMin.x, m_vtxMax.y, m_vtxMax.z);
+	start = D3DXVECTOR3(m_worldMin.x, m_worldMax.y, m_worldMin.z);
+	end = D3DXVECTOR3(m_worldMin.x, m_worldMax.y, m_worldMax.z);
 	m_pLIne[5] = CLine::Create(m_pos, start, end, lineCol);
 
-	start = D3DXVECTOR3(m_vtxMax.x, m_vtxMax.y, m_vtxMin.z);
-	end = D3DXVECTOR3(m_vtxMax.x, m_vtxMax.y, m_vtxMax.z);
+	start = D3DXVECTOR3(m_worldMax.x, m_worldMax.y, m_worldMin.z);
+	end = D3DXVECTOR3(m_worldMax.x, m_worldMax.y, m_worldMax.z);
 	m_pLIne[6] = CLine::Create(m_pos, start, end, lineCol);
 
-	start = D3DXVECTOR3(m_vtxMin.x, m_vtxMax.y, m_vtxMax.z);
-	end = D3DXVECTOR3(m_vtxMax.x, m_vtxMax.y, m_vtxMax.z);
+	start = D3DXVECTOR3(m_worldMin.x, m_worldMax.y, m_worldMax.z);
+	end = D3DXVECTOR3(m_worldMax.x, m_worldMax.y, m_worldMax.z);
 	m_pLIne[7] = CLine::Create(m_pos, start, end, lineCol);
 
 	//--------------------
 	// 縦辺
 	//--------------------
-	start = D3DXVECTOR3(m_vtxMin.x, m_vtxMin.y, m_vtxMin.z);
-	end = D3DXVECTOR3(m_vtxMin.x, m_vtxMax.y, m_vtxMin.z);
+	start = D3DXVECTOR3(m_worldMin.x, m_worldMin.y, m_worldMin.z);
+	end = D3DXVECTOR3(m_worldMin.x, m_worldMax.y, m_worldMin.z);
 	m_pLIne[8] = CLine::Create(m_pos, start, end, lineCol);
 
-	start = D3DXVECTOR3(m_vtxMin.x, m_vtxMin.y, m_vtxMax.z);
-	end = D3DXVECTOR3(m_vtxMin.x, m_vtxMax.y, m_vtxMax.z);
+	start = D3DXVECTOR3(m_worldMin.x, m_worldMin.y, m_worldMax.z);
+	end = D3DXVECTOR3(m_worldMin.x, m_worldMax.y, m_worldMax.z);
 	m_pLIne[9] = CLine::Create(m_pos, start, end, lineCol);
 
-	start = D3DXVECTOR3(m_vtxMax.x, m_vtxMin.y, m_vtxMin.z);
-	end = D3DXVECTOR3(m_vtxMax.x, m_vtxMax.y, m_vtxMin.z);
+	start = D3DXVECTOR3(m_worldMax.x, m_worldMin.y, m_worldMin.z);
+	end = D3DXVECTOR3(m_worldMax.x, m_worldMax.y, m_worldMin.z);
 	m_pLIne[10] = CLine::Create(m_pos, start, end, lineCol);
 
-	start = D3DXVECTOR3(m_vtxMax.x, m_vtxMin.y, m_vtxMax.z);
-	end = D3DXVECTOR3(m_vtxMax.x, m_vtxMax.y, m_vtxMax.z);
+	start = D3DXVECTOR3(m_worldMax.x, m_worldMin.y, m_worldMax.z);
+	end = D3DXVECTOR3(m_worldMax.x, m_worldMax.y, m_worldMax.z);
 	m_pLIne[11] = CLine::Create(m_pos, start, end, lineCol);
+}
+
+//========================
+// 線の情報の更新
+//========================
+void CModel::UpdateLine()
+{
+	//ワールド変換行列を使ってMin,Maxを求める
+	D3DXVec3TransformCoord(&m_worldMin, &m_vtxMin, &m_mtxWorld);
+	D3DXVec3TransformCoord(&m_worldMax, &m_vtxMax, &m_mtxWorld);
+
+	//矩形を構成する8点の最大最小を求める
+	//剣を含まないでけいさんする
+
+	//--------------------
+	// 下辺
+	//--------------------
+	D3DXVECTOR3 start = D3DXVECTOR3(m_worldMin.x, m_worldMin.y, m_worldMin.z);
+	D3DXVECTOR3 end = D3DXVECTOR3(m_worldMax.x, m_worldMin.y, m_worldMin.z);
+	m_pLIne[0]->SetLine(start, end);
+
+	start = D3DXVECTOR3(m_worldMin.x, m_worldMin.y, m_worldMin.z);
+	end = D3DXVECTOR3(m_worldMin.x, m_worldMin.y, m_worldMax.z);
+	m_pLIne[1]->SetLine(start, end);
+
+	start = D3DXVECTOR3(m_worldMax.x, m_worldMin.y, m_worldMin.z);
+	end = D3DXVECTOR3(m_worldMax.x, m_worldMin.y, m_worldMax.z);
+	m_pLIne[2]->SetLine(start, end);
+
+	start = D3DXVECTOR3(m_worldMin.x, m_worldMin.y, m_worldMax.z);
+	end = D3DXVECTOR3(m_worldMax.x, m_worldMin.y, m_worldMax.z);
+	m_pLIne[3]->SetLine(start, end);
+
+	//--------------------
+	// 上辺
+	//--------------------
+	start = D3DXVECTOR3(m_worldMin.x, m_worldMax.y, m_worldMin.z);
+	end = D3DXVECTOR3(m_worldMax.x, m_worldMax.y, m_worldMin.z);
+	m_pLIne[4]->SetLine(start, end);
+
+	start = D3DXVECTOR3(m_worldMin.x, m_worldMax.y, m_worldMin.z);
+	end = D3DXVECTOR3(m_worldMin.x, m_worldMax.y, m_worldMax.z);
+	m_pLIne[5]->SetLine(start, end);
+
+	start = D3DXVECTOR3(m_worldMax.x, m_worldMax.y, m_worldMin.z);
+	end = D3DXVECTOR3(m_worldMax.x, m_worldMax.y, m_worldMax.z);
+	m_pLIne[6]->SetLine(start, end);
+
+	start = D3DXVECTOR3(m_worldMin.x, m_worldMax.y, m_worldMax.z);
+	end = D3DXVECTOR3(m_worldMax.x, m_worldMax.y, m_worldMax.z);
+	m_pLIne[7]->SetLine(start, end);
+
+	//--------------------
+	// 縦辺
+	//--------------------
+	start = D3DXVECTOR3(m_worldMin.x, m_worldMin.y, m_worldMin.z);
+	end = D3DXVECTOR3(m_worldMin.x, m_worldMax.y, m_worldMin.z);
+	m_pLIne[8]->SetLine(start, end);
+
+	start = D3DXVECTOR3(m_worldMin.x, m_worldMin.y, m_worldMax.z);
+	end = D3DXVECTOR3(m_worldMin.x, m_worldMax.y, m_worldMax.z);
+	m_pLIne[9]->SetLine(start, end);
+
+	start = D3DXVECTOR3(m_worldMax.x, m_worldMin.y, m_worldMin.z);
+	end = D3DXVECTOR3(m_worldMax.x, m_worldMax.y, m_worldMin.z);
+	m_pLIne[10]->SetLine(start, end);
+
+	start = D3DXVECTOR3(m_worldMax.x, m_worldMin.y, m_worldMax.z);
+	end = D3DXVECTOR3(m_worldMax.x, m_worldMax.y, m_worldMax.z);
+	m_pLIne[11]->SetLine(start, end);
 }
 
 //========================
