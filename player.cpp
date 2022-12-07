@@ -24,7 +24,7 @@
 //------------------------
 // 静的メンバ変数宣言
 //------------------------
-const float CPlayer::fPlayerSpeed = 5.0f;
+const float CPlayer::fPlayerSpeed = 7.0f;
 
 //------------------------
 // グローバル変数
@@ -34,29 +34,29 @@ CPlayer::KEY_SET g_aKeySet[] =	//キーセット情報
 	//----------------------
 	// キー1
 	//----------------------
-	{ 80,	//フレーム数
+	{ 40,	//フレーム数
 		//		Pos				Rot
-		{{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	//体
-		{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	//頭
-		{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	//右手
-		{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	//左手
-		{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	//右足
-		{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	//左手
-		{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f }},	//剣
+		{{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },
+		{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },
+		{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },
+		{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },
+		{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },
+		{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },
+		{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f }},
 	},
 
 	//----------------------
 	// キー2
 	//----------------------
-	{ 5,	//フレーム数
+	{ 40,	//フレーム数
 		//		Pos				Rot
-		{{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	//体
-		{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	//頭
-		{ 0.0f,0.0f,0.0f , 90.0f,0.0f,0.0f },	//右手
-		{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	//左手
-		{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	//右足
-		{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	//左手
-		{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f }},	//剣
+		{{ 0.0f,1.0f,0.0f , 0.0f,0.0f,0.0f },
+		{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },
+		{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },
+		{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },
+		{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },
+		{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },
+		{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f }},
 	},
 
 	//----------------------
@@ -64,13 +64,27 @@ CPlayer::KEY_SET g_aKeySet[] =	//キーセット情報
 	//----------------------
 	{ 40,	//フレーム数
 	//		Pos				Rot
-	{ { 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	//体
-	{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	//頭
-	{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	//右手
-	{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	//左手
-	{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	//右足
-	{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	//左手
-	{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f } },	//剣
+	{ { 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },
+	{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	
+	{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	
+	{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	
+	{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	
+	{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	
+	{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f } },
+	},
+
+	//----------------------
+	// キー3
+	//----------------------
+	{ 40,	//フレーム数
+	//		Pos				Rot
+	{ { 0.0f,-1.0f,0.0f , 0.0f,0.0f,0.0f },
+	{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },
+	{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },
+	{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },
+	{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },
+	{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },
+	{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f } },
 	},
 };
 
@@ -186,6 +200,9 @@ void CPlayer::Update()
 	//-------------------------
 	MoveKeyboard(DIK_W, DIK_S, DIK_A, DIK_D);	//キーボード
 	MoveJoypad();	//ジョイパッド
+
+	//タイヤの回転
+	m_pModel[6]->SetRotX(m_rotWheel);
 
 	//-------------------------
 	// 回転
@@ -313,7 +330,7 @@ void CPlayer::SetModel()
 {
 	//モデル0：体
 	m_pModel[0] = CModel::Create("data\\MODEL\\body.x", nullptr,
-		D3DXVECTOR3(0.0f, 80.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+		D3DXVECTOR3(0.0f, 70.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	//モデル1：頭
 	m_pModel[1] = CModel::Create("data\\MODEL\\head.x", m_pModel[0],
@@ -335,9 +352,9 @@ void CPlayer::SetModel()
 	m_pModel[5] = CModel::Create("data\\MODEL\\handL.x", m_pModel[4],
 		D3DXVECTOR3(4.0f, -40.0f, 0.0f), D3DXVECTOR3(0.0f, 0.06f, -1.2f));
 
-	//モデル6：尻尾
-	m_pModel[6] = CModel::Create("data\\MODEL\\tail.x", m_pModel[0],
-		D3DXVECTOR3(0.0f, -5.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	//モデル6：タイヤ
+	m_pModel[6] = CModel::Create("data\\MODEL\\wheel.x", m_pModel[0],
+		D3DXVECTOR3(0.0f, -35.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 }
 
 //========================
@@ -510,6 +527,16 @@ void CPlayer::MoveKeyboard(int nUpKey, int nDownKey, int nLeftKey, int nRightKey
 
 	//向きを目的の角度に合わせる
 	SetRot();
+
+	//タイヤの回転量の加算
+	m_rotWheel += D3DXToRadian(-10);
+
+	if (!CInputKeyboard::Press(nUpKey) && !CInputKeyboard::Press(nDownKey)
+		&& !CInputKeyboard::Press(nRightKey) && !CInputKeyboard::Press(nLeftKey))
+	{//移動キーが押されていないなら
+		//タイヤの回転量を0にする
+		m_rotWheel = 0;
+	}
 }
 
 //===========================
@@ -521,22 +548,25 @@ void CPlayer::MoveJoypad()
 	CInputJoypad* joypad = CApplication::GetJoypad();
 	D3DXVECTOR3 stick = joypad->Stick(CInputJoypad::JOYKEY_LEFT_STICK, 0);
 
+	//スティックを動かす値の設定
+	float fMoveValue = 0.5f;
+
 	//カメラの情報取得
 	D3DXVECTOR3 cameraRot = CGame::GetCamera()->GetRot();
 
 	//-----------------------------------
 	// 右移動
 	//-----------------------------------
-	if (stick.x >= 0.5f)
+	if (stick.x >= fMoveValue)
 	{
 		// スティックを倒した方向へ移動する
-		if (stick.y <= -0.5f)
+		if (stick.y <= -fMoveValue)
 		{//右奥移動
 			m_pos.x += sinf(cameraRot.y + D3DX_PI * 0.25f) * fPlayerSpeed;
 			m_pos.z += cosf(cameraRot.y + D3DX_PI * 0.25f) * fPlayerSpeed;
 			m_rotDest.y = cameraRot.y - D3DX_PI * 0.75f;	//向きの切り替え
 		}
-		else if (stick.y >= 0.5f)
+		else if (stick.y >= fMoveValue)
 		{//右前移動
 			m_pos.x += sinf(cameraRot.y + D3DX_PI * 0.75f) * fPlayerSpeed;
 			m_pos.z += cosf(cameraRot.y + D3DX_PI * 0.75f) * fPlayerSpeed;
@@ -544,23 +574,23 @@ void CPlayer::MoveJoypad()
 		}
 		else
 		{
-			m_pos.x += sinf(cameraRot.y + D3DX_PI * 0.5f) * fPlayerSpeed;
-			m_pos.z += cosf(cameraRot.y + D3DX_PI * 0.5f) * fPlayerSpeed;
-			m_rotDest.y = cameraRot.y - D3DX_PI * 0.5f;
+			m_pos.x += sinf(cameraRot.y + D3DX_PI * fMoveValue) * fPlayerSpeed;
+			m_pos.z += cosf(cameraRot.y + D3DX_PI * fMoveValue) * fPlayerSpeed;
+			m_rotDest.y = cameraRot.y - D3DX_PI * fMoveValue;
 		}
 	}
 	//-----------------------------------
 	// 左移動
 	//-----------------------------------
-	else if (stick.x <= -0.5f)
+	else if (stick.x <= -fMoveValue)
 	{
-		if (stick.y <= -0.5f)
+		if (stick.y <= -fMoveValue)
 		{//左奥移動
 			m_pos.x += sinf(cameraRot.y - D3DX_PI * 0.25f) * fPlayerSpeed;
 			m_pos.z += cosf(cameraRot.y - D3DX_PI * 0.25f) * fPlayerSpeed;
 			m_rotDest.y = cameraRot.y + D3DX_PI * 0.75f;
 		}
-		else if (stick.y >= 0.5f)
+		else if (stick.y >= fMoveValue)
 		{//左前移動
 			m_pos.x += sinf(cameraRot.y - D3DX_PI * 0.75f) * fPlayerSpeed;
 			m_pos.z += cosf(cameraRot.y - D3DX_PI * 0.75f) * fPlayerSpeed;
@@ -568,15 +598,15 @@ void CPlayer::MoveJoypad()
 		}
 		else
 		{
-			m_pos.x -= sinf(cameraRot.y + D3DX_PI * 0.5f) * fPlayerSpeed;
-			m_pos.z -= cosf(cameraRot.y + D3DX_PI * 0.5f) * fPlayerSpeed;
-			m_rotDest.y = cameraRot.y + D3DX_PI * 0.5f;
+			m_pos.x -= sinf(cameraRot.y + D3DX_PI * fMoveValue) * fPlayerSpeed;
+			m_pos.z -= cosf(cameraRot.y + D3DX_PI * fMoveValue) * fPlayerSpeed;
+			m_rotDest.y = cameraRot.y + D3DX_PI * fMoveValue;
 		}
 	}
 	//-----------------------------------
 	// 奥移動
 	//-----------------------------------
-	else if (stick.y <= -0.5f)
+	else if (stick.y <= -fMoveValue)
 	{
 		m_pos.x -= sinf(cameraRot.y + D3DX_PI * 1.0f) * fPlayerSpeed;
 		m_pos.z -= cosf(cameraRot.y + D3DX_PI * 1.0f) * fPlayerSpeed;
@@ -585,7 +615,7 @@ void CPlayer::MoveJoypad()
 	//-----------------------------------
 	// 前移動
 	//-----------------------------------
-	else if (stick.y >= 0.5f)
+	else if (stick.y >= fMoveValue)
 	{
 		m_pos.x -= sinf(cameraRot.y + D3DX_PI * 0.0f) * fPlayerSpeed;
 		m_pos.z -= cosf(cameraRot.y + D3DX_PI * 0.0f) * fPlayerSpeed;
@@ -594,6 +624,15 @@ void CPlayer::MoveJoypad()
 
 	//向きを目的の角度に合わせる
 	SetRot();
+
+	//タイヤの回転量の加算
+	m_rotWheel += D3DXToRadian(-10);
+
+	if (stick.x < fMoveValue && stick.x > -fMoveValue && stick.y < fMoveValue && stick.y > -fMoveValue)
+	{//スティックが動かされていないなら
+		//タイヤの回転量を0にする
+		m_rotWheel = 0;
+	}
 }
 
 //===========================

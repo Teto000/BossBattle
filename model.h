@@ -42,6 +42,7 @@ public:
 	//----------------
 	void SetPos(D3DXVECTOR3 pos);		//ˆÊ’u‚Ìİ’è
 	void SetRot(D3DXVECTOR3 rot);		//Œü‚«‚Ìİ’è
+	void SetRotX(float rotX) { m_rot.x = rotX; };	//X²‚Ì‰ñ“]—Ê‚ğİ’è
 	void SetParent(CModel* pModel);		//eƒ‚ƒfƒ‹‚Ìİ’è
 
 	//----------------

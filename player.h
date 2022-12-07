@@ -22,7 +22,7 @@ class CLine;	//ライン
 // マクロ定義
 //--------------------------------
 #define MAX_PARTS	(7)		//モデルパーツの最大数
-#define MAX_KEY		(3)		//キーの最大数
+#define MAX_KEY		(4)		//キーの最大数
 
 //================================
 // プレイヤークラスの定義
@@ -108,6 +108,7 @@ private:
 	D3DXVECTOR3 m_vtxMin;			//大きさの最小値
 	D3DXVECTOR3 m_worldMin;			//ワールド上の最大値
 	D3DXVECTOR3	m_worldMax;			//ワールド上の最小値
+	float m_rotWheel;				//タイヤの回転
 	CModel*  m_pModel[MAX_PARTS];	//モデル
 	CLine* m_pLIne[nMaxLine];		//ライン
 
