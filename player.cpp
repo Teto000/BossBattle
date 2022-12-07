@@ -548,6 +548,11 @@ void CPlayer::MoveJoypad()
 	CInputJoypad* joypad = CApplication::GetJoypad();
 	D3DXVECTOR3 stick = joypad->Stick(CInputJoypad::JOYKEY_LEFT_STICK, 0);
 
+	if (joypad->IsJoyPadUse(0) == false)
+	{
+		return;
+	}
+
 	//スティックを動かす値の設定
 	float fMoveValue = 0.5f;
 
@@ -628,7 +633,8 @@ void CPlayer::MoveJoypad()
 	//タイヤの回転量の加算
 	m_rotWheel += D3DXToRadian(-10);
 
-	if (stick.x < fMoveValue && stick.x > -fMoveValue && stick.y < fMoveValue && stick.y > -fMoveValue)
+	if (stick.x < fMoveValue && stick.x > -fMoveValue 
+		&& stick.y < fMoveValue && stick.y > -fMoveValue)
 	{//スティックが動かされていないなら
 		//タイヤの回転量を0にする
 		m_rotWheel = 0;
