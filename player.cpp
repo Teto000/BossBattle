@@ -549,7 +549,7 @@ void CPlayer::MoveJoypad()
 	D3DXVECTOR3 stick = joypad->Stick(CInputJoypad::JOYKEY_LEFT_STICK, 0);
 
 	if (joypad->IsJoyPadUse(0) == false)
-	{
+	{//ジョイパッドが使われていないなら
 		return;
 	}
 
