@@ -35,7 +35,7 @@ public:
 	HRESULT Init(D3DXVECTOR3 pos);
 	void Uninit();
 	void Update();
-	void Draw();
+	void Draw(D3DMATRIX* mtxPlayer);
 
 	//----------------
 	// セッター

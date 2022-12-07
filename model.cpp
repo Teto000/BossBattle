@@ -107,7 +107,7 @@ void CModel::Update()
 //========================
 // 描画
 //========================
-void CModel::Draw()
+void CModel::Draw(D3DMATRIX* mtxPlayer)
 {
 	LPDIRECT3DDEVICE9 pDevice = CApplication::GetRenderer()->GetDevice();	//デバイスの取得
 
@@ -137,15 +137,15 @@ void CModel::Draw()
 	{//親モデルがnullじゃないなら
 		//親モデルの情報を設定
 		m_mtxParent = m_pModel->GetmtxWorld();
+
+		//親のマトリックスとの掛け算
+		D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &m_mtxParent);
 	}
 	else
 	{
-		//親のマトリックスをプレイヤーにする
-		pDevice->GetTransform(D3DTS_WORLD, &m_mtxParent);
+		//親のマトリックスとの掛け算
+		D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, (const D3DXMATRIX*)mtxPlayer);
 	}
-
-	//親のマトリックスとの掛け算
-	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &m_mtxParent);
 
 	//影の描画
 	DrawShadow();

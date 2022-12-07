@@ -202,7 +202,14 @@ void CPlayer::Update()
 	MoveJoypad();	//ジョイパッド
 
 	//タイヤの回転
-	m_pModel[6]->SetRotX(m_rotWheel);
+	m_pModel[0]->SetRotX(m_rotWheel);
+
+	if (CInputKeyboard::Press(DIK_Z))
+	{
+		m_pModel[1]->SetRotX(m_rotWheel / 2);
+	}
+
+	//D3DXMatrix
 
 	//-------------------------
 	// 回転
@@ -297,7 +304,7 @@ void CPlayer::Draw()
 			return;
 		}
 
-		m_pModel[i]->Draw();
+		m_pModel[i]->Draw(&m_mtxWorld);
 	}
 }
 
@@ -328,33 +335,33 @@ CPlayer* CPlayer::Create()
 //========================
 void CPlayer::SetModel()
 {
-	//モデル0：体
-	m_pModel[0] = CModel::Create("data\\MODEL\\body.x", nullptr,
-		D3DXVECTOR3(0.0f, 70.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	//モデル0：タイヤ
+	m_pModel[0] = CModel::Create("data\\MODEL\\wheel.x", nullptr,
+		D3DXVECTOR3(0.0f, 50.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
-	//モデル1：頭
-	m_pModel[1] = CModel::Create("data\\MODEL\\head.x", m_pModel[0],
-		D3DXVECTOR3(0.0f, 65.0f, 12.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	//モデル1：体
+	m_pModel[1] = CModel::Create("data\\MODEL\\body.x", nullptr,
+		D3DXVECTOR3(0.0f, 50.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
-	//モデル2：右腕
-	m_pModel[2] = CModel::Create("data\\MODEL\\armR.x", m_pModel[0],
-		D3DXVECTOR3(-25.0f, 45.0f, 0.0f), D3DXVECTOR3(0.5f, -0.3f, -0.5f));
+	//モデル2：頭
+	m_pModel[2] = CModel::Create("data\\MODEL\\head.x", m_pModel[1],
+		D3DXVECTOR3(0.0f, 105.0f, 12.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
-	//モデル3：右手
-	m_pModel[3] = CModel::Create("data\\MODEL\\handR.x", m_pModel[2],
+	//モデル3：右腕
+	m_pModel[3] = CModel::Create("data\\MODEL\\armR.x", m_pModel[1],
+		D3DXVECTOR3(-25.0f, 85.0f, 0.0f), D3DXVECTOR3(0.5f, -0.3f, -0.5f));
+
+	//モデル4：右手
+	m_pModel[4] = CModel::Create("data\\MODEL\\handR.x", m_pModel[3],
 		D3DXVECTOR3(-4.0f, -40.0f, 0.0f), D3DXVECTOR3(0.35f, -0.25f, 0.35f));
 
-	//モデル4：左腕
-	m_pModel[4] = CModel::Create("data\\MODEL\\armL.x", m_pModel[0],
-		D3DXVECTOR3(25.0f, 45.0f, 0.0f), D3DXVECTOR3(0.03f, 0.1f, 0.62f));
+	//モデル5：左腕
+	m_pModel[5] = CModel::Create("data\\MODEL\\armL.x", m_pModel[1],
+		D3DXVECTOR3(25.0f, 85.0f, 0.0f), D3DXVECTOR3(0.03f, 0.1f, 0.62f));
 
-	//モデル5：左手
-	m_pModel[5] = CModel::Create("data\\MODEL\\handL.x", m_pModel[4],
+	//モデル6：左手
+	m_pModel[6] = CModel::Create("data\\MODEL\\handL.x", m_pModel[5],
 		D3DXVECTOR3(4.0f, -40.0f, 0.0f), D3DXVECTOR3(0.0f, 0.06f, -1.2f));
-
-	//モデル6：タイヤ
-	m_pModel[6] = CModel::Create("data\\MODEL\\wheel.x", m_pModel[0],
-		D3DXVECTOR3(0.0f, -35.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 }
 
 //========================
@@ -529,7 +536,7 @@ void CPlayer::MoveKeyboard(int nUpKey, int nDownKey, int nLeftKey, int nRightKey
 	SetRot();
 
 	//タイヤの回転量の加算
-	m_rotWheel += D3DXToRadian(-10);
+	m_rotWheel += D3DXToRadian(-nWheelRotValue);
 
 	if (!CInputKeyboard::Press(nUpKey) && !CInputKeyboard::Press(nDownKey)
 		&& !CInputKeyboard::Press(nRightKey) && !CInputKeyboard::Press(nLeftKey))
@@ -631,7 +638,7 @@ void CPlayer::MoveJoypad()
 	SetRot();
 
 	//タイヤの回転量の加算
-	m_rotWheel += D3DXToRadian(-10);
+	m_rotWheel += D3DXToRadian(-nWheelRotValue);
 
 	if (stick.x < fMoveValue && stick.x > -fMoveValue 
 		&& stick.y < fMoveValue && stick.y > -fMoveValue)

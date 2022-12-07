@@ -72,7 +72,7 @@ public:
 	float GetWidth() override;			//幅の取得
 	float GetHeight() override;			//高さの取得
 	D3DXMATRIX GetmtxWorld();			//ワールドマトリックスの取得
-	CModel* GetModel() { return m_pModel[0]; };	//モデルの取得
+	CModel* GetModel(int nNum) { return m_pModel[nNum]; };	//モデルの取得
 
 	//----------------
 	// 静的メンバ関数
@@ -94,7 +94,8 @@ private:
 	// 定数
 	//----------------
 	static const int nMaxLine = 128;
-	static const float fPlayerSpeed;	//プレイヤーの速度
+	static const int nWheelRotValue = 10;	//タイヤの回転量
+	static const float fPlayerSpeed;		//プレイヤーの速度
 
 	//----------------
 	// メンバ変数

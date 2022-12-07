@@ -161,7 +161,7 @@ void CEnemy::Draw()
 			return;
 		}
 
-		m_pModel[i]->Draw();
+		m_pModel[i]->Draw(&m_mtxWorld);
 	}
 }
 
