@@ -51,6 +51,11 @@ CEnemy::CEnemy() : CObject(0)
 		m_pModel[i] = nullptr;
 	}
 
+	for (int i = 0; i < nMaxLine; i++)
+	{
+		m_pLine[i] = nullptr;
+	}
+
 	/* ↓ モーション情報 ↓ */
 	m_nCurrentKey = 0;
 	m_nCntMotion = 0;
@@ -294,6 +299,14 @@ void CEnemy::SetMotion(bool bLoop)
 		m_nCurrentKey++;	//キー番号を加算
 		m_nCntMotion = 0;	//モーションカウンターを初期化
 	}
+}
+
+//===========================
+// 大きさの取得
+//===========================
+void CEnemy::GetSize()
+{
+	
 }
 
 //===========================

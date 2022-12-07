@@ -15,7 +15,6 @@
 #include "game.h"
 #include "player.h"
 #include "texture.h"
-#include "line.h"
 
 //========================
 // コンストラクタ
@@ -28,11 +27,6 @@ CModel::CModel()
 	m_vtxMax = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//最大値
 	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//大きさ
 	m_pModel = nullptr;
-
-	for (int i = 0; i < nMaxLine; i++)
-	{
-		m_pLIne[i] = nullptr;
-	}
 }
 
 //========================
@@ -50,6 +44,9 @@ HRESULT CModel::Init(D3DXVECTOR3 pos)
 {
 	//初期値の設定
 	m_pos = pos;	//位置
+
+	//モデルのワールドマトリックスの初期化
+	D3DXMatrixIdentity(&m_mtxWorld);
 
 	//-----------------------
 	// デバイスの取得
@@ -72,14 +69,6 @@ HRESULT CModel::Init(D3DXVECTOR3 pos)
 	// モデルの大きさを取得
 	//-----------------------
 	GetModelSize();
-
-	//モデルのワールドマトリックスの初期化
-	D3DXMatrixIdentity(&m_mtxWorld);
-
-	//-----------------------
-	// 線の表示
-	//-----------------------
-	SetLine();
 
 	return S_OK;
 }
@@ -113,8 +102,6 @@ void CModel::Uninit()
 //========================
 void CModel::Update()
 {
-	//線の情報の更新
-	UpdateLine();
 }
 
 //========================
@@ -284,155 +271,6 @@ void CModel::GetModelSize()
 }
 
 //========================
-// 線の設置
-//========================
-void CModel::SetLine()
-{
-	//線の色
-	D3DXCOLOR lineCol(1.0f, 0.0f, 0.0f, 1.0f);
-
-	//ワールド変換行列を使ってMin,Maxを求める
-	D3DXVec3TransformCoord(&m_worldMin, &m_vtxMin, &m_mtxWorld);
-	D3DXVec3TransformCoord(&m_worldMax, &m_vtxMax, &m_mtxWorld);
-
-	//代入する値をまとめる
-	D3DXVECTOR3 min = m_worldMin;
-	D3DXVECTOR3 max = m_worldMax;
-
-	//-----------------------------------
-	// 下辺
-	//-----------------------------------
-	D3DXVECTOR3 start = D3DXVECTOR3(min.x, min.y, min.z);
-	D3DXVECTOR3 end = D3DXVECTOR3(max.x, min.y, min.z);
-	m_pLIne[0] = CLine::Create(m_pos, start, end, lineCol);
-
-	start = D3DXVECTOR3(min.x, min.y, min.z);
-	end = D3DXVECTOR3(min.x, min.y, max.z);
-	m_pLIne[1] = CLine::Create(m_pos, start, end, lineCol);
-
-	start = D3DXVECTOR3(max.x, min.y, min.z);
-	end = D3DXVECTOR3(max.x, min.y, max.z);
-	m_pLIne[2] = CLine::Create(m_pos, start, end, lineCol);
-
-	start = D3DXVECTOR3(min.x, min.y, max.z);
-	end = D3DXVECTOR3(max.x, min.y, max.z);
-	m_pLIne[3] = CLine::Create(m_pos, start, end, lineCol);
-
-	//-----------------------------------
-	// 上辺
-	//-----------------------------------
-	start = D3DXVECTOR3(min.x, max.y, min.z);
-	end = D3DXVECTOR3(max.x, max.y, min.z);
-	m_pLIne[4] = CLine::Create(m_pos, start, end, lineCol);
-
-	start = D3DXVECTOR3(min.x, max.y, min.z);
-	end = D3DXVECTOR3(min.x, max.y, max.z);
-	m_pLIne[5] = CLine::Create(m_pos, start, end, lineCol);
-
-	start = D3DXVECTOR3(max.x, max.y, min.z);
-	end = D3DXVECTOR3(max.x, max.y, max.z);
-	m_pLIne[6] = CLine::Create(m_pos, start, end, lineCol);
-
-	start = D3DXVECTOR3(min.x, max.y, max.z);
-	end = D3DXVECTOR3(max.x, max.y, max.z);
-	m_pLIne[7] = CLine::Create(m_pos, start, end, lineCol);
-
-	//-----------------------------------
-	// 縦辺
-	//-----------------------------------
-	start = D3DXVECTOR3(min.x, min.y, min.z);
-	end = D3DXVECTOR3(min.x, max.y, min.z);
-	m_pLIne[8] = CLine::Create(m_pos, start, end, lineCol);
-
-	start = D3DXVECTOR3(min.x, min.y, max.z);
-	end = D3DXVECTOR3(min.x, max.y, max.z);
-	m_pLIne[9] = CLine::Create(m_pos, start, end, lineCol);
-
-	start = D3DXVECTOR3(max.x, min.y, min.z);
-	end = D3DXVECTOR3(max.x, max.y, min.z);
-	m_pLIne[10] = CLine::Create(m_pos, start, end, lineCol);
-
-	start = D3DXVECTOR3(max.x, min.y, max.z);
-	end = D3DXVECTOR3(max.x, max.y, max.z);
-	m_pLIne[11] = CLine::Create(m_pos, start, end, lineCol);
-}
-
-//========================
-// 線の情報の更新
-//========================
-void CModel::UpdateLine()
-{
-	//ワールド変換行列を使ってMin,Maxを求める
-	D3DXVec3TransformCoord(&m_worldMin, &m_vtxMin, &m_mtxWorld);
-	D3DXVec3TransformCoord(&m_worldMax, &m_vtxMax, &m_mtxWorld);
-
-	//最大最小を求めなおす
-
-	//剣を含まないでけいさんする
-
-	//代入する値をまとめる
-	D3DXVECTOR3 min = m_worldMin;
-	D3DXVECTOR3 max = m_worldMax;
-
-	//-----------------------------------
-	// 下辺
-	//-----------------------------------
-	D3DXVECTOR3 start = D3DXVECTOR3(min.x, min.y, min.z);
-	D3DXVECTOR3 end = D3DXVECTOR3(max.x, min.y, min.z);
-	m_pLIne[0]->SetLine(start, end);
-
-	start = D3DXVECTOR3(min.x, min.y, min.z);
-	end = D3DXVECTOR3(min.x, min.y, max.z);
-	m_pLIne[1]->SetLine(start, end);
-
-	start = D3DXVECTOR3(max.x, min.y, min.z);
-	end = D3DXVECTOR3(max.x, min.y, max.z);
-	m_pLIne[2]->SetLine(start, end);
-
-	start = D3DXVECTOR3(min.x, min.y, max.z);
-	end = D3DXVECTOR3(max.x, min.y, max.z);
-	m_pLIne[3]->SetLine(start, end);
-
-	//-----------------------------------
-	// 上辺
-	//-----------------------------------
-	start = D3DXVECTOR3(min.x, max.y, min.z);
-	end = D3DXVECTOR3(max.x, max.y, min.z);
-	m_pLIne[4]->SetLine(start, end);
-
-	start = D3DXVECTOR3(min.x, max.y, min.z);
-	end = D3DXVECTOR3(min.x, max.y, max.z);
-	m_pLIne[5]->SetLine(start, end);
-
-	start = D3DXVECTOR3(max.x, max.y, min.z);
-	end = D3DXVECTOR3(max.x, max.y, max.z);
-	m_pLIne[6]->SetLine(start, end);
-
-	start = D3DXVECTOR3(min.x, max.y, max.z);
-	end = D3DXVECTOR3(max.x, max.y, max.z);
-	m_pLIne[7]->SetLine(start, end);
-
-	//-----------------------------------
-	// 縦辺
-	//-----------------------------------
-	start = D3DXVECTOR3(min.x, min.y, min.z);
-	end = D3DXVECTOR3(min.x, max.y, min.z);
-	m_pLIne[8]->SetLine(start, end);
-
-	start = D3DXVECTOR3(min.x, min.y, max.z);
-	end = D3DXVECTOR3(min.x, max.y, max.z);
-	m_pLIne[9]->SetLine(start, end);
-
-	start = D3DXVECTOR3(max.x, min.y, min.z);
-	end = D3DXVECTOR3(max.x, max.y, min.z);
-	m_pLIne[10]->SetLine(start, end);
-
-	start = D3DXVECTOR3(max.x, min.y, max.z);
-	end = D3DXVECTOR3(max.x, max.y, max.z);
-	m_pLIne[11]->SetLine(start, end);
-}
-
-//========================
 // 影の描画
 //========================
 void CModel::DrawShadow()
@@ -554,6 +392,22 @@ D3DXVECTOR3 CModel::GetPos()
 D3DXVECTOR3 CModel::GetRot()
 {
 	return m_rot;
+}
+
+//===========================
+// 最大値の取得
+//===========================
+D3DXVECTOR3 CModel::GetVtxMax()
+{
+	return m_vtxMax;
+}
+
+//===========================
+// 最小値の取得
+//===========================
+D3DXVECTOR3 CModel::GetVtxMin()
+{
+	return m_vtxMin;
 }
 
 //==============================

@@ -16,6 +16,7 @@
 // 前方宣言
 //--------------------------------
 class CModel;	//モデル
+class CLine;	//ライン
 
 //--------------------------------
 // マクロ定義
@@ -79,28 +80,36 @@ public:
 	static CPlayer* Create();
 
 private:
-	void SetModel();			//モデルの設定
-	void SetMotion(bool bLoop);	//モーションの設定
+	void SetModel();				//モデルの設定
+	void SetMotion(bool bLoop);		//モーションの設定
 	void MoveKeyboard(int nUpKey, int nDownKey, int nLeftKey, int nRightKey);	//移動
 	void MoveJoypad();	//ジョイパッドを使った移動
 	void SetRot();		//角度の設定
-	void CollisionPlayer(D3DXVECTOR3 *pPos, D3DXVECTOR3 size);	//プレイヤーの当たり判定
+	void SetLine();		//線の設置
+	void UpdateLine();	//線の更新
+	void GetSize();		//大きさの取得
 
 private:
 	//----------------
 	// 定数
 	//----------------
+	static const int nMaxLine = 128;
 	static const float fPlayerSpeed;	//プレイヤーの速度
 
 	//----------------
 	// メンバ変数
 	//----------------
-	D3DXMATRIX m_mtxWorld;		//ワールドマトリックス
-	D3DXVECTOR3 m_pos;			//位置
-	D3DXVECTOR3 m_move;			//移動量
-	D3DXVECTOR3 m_rot;			//向き
-	D3DXVECTOR3 m_rotDest;		//目的の向き
+	D3DXMATRIX m_mtxWorld;			//ワールドマトリックス
+	D3DXVECTOR3 m_pos;				//位置
+	D3DXVECTOR3 m_move;				//移動量
+	D3DXVECTOR3 m_rot;				//向き
+	D3DXVECTOR3 m_rotDest;			//目的の向き
+	D3DXVECTOR3 m_vtxMax;			//大きさの最大値
+	D3DXVECTOR3 m_vtxMin;			//大きさの最小値
+	D3DXVECTOR3 m_worldMin;			//ワールド上の最大値
+	D3DXVECTOR3	m_worldMax;			//ワールド上の最小値
 	CModel*  m_pModel[MAX_PARTS];	//モデル
+	CLine* m_pLIne[nMaxLine];		//ライン
 
 	/* ↓ モーション情報 ↓ */
 	int m_nCurrentKey;			//現在のキー番号

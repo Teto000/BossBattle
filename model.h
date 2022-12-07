@@ -12,11 +12,6 @@
 //--------------------------------
 #include "object.h"
 
-//--------------------------------
-// 前方宣言
-//--------------------------------
-class CLine;	//ライン
-
 //================================
 // モデルクラスの定義
 //================================
@@ -54,7 +49,10 @@ public:
 	//----------------
 	D3DXVECTOR3 GetPos();		//位置の取得
 	D3DXVECTOR3 GetRot();		//向きの取得
+	D3DXVECTOR3 GetVtxMax();
+	D3DXVECTOR3 GetVtxMin();
 	D3DXMATRIX GetmtxWorld();	//ワールドマトリックスの取得
+	LPD3DXMESH GetMesh() { return m_pMesh; };	//メッシュ情報の取得
 
 	//----------------
 	// 静的メンバ関数
@@ -64,16 +62,9 @@ public:
 
 private:
 	void GetModelSize();		//モデルの大きさを取得
-	void SetLine();				//線の設置
-	void UpdateLine();			//線の情報の更新
 	void DrawShadow();			//影の描画
 
 private:
-	//----------------
-	// 定数
-	//----------------
-	static const int nMaxLine = 128;
-
 	//----------------
 	// メンバ変数
 	//----------------
@@ -88,7 +79,6 @@ private:
 	D3DXVECTOR3	m_worldMax;		//最小位置
 	CModel* m_pModel;			//親モデルへのポインタ
 	LPCTSTR m_modelName;		//モデルのパス
-	CLine* m_pLIne[nMaxLine];	//ラインクラス
 	MODELTYPE m_type;			//種類
 
 	/* ↓ モデル情報 ↓ */

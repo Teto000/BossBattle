@@ -16,6 +16,7 @@
 // 前方宣言
 //--------------------------------
 class CModel;	//モデル
+class CLine;	//ライン
 
 //--------------------------------
 // マクロ定義
@@ -80,8 +81,14 @@ public:
 private:
 	void SetModel();			//モデルの設定
 	void SetMotion(bool bLoop);	//モーションの設定
+	void GetSize();				//大きさを取得
 
 private:
+	//----------------
+	// 定数
+	//----------------
+	static const int nMaxLine = 24;
+
 	//----------------
 	// メンバ変数
 	//----------------
@@ -91,6 +98,8 @@ private:
 	D3DXVECTOR3 m_rot;			//向き
 	D3DXVECTOR3 m_rotDest;		//目的の向き
 	CModel*  m_pModel[MAX_ENEMY_PARTS];	//モデル
+	CLine*	 m_pLine[nMaxLine];			//ライン
+
 
 	/* ↓ モーション情報 ↓ */
 	int m_nCurrentKey;			//現在のキー番号
