@@ -236,6 +236,11 @@ void CCamera::Turn()
 	{//Bキーが押された
 		m_rot.x -= m_TSPEED;
 	}
+
+	if (CGame::GetFinish())
+	{//終了フラグが立ってるなら
+		m_rot.y -= m_TSPEED / 3;
+	}
 }
 
 //========================

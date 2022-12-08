@@ -194,8 +194,11 @@ void CPlayer::Update()
 	//-------------------------
 	// 移動
 	//-------------------------
-	MoveKeyboard(DIK_W, DIK_S, DIK_A, DIK_D);	//キーボード
-	MoveJoypad();	//ジョイパッド
+	if (CGame::GetFinish() == false)
+	{//終了フラグが立っていないなら
+		MoveKeyboard(DIK_W, DIK_S, DIK_A, DIK_D);	//キーボード
+		MoveJoypad();	//ジョイパッド
+	}
 
 	//タイヤの回転
 	m_pModel[0]->SetRotX(m_rotWheel);
@@ -368,7 +371,7 @@ void CPlayer::SetMotion(bool bLoop)
 	if (m_nCurrentKey + 1 >= MAX_KEY)
 	{//キーが最大数に達したら
 		if (bLoop)
-		{
+		{//ループするなら
 			m_nCurrentKey = 0;	//キー番号の初期化
 		}
 		else
@@ -846,8 +849,14 @@ bool CPlayer::GetCollisionPlayer()
 	//-----------------------------
 	// 敵の情報を取得
 	//-----------------------------
-	D3DXVECTOR3 enemyPos(CGame::GetEnemy()->GetPosition());	//位置
-	D3DXVECTOR3 enemySize(CGame::GetEnemy()->GetSize());	//大きさ
+	D3DXVECTOR3 enemyPos(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	D3DXVECTOR3 enemySize(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+
+	if (CGame::GetEnemy() != nullptr)
+	{
+		enemyPos = CGame::GetEnemy()->GetPosition();	//位置
+		enemySize = CGame::GetEnemy()->GetSize();		//大きさ
+	}
 
 	//-----------------------------
 	// 当たり判定

@@ -41,22 +41,29 @@ public:
 	//------------------
 	// セッター
 	//------------------
-	static void SetEnemyState() { bDeathEnemny = true; }
+	static void SetEnemyState() { m_bDeathEnemny = true; }
 
 	//------------------
 	// ゲッター
 	//------------------
+	static bool GetFinish() { return m_bFinish; }		//終了フラグを取得
 	static CCamera*	GetCamera() { return m_pCamera; }	//カメラの取得
 	static CPlayer*	GetPlayer() { return m_pPlayer; }	//プレイヤーの取得
-	static CEnemy*	GetEnemy() { return m_pEnemy; }	//エネミーの取得
+	static CEnemy*	GetEnemy() { return m_pEnemy; }		//エネミーの取得
 	static CMeshField*	GetMeshField()
 			{ return m_pMeshField; }	//メッシュフィールドの取得
 
 private:
 	//-------------------
+	// メンバ変数
+	//-------------------
+	int nCntFinish;	//終了時間カウント
+
+	//-------------------
 	// 静的メンバ変数
 	//-------------------
-	static bool bDeathEnemny;			//敵が死んでいるか
+	static bool m_bDeathEnemny;	//敵が死んでいるか
+	static bool m_bFinish;		//終了フラグ
 
 	static CCamera*		m_pCamera;		//カメラ
 	static CPlayer*		m_pPlayer;		//プレイヤー

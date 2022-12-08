@@ -27,7 +27,8 @@
 //------------------------
 // 静的メンバ変数宣言
 //------------------------
-bool CGame::bDeathEnemny = false;			//敵が死んでいるか
+bool CGame::m_bDeathEnemny = false;			//敵が死んでいるか
+bool CGame::m_bFinish = false;				//終了フラグ
 
 CCamera*	CGame::m_pCamera = nullptr;		//カメラ
 CPlayer*	CGame::m_pPlayer = nullptr;		//プレイヤー
@@ -40,7 +41,7 @@ CPolygon*	CGame::m_pPolygon = nullptr;	//2Dポリゴン
 //===========================
 CGame::CGame()
 {
-
+	nCntFinish = 0;
 }
 
 //===========================
@@ -56,6 +57,10 @@ CGame::~CGame()
 //===========================
 HRESULT CGame::Init()
 {
+	//初期値の設定
+	m_bDeathEnemny = false;
+	m_bFinish = false;
+
 	//カメラの生成
 	m_pCamera = new CCamera;
 	m_pCamera->Init();
@@ -104,18 +109,37 @@ void CGame::Uninit()
 //===========================
 void CGame::Update()
 {
-	if (bDeathEnemny == true)
+	if (m_bDeathEnemny)
 	{//敵が死んでいるなら
 		m_pEnemy = nullptr;
+		m_bFinish = true;	//終了フラグを立てる
 	}
 
-	//カメラの更新
+	//----------------------------
+	// 終了処理
+	//----------------------------
+	if (m_bFinish)
+	{//終了フラグが立っているなら
+		nCntFinish++;	//カウントを加算
+
+		if (nCntFinish >= 300)
+		{//カウントが5秒以上なら
+			//リザルト画面に移行
+			CApplication::GetFade()->SetFade(CApplication::MODE_RESULT);
+		}
+	}
+
+	//----------------------------
+	// カメラの更新
+	//----------------------------
 	if (m_pCamera != nullptr)
 	{
 		m_pCamera->Update();
 	}
 
-	//画面遷移
+	//----------------------------
+	// 画面遷移
+	//----------------------------
 	if (CInputKeyboard::Trigger(DIK_RETURN))
 	{
 		//リザルト画面に移行
