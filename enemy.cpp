@@ -160,11 +160,13 @@ void CEnemy::Update()
 	//----------------------------
 	if (CGame::GetPlayer()->GetCollisionPlayer())
 	{//プレイヤーと当たっているなら
+		CGame::SetEnemyState();
+
 		//消去
-		//Uninit();
+		Uninit();
 
 		//リザルト画面に移行
-		CApplication::GetFade()->SetFade(CApplication::MODE_RESULT);
+		//CApplication::GetFade()->SetFade(CApplication::MODE_RESULT);
 	}
 }
 

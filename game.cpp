@@ -27,6 +27,8 @@
 //------------------------
 // 静的メンバ変数宣言
 //------------------------
+bool CGame::bDeathEnemny = false;			//敵が死んでいるか
+
 CCamera*	CGame::m_pCamera = nullptr;		//カメラ
 CPlayer*	CGame::m_pPlayer = nullptr;		//プレイヤー
 CEnemy*		CGame::m_pEnemy = nullptr;		//エネミー
@@ -38,7 +40,7 @@ CPolygon*	CGame::m_pPolygon = nullptr;	//2Dポリゴン
 //===========================
 CGame::CGame()
 {
-	
+
 }
 
 //===========================
@@ -102,6 +104,11 @@ void CGame::Uninit()
 //===========================
 void CGame::Update()
 {
+	if (bDeathEnemny == true)
+	{//敵が死んでいるなら
+		m_pEnemy = nullptr;
+	}
+
 	//カメラの更新
 	if (m_pCamera != nullptr)
 	{
