@@ -164,9 +164,6 @@ void CEnemy::Update()
 
 		//Á‹Ž
 		Uninit();
-
-		//ƒŠƒUƒ‹ƒg‰æ–Ê‚ÉˆÚs
-		//CApplication::GetFade()->SetFade(CApplication::MODE_RESULT);
 	}
 }
 

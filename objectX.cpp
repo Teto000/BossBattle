@@ -41,23 +41,6 @@ CObjectX::~CObjectX()
 //========================
 HRESULT CObjectX::Init(D3DXVECTOR3 pos)
 {
-	//-----------------------
-	// デバイスの取得
-	//-----------------------
-	LPDIRECT3DDEVICE9 pDevice = CApplication::GetRenderer()->GetDevice();
-
-	//-----------------------
-	// Xファイルの読み込み
-	//-----------------------
-	D3DXLoadMeshFromX("data\\MODEL\\sword.x",
-					  D3DXMESH_SYSTEMMEM,
-					  pDevice,
-					  NULL,
-					  &m_pBuffMat,
-					  NULL,
-					  &m_nNumMat,
-					  &m_pMesh);
-
 	return S_OK;
 }
 
@@ -240,6 +223,31 @@ void CObjectX::SetPos(D3DXVECTOR3 pos)
 void CObjectX::SetRot(D3DXVECTOR3 rot)
 {
 	m_rot = rot;
+}
+
+//===========================
+// Xファイルの名前を設定
+//===========================
+void CObjectX::SetFireName(LPCTSTR text)
+{
+	m_name = text;
+
+	//-----------------------
+	// デバイスの取得
+	//-----------------------
+	LPDIRECT3DDEVICE9 pDevice = CApplication::GetRenderer()->GetDevice();
+
+	//-----------------------
+	// Xファイルの読み込み
+	//-----------------------
+	D3DXLoadMeshFromX(m_name,
+		D3DXMESH_SYSTEMMEM,
+		pDevice,
+		NULL,
+		&m_pBuffMat,
+		NULL,
+		&m_nNumMat,
+		&m_pMesh);
 }
 
 //===========================

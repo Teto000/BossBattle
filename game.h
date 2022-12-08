@@ -22,6 +22,7 @@ class CEnemy;		//エネミー
 class CMeshField;	//メッシュフィールド
 class CPolygon;		//2Dポリゴン
 class CMessage;		//メッセージ
+class CSky;			//スカイ
 
 //================================
 // ゲームクラスの定義
@@ -72,6 +73,7 @@ private:
 	static CMeshField*	m_pMeshField;	//メッシュフィールド
 	static CPolygon*	m_pPolygon;		//2Dポリゴン
 	static CMessage*	m_pMessage;		//メッセージ
+	static CSky*		m_pSky;			//スカイ
 };
 
 #endif

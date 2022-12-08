@@ -24,6 +24,7 @@
 #include "fade.h"
 #include "polygon.h"
 #include "message.h"
+#include "sky.h"
 
 //------------------------
 // 静的メンバ変数宣言
@@ -37,6 +38,7 @@ CEnemy*		CGame::m_pEnemy = nullptr;		//エネミー
 CMeshField*	CGame::m_pMeshField = nullptr;	//メッシュフィールド
 CPolygon*	CGame::m_pPolygon = nullptr;	//2Dポリゴン
 CMessage*	CGame::m_pMessage = nullptr;	//メッセージ
+CSky*		CGame::m_pSky = nullptr;		//スカイ
 
 //===========================
 // コンストラクタ
@@ -81,6 +83,9 @@ HRESULT CGame::Init()
 
 	//メッシュフィールドの生成
 	m_pMeshField = CMeshField::Create();
+
+	//スカイの生成
+	//m_pSky = CSky::Create();
 
 	//2Dポリゴンの生成
 	m_pPolygon = CPolygon::Create(CPolygon::POLYGONTYPE_AIM);
@@ -150,12 +155,12 @@ void CGame::Update()
 	//----------------------------
 	// 画面遷移
 	//----------------------------
-	if (CInputKeyboard::Trigger(DIK_RETURN))
+	/*if (CInputKeyboard::Trigger(DIK_RETURN))
 	{
 		//リザルト画面に移行
 		CApplication::GetFade()->SetFade(CApplication::MODE_RESULT);
 
 		//SEの再生
 		CSound::PlaySound(CSound::SOUND_LABEL_SE_BUTTOM);
-	}
+	}*/
 }

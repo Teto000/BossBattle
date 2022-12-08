@@ -119,6 +119,9 @@
     <ClCompile Include="message.cpp">
       <Filter>00_Main\Object\Object2D</Filter>
     </ClCompile>
+    <ClCompile Include="sky.cpp">
+      <Filter>00_Main\Object\ObjectX</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -204,6 +207,9 @@
     </ClInclude>
     <ClInclude Include="message.h">
       <Filter>00_Main\Object\Object2D</Filter>
+    </ClInclude>
+    <ClInclude Include="sky.h">
+      <Filter>00_Main\Object\ObjectX</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

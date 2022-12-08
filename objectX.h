@@ -35,6 +35,7 @@ public:
 	//----------------
 	void SetPos(D3DXVECTOR3 pos);		//位置の設定
 	void SetRot(D3DXVECTOR3 rot);		//向きの設定
+	void SetFireName(LPCTSTR text);		//Xファイルの名前を設定
 
 	//----------------
 	// ゲッター
@@ -53,6 +54,7 @@ private:
 	D3DXMATRIX m_mtxWorld;				//ワールドマトリックス
 	D3DXVECTOR3 m_pos;					//位置
 	D3DXVECTOR3 m_rot;					//向き
+	LPCTSTR m_name;						//Xファイルの名前
 
 	/* ↓ モデル情報 ↓ */
 	LPD3DXMESH m_pMesh;					//メッシュ情報へのポインタ
