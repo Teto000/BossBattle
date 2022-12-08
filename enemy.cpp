@@ -93,8 +93,8 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 	//-----------------------
 	// ÉÇÉfÉãÇÃëÂÇ´Ç≥Çê›íË
 	//-----------------------
-	m_vtxMin = D3DXVECTOR3(-50.0f, 0.0f, -50.0f);
-	m_vtxMax = D3DXVECTOR3(50.0f, 150.0f, 50.0f);
+	m_vtxMin = D3DXVECTOR3(-40.0f, 0.0f, -40.0f);
+	m_vtxMax = D3DXVECTOR3(40.0f, 130.0f, 40.0f);
 
 	m_size.x = m_vtxMax.x - m_vtxMin.x;
 	m_size.y = m_vtxMax.y - m_vtxMin.y;
