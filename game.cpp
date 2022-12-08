@@ -23,6 +23,7 @@
 #include "meshfield.h"
 #include "fade.h"
 #include "polygon.h"
+#include "message.h"
 
 //------------------------
 // 静的メンバ変数宣言
@@ -35,6 +36,7 @@ CPlayer*	CGame::m_pPlayer = nullptr;		//プレイヤー
 CEnemy*		CGame::m_pEnemy = nullptr;		//エネミー
 CMeshField*	CGame::m_pMeshField = nullptr;	//メッシュフィールド
 CPolygon*	CGame::m_pPolygon = nullptr;	//2Dポリゴン
+CMessage*	CGame::m_pMessage = nullptr;	//メッセージ
 
 //===========================
 // コンストラクタ
@@ -68,7 +70,9 @@ HRESULT CGame::Init()
 	//プレイヤーの生成
 	m_pPlayer = CPlayer::Create();
 
-	//エネミーの生成
+	//----------------------------
+	// エネミーの生成
+	//----------------------------
 	{
 		D3DXVECTOR3 pos(0.0f, 0.0f, 300.0f);
 		D3DXVECTOR3 rot(0.0f, 0.0f, 0.0f);
@@ -80,6 +84,12 @@ HRESULT CGame::Init()
 
 	//2Dポリゴンの生成
 	m_pPolygon = CPolygon::Create(CPolygon::POLYGONTYPE_AIM);
+
+	//メッセージの生成
+	{
+		D3DXVECTOR3 pos(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f);
+		m_pMessage = CMessage::Create(pos, CMessage::MESSAGE_CLEAR);
+	}
 
 	//BGMの再生
 	CSound::PlaySound(CSound::SOUND_LABEL_GAME);

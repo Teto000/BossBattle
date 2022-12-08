@@ -21,6 +21,7 @@ class CPlayer;		//プレイヤー
 class CEnemy;		//エネミー
 class CMeshField;	//メッシュフィールド
 class CPolygon;		//2Dポリゴン
+class CMessage;		//メッセージ
 
 //================================
 // ゲームクラスの定義
@@ -70,6 +71,7 @@ private:
 	static CEnemy*		m_pEnemy;		//エネミー
 	static CMeshField*	m_pMeshField;	//メッシュフィールド
 	static CPolygon*	m_pPolygon;		//2Dポリゴン
+	static CMessage*	m_pMessage;		//メッセージ
 };
 
 #endif

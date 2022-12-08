@@ -32,6 +32,7 @@ public:
 		OBJTYPE_FADE = 0,	//フェード
 		OBJTYPE_PLAYER,		//プレイヤー
 		OBJTYPE_ENEMY,		//エネミー
+		OBJTYPE_MESSAGE,	//メッセージ
 		OBJTYPE_MAX,
 	};
 

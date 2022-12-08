@@ -116,6 +116,9 @@
     <ClCompile Include="polygon.cpp">
       <Filter>00_Main\Object\Object2D</Filter>
     </ClCompile>
+    <ClCompile Include="message.cpp">
+      <Filter>00_Main\Object\Object2D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -197,6 +200,9 @@
       <Filter>00_Main\Object\Object3D</Filter>
     </ClInclude>
     <ClInclude Include="polygon.h">
+      <Filter>00_Main\Object\Object2D</Filter>
+    </ClInclude>
+    <ClInclude Include="message.h">
       <Filter>00_Main\Object\Object2D</Filter>
     </ClInclude>
   </ItemGroup>
