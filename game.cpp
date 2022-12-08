@@ -22,6 +22,7 @@
 #include "enemy.h"
 #include "meshfield.h"
 #include "fade.h"
+#include "polygon.h"
 
 //------------------------
 // 静的メンバ変数宣言
@@ -30,6 +31,7 @@ CCamera*	CGame::m_pCamera = nullptr;		//カメラ
 CPlayer*	CGame::m_pPlayer = nullptr;		//プレイヤー
 CEnemy*		CGame::m_pEnemy = nullptr;		//エネミー
 CMeshField*	CGame::m_pMeshField = nullptr;	//メッシュフィールド
+CPolygon*	CGame::m_pPolygon = nullptr;	//2Dポリゴン
 
 //===========================
 // コンストラクタ
@@ -68,6 +70,9 @@ HRESULT CGame::Init()
 
 	//メッシュフィールドの生成
 	m_pMeshField = CMeshField::Create();
+
+	//2Dポリゴンの生成
+	m_pPolygon = CPolygon::Create(CPolygon::POLYGONTYPE_AIM);
 
 	//BGMの再生
 	CSound::PlaySound(CSound::SOUND_LABEL_GAME);

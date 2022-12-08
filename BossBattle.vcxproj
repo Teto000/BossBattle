@@ -169,6 +169,7 @@
     <ClCompile Include="object3d.cpp" />
     <ClCompile Include="objectX.cpp" />
     <ClCompile Include="player.cpp" />
+    <ClCompile Include="polygon.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="result.cpp" />
     <ClCompile Include="sound.cpp" />
@@ -197,6 +198,7 @@
     <ClInclude Include="object3d.h" />
     <ClInclude Include="objectX.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="polygon.h" />
     <ClInclude Include="renderer.h" />
     <ClInclude Include="result.h" />
     <ClInclude Include="sound.h" />

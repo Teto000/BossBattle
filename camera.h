@@ -35,6 +35,7 @@ public:
 	//------------------
 	D3DXVECTOR3 GetPosV();
 	D3DXVECTOR3 GetRot();
+	bool GetLockOn() { return m_bLockOn; };	//ƒƒbƒNƒIƒ“ó‘Ô‚Ìæ“¾
 
 private:
 	void Turn();

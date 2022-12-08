@@ -23,6 +23,7 @@ public: /* 定義 */
 		TEXTURE_TITLE = 0,		//タイトル
 		TEXTURE_RESULT,			//リザルト
 		TEXTURE_GROUND,			//地面
+		TEXTURE_AIM,			//照準
 		TEXTURE_MAX,
 		TEXTURE_NONE,			//使用しない
 	};
