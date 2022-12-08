@@ -22,7 +22,7 @@ class CLine;	//ライン
 // マクロ定義
 //--------------------------------
 #define MAX_PARTS	(7)		//モデルパーツの最大数
-#define MAX_KEY		(2)		//キーの最大数
+#define MAX_KEY		(3)		//キーの最大数
 
 //================================
 // プレイヤークラスの定義
@@ -87,7 +87,6 @@ private:
 	void SetRot();		//角度の設定
 	void SetLine();		//線の設置
 	void UpdateLine();	//線の更新
-	void GetSize();		//大きさの取得
 
 private:
 	//----------------
@@ -111,7 +110,7 @@ private:
 	D3DXVECTOR3	m_worldMax;			//ワールド上の最小値
 	float m_rotWheel;				//タイヤの回転
 	CModel*  m_pModel[MAX_PARTS];	//モデル
-	CLine* m_pLIne[nMaxLine];		//ライン
+	CLine* m_pLine[nMaxLine];		//ライン
 
 	/* ↓ モーション情報 ↓ */
 	int m_nCurrentKey;			//現在のキー番号

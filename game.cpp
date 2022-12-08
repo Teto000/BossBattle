@@ -63,7 +63,7 @@ HRESULT CGame::Init()
 	{
 		D3DXVECTOR3 pos(0.0f, 0.0f, 300.0f);
 		D3DXVECTOR3 rot(0.0f, 0.0f, 0.0f);
-		//m_pEnemy = CEnemy::Create(pos, rot);
+		m_pEnemy = CEnemy::Create(pos, rot);
 	}
 
 	//メッシュフィールドの生成

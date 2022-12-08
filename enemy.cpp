@@ -13,6 +13,7 @@
 #include "application.h"
 #include "renderer.h"
 #include "model.h"
+#include "line.h"
 
 //------------------------
 // グローバル変数
@@ -44,6 +45,10 @@ CEnemy::CEnemy() : CObject(0)
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//位置
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//移動量
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//向き
+	m_vtxMax = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//大きさの最大値
+	m_vtxMin = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//大きさの最小値
+	m_worldMin = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//ワールド上の最大値
+	m_worldMax = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//ワールド上の最小値
 
 	/* ↓ モデル情報 ↓ */
 	for (int i = 0; i < MAX_ENEMY_PARTS; i++)
@@ -81,6 +86,17 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 	// モデルの生成
 	//--------------------
 	SetModel();
+
+	//-----------------------
+	// モデルの大きさを設定
+	//-----------------------
+	m_vtxMin = D3DXVECTOR3(-50.0f, 0.0f, -50.0f);
+	m_vtxMax = D3DXVECTOR3(50.0f, 150.0f, 50.0f);
+
+	//-----------------------
+	// 線の表示
+	//-----------------------
+	SetLine();
 
 	return S_OK;
 }
@@ -126,6 +142,11 @@ void CEnemy::Update()
 	// モーション
 	//-------------------
 	SetMotion(true);
+
+	//-------------------------
+	// 線の更新
+	//-------------------------
+	UpdateLine();
 }
 
 //========================
@@ -301,12 +322,153 @@ void CEnemy::SetMotion(bool bLoop)
 	}
 }
 
-//===========================
-// 大きさの取得
-//===========================
-void CEnemy::GetSize()
+//========================
+// 線の設置
+//========================
+void CEnemy::SetLine()
 {
-	
+	//線の色
+	D3DXCOLOR lineCol(1.0f, 0.0f, 0.0f, 1.0f);
+
+	//ワールド変換行列を使ってMin,Maxを求める
+	D3DXVec3TransformCoord(&m_worldMin, &m_vtxMin, &m_mtxWorld);
+	D3DXVec3TransformCoord(&m_worldMax, &m_vtxMax, &m_mtxWorld);
+
+	//代入する値をまとめる
+	D3DXVECTOR3 min = m_worldMin;
+	D3DXVECTOR3 max = m_worldMax;
+
+	//-----------------------------------
+	// 下辺
+	//-----------------------------------
+	D3DXVECTOR3 start = D3DXVECTOR3(min.x, min.y, min.z);
+	D3DXVECTOR3 end = D3DXVECTOR3(max.x, min.y, min.z);
+	m_pLine[0] = CLine::Create(m_pos, start, end, lineCol);
+
+	start = D3DXVECTOR3(min.x, min.y, min.z);
+	end = D3DXVECTOR3(min.x, min.y, max.z);
+	m_pLine[1] = CLine::Create(m_pos, start, end, lineCol);
+
+	start = D3DXVECTOR3(max.x, min.y, min.z);
+	end = D3DXVECTOR3(max.x, min.y, max.z);
+	m_pLine[2] = CLine::Create(m_pos, start, end, lineCol);
+
+	start = D3DXVECTOR3(min.x, min.y, max.z);
+	end = D3DXVECTOR3(max.x, min.y, max.z);
+	m_pLine[3] = CLine::Create(m_pos, start, end, lineCol);
+
+	//-----------------------------------
+	// 上辺
+	//-----------------------------------
+	start = D3DXVECTOR3(min.x, max.y, min.z);
+	end = D3DXVECTOR3(max.x, max.y, min.z);
+	m_pLine[4] = CLine::Create(m_pos, start, end, lineCol);
+
+	start = D3DXVECTOR3(min.x, max.y, min.z);
+	end = D3DXVECTOR3(min.x, max.y, max.z);
+	m_pLine[5] = CLine::Create(m_pos, start, end, lineCol);
+
+	start = D3DXVECTOR3(max.x, max.y, min.z);
+	end = D3DXVECTOR3(max.x, max.y, max.z);
+	m_pLine[6] = CLine::Create(m_pos, start, end, lineCol);
+
+	start = D3DXVECTOR3(min.x, max.y, max.z);
+	end = D3DXVECTOR3(max.x, max.y, max.z);
+	m_pLine[7] = CLine::Create(m_pos, start, end, lineCol);
+
+	//-----------------------------------
+	// 縦辺
+	//-----------------------------------
+	start = D3DXVECTOR3(min.x, min.y, min.z);
+	end = D3DXVECTOR3(min.x, max.y, min.z);
+	m_pLine[8] = CLine::Create(m_pos, start, end, lineCol);
+
+	start = D3DXVECTOR3(min.x, min.y, max.z);
+	end = D3DXVECTOR3(min.x, max.y, max.z);
+	m_pLine[9] = CLine::Create(m_pos, start, end, lineCol);
+
+	start = D3DXVECTOR3(max.x, min.y, min.z);
+	end = D3DXVECTOR3(max.x, max.y, min.z);
+	m_pLine[10] = CLine::Create(m_pos, start, end, lineCol);
+
+	start = D3DXVECTOR3(max.x, min.y, max.z);
+	end = D3DXVECTOR3(max.x, max.y, max.z);
+	m_pLine[11] = CLine::Create(m_pos, start, end, lineCol);
+}
+
+//========================
+// 線の情報の更新
+//========================
+void CEnemy::UpdateLine()
+{
+	//ワールド変換行列を使ってMin,Maxを求める
+	D3DXVec3TransformCoord(&m_worldMin, &m_vtxMin, &m_mtxWorld);
+	D3DXVec3TransformCoord(&m_worldMax, &m_vtxMax, &m_mtxWorld);
+
+	//最大最小を求めなおす
+
+	//剣を含まないでけいさんする
+
+	//代入する値をまとめる
+	D3DXVECTOR3 min = m_worldMin;
+	D3DXVECTOR3 max = m_worldMax;
+
+	//-----------------------------------
+	// 下辺
+	//-----------------------------------
+	D3DXVECTOR3 start = D3DXVECTOR3(min.x, min.y, min.z);
+	D3DXVECTOR3 end = D3DXVECTOR3(max.x, min.y, min.z);
+	m_pLine[0]->SetLine(start, end);
+
+	start = D3DXVECTOR3(min.x, min.y, min.z);
+	end = D3DXVECTOR3(min.x, min.y, max.z);
+	m_pLine[1]->SetLine(start, end);
+
+	start = D3DXVECTOR3(max.x, min.y, min.z);
+	end = D3DXVECTOR3(max.x, min.y, max.z);
+	m_pLine[2]->SetLine(start, end);
+
+	start = D3DXVECTOR3(min.x, min.y, max.z);
+	end = D3DXVECTOR3(max.x, min.y, max.z);
+	m_pLine[3]->SetLine(start, end);
+
+	//-----------------------------------
+	// 上辺
+	//-----------------------------------
+	start = D3DXVECTOR3(min.x, max.y, min.z);
+	end = D3DXVECTOR3(max.x, max.y, min.z);
+	m_pLine[4]->SetLine(start, end);
+
+	start = D3DXVECTOR3(min.x, max.y, min.z);
+	end = D3DXVECTOR3(min.x, max.y, max.z);
+	m_pLine[5]->SetLine(start, end);
+
+	start = D3DXVECTOR3(max.x, max.y, min.z);
+	end = D3DXVECTOR3(max.x, max.y, max.z);
+	m_pLine[6]->SetLine(start, end);
+
+	start = D3DXVECTOR3(min.x, max.y, max.z);
+	end = D3DXVECTOR3(max.x, max.y, max.z);
+	m_pLine[7]->SetLine(start, end);
+
+	//-----------------------------------
+	// 縦辺
+	//-----------------------------------
+	start = D3DXVECTOR3(min.x, min.y, min.z);
+	end = D3DXVECTOR3(min.x, max.y, min.z);
+	m_pLine[8]->SetLine(start, end);
+
+	start = D3DXVECTOR3(min.x, min.y, max.z);
+	end = D3DXVECTOR3(min.x, max.y, max.z);
+	m_pLine[9]->SetLine(start, end);
+
+	start = D3DXVECTOR3(max.x, min.y, min.z);
+	end = D3DXVECTOR3(max.x, max.y, min.z);
+	m_pLine[10]->SetLine(start, end);
+
+	start = D3DXVECTOR3(max.x, min.y, max.z);
+	end = D3DXVECTOR3(max.x, max.y, max.z);
+	m_pLine[11]->SetLine(start, end);
 }
 
 //===========================

@@ -81,7 +81,8 @@ public:
 private:
 	void SetModel();			//モデルの設定
 	void SetMotion(bool bLoop);	//モーションの設定
-	void GetSize();				//大きさを取得
+	void SetLine();		//線の設置
+	void UpdateLine();	//線の更新
 
 private:
 	//----------------
@@ -97,6 +98,10 @@ private:
 	D3DXVECTOR3 m_move;			//移動量
 	D3DXVECTOR3 m_rot;			//向き
 	D3DXVECTOR3 m_rotDest;		//目的の向き
+	D3DXVECTOR3 m_vtxMax;		//大きさの最大値
+	D3DXVECTOR3 m_vtxMin;		//大きさの最小値
+	D3DXVECTOR3 m_worldMin;		//ワールド上の最大値
+	D3DXVECTOR3	m_worldMax;		//ワールド上の最小値
 	CModel*  m_pModel[MAX_ENEMY_PARTS];	//モデル
 	CLine*	 m_pLine[nMaxLine];			//ライン
 

@@ -31,15 +31,18 @@ const float CPlayer::fPlayerSpeed = 7.0f;
 //------------------------
 CPlayer::KEY_SET g_aKeySet[] =	//キーセット情報
 {
+	//================================================
+	// 移動モーション
+	//================================================
 	//----------------------
 	// キー1
 	//----------------------
-	{ 40,	//フレーム数
+	{ 80,	//フレーム数
 		//		Pos				Rot
 		{{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	//タイヤ
 		{ 0.0f,0.0f,0.0f , -1.0f,0.0f,0.0f },	//体
 		{ 0.0f,0.0f,0.0f , 0.9f,0.0f,0.0f },	//頭
-		{ 0.0f,0.0f,0.0f , 0.0f,0.0f,-0.56f },	//右腕
+		{ 0.0f,0.0f,0.0f , 0.0f,0.0f,-0.5f },	//右腕
 		{ 0.0f,0.0f,0.0f , 0.75f,0.5f,0.0f },	//右手
 		{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.5f },	//左腕
 		{ 0.0f,0.0f,0.0f , 0.4f,0.0f,0.0f }},	//左手
@@ -48,12 +51,26 @@ CPlayer::KEY_SET g_aKeySet[] =	//キーセット情報
 	//----------------------
 	// キー2
 	//----------------------
-	{ 40,	//フレーム数
+	{ 80,	//フレーム数
+	//		Pos				Rot
+	{ { 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	//タイヤ
+	{ 0.0f,0.0f,0.0f , -1.0f,0.0f,0.0f },	//体
+	{ 0.0f,0.0f,0.0f , 0.9f,0.0f,0.0f },	//頭
+	{ 0.0f,0.0f,0.0f , 0.0f,0.0f,-0.8f },	//右腕
+	{ 0.0f,0.0f,0.0f , 0.75f,0.5f,0.0f },	//右手
+	{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.8f },	//左腕
+	{ 0.0f,0.0f,0.0f , 0.4f,0.0f,0.0f } },	//左手
+	},
+
+	//----------------------
+	// キー3
+	//----------------------
+	{ 80,	//フレーム数
 			//		Pos				Rot
 	{ { 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	//タイヤ
 	{ 0.0f,0.0f,0.0f , -1.0f,0.0f,0.0f },	//体
 	{ 0.0f,0.0f,0.0f , 0.9f,0.0f,0.0f },	//頭
-	{ 0.0f,0.0f,0.0f , 0.0f,0.0f,-0.56f },	//右腕
+	{ 0.0f,0.0f,0.0f , 0.0f,0.0f,-0.5f },	//右腕
 	{ 0.0f,0.0f,0.0f , 0.75f,0.5f,0.0f },	//右手
 	{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.5f },	//左腕
 	{ 0.0f,0.0f,0.0f , 0.4f,0.0f,0.0f } },	//左手
@@ -82,7 +99,7 @@ CPlayer::CPlayer() : CObject(0)
 	//線
 	for (int i = 0; i < nMaxLine; i++)
 	{
-		m_pLIne[i] = nullptr;
+		m_pLine[i] = nullptr;
 	}
 
 	/* ↓ モーション情報 ↓ */
@@ -118,14 +135,15 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	SetModel();
 
 	//-----------------------
-	// モデルの大きさを取得
+	// モデルの大きさを設定
 	//-----------------------
-	GetSize();
+	m_vtxMin = D3DXVECTOR3(-100.0f, 0.0f, -140.0f);
+	m_vtxMax = D3DXVECTOR3(100.0f, 100.0f, 40.0f);
 
 	//-----------------------
 	// 線の表示
 	//-----------------------
-	//SetLine();
+	SetLine();
 
 	return S_OK;
 }
@@ -223,7 +241,7 @@ void CPlayer::Update()
 	//-------------------------
 	// 線の更新
 	//-------------------------
-	//UpdateLine();
+	UpdateLine();
 }
 
 //========================
@@ -309,11 +327,11 @@ void CPlayer::SetModel()
 {
 	//モデル0：タイヤ
 	m_pModel[0] = CModel::Create("data\\MODEL\\wheel.x", nullptr,
-		D3DXVECTOR3(0.0f, 50.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+		D3DXVECTOR3(0.0f, 30.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	//モデル1：体
 	m_pModel[1] = CModel::Create("data\\MODEL\\body.x", nullptr,
-		D3DXVECTOR3(0.0f, 50.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+		D3DXVECTOR3(0.0f, 30.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	//モデル2：頭
 	m_pModel[2] = CModel::Create("data\\MODEL\\head.x", m_pModel[1],
@@ -676,57 +694,57 @@ void CPlayer::SetLine()
 	//-----------------------------------
 	D3DXVECTOR3 start = D3DXVECTOR3(min.x, min.y, min.z);
 	D3DXVECTOR3 end = D3DXVECTOR3(max.x, min.y, min.z);
-	m_pLIne[0] = CLine::Create(m_pos, start, end, lineCol);
+	m_pLine[0] = CLine::Create(m_pos, start, end, lineCol);
 
 	start = D3DXVECTOR3(min.x, min.y, min.z);
 	end = D3DXVECTOR3(min.x, min.y, max.z);
-	m_pLIne[1] = CLine::Create(m_pos, start, end, lineCol);
+	m_pLine[1] = CLine::Create(m_pos, start, end, lineCol);
 
 	start = D3DXVECTOR3(max.x, min.y, min.z);
 	end = D3DXVECTOR3(max.x, min.y, max.z);
-	m_pLIne[2] = CLine::Create(m_pos, start, end, lineCol);
+	m_pLine[2] = CLine::Create(m_pos, start, end, lineCol);
 
 	start = D3DXVECTOR3(min.x, min.y, max.z);
 	end = D3DXVECTOR3(max.x, min.y, max.z);
-	m_pLIne[3] = CLine::Create(m_pos, start, end, lineCol);
+	m_pLine[3] = CLine::Create(m_pos, start, end, lineCol);
 
 	//-----------------------------------
 	// 上辺
 	//-----------------------------------
 	start = D3DXVECTOR3(min.x, max.y, min.z);
 	end = D3DXVECTOR3(max.x, max.y, min.z);
-	m_pLIne[4] = CLine::Create(m_pos, start, end, lineCol);
+	m_pLine[4] = CLine::Create(m_pos, start, end, lineCol);
 
 	start = D3DXVECTOR3(min.x, max.y, min.z);
 	end = D3DXVECTOR3(min.x, max.y, max.z);
-	m_pLIne[5] = CLine::Create(m_pos, start, end, lineCol);
+	m_pLine[5] = CLine::Create(m_pos, start, end, lineCol);
 
 	start = D3DXVECTOR3(max.x, max.y, min.z);
 	end = D3DXVECTOR3(max.x, max.y, max.z);
-	m_pLIne[6] = CLine::Create(m_pos, start, end, lineCol);
+	m_pLine[6] = CLine::Create(m_pos, start, end, lineCol);
 
 	start = D3DXVECTOR3(min.x, max.y, max.z);
 	end = D3DXVECTOR3(max.x, max.y, max.z);
-	m_pLIne[7] = CLine::Create(m_pos, start, end, lineCol);
+	m_pLine[7] = CLine::Create(m_pos, start, end, lineCol);
 
 	//-----------------------------------
 	// 縦辺
 	//-----------------------------------
 	start = D3DXVECTOR3(min.x, min.y, min.z);
 	end = D3DXVECTOR3(min.x, max.y, min.z);
-	m_pLIne[8] = CLine::Create(m_pos, start, end, lineCol);
+	m_pLine[8] = CLine::Create(m_pos, start, end, lineCol);
 
 	start = D3DXVECTOR3(min.x, min.y, max.z);
 	end = D3DXVECTOR3(min.x, max.y, max.z);
-	m_pLIne[9] = CLine::Create(m_pos, start, end, lineCol);
+	m_pLine[9] = CLine::Create(m_pos, start, end, lineCol);
 
 	start = D3DXVECTOR3(max.x, min.y, min.z);
 	end = D3DXVECTOR3(max.x, max.y, min.z);
-	m_pLIne[10] = CLine::Create(m_pos, start, end, lineCol);
+	m_pLine[10] = CLine::Create(m_pos, start, end, lineCol);
 
 	start = D3DXVECTOR3(max.x, min.y, max.z);
 	end = D3DXVECTOR3(max.x, max.y, max.z);
-	m_pLIne[11] = CLine::Create(m_pos, start, end, lineCol);
+	m_pLine[11] = CLine::Create(m_pos, start, end, lineCol);
 }
 
 //========================
@@ -751,102 +769,57 @@ void CPlayer::UpdateLine()
 	//-----------------------------------
 	D3DXVECTOR3 start = D3DXVECTOR3(min.x, min.y, min.z);
 	D3DXVECTOR3 end = D3DXVECTOR3(max.x, min.y, min.z);
-	m_pLIne[0]->SetLine(start, end);
+	m_pLine[0]->SetLine(start, end);
 
 	start = D3DXVECTOR3(min.x, min.y, min.z);
 	end = D3DXVECTOR3(min.x, min.y, max.z);
-	m_pLIne[1]->SetLine(start, end);
+	m_pLine[1]->SetLine(start, end);
 
 	start = D3DXVECTOR3(max.x, min.y, min.z);
 	end = D3DXVECTOR3(max.x, min.y, max.z);
-	m_pLIne[2]->SetLine(start, end);
+	m_pLine[2]->SetLine(start, end);
 
 	start = D3DXVECTOR3(min.x, min.y, max.z);
 	end = D3DXVECTOR3(max.x, min.y, max.z);
-	m_pLIne[3]->SetLine(start, end);
+	m_pLine[3]->SetLine(start, end);
 
 	//-----------------------------------
 	// 上辺
 	//-----------------------------------
 	start = D3DXVECTOR3(min.x, max.y, min.z);
 	end = D3DXVECTOR3(max.x, max.y, min.z);
-	m_pLIne[4]->SetLine(start, end);
+	m_pLine[4]->SetLine(start, end);
 
 	start = D3DXVECTOR3(min.x, max.y, min.z);
 	end = D3DXVECTOR3(min.x, max.y, max.z);
-	m_pLIne[5]->SetLine(start, end);
+	m_pLine[5]->SetLine(start, end);
 
 	start = D3DXVECTOR3(max.x, max.y, min.z);
 	end = D3DXVECTOR3(max.x, max.y, max.z);
-	m_pLIne[6]->SetLine(start, end);
+	m_pLine[6]->SetLine(start, end);
 
 	start = D3DXVECTOR3(min.x, max.y, max.z);
 	end = D3DXVECTOR3(max.x, max.y, max.z);
-	m_pLIne[7]->SetLine(start, end);
+	m_pLine[7]->SetLine(start, end);
 
 	//-----------------------------------
 	// 縦辺
 	//-----------------------------------
 	start = D3DXVECTOR3(min.x, min.y, min.z);
 	end = D3DXVECTOR3(min.x, max.y, min.z);
-	m_pLIne[8]->SetLine(start, end);
+	m_pLine[8]->SetLine(start, end);
 
 	start = D3DXVECTOR3(min.x, min.y, max.z);
 	end = D3DXVECTOR3(min.x, max.y, max.z);
-	m_pLIne[9]->SetLine(start, end);
+	m_pLine[9]->SetLine(start, end);
 
 	start = D3DXVECTOR3(max.x, min.y, min.z);
 	end = D3DXVECTOR3(max.x, max.y, min.z);
-	m_pLIne[10]->SetLine(start, end);
+	m_pLine[10]->SetLine(start, end);
 
 	start = D3DXVECTOR3(max.x, min.y, max.z);
 	end = D3DXVECTOR3(max.x, max.y, max.z);
-	m_pLIne[11]->SetLine(start, end);
-}
-
-//===========================
-// 大きさの取得
-//===========================
-void CPlayer::GetSize()
-{
-	for (int i = 0; i < MAX_PARTS; i++)
-	{
-		//-------------------------------
-		// 最小値の比較
-		//-------------------------------
-		D3DXVECTOR3 vtxMin = m_pModel[i]->GetVtxMin();
-
-		if (vtxMin.x <= m_vtxMin.x)
-		{
-			m_vtxMin.x = floorf(m_vtxMin.x);
-		}
-		if (vtxMin.y <= m_vtxMin.y)
-		{
-			m_vtxMin.y = floorf(m_vtxMin.y);
-		}
-		if (vtxMin.z <= m_vtxMin.z)
-		{
-			m_vtxMin.z = floorf(m_vtxMin.z);
-		}
-
-		//-------------------------------
-		// 最大値の比較
-		//-------------------------------
-		D3DXVECTOR3 vtxMax = m_pModel[i]->GetVtxMax();
-
-		if (vtxMax.x >= m_vtxMax.x)
-		{
-			m_vtxMax.x = floorf(vtxMax.x);
-		}
-		if (vtxMax.y >= m_vtxMax.y)
-		{
-			m_vtxMax.y = floorf(vtxMax.y);
-		}
-		if (vtxMax.z >= m_vtxMax.z)
-		{
-			m_vtxMax.z = floorf(vtxMax.z);
-		}
-	}
+	m_pLine[11]->SetLine(start, end);
 }
 
 //===========================

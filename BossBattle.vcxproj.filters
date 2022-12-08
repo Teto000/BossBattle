@@ -18,9 +18,6 @@
     <Filter Include="00_Main\Object\Object3D">
       <UniqueIdentifier>{a3762304-c7ac-46ad-bd8b-90ab12135ef1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00_Main\Object\ObjectX">
-      <UniqueIdentifier>{f9267d4d-4bd4-44ef-86f4-7ad0a156c89a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="00_Main\Object\Mesh">
       <UniqueIdentifier>{18c392cf-e225-4c8e-b3d2-72c751f14079}</UniqueIdentifier>
     </Filter>
@@ -32,6 +29,9 @@
     </Filter>
     <Filter Include="00_Main\Application\Input">
       <UniqueIdentifier>{5f159fc1-a5b8-445a-b6a1-60c705f3ac63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00_Main\Object\Object2D\ObjectX">
+      <UniqueIdentifier>{f9267d4d-4bd4-44ef-86f4-7ad0a156c89a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -87,13 +87,13 @@
       <Filter>00_Main\Object\Object3D</Filter>
     </ClCompile>
     <ClCompile Include="objectX.cpp">
-      <Filter>00_Main\Object\ObjectX</Filter>
+      <Filter>00_Main\Object\Object2D\ObjectX</Filter>
     </ClCompile>
     <ClCompile Include="player.cpp">
-      <Filter>00_Main\Object\ObjectX</Filter>
+      <Filter>00_Main\Object\Object2D\ObjectX</Filter>
     </ClCompile>
     <ClCompile Include="model.cpp">
-      <Filter>00_Main\Object\ObjectX</Filter>
+      <Filter>00_Main\Object\Object2D\ObjectX</Filter>
     </ClCompile>
     <ClCompile Include="meshfield.cpp">
       <Filter>00_Main\Object\Mesh</Filter>
@@ -102,7 +102,7 @@
       <Filter>00_Main\Object\Mesh</Filter>
     </ClCompile>
     <ClCompile Include="enemy.cpp">
-      <Filter>00_Main\Object\ObjectX</Filter>
+      <Filter>00_Main\Object\Object2D\ObjectX</Filter>
     </ClCompile>
     <ClCompile Include="bg.cpp">
       <Filter>00_Main\Object\Object2D</Filter>
@@ -167,13 +167,13 @@
       <Filter>00_Main\Object\Object3D</Filter>
     </ClInclude>
     <ClInclude Include="objectX.h">
-      <Filter>00_Main\Object\ObjectX</Filter>
+      <Filter>00_Main\Object\Object2D\ObjectX</Filter>
     </ClInclude>
     <ClInclude Include="player.h">
-      <Filter>00_Main\Object\ObjectX</Filter>
+      <Filter>00_Main\Object\Object2D\ObjectX</Filter>
     </ClInclude>
     <ClInclude Include="model.h">
-      <Filter>00_Main\Object\ObjectX</Filter>
+      <Filter>00_Main\Object\Object2D\ObjectX</Filter>
     </ClInclude>
     <ClInclude Include="meshfield.h">
       <Filter>00_Main\Object\Mesh</Filter>
@@ -182,7 +182,7 @@
       <Filter>00_Main\Object\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="enemy.h">
-      <Filter>00_Main\Object\ObjectX</Filter>
+      <Filter>00_Main\Object\Object2D\ObjectX</Filter>
     </ClInclude>
     <ClInclude Include="bg.h">
       <Filter>00_Main\Object\Object2D</Filter>
