@@ -50,8 +50,6 @@ public:
 	//----------------
 	D3DXVECTOR3 GetPos();		//位置の取得
 	D3DXVECTOR3 GetRot();		//向きの取得
-	D3DXVECTOR3 GetVtxMax();
-	D3DXVECTOR3 GetVtxMin();
 	D3DXMATRIX GetmtxWorld();	//ワールドマトリックスの取得
 	LPD3DXMESH GetMesh() { return m_pMesh; };	//メッシュ情報の取得
 
@@ -62,7 +60,6 @@ public:
 		LPCTSTR text, CModel* model, D3DXVECTOR3 pos, D3DXVECTOR3 rot);
 
 private:
-	void GetModelSize();		//モデルの大きさを取得
 	void DrawShadow();			//影の描画
 
 private:
@@ -73,11 +70,6 @@ private:
 	D3DXMATRIX m_mtxParent;		//親のマトリックス
 	D3DXVECTOR3 m_pos;			//位置
 	D3DXVECTOR3 m_rot;			//向き
-	D3DXVECTOR3 m_vtxMin;		//最小値
-	D3DXVECTOR3 m_vtxMax;		//最大値
-	D3DXVECTOR3 m_size;			//大きさ
-	D3DXVECTOR3 m_worldMin;		//最大位置
-	D3DXVECTOR3	m_worldMax;		//最小位置
 	CModel* m_pModel;			//親モデルへのポインタ
 	LPCTSTR m_modelName;		//モデルのパス
 	MODELTYPE m_type;			//種類

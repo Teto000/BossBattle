@@ -71,6 +71,7 @@ public:
 	D3DXVECTOR3 GetRot();				//向きの取得
 	float GetWidth() override;			//幅の取得
 	float GetHeight() override;			//高さの取得
+	D3DXVECTOR3 GetSize() { return m_size; };	//大きさの取得
 	D3DXMATRIX GetmtxWorld();			//ワールドマトリックスの取得
 
 	//----------------
@@ -102,6 +103,7 @@ private:
 	D3DXVECTOR3 m_vtxMin;		//大きさの最小値
 	D3DXVECTOR3 m_worldMin;		//ワールド上の最大値
 	D3DXVECTOR3	m_worldMax;		//ワールド上の最小値
+	D3DXVECTOR3 m_size;			//大きさ
 	CModel*  m_pModel[MAX_ENEMY_PARTS];	//モデル
 	CLine*	 m_pLine[nMaxLine];			//ライン
 

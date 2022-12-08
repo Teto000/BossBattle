@@ -23,9 +23,6 @@ CModel::CModel()
 {
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//位置の設定
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//向きの設定
-	m_vtxMin = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//最小値
-	m_vtxMax = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//最大値
-	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//大きさ
 	m_pModel = nullptr;
 }
 
@@ -64,11 +61,6 @@ HRESULT CModel::Init(D3DXVECTOR3 pos)
 					   nullptr,
 					   &m_nNumMat,
 					   &m_pMesh);
-
-	//-----------------------
-	// モデルの大きさを取得
-	//-----------------------
-	GetModelSize();
 
 	return S_OK;
 }
@@ -205,72 +197,6 @@ CModel* CModel::Create(LPCTSTR text, CModel* model, D3DXVECTOR3 pos, D3DXVECTOR3
 }
 
 //========================
-// モデルの大きさを取得
-//========================
-void CModel::GetModelSize()
-{
-	int nNumVtx;		//頂点数
-	DWORD sizeFVF;		//頂点フォーマットのサイズ
-	BYTE *pVtxBuff;		//頂点バッファへのポインタ
-
-	//頂点数の取得
-	nNumVtx = m_pMesh->GetNumVertices();
-
-	//頂点フォーマットのサイズを取得
-	sizeFVF = D3DXGetFVFVertexSize(m_pMesh->GetFVF());
-
-	//頂点バッファのロック
-	m_pMesh->LockVertexBuffer(D3DLOCK_READONLY, (void**)&pVtxBuff);
-
-	for (int i = 0; i < nNumVtx; i++)
-	{
-		//頂点座標の代入
-		D3DXVECTOR3 vtx = *(D3DXVECTOR3*)pVtxBuff;
-
-		//---------------------
-		// 頂点座標の比較
-		//---------------------
-		//最小値の比較
-		if (vtx.x <= m_vtxMin.x)
-		{
-			m_vtxMin.x = floorf(vtx.x);
-		}
-		if (vtx.y <= m_vtxMin.y)
-		{
-			m_vtxMin.y = floorf(vtx.y);
-		}
-		if (vtx.z <= m_vtxMin.z)
-		{
-			m_vtxMin.z = floorf(vtx.z);
-		}
-
-		//最大値の比較
-		if (vtx.x >= m_vtxMax.x)
-		{
-			m_vtxMax.x = floorf(vtx.x);
-		}
-		if (vtx.y >= m_vtxMax.y)
-		{
-			m_vtxMax.y = floorf(vtx.y);
-		}
-		if (vtx.z >= m_vtxMax.z)
-		{
-			m_vtxMax.z = floorf(vtx.z);
-		}
-
-		//--------------------------
-		// モデルの大きさを設定
-		//--------------------------
-		m_size.x = m_vtxMax.x - m_vtxMin.x;
-		m_size.y = m_vtxMax.y - m_vtxMin.y;
-		m_size.z = m_vtxMax.z - m_vtxMin.z;
-
-		//頂点フォーマットのサイズ分ポインタを進める
-		pVtxBuff += sizeFVF;
-	}
-}
-
-//========================
 // 影の描画
 //========================
 void CModel::DrawShadow()
@@ -392,22 +318,6 @@ D3DXVECTOR3 CModel::GetPos()
 D3DXVECTOR3 CModel::GetRot()
 {
 	return m_rot;
-}
-
-//===========================
-// 最大値の取得
-//===========================
-D3DXVECTOR3 CModel::GetVtxMax()
-{
-	return m_vtxMax;
-}
-
-//===========================
-// 最小値の取得
-//===========================
-D3DXVECTOR3 CModel::GetVtxMin()
-{
-	return m_vtxMin;
 }
 
 //==============================

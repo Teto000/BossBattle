@@ -20,6 +20,7 @@
 #include "model.h"
 #include "game.h"
 #include "line.h"
+#include "enemy.h"
 
 //------------------------
 // 静的メンバ変数宣言
@@ -89,6 +90,7 @@ CPlayer::CPlayer() : CObject(0)
 	m_vtxMin = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//大きさの最小値
 	m_worldMin = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//ワールド上の最大値
 	m_worldMax = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//ワールド上の最小値
+	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//大きさ
 
 	//モデル
 	for (int i = 0; i < MAX_PARTS; i++)
@@ -137,8 +139,12 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	//-----------------------
 	// モデルの大きさを設定
 	//-----------------------
-	m_vtxMin = D3DXVECTOR3(-100.0f, 0.0f, -140.0f);
-	m_vtxMax = D3DXVECTOR3(100.0f, 100.0f, 40.0f);
+	m_vtxMin = D3DXVECTOR3(-70.0f, 0.0f, -120.0f);
+	m_vtxMax = D3DXVECTOR3(70.0f, 100.0f, 30.0f);
+
+	m_size.x = m_vtxMax.x - m_vtxMin.x;
+	m_size.y = m_vtxMax.y - m_vtxMin.y;
+	m_size.z = m_vtxMax.z - m_vtxMin.z;
 
 	//-----------------------
 	// 線の表示
@@ -820,6 +826,43 @@ void CPlayer::UpdateLine()
 	start = D3DXVECTOR3(max.x, min.y, max.z);
 	end = D3DXVECTOR3(max.x, max.y, max.z);
 	m_pLine[11]->SetLine(start, end);
+}
+
+//===========================
+// プレイヤーの当たり判定
+//===========================
+bool CPlayer::GetCollisionPlayer()
+{
+	//-----------------------------
+	// プレイヤーの端の設定
+	//-----------------------------
+	float fLeft = m_pos.x - (m_size.x / 2);		//プレイヤーの左端
+	float fRight = m_pos.x + (m_size.x / 2);	//プレイヤーの右端
+	float fTop = m_pos.y + (m_size.y / 2);		//プレイヤーの上端
+	float fBottom = m_pos.y - (m_size.y / 2);	//プレイヤーの下端
+	float fFront = m_pos.z - (m_size.z / 2);	//プレイヤーの前端
+	float fBack = m_pos.z + (m_size.z / 2);		//プレイヤーの後端
+
+	//-----------------------------
+	// 敵の情報を取得
+	//-----------------------------
+	D3DXVECTOR3 enemyPos(CGame::GetEnemy()->GetPosition());	//位置
+	D3DXVECTOR3 enemySize(CGame::GetEnemy()->GetSize());	//大きさ
+
+	//-----------------------------
+	// 当たり判定
+	//-----------------------------
+	if (enemyPos.x + enemySize.x >= fLeft
+		&& enemyPos.x - enemySize.x <= fRight
+		&& enemyPos.y + enemySize.y >= fTop
+		&& enemyPos.y - enemySize.y <= fBottom
+		&& enemyPos.z + enemySize.z >= fFront
+		&& enemyPos.z - enemySize.z <= fBack)
+	{//敵とプレイヤーが当たった
+		return true;
+	}
+
+	return false;
 }
 
 //===========================

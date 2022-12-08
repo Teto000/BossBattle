@@ -73,6 +73,7 @@ public:
 	float GetHeight() override;			//高さの取得
 	D3DXMATRIX GetmtxWorld();			//ワールドマトリックスの取得
 	CModel* GetModel(int nNum) { return m_pModel[nNum]; };	//モデルの取得
+	bool GetCollisionPlayer();
 
 	//----------------
 	// 静的メンバ関数
@@ -106,6 +107,7 @@ private:
 	D3DXVECTOR3 m_rotDest;			//目的の向き
 	D3DXVECTOR3 m_vtxMax;			//大きさの最大値
 	D3DXVECTOR3 m_vtxMin;			//大きさの最小値
+	D3DXVECTOR3 m_size;				//大きさ
 	D3DXVECTOR3 m_worldMin;			//ワールド上の最大値
 	D3DXVECTOR3	m_worldMax;			//ワールド上の最小値
 	float m_rotWheel;				//タイヤの回転

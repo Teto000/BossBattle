@@ -14,6 +14,9 @@
 #include "renderer.h"
 #include "model.h"
 #include "line.h"
+#include "game.h"
+#include "player.h"
+#include "fade.h"
 
 //------------------------
 // グローバル変数
@@ -93,6 +96,10 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 	m_vtxMin = D3DXVECTOR3(-50.0f, 0.0f, -50.0f);
 	m_vtxMax = D3DXVECTOR3(50.0f, 150.0f, 50.0f);
 
+	m_size.x = m_vtxMax.x - m_vtxMin.x;
+	m_size.y = m_vtxMax.y - m_vtxMin.y;
+	m_size.z = m_vtxMax.z - m_vtxMin.z;
+
 	//-----------------------
 	// 線の表示
 	//-----------------------
@@ -147,6 +154,18 @@ void CEnemy::Update()
 	// 線の更新
 	//-------------------------
 	UpdateLine();
+
+	//----------------------------
+	// プレイヤーとの当たり判定
+	//----------------------------
+	if (CGame::GetPlayer()->GetCollisionPlayer())
+	{//プレイヤーと当たっているなら
+		//消去
+		//Uninit();
+
+		//リザルト画面に移行
+		CApplication::GetFade()->SetFade(CApplication::MODE_RESULT);
+	}
 }
 
 //========================
