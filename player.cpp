@@ -196,7 +196,7 @@ void CPlayer::Update()
 	//-------------------------
 	if (CGame::GetFinish() == false)
 	{//終了フラグが立っていないなら
-		MoveKeyboard(DIK_W, DIK_S, DIK_A, DIK_D);	//キーボード
+		//MoveKeyboard(DIK_W, DIK_S, DIK_A, DIK_D);	//キーボード
 		MoveJoypad();	//ジョイパッド
 	}
 

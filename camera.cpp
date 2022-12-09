@@ -231,21 +231,24 @@ void CCamera::Turn()
 	//------------------
 	// 注視点の旋回
 	//------------------
-	if (CInputKeyboard::Press(DIK_Q) || stick.x <= -fMoveValue)	//左回転
-	{//Qキーが押された
-		m_rot.y -= m_TSPEED;	//回転量の増加
-	}
-	else if (CInputKeyboard::Press(DIK_E) || stick.x >= fMoveValue)	//右回転
-	{//Eキーが押された
-		m_rot.y += m_TSPEED;
-	}
-	if (CInputKeyboard::Press(DIK_Y) || stick.y >= fMoveValue)	//上回転
-	{//Yキーが押された
-		m_rot.x += m_TSPEED;
-	}
-	else if (CInputKeyboard::Press(DIK_B) || stick.y <= -fMoveValue)	//下回転
-	{//Bキーが押された
-		m_rot.x -= m_TSPEED;
+	if (CGame::GetFinish() == false)
+	{//終了フラグが立っていないなら
+		if (CInputKeyboard::Press(DIK_Q) || stick.x <= -fMoveValue)	//左回転
+		{//Qキーが押された
+			m_rot.y -= m_TSPEED;	//回転量の増加
+		}
+		else if (CInputKeyboard::Press(DIK_E) || stick.x >= fMoveValue)	//右回転
+		{//Eキーが押された
+			m_rot.y += m_TSPEED;
+		}
+		if (CInputKeyboard::Press(DIK_Y) || stick.y >= fMoveValue)	//上回転
+		{//Yキーが押された
+			m_rot.x += m_TSPEED;
+		}
+		else if (CInputKeyboard::Press(DIK_B) || stick.y <= -fMoveValue)	//下回転
+		{//Bキーが押された
+			m_rot.x -= m_TSPEED;
+		}
 	}
 
 	if (CGame::GetFinish())
