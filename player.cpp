@@ -194,10 +194,19 @@ void CPlayer::Update()
 	//-------------------------
 	// 移動
 	//-------------------------
+	// ジョイパッドでの操作
+	CInputJoypad* joypad = CApplication::GetJoypad();
+
 	if (CGame::GetFinish() == false)
 	{//終了フラグが立っていないなら
-		//MoveKeyboard(DIK_W, DIK_S, DIK_A, DIK_D);	//キーボード
-		MoveJoypad();	//ジョイパッド
+		if (joypad->IsJoyPadUse(0) == false)
+		{//ジョイパッドが使われていないなら
+			MoveKeyboard(DIK_W, DIK_S, DIK_A, DIK_D);	//キーボード
+		}
+		else
+		{
+			MoveJoypad();	//ジョイパッド
+		}
 	}
 
 	//タイヤの回転
