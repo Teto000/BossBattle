@@ -11,6 +11,7 @@
 #include "camera.h"
 #include "input.h"
 #include "input_keyboard.h"
+#include "input_joypad.h"
 #include "renderer.h"
 #include "game.h"
 #include "player.h"
@@ -73,11 +74,14 @@ void CCamera::Update(void)
 {
 	LPDIRECT3DDEVICE9 pDevice = CApplication::GetRenderer()->GetDevice();	//デバイスの取得
 
+	// ジョイパッドでの操作
+	CInputJoypad* joypad = CApplication::GetJoypad();
+
 	//回転
 	Turn();
 
 	//ロックオン状態の切り替え
-	if (CInputKeyboard::Trigger(DIK_SPACE))
+	if (CInputKeyboard::Trigger(DIK_SPACE)/* || joypad->Press(CInputJoypad::JOYKEY_RIGHT_SHOULDER)*/)
 	{
 		//ロックオン状態を切り替え
 		m_bLockOn = !m_bLockOn;
@@ -217,22 +221,29 @@ void CCamera::SetCamera(LPDIRECT3DDEVICE9 pDevice)
 //========================
 void CCamera::Turn()
 {
+	// ジョイパッドでの操作
+	CInputJoypad* joypad = CApplication::GetJoypad();
+	D3DXVECTOR3 stick = joypad->Stick(CInputJoypad::JOYKEY_RIGHT_STICK, 0);
+
+	//スティックを動かす値の設定
+	float fMoveValue = 0.5f;
+
 	//------------------
 	// 注視点の旋回
 	//------------------
-	if (CInputKeyboard::Press(DIK_Q))	//左回転
+	if (CInputKeyboard::Press(DIK_Q) || stick.x <= -fMoveValue)	//左回転
 	{//Qキーが押された
 		m_rot.y -= m_TSPEED;	//回転量の増加
 	}
-	else if (CInputKeyboard::Press(DIK_E))	//右回転
+	else if (CInputKeyboard::Press(DIK_E) || stick.x >= fMoveValue)	//右回転
 	{//Eキーが押された
 		m_rot.y += m_TSPEED;
 	}
-	if (CInputKeyboard::Press(DIK_Y))	//上回転
+	if (CInputKeyboard::Press(DIK_Y) || stick.y >= fMoveValue)	//上回転
 	{//Yキーが押された
 		m_rot.x += m_TSPEED;
 	}
-	else if (CInputKeyboard::Press(DIK_B))	//下回転
+	else if (CInputKeyboard::Press(DIK_B) || stick.y <= -fMoveValue)	//下回転
 	{//Bキーが押された
 		m_rot.x -= m_TSPEED;
 	}

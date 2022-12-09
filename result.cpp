@@ -65,8 +65,11 @@ void CResult::Uninit()
 //===========================
 void CResult::Update()
 {
+	// ジョイパッドでの操作
+	CInputJoypad* joypad = CApplication::GetJoypad();
+
 	//画面遷移
-	if (CInputKeyboard::Trigger(DIK_RETURN))
+	if (CInputKeyboard::Trigger(DIK_RETURN) || joypad->Press(CInputJoypad::JOYKEY_A))
 	{
 		//タイトル画面に移行
 		CApplication::GetFade()->SetFade(CApplication::MODE_TITLE);
