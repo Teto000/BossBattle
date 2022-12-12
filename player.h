@@ -86,8 +86,8 @@ public:
 
 private:
 	void SetModel();					//モデルの設定
-	void SetMotion(bool bLoop);			//モーションの設定
 	void SetKeySet(int nMotionType);	//キーセット情報の設定
+	void SetMotion(bool bLoop);			//モーションの設定
 	void MoveKeyboard(int nUpKey, int nDownKey, int nLeftKey, int nRightKey);	//移動
 	void MoveJoypad();	//ジョイパッドを使った移動
 	void SetRot();		//角度の設定
@@ -122,7 +122,8 @@ private:
 	/* ↓ モーション情報 ↓ */
 	int m_nCurrentKey;			//現在のキー番号
 	int m_nCntMotion;			//モーションカウンター
-	KEY_SET m_aKeySet[MAX_KEY];
+	KEY_SET m_aKeySet[MAX_KEY];	//キーセット情報
+	MOTION_TYPE m_type;			//現在のモーション
 
 	/* ↓ クォータニオン ↓ */
 	D3DXMATRIX		m_mtxRot;	//回転マトリックス(保存用)

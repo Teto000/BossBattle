@@ -27,59 +27,6 @@
 //------------------------
 const float CPlayer::fPlayerSpeed = 7.0f;
 
-//------------------------
-// グローバル変数
-//------------------------
-/*CPlayer::KEY_SET g_aKeySet[] =	//キーセット情報
-{
-	//================================================
-	//
-	// 移動モーション
-	//
-	//================================================
-	//----------------------
-	// キー1
-	//----------------------
-	{ 80,	//フレーム数
-		//		Pos				Rot
-		{{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	//タイヤ
-		{ 0.0f,0.0f,0.0f , -1.0f,0.0f,0.0f },	//体
-		{ 0.0f,0.0f,0.0f , 0.9f,0.0f,0.0f },	//頭
-		{ 0.0f,0.0f,0.0f , 0.0f,0.0f,-0.5f },	//右腕
-		{ 0.0f,0.0f,0.0f , 0.75f,0.5f,0.0f },	//右手
-		{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.5f },	//左腕
-		{ 0.0f,0.0f,0.0f , 0.4f,0.0f,0.0f }},	//左手
-	},
-
-	//----------------------
-	// キー2
-	//----------------------
-	{ 80,	//フレーム数
-	//		Pos				Rot
-	{ { 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	//タイヤ
-	{ 0.0f,0.0f,0.0f , -1.0f,0.0f,0.0f },	//体
-	{ 0.0f,0.0f,0.0f , 0.9f,0.0f,0.0f },	//頭
-	{ 0.0f,0.0f,0.0f , 0.0f,0.0f,-0.8f },	//右腕
-	{ 0.0f,0.0f,0.0f , 0.75f,0.5f,0.0f },	//右手
-	{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.8f },	//左腕
-	{ 0.0f,0.0f,0.0f , 0.4f,0.0f,0.0f } },	//左手
-	},
-
-	//----------------------
-	// キー3
-	//----------------------
-	{ 80,	//フレーム数
-	//		Pos				Rot
-	{ { 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	//タイヤ
-	{ 0.0f,0.0f,0.0f , -1.0f,0.0f,0.0f },	//体
-	{ 0.0f,0.0f,0.0f , 0.9f,0.0f,0.0f },	//頭
-	{ 0.0f,0.0f,0.0f , 0.0f,0.0f,-0.5f },	//右腕
-	{ 0.0f,0.0f,0.0f , 0.75f,0.5f,0.0f },	//右手
-	{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.5f },	//左腕
-	{ 0.0f,0.0f,0.0f , 0.4f,0.0f,0.0f } },	//左手
-	},
-};*/
-
 //========================
 // コンストラクタ
 //========================
@@ -93,6 +40,7 @@ CPlayer::CPlayer() : CObject(0)
 	m_worldMin = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//ワールド上の最大値
 	m_worldMax = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//ワールド上の最小値
 	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//大きさ
+	m_type = MOTION_TYPE_IDOL;					//現在のモーション
 
 	//モデル
 	for (int i = 0; i < MAX_PARTS; i++)
@@ -165,9 +113,6 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	//-----------------------
 	SetLine();
 
-	//キーセット情報の設定
-	SetKeySet(MOTION_TYPE_MOVE);
-
 	return S_OK;
 }
 
@@ -197,6 +142,9 @@ void CPlayer::Uninit()
 //========================
 void CPlayer::Update()
 {
+	//待機モーションにする
+	m_type = MOTION_TYPE_IDOL;
+
 	//-------------------------
 	// モデルの更新
 	//-------------------------
@@ -232,6 +180,10 @@ void CPlayer::Update()
 	//-------------------------
 	// モーション
 	//-------------------------
+	//キーセット情報の設定
+	SetKeySet(m_type);
+
+	//モーションの設定
 	SetMotion(true);
 
 	//-------------------------
@@ -350,6 +302,98 @@ void CPlayer::SetModel()
 		D3DXVECTOR3(4.0f, -40.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 }
 
+//=====================================
+// キーセット情報の設定
+// 引数：モーションの種類
+//=====================================
+void CPlayer::SetKeySet(int nMotionType)
+{
+	switch (nMotionType)
+	{
+		//===================================
+		// 待機モーション
+		//===================================
+	case MOTION_TYPE_IDOL:
+		//----------------------
+		// キー1
+		//----------------------
+		m_aKeySet[0].nFrame = 80;	//フレーム数
+		m_aKeySet[0].aKey[0].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		m_aKeySet[0].aKey[1].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		m_aKeySet[0].aKey[2].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		m_aKeySet[0].aKey[3].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		m_aKeySet[0].aKey[4].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		m_aKeySet[0].aKey[5].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		m_aKeySet[0].aKey[6].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+		//----------------------
+		// キー2
+		//----------------------
+		m_aKeySet[1].nFrame = 80;	//フレーム数
+		m_aKeySet[1].aKey[0].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		m_aKeySet[1].aKey[1].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		m_aKeySet[1].aKey[2].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		m_aKeySet[1].aKey[3].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		m_aKeySet[1].aKey[4].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		m_aKeySet[1].aKey[5].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		m_aKeySet[1].aKey[6].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+		//----------------------
+		// キー2
+		//----------------------
+		m_aKeySet[2].nFrame = 80;	//フレーム数
+		m_aKeySet[2].aKey[0].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		m_aKeySet[2].aKey[1].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		m_aKeySet[2].aKey[2].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		m_aKeySet[2].aKey[3].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		m_aKeySet[2].aKey[4].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		m_aKeySet[2].aKey[5].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		m_aKeySet[2].aKey[6].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		break;
+
+		//===================================
+		// 移動モーション
+		//===================================
+	case MOTION_TYPE_MOVE:
+		//----------------------
+		// キー1
+		//----------------------
+		m_aKeySet[0].nFrame = 80;	//フレーム数
+		m_aKeySet[0].aKey[0].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		m_aKeySet[0].aKey[1].rot = D3DXVECTOR3(-1.0f, 0.0f, 0.0f);
+		m_aKeySet[0].aKey[2].rot = D3DXVECTOR3(0.9f, 0.0f, 0.0f);
+		m_aKeySet[0].aKey[3].rot = D3DXVECTOR3(0.0f, 0.0f, -0.5f);
+		m_aKeySet[0].aKey[4].rot = D3DXVECTOR3(0.75f, 0.5f, 0.0f);
+		m_aKeySet[0].aKey[5].rot = D3DXVECTOR3(0.0f, 0.0f, 0.5f);
+		m_aKeySet[0].aKey[6].rot = D3DXVECTOR3(0.4f, 0.0f, 0.0f);
+
+		//----------------------
+		// キー2
+		//----------------------
+		m_aKeySet[1].nFrame = 80;	//フレーム数
+		m_aKeySet[1].aKey[0].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		m_aKeySet[1].aKey[1].rot = D3DXVECTOR3(-1.0f, 0.0f, 0.0f);
+		m_aKeySet[1].aKey[2].rot = D3DXVECTOR3(0.9f, 0.0f, 0.0f);
+		m_aKeySet[1].aKey[3].rot = D3DXVECTOR3(0.0f, 0.0f, -0.8f);
+		m_aKeySet[1].aKey[4].rot = D3DXVECTOR3(0.75f, 0.5f, 0.0f);
+		m_aKeySet[1].aKey[5].rot = D3DXVECTOR3(0.0f, 0.0f, 0.8f);
+		m_aKeySet[1].aKey[6].rot = D3DXVECTOR3(0.4f, 0.0f, 0.0f);
+
+		//----------------------
+		// キー2
+		//----------------------
+		m_aKeySet[2].nFrame = 80;	//フレーム数
+		m_aKeySet[2].aKey[0].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		m_aKeySet[2].aKey[1].rot = D3DXVECTOR3(-1.0f, 0.0f, 0.0f);
+		m_aKeySet[2].aKey[2].rot = D3DXVECTOR3(0.9f, 0.0f, 0.0f);
+		m_aKeySet[2].aKey[3].rot = D3DXVECTOR3(0.0f, 0.0f, -0.5f);
+		m_aKeySet[2].aKey[4].rot = D3DXVECTOR3(0.75f, 0.5f, 0.0f);
+		m_aKeySet[2].aKey[5].rot = D3DXVECTOR3(0.0f, 0.0f, 0.5f);
+		m_aKeySet[2].aKey[6].rot = D3DXVECTOR3(0.4f, 0.0f, 0.0f);
+		break;
+	}
+}
+
 //========================
 // モーションの設定
 //========================
@@ -452,54 +496,6 @@ void CPlayer::SetMotion(bool bLoop)
 }
 
 //=====================================
-// キーセット情報の設定
-// 引数：モーションの種類
-//=====================================
-void CPlayer::SetKeySet(int nMotionType)
-{
-	switch (nMotionType)
-	{
-	case MOTION_TYPE_MOVE:	//移動モーション
-		//----------------------
-		// キー1
-		//----------------------
-		m_aKeySet[0].nFrame = 80;	//フレーム数
-		m_aKeySet[0].aKey[0].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		m_aKeySet[0].aKey[1].rot = D3DXVECTOR3(-1.0f, 0.0f, 0.0f);
-		m_aKeySet[0].aKey[2].rot = D3DXVECTOR3(0.9f, 0.0f, 0.0f);
-		m_aKeySet[0].aKey[3].rot = D3DXVECTOR3(0.0f, 0.0f, -0.5f);
-		m_aKeySet[0].aKey[4].rot = D3DXVECTOR3(0.75f, 0.5f, 0.0f);
-		m_aKeySet[0].aKey[5].rot = D3DXVECTOR3(0.0f, 0.0f, 0.5f);
-		m_aKeySet[0].aKey[6].rot = D3DXVECTOR3(0.4f, 0.0f, 0.0f);
-		
-		//----------------------
-		// キー2
-		//----------------------
-		m_aKeySet[1].nFrame = 80;	//フレーム数
-		m_aKeySet[1].aKey[0].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		m_aKeySet[1].aKey[1].rot = D3DXVECTOR3(-1.0f, 0.0f, 0.0f);
-		m_aKeySet[1].aKey[2].rot = D3DXVECTOR3(0.9f, 0.0f, 0.0f);
-		m_aKeySet[1].aKey[3].rot = D3DXVECTOR3(0.0f, 0.0f, -0.8f);
-		m_aKeySet[1].aKey[4].rot = D3DXVECTOR3(0.75f, 0.5f, 0.0f);
-		m_aKeySet[1].aKey[5].rot = D3DXVECTOR3(0.0f, 0.0f, 0.8f);
-		m_aKeySet[1].aKey[6].rot = D3DXVECTOR3(0.4f, 0.0f, 0.0f);
-
-		//----------------------
-		// キー2
-		//----------------------
-		m_aKeySet[2].nFrame = 80;	//フレーム数
-		m_aKeySet[2].aKey[0].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		m_aKeySet[2].aKey[1].rot = D3DXVECTOR3(-1.0f, 0.0f, 0.0f);
-		m_aKeySet[2].aKey[2].rot = D3DXVECTOR3(0.9f, 0.0f, 0.0f);
-		m_aKeySet[2].aKey[3].rot = D3DXVECTOR3(0.0f, 0.0f, -0.5f);
-		m_aKeySet[2].aKey[4].rot = D3DXVECTOR3(0.75f, 0.5f, 0.0f);
-		m_aKeySet[2].aKey[5].rot = D3DXVECTOR3(0.0f, 0.0f, 0.5f);
-		m_aKeySet[2].aKey[6].rot = D3DXVECTOR3(0.4f, 0.0f, 0.0f);
-		break;
-	}
-}
-
-//=====================================
 // 移動
 // 引数：上キー,下キー,左キー,右キー
 //=====================================
@@ -577,6 +573,11 @@ void CPlayer::MoveKeyboard(int nUpKey, int nDownKey, int nLeftKey, int nRightKey
 	{//移動キーが押されていないなら
 		//タイヤの回転量を0にする
 		m_rotWheel = 0;
+	}
+	else
+	{//どれかが押されているなら
+		//移動モーションにする
+		m_type = MOTION_TYPE_MOVE;
 	}
 }
 
