@@ -30,7 +30,7 @@ const float CPlayer::fPlayerSpeed = 7.0f;
 //------------------------
 // グローバル変数
 //------------------------
-CPlayer::KEY_SET g_aKeySet[] =	//キーセット情報
+/*CPlayer::KEY_SET g_aKeySet[] =	//キーセット情報
 {
 	//================================================
 	//
@@ -78,7 +78,7 @@ CPlayer::KEY_SET g_aKeySet[] =	//キーセット情報
 	{ 0.0f,0.0f,0.0f , 0.0f,0.0f,0.5f },	//左腕
 	{ 0.0f,0.0f,0.0f , 0.4f,0.0f,0.0f } },	//左手
 	},
-};
+};*/
 
 //========================
 // コンストラクタ
@@ -109,6 +109,18 @@ CPlayer::CPlayer() : CObject(0)
 	/* ↓ モーション情報 ↓ */
 	m_nCurrentKey = 0;
 	m_nCntMotion = 0;
+
+	//キーセット情報の初期化
+	for (int i = 0; i < MOTION_TYPE_MAX; i++)
+	{
+		for (int j = 0; j < MAX_PARTS; j++)
+		{
+			m_aKeySet[i].aKey[j].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//位置
+			m_aKeySet[i].aKey[j].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//向き
+		}
+
+		m_aKeySet[i].nFrame = 0;	//フレーム数
+	}
 }
 
 //========================
@@ -152,6 +164,9 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	// 線の表示
 	//-----------------------
 	SetLine();
+
+	//キーセット情報の設定
+	SetKeySet(MOTION_TYPE_MOVE);
 
 	return S_OK;
 }
@@ -213,11 +228,6 @@ void CPlayer::Update()
 
 	//タイヤの回転
 	m_pModel[0]->SetRotX(m_rotWheel);
-
-	if (CInputKeyboard::Press(DIK_Z))
-	{
-		m_pModel[1]->SetRotX(m_rotWheel / 2);
-	}
 
 	//-------------------------
 	// モーション
@@ -368,8 +378,8 @@ void CPlayer::SetMotion(bool bLoop)
 		}
 
 		//キー情報を持った変数
-		KEY key = g_aKeySet[m_nCurrentKey].aKey[i];
-		KEY keyNext = g_aKeySet[m_nCurrentKey + 1].aKey[i];
+		KEY key = m_aKeySet[m_nCurrentKey].aKey[i];
+		KEY keyNext = m_aKeySet[m_nCurrentKey + 1].aKey[i];
 
 		//-----------------------------------------
 		// 現在値を取得
@@ -389,34 +399,34 @@ void CPlayer::SetMotion(bool bLoop)
 		// (終了値 - 開始値)
 		//-----------------------------------------
 		//位置
-		float fDifPosX = keyNext.fPosX - key.fPosX;
-		float fDifPosY = keyNext.fPosY - key.fPosY;
-		float fDifPosZ = keyNext.fPosZ - key.fPosZ;
+		float fDifPosX = keyNext.pos.x - key.pos.x;
+		float fDifPosY = keyNext.pos.y - key.pos.y;
+		float fDifPosZ = keyNext.pos.z - key.pos.z;
 
 		//向き
-		float fDifRotX = keyNext.fRotX - key.fRotX;
-		float fDifRotY = keyNext.fRotY - key.fRotY;
-		float fDifRotZ = keyNext.fRotZ - key.fRotZ;
+		float fDifRotX = keyNext.rot.x - key.rot.x;
+		float fDifRotY = keyNext.rot.y - key.rot.y;
+		float fDifRotZ = keyNext.rot.z - key.rot.z;
 
 		//-----------------------------------------
 		// 相対値の計算
 		// (モーションカウンター / フレーム数)
 		//-----------------------------------------
-		float fNumRelative = m_nCntMotion / (float)g_aKeySet[m_nCurrentKey].nFrame;
+		float fNumRelative = m_nCntMotion / (float)m_aKeySet[m_nCurrentKey].nFrame;
 
 		//-----------------------------------------
 		// 現在値の計算
 		// (開始値 + (差分 * 相対値))
 		//-----------------------------------------
 		//位置
-		fPosX += key.fPosX + (fDifPosX * fNumRelative);
-		fPosY += key.fPosY + (fDifPosY * fNumRelative);
-		fPosZ += key.fPosZ + (fDifPosZ * fNumRelative);
+		fPosX += key.pos.x + (fDifPosX * fNumRelative);
+		fPosY += key.pos.y + (fDifPosY * fNumRelative);
+		fPosZ += key.pos.z + (fDifPosZ * fNumRelative);
 
 		//向き
-		fRotX = key.fRotX + (fDifRotX * fNumRelative);
-		fRotY = key.fRotY + (fDifRotY * fNumRelative);
-		fRotZ = key.fRotZ + (fDifRotZ * fNumRelative);
+		fRotX = key.rot.x + (fDifRotX * fNumRelative);
+		fRotY = key.rot.y + (fDifRotY * fNumRelative);
+		fRotZ = key.rot.z + (fDifRotZ * fNumRelative);
 
 		//-----------------------------------------
 		// モデル情報の設定
@@ -434,10 +444,58 @@ void CPlayer::SetMotion(bool bLoop)
 	//-------------------------
 	// 初期化
 	//-------------------------
-	if (m_nCntMotion >= g_aKeySet[m_nCurrentKey].nFrame)
+	if (m_nCntMotion >= m_aKeySet[m_nCurrentKey].nFrame)
 	{//モーションカウンターが再生フレームに達したら
 		m_nCurrentKey++;	//キー番号を加算
 		m_nCntMotion = 0;	//モーションカウンターを初期化
+	}
+}
+
+//=====================================
+// キーセット情報の設定
+// 引数：モーションの種類
+//=====================================
+void CPlayer::SetKeySet(int nMotionType)
+{
+	switch (nMotionType)
+	{
+	case MOTION_TYPE_MOVE:	//移動モーション
+		//----------------------
+		// キー1
+		//----------------------
+		m_aKeySet[0].nFrame = 80;	//フレーム数
+		m_aKeySet[0].aKey[0].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		m_aKeySet[0].aKey[1].rot = D3DXVECTOR3(-1.0f, 0.0f, 0.0f);
+		m_aKeySet[0].aKey[2].rot = D3DXVECTOR3(0.9f, 0.0f, 0.0f);
+		m_aKeySet[0].aKey[3].rot = D3DXVECTOR3(0.0f, 0.0f, -0.5f);
+		m_aKeySet[0].aKey[4].rot = D3DXVECTOR3(0.75f, 0.5f, 0.0f);
+		m_aKeySet[0].aKey[5].rot = D3DXVECTOR3(0.0f, 0.0f, 0.5f);
+		m_aKeySet[0].aKey[6].rot = D3DXVECTOR3(0.4f, 0.0f, 0.0f);
+		
+		//----------------------
+		// キー2
+		//----------------------
+		m_aKeySet[1].nFrame = 80;	//フレーム数
+		m_aKeySet[1].aKey[0].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		m_aKeySet[1].aKey[1].rot = D3DXVECTOR3(-1.0f, 0.0f, 0.0f);
+		m_aKeySet[1].aKey[2].rot = D3DXVECTOR3(0.9f, 0.0f, 0.0f);
+		m_aKeySet[1].aKey[3].rot = D3DXVECTOR3(0.0f, 0.0f, -0.8f);
+		m_aKeySet[1].aKey[4].rot = D3DXVECTOR3(0.75f, 0.5f, 0.0f);
+		m_aKeySet[1].aKey[5].rot = D3DXVECTOR3(0.0f, 0.0f, 0.8f);
+		m_aKeySet[1].aKey[6].rot = D3DXVECTOR3(0.4f, 0.0f, 0.0f);
+
+		//----------------------
+		// キー2
+		//----------------------
+		m_aKeySet[2].nFrame = 80;	//フレーム数
+		m_aKeySet[2].aKey[0].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		m_aKeySet[2].aKey[1].rot = D3DXVECTOR3(-1.0f, 0.0f, 0.0f);
+		m_aKeySet[2].aKey[2].rot = D3DXVECTOR3(0.9f, 0.0f, 0.0f);
+		m_aKeySet[2].aKey[3].rot = D3DXVECTOR3(0.0f, 0.0f, -0.5f);
+		m_aKeySet[2].aKey[4].rot = D3DXVECTOR3(0.75f, 0.5f, 0.0f);
+		m_aKeySet[2].aKey[5].rot = D3DXVECTOR3(0.0f, 0.0f, 0.5f);
+		m_aKeySet[2].aKey[6].rot = D3DXVECTOR3(0.4f, 0.0f, 0.0f);
+		break;
 	}
 }
 

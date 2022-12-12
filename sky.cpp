@@ -62,7 +62,7 @@ void CSky::Update()
 void CSky::Draw()
 {
 	//デバイスの取得
-	LPDIRECT3DDEVICE9 pDevice = CApplication::GetRenderer()->GetDevice();
+	//LPDIRECT3DDEVICE9 pDevice = CApplication::GetRenderer()->GetDevice();
 
 	//ライトを無効にする
 	//pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);

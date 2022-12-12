@@ -33,12 +33,8 @@ public:
 	//キー要素
 	struct KEY
 	{
-		float fPosX;	//位置
-		float fPosY;
-		float fPosZ;
-		float fRotX;	//向き
-		float fRotY;
-		float fRotZ;
+		D3DXVECTOR3 pos;	//位置
+		D3DXVECTOR3 rot;	//向き
 	};
 
 	//キー情報
@@ -89,8 +85,9 @@ public:
 	static CPlayer* Create();
 
 private:
-	void SetModel();				//モデルの設定
-	void SetMotion(bool bLoop);		//モーションの設定
+	void SetModel();					//モデルの設定
+	void SetMotion(bool bLoop);			//モーションの設定
+	void SetKeySet(int nMotionType);	//キーセット情報の設定
 	void MoveKeyboard(int nUpKey, int nDownKey, int nLeftKey, int nRightKey);	//移動
 	void MoveJoypad();	//ジョイパッドを使った移動
 	void SetRot();		//角度の設定
@@ -125,6 +122,7 @@ private:
 	/* ↓ モーション情報 ↓ */
 	int m_nCurrentKey;			//現在のキー番号
 	int m_nCntMotion;			//モーションカウンター
+	KEY_SET m_aKeySet[MAX_KEY];
 
 	/* ↓ クォータニオン ↓ */
 	D3DXMATRIX		m_mtxRot;	//回転マトリックス(保存用)
