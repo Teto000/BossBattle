@@ -62,17 +62,17 @@ public:
 	//----------------
 	// セッター
 	//----------------
-	void SetPosition(D3DXVECTOR3 pos);
+	void SetPosition(D3DXVECTOR3 pos) { m_pos = pos; }			//位置の設定
 
 	//----------------
 	// ゲッター
 	//----------------
-	D3DXVECTOR3 GetPosition() override;	//位置の取得
-	D3DXVECTOR3 GetRot();				//向きの取得
-	float GetWidth() override;			//幅の取得
-	float GetHeight() override;			//高さの取得
-	D3DXVECTOR3 GetSize() { return m_size; };	//大きさの取得
-	D3DXMATRIX GetmtxWorld();			//ワールドマトリックスの取得
+	D3DXVECTOR3 GetPosition() override  { return m_pos; }		//位置の取得
+	D3DXVECTOR3 GetRot()				{ return m_rot; }		//向きの取得
+	float GetWidth() override			{ return 0.0f; }		//幅の取得
+	float GetHeight() override			{ return 0.0f; }		//高さの取得
+	D3DXVECTOR3 GetSize()				{ return m_size; }		//大きさの取得
+	D3DXMATRIX GetmtxWorld()			{ return m_mtxWorld; }	//ワールドマトリックスの取得
 
 	//----------------
 	// 静的メンバ関数

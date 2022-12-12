@@ -39,14 +39,14 @@ public:
 	//-------------------
 	// ゲッター
 	//-------------------
-	D3DXVECTOR3 GetPosition() override;		//位置の取得
-	float GetWidth() override;				//幅の取得
-	float GetHeight() override;				//高さの取得
+	D3DXVECTOR3 GetPosition() override  { return m_pos; }		//位置の取得
+	float GetWidth() override			{ return 0.0f; }		//幅の取得
+	float GetHeight() override			{ return 0.0f; }		//高さの取得
 
 	//-------------------
 	// 静的メンバ関数
 	//-------------------
-	static CBg *Create(D3DXVECTOR3 pos, BGTYPE type);
+	static CBg *Create(D3DXVECTOR3 pos, BGTYPE type);	//生成
 
 private:
 	//-------------------

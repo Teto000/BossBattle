@@ -66,18 +66,18 @@ public:
 	//----------------
 	// セッター
 	//----------------
-	void SetPosition(D3DXVECTOR3 pos);
+	void SetPosition(D3DXVECTOR3 pos) { m_pos = pos; }	//位置の設定
 
 	//----------------
 	// ゲッター
 	//----------------
-	D3DXVECTOR3 GetPosition() override;	//位置の取得
-	D3DXVECTOR3 GetRot();				//向きの取得
-	float GetWidth() override;			//幅の取得
-	float GetHeight() override;			//高さの取得
-	D3DXMATRIX GetmtxWorld();			//ワールドマトリックスの取得
-	CModel* GetModel(int nNum) { return m_pModel[nNum]; };	//モデルの取得
-	bool GetCollisionPlayer();
+	D3DXVECTOR3 GetPosition() override { return m_pos; }			//位置の取得
+	D3DXVECTOR3 GetRot()			   { return m_rot; }			//向きの取得
+	float GetWidth() override		   { return 0.0f; }				//幅の取得
+	float GetHeight() override		   { return 0.0f; }				//高さの取得
+	D3DXMATRIX GetmtxWorld()		   { return m_mtxWorld; }		//ワールドマトリックスの取得
+	CModel* GetModel(int nNum)		   { return m_pModel[nNum]; };	//モデルの取得
+	bool GetCollisionPlayer();	//当たり判定の取得
 
 	//----------------
 	// 静的メンバ関数
@@ -89,16 +89,16 @@ private:
 	void SetKeySet(int nMotionType);	//キーセット情報の設定
 	void SetMotion(bool bLoop);			//モーションの設定
 	void MoveKeyboard(int nUpKey, int nDownKey, int nLeftKey, int nRightKey);	//移動
-	void MoveJoypad();	//ジョイパッドを使った移動
-	void SetRot();		//角度の設定
-	void SetLine();		//線の設置
-	void UpdateLine();	//線の更新
+	void MoveJoypad();					//ジョイパッドを使った移動
+	void SetRot();						//角度の設定
+	void SetLine();						//線の設置
+	void UpdateLine();					//線の更新
 
 private:
 	//----------------
 	// 定数
 	//----------------
-	static const int nMaxLine = 128;
+	static const int nMaxLine = 128;		//最大体力
 	static const int nWheelRotValue = 10;	//タイヤの回転量
 	static const float fPlayerSpeed;		//プレイヤーの速度
 
@@ -120,16 +120,16 @@ private:
 	CLine* m_pLine[nMaxLine];		//ライン
 
 	/* ↓ モーション情報 ↓ */
-	int m_nCurrentKey;			//現在のキー番号
-	int m_nCntMotion;			//モーションカウンター
-	KEY_SET m_aKeySet[MAX_KEY];	//キーセット情報
-	MOTION_TYPE m_type;			//現在のモーション
+	int m_nCurrentKey;				//現在のキー番号
+	int m_nCntMotion;				//モーションカウンター
+	KEY_SET m_aKeySet[MAX_KEY];		//キーセット情報
+	MOTION_TYPE m_type;				//現在のモーション
 
 	/* ↓ クォータニオン ↓ */
-	D3DXMATRIX		m_mtxRot;	//回転マトリックス(保存用)
-	D3DXQUATERNION	m_quat;		//クォータニオン
-	D3DXVECTOR3		m_vecAxis;	//回転軸
-	float			m_fValueRot;//回転角(ラジアン)
+	D3DXMATRIX		m_mtxRot;		//回転マトリックス(保存用)
+	D3DXQUATERNION	m_quat;			//クォータニオン
+	D3DXVECTOR3		m_vecAxis;		//回転軸
+	float			m_fValueRot;	//回転角(ラジアン)
 };
 
 #endif

@@ -124,27 +124,3 @@ CBg* CBg::Create(D3DXVECTOR3 pos, BGTYPE type)
 
 	return pBg;
 }
-
-//========================
-// ˆÊ’u‚Ìæ“¾
-//========================
-D3DXVECTOR3 CBg::GetPosition()
-{
-	return m_pos;
-}
-
-//========================
-//	•‚Ìæ“¾
-//========================
-float CBg::GetWidth()
-{
-	return m_fWidth;
-}
-
-//========================
-// ‚‚³æ“¾
-//========================
-float CBg::GetHeight()
-{
-	return m_fHeight;
-}
