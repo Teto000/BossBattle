@@ -48,6 +48,14 @@ public:
 		KEY aKey[MAX_PARTS];
 	};
 
+	//モーションの種類
+	enum MOTION_TYPE
+	{
+		MOTION_TYPE_IDOL = 0,	//待機
+		MOTION_TYPE_MOVE,		//移動
+		MOTION_TYPE_MAX
+	};
+
 	CPlayer();				//コンストラクタ
 	~CPlayer() override;	//デストラクタ
 

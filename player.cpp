@@ -33,7 +33,9 @@ const float CPlayer::fPlayerSpeed = 7.0f;
 CPlayer::KEY_SET g_aKeySet[] =	//キーセット情報
 {
 	//================================================
+	//
 	// 移動モーション
+	//
 	//================================================
 	//----------------------
 	// キー1
@@ -67,7 +69,7 @@ CPlayer::KEY_SET g_aKeySet[] =	//キーセット情報
 	// キー3
 	//----------------------
 	{ 80,	//フレーム数
-			//		Pos				Rot
+	//		Pos				Rot
 	{ { 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },	//タイヤ
 	{ 0.0f,0.0f,0.0f , -1.0f,0.0f,0.0f },	//体
 	{ 0.0f,0.0f,0.0f , 0.9f,0.0f,0.0f },	//頭
@@ -197,9 +199,9 @@ void CPlayer::Update()
 	// ジョイパッドでの操作
 	CInputJoypad* joypad = CApplication::GetJoypad();
 
-	if (CGame::GetFinish() == false)
+	if (!CGame::GetFinish())
 	{//終了フラグが立っていないなら
-		if (joypad->IsJoyPadUse(0) == false)
+		if (!joypad->IsJoyPadUse(0))
 		{//ジョイパッドが使われていないなら
 			MoveKeyboard(DIK_W, DIK_S, DIK_A, DIK_D);	//キーボード
 		}
@@ -216,40 +218,6 @@ void CPlayer::Update()
 	{
 		m_pModel[1]->SetRotX(m_rotWheel / 2);
 	}
-
-	//D3DXMatrix
-
-	//-------------------------
-	// 回転
-	//-------------------------
-	//回転軸の設定
-	/*m_vecAxis.x = sinf(D3DXToRadian(90));
-	m_vecAxis.z = sinf(D3DXToRadian(90));
-
-	//回転角の設定
-	if (CInputKeyboard::Press(DIK_A))
-	{//Aキーが押された
-		m_fValueRot = D3DXToRadian(fPlayerSpeed);
-	}
-	else if (CInputKeyboard::Press(DIK_D))
-	{//Dキーが押された
-		m_fValueRot = -D3DXToRadian(fPlayerSpeed);
-	}
-
-	if (CInputKeyboard::Press(DIK_W))
-	{//Wキーが押された
-		m_fValueRot = D3DXToRadian(fPlayerSpeed);
-	}
-	else if (CInputKeyboard::Press(DIK_S))
-	{//Sキーが押された
-		m_fValueRot = -D3DXToRadian(fPlayerSpeed);
-	}
-
-	if (!CInputKeyboard::Press(DIK_A) && !CInputKeyboard::Press(DIK_D)
-		&& !CInputKeyboard::Press(DIK_W) && !CInputKeyboard::Press(DIK_S))
-	{//移動していないなら
-		m_fValueRot = 0.0f;
-	}*/
 
 	//-------------------------
 	// モーション
@@ -676,7 +644,7 @@ void CPlayer::SetRot()
 	//-------------------------------
 	// 目的の角度まで回転する
 	//-------------------------------
-	m_rot.y += (m_rotDest.y - m_rot.y) * 0.04f;	//減衰処理
+	m_rot.y += (m_rotDest.y - m_rot.y) * 0.05f;	//減衰処理
 
 	//-------------------------------
 	// 角度の正規化
