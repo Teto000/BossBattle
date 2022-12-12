@@ -183,9 +183,6 @@ void CPlayer::Update()
 	//キーセット情報の設定
 	SetKeySet(m_type);
 
-	//モーションの設定
-	SetMotion(true);
-
 	//-------------------------
 	// 線の更新
 	//-------------------------
@@ -310,21 +307,21 @@ void CPlayer::SetKeySet(int nMotionType)
 {
 	switch (nMotionType)
 	{
-		//===================================
-		// 待機モーション
-		//===================================
+	//===================================
+	// 待機モーション
+	//===================================
 	case MOTION_TYPE_IDOL:
 		//----------------------
 		// キー1
 		//----------------------
 		m_aKeySet[0].nFrame = 80;	//フレーム数
-		m_aKeySet[0].aKey[0].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		m_aKeySet[0].aKey[1].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		m_aKeySet[0].aKey[2].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		m_aKeySet[0].aKey[3].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		m_aKeySet[0].aKey[4].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		m_aKeySet[0].aKey[5].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		m_aKeySet[0].aKey[6].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		m_aKeySet[0].aKey[0].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//タイヤ
+		m_aKeySet[0].aKey[1].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//体
+		m_aKeySet[0].aKey[2].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//頭
+		m_aKeySet[0].aKey[3].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//右腕
+		m_aKeySet[0].aKey[4].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//右手
+		m_aKeySet[0].aKey[5].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//左腕
+		m_aKeySet[0].aKey[6].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//左手
 
 		//----------------------
 		// キー2
@@ -333,39 +330,54 @@ void CPlayer::SetKeySet(int nMotionType)
 		m_aKeySet[1].aKey[0].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		m_aKeySet[1].aKey[1].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		m_aKeySet[1].aKey[2].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		m_aKeySet[1].aKey[3].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		m_aKeySet[1].aKey[4].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		m_aKeySet[1].aKey[3].rot = D3DXVECTOR3(0.5f, 0.0f, 0.0f);
+		m_aKeySet[1].aKey[4].rot = D3DXVECTOR3(0.5f, 0.0f, 0.0f);
 		m_aKeySet[1].aKey[5].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		m_aKeySet[1].aKey[6].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 		//----------------------
-		// キー2
+		// キー3
 		//----------------------
-		m_aKeySet[2].nFrame = 80;	//フレーム数
+		m_aKeySet[2].nFrame = 40;	//フレーム数
 		m_aKeySet[2].aKey[0].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		m_aKeySet[2].aKey[1].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		m_aKeySet[2].aKey[2].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		m_aKeySet[2].aKey[3].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		m_aKeySet[2].aKey[4].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		m_aKeySet[2].aKey[3].rot = D3DXVECTOR3(-0.5f, 0.0f, 0.0f);
+		m_aKeySet[2].aKey[4].rot = D3DXVECTOR3(0.5f, 0.0f, 0.0f);
 		m_aKeySet[2].aKey[5].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		m_aKeySet[2].aKey[6].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+		//----------------------
+		// キー4
+		//----------------------
+		m_aKeySet[3].nFrame = 80;	//フレーム数
+		m_aKeySet[3].aKey[0].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		m_aKeySet[3].aKey[1].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		m_aKeySet[3].aKey[2].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		m_aKeySet[3].aKey[3].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		m_aKeySet[3].aKey[4].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		m_aKeySet[3].aKey[5].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		m_aKeySet[3].aKey[6].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+		//モーションの設定
+		SetMotion(4, true);
 		break;
 
-		//===================================
-		// 移動モーション
-		//===================================
+	//===================================
+	// 移動モーション
+	//===================================
 	case MOTION_TYPE_MOVE:
 		//----------------------
 		// キー1
 		//----------------------
 		m_aKeySet[0].nFrame = 80;	//フレーム数
-		m_aKeySet[0].aKey[0].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		m_aKeySet[0].aKey[1].rot = D3DXVECTOR3(-1.0f, 0.0f, 0.0f);
-		m_aKeySet[0].aKey[2].rot = D3DXVECTOR3(0.9f, 0.0f, 0.0f);
-		m_aKeySet[0].aKey[3].rot = D3DXVECTOR3(0.0f, 0.0f, -0.5f);
-		m_aKeySet[0].aKey[4].rot = D3DXVECTOR3(0.75f, 0.5f, 0.0f);
-		m_aKeySet[0].aKey[5].rot = D3DXVECTOR3(0.0f, 0.0f, 0.5f);
-		m_aKeySet[0].aKey[6].rot = D3DXVECTOR3(0.4f, 0.0f, 0.0f);
+		m_aKeySet[0].aKey[0].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	 //タイヤ
+		m_aKeySet[0].aKey[1].rot = D3DXVECTOR3(-1.0f, 0.0f, 0.0f);	 //体
+		m_aKeySet[0].aKey[2].rot = D3DXVECTOR3(0.9f, 0.0f, 0.0f);	 //頭
+		m_aKeySet[0].aKey[3].rot = D3DXVECTOR3(0.0f, 0.0f, -0.5f);	 //右腕
+		m_aKeySet[0].aKey[4].rot = D3DXVECTOR3(0.75f, 0.5f, 0.0f);	 //右手
+		m_aKeySet[0].aKey[5].rot = D3DXVECTOR3(0.0f, 0.0f, 0.5f);	 //左腕
+		m_aKeySet[0].aKey[6].rot = D3DXVECTOR3(0.4f, 0.0f, 0.0f);	 //左手
 
 		//----------------------
 		// キー2
@@ -390,6 +402,9 @@ void CPlayer::SetKeySet(int nMotionType)
 		m_aKeySet[2].aKey[4].rot = D3DXVECTOR3(0.75f, 0.5f, 0.0f);
 		m_aKeySet[2].aKey[5].rot = D3DXVECTOR3(0.0f, 0.0f, 0.5f);
 		m_aKeySet[2].aKey[6].rot = D3DXVECTOR3(0.4f, 0.0f, 0.0f);
+
+		//モーションの設定
+		SetMotion(3, true);
 		break;
 	}
 }
@@ -397,9 +412,9 @@ void CPlayer::SetKeySet(int nMotionType)
 //========================
 // モーションの設定
 //========================
-void CPlayer::SetMotion(bool bLoop)
+void CPlayer::SetMotion(int m_nNumKey, bool bLoop)
 {
-	if (m_nCurrentKey + 1 >= MAX_KEY)
+	if (m_nCurrentKey + 1 >= m_nNumKey)
 	{//キーが最大数に達したら
 		if (bLoop)
 		{//ループするなら

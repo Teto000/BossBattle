@@ -22,7 +22,7 @@ class CLine;	//ライン
 // マクロ定義
 //--------------------------------
 #define MAX_PARTS	(7)		//モデルパーツの最大数
-#define MAX_KEY		(3)		//キーの最大数
+#define MAX_KEY		(4)		//キーの最大数
 
 //================================
 // プレイヤークラスの定義
@@ -85,14 +85,14 @@ public:
 	static CPlayer* Create();
 
 private:
-	void SetModel();					//モデルの設定
-	void SetKeySet(int nMotionType);	//キーセット情報の設定
-	void SetMotion(bool bLoop);			//モーションの設定
+	void SetModel();							//モデルの設定
+	void SetKeySet(int nMotionType);			//キーセット情報の設定
+	void SetMotion(int m_nNumKey, bool bLoop);	//モーションの設定
 	void MoveKeyboard(int nUpKey, int nDownKey, int nLeftKey, int nRightKey);	//移動
-	void MoveJoypad();					//ジョイパッドを使った移動
-	void SetRot();						//角度の設定
-	void SetLine();						//線の設置
-	void UpdateLine();					//線の更新
+	void MoveJoypad();		//ジョイパッドを使った移動
+	void SetRot();			//角度の設定
+	void SetLine();			//線の設置
+	void UpdateLine();		//線の更新
 
 private:
 	//----------------
@@ -122,6 +122,7 @@ private:
 	/* ↓ モーション情報 ↓ */
 	int m_nCurrentKey;				//現在のキー番号
 	int m_nCntMotion;				//モーションカウンター
+	int m_nNumKey;					//キーの最大数
 	KEY_SET m_aKeySet[MAX_KEY];		//キーセット情報
 	MOTION_TYPE m_type;				//現在のモーション
 
