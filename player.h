@@ -88,6 +88,7 @@ private:
 	void SetModel();							//モデルの設定
 	void SetKeySet(int nMotionType);			//キーセット情報の設定
 	void SetMotion(int m_nNumKey, bool bLoop);	//モーションの設定
+	void GetFileMotion();						//ファイルを使ったモーションの取得
 	void MoveKeyboard(int nUpKey, int nDownKey, int nLeftKey, int nRightKey);	//移動
 	void MoveJoypad();		//ジョイパッドを使った移動
 	void SetRot();			//角度の設定

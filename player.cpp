@@ -8,6 +8,8 @@
 //------------------------
 // インクルード
 //------------------------
+#include <stdio.h>
+#include <assert.h>
 #include "player.h"
 #include "object.h"
 #include "application.h"
@@ -113,6 +115,11 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	//-----------------------
 	SetLine();
 
+	//-----------------------
+	// モーションの読み込み
+	//-----------------------
+	GetFileMotion();
+
 	return S_OK;
 }
 
@@ -181,7 +188,10 @@ void CPlayer::Update()
 	// モーション
 	//-------------------------
 	//キーセット情報の設定
-	SetKeySet(m_type);
+	//SetKeySet(m_type);
+
+	//モーションの設定
+	SetMotion(m_nNumKey, true);
 
 	//-------------------------
 	// 線の更新
@@ -396,6 +406,33 @@ void CPlayer::SetKeySet(int nMotionType)
 
 	//モーションの設定
 	SetMotion(m_nNumKey, true);
+}
+
+//=====================================
+// ファイルからモーション情報を取得
+//=====================================
+void CPlayer::GetFileMotion()
+{
+	FILE *pFile;			//ファイルポインタを宣言する
+	char cText[256];		//1行分の文字読み取り用変数
+	char cTextHead[256];	//頭文字を取るようの変数
+
+	//読み込むファイルの設定
+	LPCTSTR text = "data/MOTION/player.txt";
+
+	//-------------------------
+	// ファイルの読み込み
+	//-------------------------
+	//ファイルを開く
+	pFile = fopen(text, "r");
+
+	if (pFile == nullptr)
+	{//開けなかったら
+		assert(false);
+	}
+
+	//ファイルを閉じる
+	fclose(pFile);
 }
 
 //=====================================

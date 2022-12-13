@@ -214,6 +214,34 @@ void CCamera::SetCamera(LPDIRECT3DDEVICE9 pDevice)
 
 	//プロジェクションマトリックスの設定
 	pDevice->SetTransform(D3DTS_PROJECTION, &m_mtxProjection);
+
+	//----------------------------
+	// フォグ
+	//----------------------------
+	//フォグの有効設定
+	pDevice->SetRenderState(D3DRS_FOGENABLE, TRUE);
+
+	//フォグカラーの設定
+	pDevice->SetRenderState(D3DRS_FOGCOLOR, D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
+
+	//フォグモードの設定
+	//範囲指定:D3DFOG_LINEAR , 密度指定:D3DFOG_EXP
+	//pDevice->SetRenderState(D3DRS_FOGTABLEMODE, D3DFOG_LINEAR);	//範囲指定
+	pDevice->SetRenderState(D3DRS_FOGTABLEMODE, D3DFOG_EXP);	//密度指定
+
+	//----------------------------
+	// 範囲指定時の処理
+	//----------------------------
+	/*float fFogStart = 100;		//開始位置
+	float fFogEnd = 1000;		//終了位置
+	pDevice->SetRenderState(D3DRS_FOGSTART, *(DWORD*)(&fFogStart));
+	pDevice->SetRenderState(D3DRS_FOGEND, *(DWORD*)(&fFogEnd));*/
+
+	//----------------------------
+	// 密度指定時の処理
+	//----------------------------
+	float fFogDensity = 0.000f;		//密度(0.001でもかなり真っ白)
+	pDevice->SetRenderState(D3DRS_FOGDENSITY, *(DWORD*)(&fFogDensity));
 }
 
 //========================
