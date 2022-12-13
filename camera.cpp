@@ -190,6 +190,9 @@ void CCamera::Update(void)
 //========================
 void CCamera::SetCamera(LPDIRECT3DDEVICE9 pDevice)
 {
+	//--------------------------------
+	// カメラ情報の設定
+	//--------------------------------
 	//ビューマトリックスの初期化
 	D3DXMatrixIdentity(&m_mtxView);
 
@@ -207,17 +210,17 @@ void CCamera::SetCamera(LPDIRECT3DDEVICE9 pDevice)
 
 	//プロジェクションマトリックスの作成
 	D3DXMatrixPerspectiveFovLH(&m_mtxProjection,
-							   D3DXToRadian(45.0f),
-							   (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT,
-							   10.0f,
-							   100000.0f);
+							   D3DXToRadian(45.0f),	//視野角
+							   (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT,	//アスペクト比
+							   10.0f,		//near
+							   100000.0f);	//far
 
 	//プロジェクションマトリックスの設定
 	pDevice->SetTransform(D3DTS_PROJECTION, &m_mtxProjection);
 
-	//----------------------------
+	//--------------------------------
 	// フォグ
-	//----------------------------
+	//--------------------------------
 	//フォグの有効設定
 	pDevice->SetRenderState(D3DRS_FOGENABLE, TRUE);
 
