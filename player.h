@@ -124,6 +124,7 @@ private:
 	int m_nCurrentKey;				//現在のキー番号
 	int m_nCntMotion;				//モーションカウンター
 	int m_nNumKey;					//キーの最大数
+	bool m_bLoop;					//ループするかどうか
 	KEY_SET m_aKeySet[MAX_KEY];		//キーセット情報
 	MOTION_TYPE m_type;				//現在のモーション
 

@@ -59,6 +59,7 @@ CPlayer::CPlayer() : CObject(0)
 	/* ↓ モーション情報 ↓ */
 	m_nCurrentKey = 0;
 	m_nCntMotion = 0;
+	m_bLoop = false;
 
 	//キーセット情報の初期化
 	for (int i = 0; i < MOTION_TYPE_MAX; i++)
@@ -191,7 +192,7 @@ void CPlayer::Update()
 	//SetKeySet(m_type);
 
 	//モーションの設定
-	SetMotion(m_nNumKey, true);
+	SetMotion(m_nNumKey, m_bLoop);
 
 	//-------------------------
 	// 線の更新
@@ -413,22 +414,160 @@ void CPlayer::SetKeySet(int nMotionType)
 //=====================================
 void CPlayer::GetFileMotion()
 {
-	FILE *pFile;			//ファイルポインタを宣言する
-	char cText[256];		//1行分の文字読み取り用変数
-	char cTextHead[256];	//頭文字を取るようの変数
+	const int nMaxText = 256;	//文字の最大数
 
-	//読み込むファイルの設定
-	LPCTSTR text = "data/MOTION/player.txt";
+	FILE *pFile;				//ファイルポインタを宣言する
+	char cText[nMaxText];		//1行分の文字読み取り用変数
+	char cTextHead[nMaxText];	//頭文字を取るようの変数
+	int nNumKey = 0;			//読み込み中のキー数
+	int nNumParts = 0;			//読み込み中のパーツ数
 
 	//-------------------------
 	// ファイルの読み込み
 	//-------------------------
 	//ファイルを開く
-	pFile = fopen(text, "r");
+	pFile = fopen("data/MOTION/player.txt", "r");
 
 	if (pFile == nullptr)
 	{//開けなかったら
 		assert(false);
+	}
+
+	//文字の読み取り処理
+	while (fgets(cText, nMaxText, pFile) != nullptr)
+	{
+		//文字列の分析
+		sscanf(cText, "%s", &cTextHead);
+
+		//===================================
+		// モーション情報
+		//===================================
+		if (strcmp(&cTextHead[0], "MOTIONSET") == 0)
+		{//頭文字がMOTIONSETなら
+			//文字の読み取り処理
+			while (fgets(cText, nMaxText, pFile) != nullptr)
+			{
+				//文字列の分析
+				sscanf(cText, "%s", &cTextHead);
+
+				//------------------------
+				// ループするかどうか
+				//------------------------
+				if (strcmp(&cTextHead[0], "LOOP") == 0)
+				{//頭文字がLOOPなら
+					int nLoop = 0;
+
+					//文字列からループの値を読み取る
+					sscanf(cText, "%s = %d", &cTextHead, &nLoop);
+
+					if (nLoop == 0)
+					{//読み取った値が0なら
+						m_bLoop = false;
+					}
+					else if (nLoop == 1)
+					{//読み取った値が1なら
+						m_bLoop = true;
+					}
+				}
+				//------------------------
+				// キーの最大数
+				//------------------------
+				else if (strcmp(&cTextHead[0], "NUM_KEY") == 0)
+				{//頭文字がNUM_KEYなら
+					//文字列からキーの最大数を読み取る
+					sscanf(cText, "%s = %d", &cTextHead, &m_nNumKey);
+				}
+				//===================================
+				// キーセット情報
+				//===================================
+				else if (strcmp(&cTextHead[0], "KEYSET") == 0)
+				{//頭文字がKEYSETなら
+					//文字の読み取り処理
+					while (fgets(cText, nMaxText, pFile) != nullptr)
+					{
+						//文字列の分析
+						sscanf(cText, "%s", &cTextHead);
+
+						//------------------------
+						// フレーム数
+						//------------------------
+						if (strcmp(&cTextHead[0], "FRAME") == 0)
+						{//頭文字がFRAMEなら
+							//文字列からキーの最大数を読み取る
+							sscanf(cText, "%s = %d", &cTextHead, &m_aKeySet[nNumKey].nFrame);
+						}
+						//===================================
+						// キー情報
+						//===================================
+						else if (strcmp(&cTextHead[0], "KEY") == 0)
+						{//頭文字がKEYなら
+							//文字の読み取り処理
+							while (fgets(cText, nMaxText, pFile) != nullptr)
+							{
+								//文字列の分析
+								sscanf(cText, "%s", &cTextHead);
+
+								//------------------------
+								// 位置
+								//------------------------
+								if (strcmp(&cTextHead[0], "POS") == 0)
+								{//頭文字がPOSなら
+									//文字列から位置を読み取る
+									sscanf(cText, "%s = %f %f %f", &cTextHead,
+										&m_aKeySet[nNumKey].aKey[nNumParts].pos.x,
+										&m_aKeySet[nNumKey].aKey[nNumParts].pos.y,
+										&m_aKeySet[nNumKey].aKey[nNumParts].pos.z);
+								}
+								//------------------------
+								// 向き
+								//------------------------
+								else if (strcmp(&cTextHead[0], "ROT") == 0)
+								{//頭文字がROTなら
+									//文字列から向きを読み取る
+									sscanf(cText, "%s = %f %f %f", &cTextHead,
+										&m_aKeySet[nNumKey].aKey[nNumParts].rot.x,
+										&m_aKeySet[nNumKey].aKey[nNumParts].rot.y,
+										&m_aKeySet[nNumKey].aKey[nNumParts].rot.z);
+								}
+								else if (strcmp(&cTextHead[0], "END_KEY") == 0)
+								{//キーの読み取りが終了したら
+									if (nNumParts + 1 < MAX_PARTS)
+									{//パーツ数を超えないなら
+										//パーツ番号の加算
+										nNumParts++;
+									}
+									else
+									{//パーツ数分読み込んだら
+										//パーツ番号をリセット
+										nNumParts = 0;
+									}
+									break;
+								}
+							}
+						}
+						else if (strcmp(&cTextHead[0], "END_KEYSET") == 0)
+						{//キーセットの読み取りが終了したら
+							if (nNumKey < m_nNumKey)
+							{//キー数が最大じゃないなら
+								//キー番号の加算
+								nNumKey++;
+							}
+							break;
+						}
+					}
+				}
+				else if (strcmp(&cTextHead[0], "END_MOTIONSET") == 0)
+				{//モーションの読み取りが終了したら
+					break;
+				}
+			}
+		}
+
+		//---------------------------
+		// 保存中の文字列の初期化
+		//---------------------------
+		ZeroMemory(&cText, sizeof(cText));
+		ZeroMemory(&cTextHead, sizeof(cTextHead));
 	}
 
 	//ファイルを閉じる
