@@ -59,18 +59,21 @@ CPlayer::CPlayer() : CObject(0)
 	/* ↓ モーション情報 ↓ */
 	m_nCurrentKey = 0;
 	m_nCntMotion = 0;
-	m_bLoop = false;
 
 	//キーセット情報の初期化
-	for (int i = 0; i < MOTION_TYPE_MAX; i++)
+	for (int nCnt = 0; nCnt < MOTION_TYPE_MAX; nCnt++)
 	{
-		for (int j = 0; j < MAX_PARTS; j++)
+		for (int i = 0; i < MOTION_TYPE_MAX; i++)
 		{
-			m_aKeySet[i].aKey[j].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//位置
-			m_aKeySet[i].aKey[j].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//向き
-		}
+			for (int j = 0; j < MAX_PARTS; j++)
+			{
+				m_aMotionSet[nCnt].aKeySet[i].aKey[j].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//位置
+				m_aMotionSet[nCnt].aKeySet[i].aKey[j].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//向き
+			}
 
-		m_aKeySet[i].nFrame = 0;	//フレーム数
+			m_aMotionSet[nCnt].bLoop = false;
+			m_aMotionSet[nCnt].aKeySet[i].nFrame = 0;	//フレーム数
+		}
 	}
 }
 
@@ -192,7 +195,7 @@ void CPlayer::Update()
 	//SetKeySet(m_type);
 
 	//モーションの設定
-	SetMotion(m_nNumKey, m_bLoop);
+	SetMotion(m_type, m_aMotionSet[m_type].bLoop, m_aMotionSet[m_type].nNumKey);
 
 	//-------------------------
 	// 線の更新
@@ -311,105 +314,6 @@ void CPlayer::SetModel()
 }
 
 //=====================================
-// キーセット情報の設定
-// 引数：モーションの種類
-//=====================================
-void CPlayer::SetKeySet(int nMotionType)
-{
-	switch (nMotionType)
-	{
-	//===================================
-	// 待機モーション
-	//===================================
-	case MOTION_TYPE_IDOL:
-		m_nNumKey = 3;	//キー数
-
-		//----------------------
-		// キー1
-		//----------------------
-		m_aKeySet[0].nFrame = 80;	//フレーム数
-		m_aKeySet[0].aKey[0].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//タイヤ
-		m_aKeySet[0].aKey[1].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//体
-		m_aKeySet[0].aKey[2].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//頭
-		m_aKeySet[0].aKey[3].rot = D3DXVECTOR3(-0.75f, 0.3f, -0.5f);	//右腕
-		m_aKeySet[0].aKey[4].rot = D3DXVECTOR3(0.5f, 0.5f, 0.4f);		//右手
-		m_aKeySet[0].aKey[5].rot = D3DXVECTOR3(0.7f, -0.5f, -0.06f);	//左腕
-		m_aKeySet[0].aKey[6].rot = D3DXVECTOR3(1.5f, -0.2f, -1.1f);		//左手
-
-		//----------------------
-		// キー2
-		//----------------------
-		m_aKeySet[1].nFrame = 80;	//フレーム数
-		m_aKeySet[1].aKey[0].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		m_aKeySet[1].aKey[1].rot = D3DXVECTOR3(-0.1f, 0.0f, 0.0f);
-		m_aKeySet[1].aKey[2].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		m_aKeySet[1].aKey[3].rot = D3DXVECTOR3(-0.6f, 0.3f, -0.5f);
-		m_aKeySet[1].aKey[4].rot = D3DXVECTOR3(0.8f, 0.5f, 0.4f);
-		m_aKeySet[1].aKey[5].rot = D3DXVECTOR3(0.9f, -0.3f, -0.06f);
-		m_aKeySet[1].aKey[6].rot = D3DXVECTOR3(0.8f, -0.1f, -0.9f);
-
-		//----------------------
-		// キー3
-		//----------------------
-		m_aKeySet[2].nFrame = 80;	//フレーム数
-		m_aKeySet[2].aKey[0].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		m_aKeySet[2].aKey[1].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		m_aKeySet[2].aKey[2].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		m_aKeySet[2].aKey[3].rot = D3DXVECTOR3(-0.75f, 0.3f, -0.5f);
-		m_aKeySet[2].aKey[4].rot = D3DXVECTOR3(0.5f, 0.5f, 0.4f);
-		m_aKeySet[2].aKey[5].rot = D3DXVECTOR3(0.7f, -0.5f, -0.06f);
-		m_aKeySet[2].aKey[6].rot = D3DXVECTOR3(1.5f, -0.2f, -1.1f);
-		break;
-
-	//===================================
-	// 移動モーション
-	//===================================
-	case MOTION_TYPE_MOVE:
-		m_nNumKey = 3;	//キー数
-
-		//----------------------
-		// キー1
-		//----------------------
-		m_aKeySet[0].nFrame = 80;	//フレーム数
-		m_aKeySet[0].aKey[0].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	 //タイヤ
-		m_aKeySet[0].aKey[1].rot = D3DXVECTOR3(-1.0f, 0.0f, 0.0f);	 //体
-		m_aKeySet[0].aKey[2].rot = D3DXVECTOR3(0.9f, 0.0f, 0.0f);	 //頭
-		m_aKeySet[0].aKey[3].rot = D3DXVECTOR3(0.0f, 0.0f, -0.5f);	 //右腕
-		m_aKeySet[0].aKey[4].rot = D3DXVECTOR3(0.75f, 0.5f, 0.0f);	 //右手
-		m_aKeySet[0].aKey[5].rot = D3DXVECTOR3(0.0f, 0.0f, 0.5f);	 //左腕
-		m_aKeySet[0].aKey[6].rot = D3DXVECTOR3(0.4f, 0.0f, 0.0f);	 //左手
-
-		//----------------------
-		// キー2
-		//----------------------
-		m_aKeySet[1].nFrame = 80;	//フレーム数
-		m_aKeySet[1].aKey[0].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		m_aKeySet[1].aKey[1].rot = D3DXVECTOR3(-1.0f, 0.0f, 0.0f);
-		m_aKeySet[1].aKey[2].rot = D3DXVECTOR3(0.9f, 0.0f, 0.0f);
-		m_aKeySet[1].aKey[3].rot = D3DXVECTOR3(0.0f, 0.0f, -0.8f);
-		m_aKeySet[1].aKey[4].rot = D3DXVECTOR3(0.75f, 0.5f, 0.0f);
-		m_aKeySet[1].aKey[5].rot = D3DXVECTOR3(0.0f, 0.0f, 0.8f);
-		m_aKeySet[1].aKey[6].rot = D3DXVECTOR3(0.4f, 0.0f, 0.0f);
-
-		//----------------------
-		// キー2
-		//----------------------
-		m_aKeySet[2].nFrame = 80;	//フレーム数
-		m_aKeySet[2].aKey[0].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		m_aKeySet[2].aKey[1].rot = D3DXVECTOR3(-1.0f, 0.0f, 0.0f);
-		m_aKeySet[2].aKey[2].rot = D3DXVECTOR3(0.9f, 0.0f, 0.0f);
-		m_aKeySet[2].aKey[3].rot = D3DXVECTOR3(0.0f, 0.0f, -0.5f);
-		m_aKeySet[2].aKey[4].rot = D3DXVECTOR3(0.75f, 0.5f, 0.0f);
-		m_aKeySet[2].aKey[5].rot = D3DXVECTOR3(0.0f, 0.0f, 0.5f);
-		m_aKeySet[2].aKey[6].rot = D3DXVECTOR3(0.4f, 0.0f, 0.0f);
-		break;
-	}
-
-	//モーションの設定
-	SetMotion(m_nNumKey, true);
-}
-
-//=====================================
 // ファイルからモーション情報を取得
 //=====================================
 void CPlayer::GetFileMotion()
@@ -419,8 +323,9 @@ void CPlayer::GetFileMotion()
 	FILE *pFile;				//ファイルポインタを宣言する
 	char cText[nMaxText];		//1行分の文字読み取り用変数
 	char cTextHead[nMaxText];	//頭文字を取るようの変数
-	int nNumKey = 0;			//読み込み中のキー数
-	int nNumParts = 0;			//読み込み中のパーツ数
+	int nNumMotion = 0;			//読み込み中のモーション番号
+	int nNumKey = 0;			//読み込み中のキー番号
+	int nNumParts = 0;			//読み込み中のパーツ番号
 
 	//-------------------------
 	// ファイルの読み込み
@@ -462,11 +367,11 @@ void CPlayer::GetFileMotion()
 
 					if (nLoop == 0)
 					{//読み取った値が0なら
-						m_bLoop = false;
+						m_aMotionSet[nNumMotion].bLoop = false;
 					}
 					else if (nLoop == 1)
 					{//読み取った値が1なら
-						m_bLoop = true;
+						m_aMotionSet[nNumMotion].bLoop = true;
 					}
 				}
 				//------------------------
@@ -475,7 +380,7 @@ void CPlayer::GetFileMotion()
 				else if (strcmp(&cTextHead[0], "NUM_KEY") == 0)
 				{//頭文字がNUM_KEYなら
 					//文字列からキーの最大数を読み取る
-					sscanf(cText, "%s = %d", &cTextHead, &m_nNumKey);
+					sscanf(cText, "%s = %d", &cTextHead, &m_aMotionSet[nNumMotion].nNumKey);
 				}
 				//===================================
 				// キーセット情報
@@ -494,7 +399,7 @@ void CPlayer::GetFileMotion()
 						if (strcmp(&cTextHead[0], "FRAME") == 0)
 						{//頭文字がFRAMEなら
 							//文字列からキーの最大数を読み取る
-							sscanf(cText, "%s = %d", &cTextHead, &m_aKeySet[nNumKey].nFrame);
+							sscanf(cText, "%s = %d", &cTextHead, &m_aMotionSet[nNumMotion].aKeySet[nNumKey].nFrame);
 						}
 						//===================================
 						// キー情報
@@ -514,9 +419,9 @@ void CPlayer::GetFileMotion()
 								{//頭文字がPOSなら
 									//文字列から位置を読み取る
 									sscanf(cText, "%s = %f %f %f", &cTextHead,
-										&m_aKeySet[nNumKey].aKey[nNumParts].pos.x,
-										&m_aKeySet[nNumKey].aKey[nNumParts].pos.y,
-										&m_aKeySet[nNumKey].aKey[nNumParts].pos.z);
+										&m_aMotionSet[nNumMotion].aKeySet[nNumKey].aKey[nNumParts].pos.x,
+										&m_aMotionSet[nNumMotion].aKeySet[nNumKey].aKey[nNumParts].pos.y,
+										&m_aMotionSet[nNumMotion].aKeySet[nNumKey].aKey[nNumParts].pos.z);
 								}
 								//------------------------
 								// 向き
@@ -525,9 +430,9 @@ void CPlayer::GetFileMotion()
 								{//頭文字がROTなら
 									//文字列から向きを読み取る
 									sscanf(cText, "%s = %f %f %f", &cTextHead,
-										&m_aKeySet[nNumKey].aKey[nNumParts].rot.x,
-										&m_aKeySet[nNumKey].aKey[nNumParts].rot.y,
-										&m_aKeySet[nNumKey].aKey[nNumParts].rot.z);
+										&m_aMotionSet[nNumMotion].aKeySet[nNumKey].aKey[nNumParts].rot.x,
+										&m_aMotionSet[nNumMotion].aKeySet[nNumKey].aKey[nNumParts].rot.y,
+										&m_aMotionSet[nNumMotion].aKeySet[nNumKey].aKey[nNumParts].rot.z);
 								}
 								else if (strcmp(&cTextHead[0], "END_KEY") == 0)
 								{//キーの読み取りが終了したら
@@ -547,7 +452,7 @@ void CPlayer::GetFileMotion()
 						}
 						else if (strcmp(&cTextHead[0], "END_KEYSET") == 0)
 						{//キーセットの読み取りが終了したら
-							if (nNumKey < m_nNumKey)
+							if (nNumKey < m_aMotionSet[nNumMotion].nNumKey)
 							{//キー数が最大じゃないなら
 								//キー番号の加算
 								nNumKey++;
@@ -558,6 +463,10 @@ void CPlayer::GetFileMotion()
 				}
 				else if (strcmp(&cTextHead[0], "END_MOTIONSET") == 0)
 				{//モーションの読み取りが終了したら
+					//キー番号をリセット
+					nNumKey = 0;
+					//モーション番号の加算
+					nNumMotion++;
 					break;
 				}
 			}
@@ -576,9 +485,9 @@ void CPlayer::GetFileMotion()
 
 //=====================================
 // モーションの設定
-// 引数：キー数、ループ状態
+// 引数：種類、ループ状態、キー数
 //=====================================
-void CPlayer::SetMotion(int nNumKey, bool bLoop)
+void CPlayer::SetMotion(MOTION_TYPE type, bool bLoop, int nNumKey)
 {
 	if (m_nCurrentKey + 1 >= nNumKey)
 	{//キーが最大数に達したら
@@ -603,8 +512,8 @@ void CPlayer::SetMotion(int nNumKey, bool bLoop)
 		}
 
 		//キー情報を持った変数
-		KEY key = m_aKeySet[m_nCurrentKey].aKey[i];
-		KEY keyNext = m_aKeySet[m_nCurrentKey + 1].aKey[i];
+		KEY key = m_aMotionSet[type].aKeySet[m_nCurrentKey].aKey[i];
+		KEY keyNext = m_aMotionSet[type].aKeySet[m_nCurrentKey + 1].aKey[i];
 
 		//-----------------------------------------
 		// 現在値を取得
@@ -637,7 +546,7 @@ void CPlayer::SetMotion(int nNumKey, bool bLoop)
 		// 相対値の計算
 		// (モーションカウンター / フレーム数)
 		//-----------------------------------------
-		float fNumRelative = m_nCntMotion / (float)m_aKeySet[m_nCurrentKey].nFrame;
+		float fNumRelative = m_nCntMotion / (float)m_aMotionSet[type].aKeySet[m_nCurrentKey].nFrame;
 
 		//-----------------------------------------
 		// 現在値の計算
@@ -669,7 +578,7 @@ void CPlayer::SetMotion(int nNumKey, bool bLoop)
 	//-------------------------
 	// 初期化
 	//-------------------------
-	if (m_nCntMotion >= m_aKeySet[m_nCurrentKey].nFrame)
+	if (m_nCntMotion >= m_aMotionSet[type].aKeySet[m_nCurrentKey].nFrame)
 	{//モーションカウンターが再生フレームに達したら
 		m_nCurrentKey++;	//キー番号を加算
 		m_nCntMotion = 0;	//モーションカウンターを初期化

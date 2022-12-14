@@ -52,6 +52,14 @@ public:
 		MOTION_TYPE_MAX
 	};
 
+	//モーション情報
+	struct MOTION_SET
+	{
+		bool bLoop;					//ループするかどうか
+		int nNumKey;				//キーの最大数
+		KEY_SET aKeySet[MAX_KEY];	//キーセット情報
+	};
+
 	CPlayer();				//コンストラクタ
 	~CPlayer() override;	//デストラクタ
 
@@ -85,10 +93,9 @@ public:
 	static CPlayer* Create();
 
 private:
-	void SetModel();							//モデルの設定
-	void SetKeySet(int nMotionType);			//キーセット情報の設定
-	void SetMotion(int m_nNumKey, bool bLoop);	//モーションの設定
-	void GetFileMotion();						//ファイルを使ったモーションの取得
+	void SetModel();											//モデルの設定
+	void SetMotion(MOTION_TYPE type, bool bLoop, int nNumKey);	//モーションの設定
+	void GetFileMotion();										//ファイルを使ったモーションの取得
 	void MoveKeyboard(int nUpKey, int nDownKey, int nLeftKey, int nRightKey);	//移動
 	void MoveJoypad();		//ジョイパッドを使った移動
 	void SetRot();			//角度の設定
@@ -123,9 +130,7 @@ private:
 	/* ↓ モーション情報 ↓ */
 	int m_nCurrentKey;				//現在のキー番号
 	int m_nCntMotion;				//モーションカウンター
-	int m_nNumKey;					//キーの最大数
-	bool m_bLoop;					//ループするかどうか
-	KEY_SET m_aKeySet[MAX_KEY];		//キーセット情報
+	MOTION_SET m_aMotionSet[MOTION_TYPE_MAX];		//モーション情報
 	MOTION_TYPE m_type;				//現在のモーション
 
 	/* ↓ クォータニオン ↓ */
