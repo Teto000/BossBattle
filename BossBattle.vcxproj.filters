@@ -33,6 +33,9 @@
     <Filter Include="00_Main\Object\ObjectX">
       <UniqueIdentifier>{f9267d4d-4bd4-44ef-86f4-7ad0a156c89a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00_Main\Object\Object2D\Gauge">
+      <UniqueIdentifier>{d71e9d37-6968-4db4-b964-ec06ec744310}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -125,6 +128,12 @@
     <ClCompile Include="meshorbit.cpp">
       <Filter>00_Main\Object\Mesh</Filter>
     </ClCompile>
+    <ClCompile Include="gauge.cpp">
+      <Filter>00_Main\Object\Object2D\Gauge</Filter>
+    </ClCompile>
+    <ClCompile Include="hp.cpp">
+      <Filter>00_Main\Object\Object2D\Gauge</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -216,6 +225,12 @@
     </ClInclude>
     <ClInclude Include="meshorbit.h">
       <Filter>00_Main\Object\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="gauge.h">
+      <Filter>00_Main\Object\Object2D\Gauge</Filter>
+    </ClInclude>
+    <ClInclude Include="hp.h">
+      <Filter>00_Main\Object\Object2D\Gauge</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

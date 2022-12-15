@@ -1,0 +1,48 @@
+//===================================================
+//
+// ゲージのヘッダー
+// Author : Sato Teruto
+//
+//===================================================
+#ifndef _GAUGE_H_
+#define _GAUGE_H_	//二重インクルード防止
+
+//--------------------------------
+// インクルード
+//--------------------------------
+#include "object2D.h"
+
+//--------------------------------
+// ゲージクラス
+//--------------------------------
+class CGauge : public CObject2D
+{
+public:
+	CGauge();
+	explicit CGauge(int nPriority);	//コンストラクタ
+	virtual ~CGauge() override;		//デストラクタ
+
+	//------------------
+	// メンバ関数
+	//------------------
+	virtual HRESULT Init(D3DXVECTOR3 pos) override;
+	virtual void Uninit() override;
+	virtual void Update() override;
+	virtual void Draw() override;
+
+	void SetLife(float fLife, float fRemLife);	//HPの設定
+	void SubHP();	//HP減少時の処理
+
+protected:
+	//------------------
+	// メンバ変数
+	//------------------
+	D3DXVECTOR3 m_pos;	//位置
+	float m_fLife;		//体力受け取り用
+	float m_fRemLife;	//残り体力受け取り用
+	float m_fWidth;		//幅
+	float m_fHeight;	//高さ
+	float m_fLength;	//HPバーの長さ
+};
+
+#endif

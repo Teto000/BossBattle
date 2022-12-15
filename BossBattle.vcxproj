@@ -159,6 +159,8 @@
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="fade.cpp" />
     <ClCompile Include="game.cpp" />
+    <ClCompile Include="gauge.cpp" />
+    <ClCompile Include="hp.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="input_joypad.cpp" />
     <ClCompile Include="input_keyboard.cpp" />
@@ -191,6 +193,8 @@
     <ClInclude Include="enemy.h" />
     <ClInclude Include="fade.h" />
     <ClInclude Include="game.h" />
+    <ClInclude Include="gauge.h" />
+    <ClInclude Include="hp.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="input_joypad.h" />
     <ClInclude Include="input_keyboard.h" />

@@ -17,6 +17,7 @@
 //--------------------------------
 class CModel;	//モデル
 class CLine;	//ライン
+class CHP;		//HP
 
 //--------------------------------
 // マクロ定義
@@ -116,20 +117,23 @@ private:
 	//----------------
 	// メンバ変数
 	//----------------
-	D3DXMATRIX m_mtxWorld;			//ワールドマトリックス
-	D3DXVECTOR3 m_pos;				//位置
-	D3DXVECTOR3 m_move;				//移動量
-	D3DXVECTOR3 m_rot;				//向き
-	D3DXVECTOR3 m_rotDest;			//目的の向き
-	D3DXVECTOR3 m_vtxMax;			//大きさの最大値
-	D3DXVECTOR3 m_vtxMin;			//大きさの最小値
-	D3DXVECTOR3 m_size;				//大きさ
-	D3DXVECTOR3 m_worldMin;			//ワールド上の最大値
-	D3DXVECTOR3	m_worldMax;			//ワールド上の最小値
-	int m_nCntAttackTime;			//攻撃時間
-	float fSizeWidth;				//サイズ(幅)
-	float fSizeDepth;				//サイズ(奥行き)
-	float m_rotWheel;				//タイヤの回転量
+	D3DXMATRIX m_mtxWorld;		//ワールドマトリックス
+	D3DXVECTOR3 m_pos;			//位置
+	D3DXVECTOR3 m_move;			//移動量
+	D3DXVECTOR3 m_rot;			//向き
+	D3DXVECTOR3 m_rotDest;		//目的の向き
+	D3DXVECTOR3 m_vtxMax;		//大きさの最大値
+	D3DXVECTOR3 m_vtxMin;		//大きさの最小値
+	D3DXVECTOR3 m_size;			//大きさ
+	D3DXVECTOR3 m_worldMin;		//ワールド上の最大値
+	D3DXVECTOR3	m_worldMax;		//ワールド上の最小値
+	int m_nCntAttackTime;		//攻撃時間
+	int m_nLife;				//体力
+	int m_nRemLife;				//残り体力
+	float fSizeWidth;			//サイズ(幅)
+	float fSizeDepth;			//サイズ(奥行き)
+	float m_rotWheel;			//タイヤの回転量
+	CHP*  m_pHP;				//HP
 
 	/* ↓ モデル情報 ↓ */
 	CModel*  m_pModel[MAX_PARTS];		//モデル

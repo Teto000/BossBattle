@@ -25,6 +25,7 @@
 #include "polygon.h"
 #include "message.h"
 #include "sky.h"
+#include "hp.h"
 
 //------------------------
 // Ã“Iƒƒ“ƒo•Ï”éŒ¾

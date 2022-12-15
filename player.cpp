@@ -23,6 +23,7 @@
 #include "game.h"
 #include "line.h"
 #include "enemy.h"
+#include "hp.h"
 
 //------------------------
 // 静的メンバ変数宣言
@@ -42,10 +43,13 @@ CPlayer::CPlayer() : CObject(0)
 	m_worldMin = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//ワールド上の最大値
 	m_worldMax = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//ワールド上の最小値
 	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//大きさ
+	m_nLife = 0;								//体力
+	m_nRemLife = 0;								//残り体力
 	m_nCntAttackTime = 0;						//攻撃時間
 	fSizeWidth = 0.0f;							//サイズ(幅)
 	fSizeDepth = 0.0f;							//サイズ(奥行き)
 	m_type = MOTION_TYPE_IDOL;					//現在のモーション
+	m_pHP = nullptr;							//HP
 
 	//モデル
 	for (int i = 0; i < MAX_PARTS; i++)
@@ -106,6 +110,9 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 
 	//回転マトリックスの初期化
 	D3DXMatrixIdentity(&m_mtxRot);
+
+	//HPの生成
+	m_pHP = CHP::Create(D3DXVECTOR3(270.0f, 60.0f, 0.0f), 500.0f, 50.0f);
 
 	//--------------------
 	// モデルの生成
