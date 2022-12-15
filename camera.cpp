@@ -87,6 +87,12 @@ void CCamera::Update(void)
 		m_bLockOn = !m_bLockOn;
 	}
 
+	if (CGame::GetFinish())
+	{//終了フラグが立っているなら
+		//ロックオンを解除
+		m_bLockOn = false;
+	}
+
 	//----------------------------------------
 	// カメラ内のプレイヤーの位置設定
 	//----------------------------------------
@@ -164,8 +170,11 @@ void CCamera::Update(void)
 		D3DXVec3Normalize(&vec, &vec);
 
 		//視点の位置を設定
-		m_worldPosV = playerPos + (-vec) * 500.0f;
-		m_worldPosV.y = 200.0f;
+		{
+			float posV_y = m_worldPosV.y;				//y座標を保存
+			m_worldPosV = playerPos + (-vec) * 500.0f;	//視点の位置を変更
+			m_worldPosV.y = posV_y;						//y座標を戻す
+		}
 
 		//カメラの角度をロックオン先に合わせる
 		m_rot.y = atan2f(m_worldPosR.x - m_worldPosV.x, m_worldPosR.z - m_worldPosV.z);

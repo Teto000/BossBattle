@@ -42,6 +42,7 @@ CPlayer::CPlayer() : CObject(0)
 	m_worldMin = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//ワールド上の最大値
 	m_worldMax = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//ワールド上の最小値
 	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//大きさ
+	m_nCntAttackTime = 0;						//攻撃時間
 	m_type = MOTION_TYPE_IDOL;					//現在のモーション
 
 	//モデル
@@ -74,6 +75,9 @@ CPlayer::CPlayer() : CObject(0)
 			m_aMotionSet[nCnt].bLoop = false;
 			m_aMotionSet[nCnt].aKeySet[i].nFrame = 0;	//フレーム数
 		}
+
+		m_aMotionSet[nCnt].nNumKey = 0;
+		m_aMotionSet[nCnt].bLoop = false;
 	}
 }
 
@@ -153,8 +157,14 @@ void CPlayer::Uninit()
 //========================
 void CPlayer::Update()
 {
-	//待機モーションにする
-	m_type = MOTION_TYPE_IDOL;
+	//-------------------------
+	// モーションのリセット
+	//-------------------------
+	if (m_type != MOTION_TYPE_ATTACK)
+	{//攻撃モーションじゃないなら
+		//待機モーションにする
+		ChangeMotion(MOTION_TYPE_IDOL);
+	}
 
 	//-------------------------
 	// モデルの更新
@@ -173,8 +183,8 @@ void CPlayer::Update()
 	// ジョイパッドでの操作
 	CInputJoypad* joypad = CApplication::GetJoypad();
 
-	if (!CGame::GetFinish())
-	{//終了フラグが立っていないなら
+	if (!CGame::GetFinish() && m_type != MOTION_TYPE_ATTACK)
+	{//終了フラグが立っていない & 攻撃中じゃないなら
 		if (!joypad->IsJoyPadUse(0))
 		{//ジョイパッドが使われていないなら
 			MoveKeyboard(DIK_W, DIK_S, DIK_A, DIK_D);	//キーボード
@@ -189,12 +199,13 @@ void CPlayer::Update()
 	m_pModel[0]->SetRotX(m_rotWheel);
 
 	//-------------------------
-	// モーション
+	// 攻撃処理
 	//-------------------------
-	//キーセット情報の設定
-	//SetKeySet(m_type);
+	Attack();
 
-	//モーションの設定
+	//-------------------------
+	// モーションの設定
+	//-------------------------
 	SetMotion(m_type, m_aMotionSet[m_type].bLoop, m_aMotionSet[m_type].nNumKey);
 
 	//-------------------------
@@ -586,6 +597,20 @@ void CPlayer::SetMotion(MOTION_TYPE type, bool bLoop, int nNumKey)
 }
 
 //=====================================
+// モーションの変更
+// 引数：変更したいモーションの列挙
+//=====================================
+void CPlayer::ChangeMotion(MOTION_TYPE type)
+{
+	//モーションの変更
+	m_type = type;
+
+	//モーション情報の初期化
+	m_nCurrentKey = 0;
+	m_nCntMotion = 0;
+}
+
+//=====================================
 // 移動
 // 引数：上キー,下キー,左キー,右キー
 //=====================================
@@ -667,7 +692,7 @@ void CPlayer::MoveKeyboard(int nUpKey, int nDownKey, int nLeftKey, int nRightKey
 	else
 	{//どれかが押されているなら
 		//移動モーションにする
-		m_type = MOTION_TYPE_MOVE;
+		ChangeMotion(MOTION_TYPE_MOVE);
 	}
 }
 
@@ -770,6 +795,40 @@ void CPlayer::MoveJoypad()
 	{//スティックが動かされていないなら
 		//タイヤの回転量を0にする
 		m_rotWheel = 0;
+	}
+}
+
+//===========================
+// 攻撃処理
+//===========================
+void CPlayer::Attack()
+{
+	if (CInputKeyboard::Trigger(DIK_RETURN))
+	{//ENTERキーが押されたら
+		//攻撃モーションにする
+		m_type = MOTION_TYPE_ATTACK;
+	}
+
+	if (m_type == MOTION_TYPE_ATTACK)
+	{//攻撃モーション中なら
+		int nAttackFream = 0;
+		for (int i = 0; i < m_aMotionSet[m_type].nNumKey; i++)
+		{//キー数-1回分回す
+			//攻撃モーションのフレーム数を合計する
+			nAttackFream += m_aMotionSet[m_type].aKeySet[i].nFrame;
+		}
+
+		if (nAttackFream <= m_nCntAttackTime)
+		{//攻撃時間が攻撃モーションのフレーム数の合計を超えたら
+			//待機モーションにする
+			ChangeMotion(MOTION_TYPE_IDOL);
+			m_nCntAttackTime = 0;
+		}
+		else
+		{
+			//攻撃時間を加算
+			m_nCntAttackTime++;
+		}
 	}
 }
 

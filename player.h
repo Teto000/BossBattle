@@ -49,6 +49,7 @@ public:
 	{
 		MOTION_TYPE_IDOL = 0,	//待機
 		MOTION_TYPE_MOVE,		//移動
+		MOTION_TYPE_ATTACK,		//攻撃
 		MOTION_TYPE_MAX
 	};
 
@@ -95,9 +96,11 @@ public:
 private:
 	void SetModel();											//モデルの設定
 	void SetMotion(MOTION_TYPE type, bool bLoop, int nNumKey);	//モーションの設定
-	void GetFileMotion();										//ファイルを使ったモーションの取得
+	void ChangeMotion(MOTION_TYPE type);	//モーションの変更
+	void GetFileMotion();					//ファイルを使ったモーションの取得
 	void MoveKeyboard(int nUpKey, int nDownKey, int nLeftKey, int nRightKey);	//移動
 	void MoveJoypad();		//ジョイパッドを使った移動
+	void Attack();			//攻撃処理
 	void SetRot();			//角度の設定
 	void SetLine();			//線の設置
 	void UpdateLine();		//線の更新
@@ -123,15 +126,18 @@ private:
 	D3DXVECTOR3 m_size;				//大きさ
 	D3DXVECTOR3 m_worldMin;			//ワールド上の最大値
 	D3DXVECTOR3	m_worldMax;			//ワールド上の最小値
-	float m_rotWheel;				//タイヤの回転
-	CModel*  m_pModel[MAX_PARTS];	//モデル
-	CLine* m_pLine[nMaxLine];		//ライン
+	int m_nCntAttackTime;			//攻撃時間
+	float m_rotWheel;				//タイヤの回転量
+
+	/* ↓ モデル情報 ↓ */
+	CModel*  m_pModel[MAX_PARTS];		//モデル
+	CLine* m_pLine[nMaxLine];			//ライン
 
 	/* ↓ モーション情報 ↓ */
-	int m_nCurrentKey;				//現在のキー番号
-	int m_nCntMotion;				//モーションカウンター
-	MOTION_SET m_aMotionSet[MOTION_TYPE_MAX];		//モーション情報
-	MOTION_TYPE m_type;				//現在のモーション
+	int m_nCurrentKey;							//現在のキー番号
+	int m_nCntMotion;							//モーションカウンター
+	MOTION_SET m_aMotionSet[MOTION_TYPE_MAX];	//モーション情報
+	MOTION_TYPE m_type;							//現在のモーション
 
 	/* ↓ クォータニオン ↓ */
 	D3DXMATRIX		m_mtxRot;		//回転マトリックス(保存用)
