@@ -111,7 +111,7 @@ private:
 	//----------------
 	static const int nMaxLine = 128;		//最大体力
 	static const int nWheelRotValue = 10;	//タイヤの回転量
-	static const float fPlayerSpeed;		//プレイヤーの速度
+	static const float fSpeed;				//移動速度
 
 	//----------------
 	// メンバ変数
@@ -127,6 +127,8 @@ private:
 	D3DXVECTOR3 m_worldMin;			//ワールド上の最大値
 	D3DXVECTOR3	m_worldMax;			//ワールド上の最小値
 	int m_nCntAttackTime;			//攻撃時間
+	float fSizeWidth;				//サイズ(幅)
+	float fSizeDepth;				//サイズ(奥行き)
 	float m_rotWheel;				//タイヤの回転量
 
 	/* ↓ モデル情報 ↓ */

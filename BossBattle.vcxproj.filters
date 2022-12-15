@@ -122,6 +122,9 @@
     <ClCompile Include="sky.cpp">
       <Filter>00_Main\Object\ObjectX</Filter>
     </ClCompile>
+    <ClCompile Include="meshorbit.cpp">
+      <Filter>00_Main\Object\Mesh</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -210,6 +213,9 @@
     </ClInclude>
     <ClInclude Include="sky.h">
       <Filter>00_Main\Object\ObjectX</Filter>
+    </ClInclude>
+    <ClInclude Include="meshorbit.h">
+      <Filter>00_Main\Object\Mesh</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

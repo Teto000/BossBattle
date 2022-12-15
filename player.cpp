@@ -27,7 +27,7 @@
 //------------------------
 // 静的メンバ変数宣言
 //------------------------
-const float CPlayer::fPlayerSpeed = 7.0f;
+const float CPlayer::fSpeed = 7.0f;			//移動速度
 
 //========================
 // コンストラクタ
@@ -43,6 +43,8 @@ CPlayer::CPlayer() : CObject(0)
 	m_worldMax = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//ワールド上の最小値
 	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//大きさ
 	m_nCntAttackTime = 0;						//攻撃時間
+	fSizeWidth = 0.0f;							//サイズ(幅)
+	fSizeDepth = 0.0f;							//サイズ(奥行き)
 	m_type = MOTION_TYPE_IDOL;					//現在のモーション
 
 	//モデル
@@ -96,6 +98,8 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 {
 	m_pos = pos;
 	m_nCntMotion = 1;
+	fSizeWidth = 30.0f;
+	fSizeDepth = 30.0f;
 
 	//ワールドマトリックスの初期化
 	D3DXMatrixIdentity(&m_mtxWorld);
@@ -111,8 +115,8 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	//-----------------------
 	// モデルの大きさを設定
 	//-----------------------
-	m_vtxMin = D3DXVECTOR3(-70.0f, 0.0f, -120.0f);
-	m_vtxMax = D3DXVECTOR3(70.0f, 100.0f, 30.0f);
+	m_vtxMin = D3DXVECTOR3(-fSizeWidth, 10.0f, -fSizeDepth);
+	m_vtxMax = D3DXVECTOR3(fSizeWidth, 150.0f, fSizeDepth);
 
 	m_size.x = m_vtxMax.x - m_vtxMin.x;
 	m_size.y = m_vtxMax.y - m_vtxMin.y;
@@ -177,31 +181,34 @@ void CPlayer::Update()
 		}
 	}
 
-	//-------------------------
-	// 移動
-	//-------------------------
-	// ジョイパッドでの操作
-	CInputJoypad* joypad = CApplication::GetJoypad();
+	if (!CGame::GetFinish())
+	{//終了フラグが立っていないなら
+		//-------------------------
+		// 移動
+		//-------------------------
+		// ジョイパッドでの操作
+		CInputJoypad* joypad = CApplication::GetJoypad();
 
-	if (!CGame::GetFinish() && m_type != MOTION_TYPE_ATTACK)
-	{//終了フラグが立っていない & 攻撃中じゃないなら
-		if (!joypad->IsJoyPadUse(0))
-		{//ジョイパッドが使われていないなら
-			MoveKeyboard(DIK_W, DIK_S, DIK_A, DIK_D);	//キーボード
+		if (m_type != MOTION_TYPE_ATTACK)
+		{//攻撃中じゃないなら
+			if (!joypad->IsJoyPadUse(0))
+			{//ジョイパッドが使われていないなら
+				MoveKeyboard(DIK_W, DIK_S, DIK_A, DIK_D);	//キーボード
+			}
+			else
+			{
+				MoveJoypad();	//ジョイパッド
+			}
 		}
-		else
-		{
-			MoveJoypad();	//ジョイパッド
-		}
+
+		//タイヤの回転
+		m_pModel[0]->SetRotX(m_rotWheel);
+
+		//-------------------------
+		// 攻撃処理
+		//-------------------------
+		Attack();
 	}
-
-	//タイヤの回転
-	m_pModel[0]->SetRotX(m_rotWheel);
-
-	//-------------------------
-	// 攻撃処理
-	//-------------------------
-	Attack();
 
 	//-------------------------
 	// モーションの設定
@@ -606,8 +613,11 @@ void CPlayer::ChangeMotion(MOTION_TYPE type)
 	m_type = type;
 
 	//モーション情報の初期化
-	m_nCurrentKey = 0;
-	m_nCntMotion = 0;
+	if (m_type == MOTION_TYPE_ATTACK)
+	{
+		m_nCurrentKey = 0;
+		m_nCntMotion = 0;
+	}
 }
 
 //=====================================
@@ -626,20 +636,20 @@ void CPlayer::MoveKeyboard(int nUpKey, int nDownKey, int nLeftKey, int nRightKey
 	{//Aキーが押された
 		if (CInputKeyboard::Press(nUpKey))
 		{//Wキーが押された
-			m_pos.x += sinf(cameraRot.y - D3DX_PI * 0.25f) * fPlayerSpeed;	//左奥移動
-			m_pos.z += cosf(cameraRot.y - D3DX_PI * 0.25f) * fPlayerSpeed;
+			m_pos.x += sinf(cameraRot.y - D3DX_PI * 0.25f) * fSpeed;	//左奥移動
+			m_pos.z += cosf(cameraRot.y - D3DX_PI * 0.25f) * fSpeed;
 			m_rotDest.y = cameraRot.y + D3DX_PI * 0.75f;	//向きの切り替え
 		}
 		else if (CInputKeyboard::Press(nDownKey))
 		{//Sキーが押された
-			m_pos.x += sinf(cameraRot.y - D3DX_PI * 0.75f) * fPlayerSpeed;	//左前移動
-			m_pos.z += cosf(cameraRot.y - D3DX_PI * 0.75f) * fPlayerSpeed;
+			m_pos.x += sinf(cameraRot.y - D3DX_PI * 0.75f) * fSpeed;	//左前移動
+			m_pos.z += cosf(cameraRot.y - D3DX_PI * 0.75f) * fSpeed;
 			m_rotDest.y = cameraRot.y + D3DX_PI * 0.25f;
 		}
 		else
 		{
-			m_pos.x -= sinf(cameraRot.y + D3DX_PI * 0.5f) * fPlayerSpeed;	//左移動
-			m_pos.z -= cosf(cameraRot.y + D3DX_PI * 0.5f) * fPlayerSpeed;
+			m_pos.x -= sinf(cameraRot.y + D3DX_PI * 0.5f) * fSpeed;	//左移動
+			m_pos.z -= cosf(cameraRot.y + D3DX_PI * 0.5f) * fSpeed;
 			m_rotDest.y = cameraRot.y + D3DX_PI * 0.5f;
 		}
 	}
@@ -647,33 +657,33 @@ void CPlayer::MoveKeyboard(int nUpKey, int nDownKey, int nLeftKey, int nRightKey
 	{//Dキーが押された
 		if (CInputKeyboard::Press(nUpKey))
 		{//Wキーが押された
-			m_pos.x += sinf(cameraRot.y + D3DX_PI * 0.25f) * fPlayerSpeed;	//右奥移動
-			m_pos.z += cosf(cameraRot.y + D3DX_PI * 0.25f) * fPlayerSpeed;
+			m_pos.x += sinf(cameraRot.y + D3DX_PI * 0.25f) * fSpeed;	//右奥移動
+			m_pos.z += cosf(cameraRot.y + D3DX_PI * 0.25f) * fSpeed;
 			m_rotDest.y = cameraRot.y - D3DX_PI * 0.75f;
 		}
 		else if (CInputKeyboard::Press(nDownKey))
 		{//Sキーが押された
-			m_pos.x += sinf(cameraRot.y + D3DX_PI * 0.75f) * fPlayerSpeed;	//右前移動
-			m_pos.z += cosf(cameraRot.y + D3DX_PI * 0.75f) * fPlayerSpeed;
+			m_pos.x += sinf(cameraRot.y + D3DX_PI * 0.75f) * fSpeed;	//右前移動
+			m_pos.z += cosf(cameraRot.y + D3DX_PI * 0.75f) * fSpeed;
 			m_rotDest.y = cameraRot.y - D3DX_PI * 0.25f;
 		}
 		else
 		{
-			m_pos.x += sinf(cameraRot.y + D3DX_PI * 0.5f) * fPlayerSpeed;	//右移動
-			m_pos.z += cosf(cameraRot.y + D3DX_PI * 0.5f) * fPlayerSpeed;
+			m_pos.x += sinf(cameraRot.y + D3DX_PI * 0.5f) * fSpeed;	//右移動
+			m_pos.z += cosf(cameraRot.y + D3DX_PI * 0.5f) * fSpeed;
 			m_rotDest.y = cameraRot.y - D3DX_PI * 0.5f;
 		}
 	}
 	else if (CInputKeyboard::Press(nUpKey))
 	{//Wキーが押された
-		m_pos.x -= sinf(cameraRot.y + D3DX_PI * 1.0f) * fPlayerSpeed;	//奥移動
-		m_pos.z -= cosf(cameraRot.y + D3DX_PI * 1.0f) * fPlayerSpeed;
+		m_pos.x -= sinf(cameraRot.y + D3DX_PI * 1.0f) * fSpeed;	//奥移動
+		m_pos.z -= cosf(cameraRot.y + D3DX_PI * 1.0f) * fSpeed;
 		m_rotDest.y = cameraRot.y + D3DX_PI * 1.0f;
 	}
 	else if (CInputKeyboard::Press(nDownKey))
 	{//Sキーが押された
-		m_pos.x -= sinf(cameraRot.y + D3DX_PI * 0.0f) * fPlayerSpeed;	//前移動
-		m_pos.z -= cosf(cameraRot.y + D3DX_PI * 0.0f) * fPlayerSpeed;
+		m_pos.x -= sinf(cameraRot.y + D3DX_PI * 0.0f) * fSpeed;	//前移動
+		m_pos.z -= cosf(cameraRot.y + D3DX_PI * 0.0f) * fSpeed;
 		m_rotDest.y = cameraRot.y + D3DX_PI * 0.0f;
 	}
 
@@ -724,20 +734,20 @@ void CPlayer::MoveJoypad()
 		// スティックを倒した方向へ移動する
 		if (stick.y <= -fMoveValue)
 		{//右奥移動
-			m_pos.x += sinf(cameraRot.y + D3DX_PI * 0.25f) * fPlayerSpeed;
-			m_pos.z += cosf(cameraRot.y + D3DX_PI * 0.25f) * fPlayerSpeed;
+			m_pos.x += sinf(cameraRot.y + D3DX_PI * 0.25f) * fSpeed;
+			m_pos.z += cosf(cameraRot.y + D3DX_PI * 0.25f) * fSpeed;
 			m_rotDest.y = cameraRot.y - D3DX_PI * 0.75f;	//向きの切り替え
 		}
 		else if (stick.y >= fMoveValue)
 		{//右前移動
-			m_pos.x += sinf(cameraRot.y + D3DX_PI * 0.75f) * fPlayerSpeed;
-			m_pos.z += cosf(cameraRot.y + D3DX_PI * 0.75f) * fPlayerSpeed;
+			m_pos.x += sinf(cameraRot.y + D3DX_PI * 0.75f) * fSpeed;
+			m_pos.z += cosf(cameraRot.y + D3DX_PI * 0.75f) * fSpeed;
 			m_rotDest.y = cameraRot.y - D3DX_PI * 0.25f;
 		}
 		else
 		{
-			m_pos.x += sinf(cameraRot.y + D3DX_PI * fMoveValue) * fPlayerSpeed;
-			m_pos.z += cosf(cameraRot.y + D3DX_PI * fMoveValue) * fPlayerSpeed;
+			m_pos.x += sinf(cameraRot.y + D3DX_PI * fMoveValue) * fSpeed;
+			m_pos.z += cosf(cameraRot.y + D3DX_PI * fMoveValue) * fSpeed;
 			m_rotDest.y = cameraRot.y - D3DX_PI * fMoveValue;
 		}
 	}
@@ -748,20 +758,20 @@ void CPlayer::MoveJoypad()
 	{
 		if (stick.y <= -fMoveValue)
 		{//左奥移動
-			m_pos.x += sinf(cameraRot.y - D3DX_PI * 0.25f) * fPlayerSpeed;
-			m_pos.z += cosf(cameraRot.y - D3DX_PI * 0.25f) * fPlayerSpeed;
+			m_pos.x += sinf(cameraRot.y - D3DX_PI * 0.25f) * fSpeed;
+			m_pos.z += cosf(cameraRot.y - D3DX_PI * 0.25f) * fSpeed;
 			m_rotDest.y = cameraRot.y + D3DX_PI * 0.75f;
 		}
 		else if (stick.y >= fMoveValue)
 		{//左前移動
-			m_pos.x += sinf(cameraRot.y - D3DX_PI * 0.75f) * fPlayerSpeed;
-			m_pos.z += cosf(cameraRot.y - D3DX_PI * 0.75f) * fPlayerSpeed;
+			m_pos.x += sinf(cameraRot.y - D3DX_PI * 0.75f) * fSpeed;
+			m_pos.z += cosf(cameraRot.y - D3DX_PI * 0.75f) * fSpeed;
 			m_rotDest.y = cameraRot.y + D3DX_PI * 0.25f;
 		}
 		else
 		{
-			m_pos.x -= sinf(cameraRot.y + D3DX_PI * fMoveValue) * fPlayerSpeed;
-			m_pos.z -= cosf(cameraRot.y + D3DX_PI * fMoveValue) * fPlayerSpeed;
+			m_pos.x -= sinf(cameraRot.y + D3DX_PI * fMoveValue) * fSpeed;
+			m_pos.z -= cosf(cameraRot.y + D3DX_PI * fMoveValue) * fSpeed;
 			m_rotDest.y = cameraRot.y + D3DX_PI * fMoveValue;
 		}
 	}
@@ -770,8 +780,8 @@ void CPlayer::MoveJoypad()
 	//-----------------------------------
 	else if (stick.y <= -fMoveValue)
 	{
-		m_pos.x -= sinf(cameraRot.y + D3DX_PI * 1.0f) * fPlayerSpeed;
-		m_pos.z -= cosf(cameraRot.y + D3DX_PI * 1.0f) * fPlayerSpeed;
+		m_pos.x -= sinf(cameraRot.y + D3DX_PI * 1.0f) * fSpeed;
+		m_pos.z -= cosf(cameraRot.y + D3DX_PI * 1.0f) * fSpeed;
 		m_rotDest.y = cameraRot.y + D3DX_PI * 1.0f;
 	}
 	//-----------------------------------
@@ -779,8 +789,8 @@ void CPlayer::MoveJoypad()
 	//-----------------------------------
 	else if (stick.y >= fMoveValue)
 	{
-		m_pos.x -= sinf(cameraRot.y + D3DX_PI * 0.0f) * fPlayerSpeed;
-		m_pos.z -= cosf(cameraRot.y + D3DX_PI * 0.0f) * fPlayerSpeed;
+		m_pos.x -= sinf(cameraRot.y + D3DX_PI * 0.0f) * fSpeed;
+		m_pos.z -= cosf(cameraRot.y + D3DX_PI * 0.0f) * fSpeed;
 		m_rotDest.y = cameraRot.y + D3DX_PI * 0.0f;
 	}
 
