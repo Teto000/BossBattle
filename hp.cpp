@@ -32,8 +32,6 @@ HRESULT CHP::Init(D3DXVECTOR3 pos)
 {
 	CGauge::Init(pos);
 
-	CGauge::SetLife(100, 100);
-
 	return S_OK;
 }
 

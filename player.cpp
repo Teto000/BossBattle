@@ -43,12 +43,13 @@ CPlayer::CPlayer() : CObject(0)
 	m_worldMin = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//ワールド上の最大値
 	m_worldMax = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//ワールド上の最小値
 	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//大きさ
-	m_nLife = 0;								//体力
-	m_nRemLife = 0;								//残り体力
+	m_fLife = 0;								//体力
+	m_fRemLife = 0;								//残り体力
 	m_nCntAttackTime = 0;						//攻撃時間
 	fSizeWidth = 0.0f;							//サイズ(幅)
 	fSizeDepth = 0.0f;							//サイズ(奥行き)
 	m_type = MOTION_TYPE_IDOL;					//現在のモーション
+	m_battleMode = BATTLEMODE_NONE;				//バトルモード
 	m_pHP = nullptr;							//HP
 
 	//モデル
@@ -100,10 +101,11 @@ CPlayer::~CPlayer()
 //========================
 HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 {
-	m_pos = pos;
-	m_nCntMotion = 1;
-	fSizeWidth = 30.0f;
-	fSizeDepth = 30.0f;
+	m_pos = pos;			//位置
+	fSizeWidth = 30.0f;		//モデルの幅
+	fSizeDepth = 30.0f;		//モデルの奥行き
+	m_fLife = 100.0f;		//HP
+	m_fRemLife = 100.0f;	//残りHP
 
 	//ワールドマトリックスの初期化
 	D3DXMatrixIdentity(&m_mtxWorld);
@@ -112,7 +114,8 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	D3DXMatrixIdentity(&m_mtxRot);
 
 	//HPの生成
-	m_pHP = CHP::Create(D3DXVECTOR3(270.0f, 60.0f, 0.0f), 500.0f, 50.0f);
+	m_pHP = CHP::Create(D3DXVECTOR3(0.0f, 50.0f, 0.0f), 200.0f, 10.0f);
+	m_pHP->SetLife(m_fLife, m_fRemLife);	//HPの設定
 
 	//--------------------
 	// モデルの生成
@@ -215,6 +218,11 @@ void CPlayer::Update()
 		// 攻撃処理
 		//-------------------------
 		Attack();
+
+		//-------------------------
+		// モードチェンジ
+		//-------------------------
+		ChangeMode();
 	}
 
 	//-------------------------
@@ -846,6 +854,25 @@ void CPlayer::Attack()
 			//攻撃時間を加算
 			m_nCntAttackTime++;
 		}
+	}
+}
+
+//===========================
+// モードチェンジ
+//===========================
+void CPlayer::ChangeMode()
+{
+	if (CInputKeyboard::Trigger(DIK_1))
+	{
+		m_battleMode = BATTLEMODE_ATTACK;
+	}
+	else if (CInputKeyboard::Trigger(DIK_2))
+	{
+		m_battleMode = BATTLEMODE_SPEED;
+	}
+	else if (CInputKeyboard::Trigger(DIK_3))
+	{
+		m_battleMode = BATTLEMODE_COMBO;
 	}
 }
 

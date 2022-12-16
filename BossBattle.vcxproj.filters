@@ -33,7 +33,10 @@
     <Filter Include="00_Main\Object\ObjectX">
       <UniqueIdentifier>{f9267d4d-4bd4-44ef-86f4-7ad0a156c89a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="00_Main\Object\Object2D\Gauge">
+    <Filter Include="00_Main\Object\Billboard">
+      <UniqueIdentifier>{9b39766b-3ae8-4f31-867f-f483ee60f05a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="00_Main\Object\Billboard\Gauge">
       <UniqueIdentifier>{d71e9d37-6968-4db4-b964-ec06ec744310}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -129,10 +132,13 @@
       <Filter>00_Main\Object\Mesh</Filter>
     </ClCompile>
     <ClCompile Include="gauge.cpp">
-      <Filter>00_Main\Object\Object2D\Gauge</Filter>
+      <Filter>00_Main\Object\Billboard\Gauge</Filter>
     </ClCompile>
     <ClCompile Include="hp.cpp">
-      <Filter>00_Main\Object\Object2D\Gauge</Filter>
+      <Filter>00_Main\Object\Billboard\Gauge</Filter>
+    </ClCompile>
+    <ClCompile Include="billboard.cpp">
+      <Filter>00_Main\Object\Billboard</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -227,10 +233,13 @@
       <Filter>00_Main\Object\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="gauge.h">
-      <Filter>00_Main\Object\Object2D\Gauge</Filter>
+      <Filter>00_Main\Object\Billboard\Gauge</Filter>
     </ClInclude>
     <ClInclude Include="hp.h">
-      <Filter>00_Main\Object\Object2D\Gauge</Filter>
+      <Filter>00_Main\Object\Billboard\Gauge</Filter>
+    </ClInclude>
+    <ClInclude Include="billboard.h">
+      <Filter>00_Main\Object\Billboard</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -62,6 +62,16 @@ public:
 		KEY_SET aKeySet[MAX_KEY];	//キーセット情報
 	};
 
+	//プレイヤーのモード
+	enum BATTLEMODE
+	{
+		BATTLEMODE_NONE = 0,	//通常
+		BATTLEMODE_ATTACK,		//攻撃
+		BATTLEMODE_SPEED,		//速度
+		BATTLEMODE_COMBO,		//連撃
+		BATTLEMODE_MAX
+	};
+
 	CPlayer();				//コンストラクタ
 	~CPlayer() override;	//デストラクタ
 
@@ -86,7 +96,8 @@ public:
 	float GetWidth() override		   { return 0.0f; }				//幅の取得
 	float GetHeight() override		   { return 0.0f; }				//高さの取得
 	D3DXMATRIX GetmtxWorld()		   { return m_mtxWorld; }		//ワールドマトリックスの取得
-	CModel* GetModel(int nNum)		   { return m_pModel[nNum]; };	//モデルの取得
+	CModel* GetModel(int nNum)		   { return m_pModel[nNum]; }	//モデルの取得
+	BATTLEMODE GetMode()			   { return m_battleMode; }		//バトルモードの取得
 	bool GetCollisionPlayer();	//当たり判定の取得
 
 	//----------------
@@ -102,6 +113,7 @@ private:
 	void MoveKeyboard(int nUpKey, int nDownKey, int nLeftKey, int nRightKey);	//移動
 	void MoveJoypad();		//ジョイパッドを使った移動
 	void Attack();			//攻撃処理
+	void ChangeMode();		//モードチェンジ
 	void SetRot();			//角度の設定
 	void SetLine();			//線の設置
 	void UpdateLine();		//線の更新
@@ -128,11 +140,12 @@ private:
 	D3DXVECTOR3 m_worldMin;		//ワールド上の最大値
 	D3DXVECTOR3	m_worldMax;		//ワールド上の最小値
 	int m_nCntAttackTime;		//攻撃時間
-	int m_nLife;				//体力
-	int m_nRemLife;				//残り体力
+	float m_fLife;				//体力
+	float m_fRemLife;			//残り体力
 	float fSizeWidth;			//サイズ(幅)
 	float fSizeDepth;			//サイズ(奥行き)
 	float m_rotWheel;			//タイヤの回転量
+	BATTLEMODE m_battleMode;	//バトルモード
 	CHP*  m_pHP;				//HP
 
 	/* ↓ モデル情報 ↓ */

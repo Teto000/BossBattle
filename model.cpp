@@ -159,6 +159,23 @@ void CModel::Draw(D3DMATRIX* mtxPlayer)
 
 	for (int nCntMat = 0; nCntMat < (int)m_nNumMat; nCntMat++)
 	{
+		if (nCntMat == 4 && CGame::GetPlayer())
+		{//剣のマテリアル & プレイヤーがnullじゃないなら
+			if (CGame::GetPlayer()->GetMode() == CPlayer::BATTLEMODE_ATTACK)
+			{//アタックモードのとき
+				//マテリアルの色の設定
+				pMat[nCntMat].MatD3D.Diffuse = D3DXCOLOR(1.0f, 0.0f, 0.0f, 0.7f);
+			}
+			else if (CGame::GetPlayer()->GetMode() == CPlayer::BATTLEMODE_SPEED)
+			{//スピードモードのとき
+				pMat[nCntMat].MatD3D.Diffuse = D3DXCOLOR(0.0f, 0.0f, 1.0f, 0.7f);
+			}
+			else if (CGame::GetPlayer()->GetMode() == CPlayer::BATTLEMODE_COMBO)
+			{//コンボモードのとき
+				pMat[nCntMat].MatD3D.Diffuse = D3DXCOLOR(0.0f, 1.0f, 0.0f, 0.7f);
+			}
+		}
+
 		//マテリアルの設定
 		pDevice->SetMaterial(&pMat[nCntMat].MatD3D);
 

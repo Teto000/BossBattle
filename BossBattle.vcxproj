@@ -154,6 +154,7 @@
   <ItemGroup>
     <ClCompile Include="application.cpp" />
     <ClCompile Include="bg.cpp" />
+    <ClCompile Include="billboard.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="debug_proc.cpp" />
     <ClCompile Include="enemy.cpp" />
@@ -188,6 +189,7 @@
   <ItemGroup>
     <ClInclude Include="application.h" />
     <ClInclude Include="bg.h" />
+    <ClInclude Include="billboard.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="debug_proc.h" />
     <ClInclude Include="enemy.h" />
