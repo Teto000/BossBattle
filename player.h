@@ -141,7 +141,8 @@ private:
 	D3DXVECTOR3	m_worldMax;		//ワールド上の最小値
 	int m_nCntAttackTime;		//攻撃時間
 	float m_fLife;				//体力
-	float m_fRemLife;			//残り体力
+	float m_fRemLife;			//残り体力(%)
+	float m_fMaxLife;			//最大体力
 	float fSizeWidth;			//サイズ(幅)
 	float fSizeDepth;			//サイズ(奥行き)
 	float m_rotWheel;			//タイヤの回転量

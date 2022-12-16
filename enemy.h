@@ -17,6 +17,7 @@
 //--------------------------------
 class CModel;	//モデル
 class CLine;	//ライン
+class CHP;		//HP
 
 //--------------------------------
 // マクロ定義
@@ -104,8 +105,12 @@ private:
 	D3DXVECTOR3 m_worldMin;		//ワールド上の最大値
 	D3DXVECTOR3	m_worldMax;		//ワールド上の最小値
 	D3DXVECTOR3 m_size;			//大きさ
+	float m_fLife;				//体力
+	float m_fRemLife;			//残り体力(%)
+	float m_fMaxLife;			//最大体力
 	CModel*  m_pModel[MAX_ENEMY_PARTS];	//モデル
 	CLine*	 m_pLine[nMaxLine];			//ライン
+	CHP*	 m_pHP;						//HP
 
 
 	/* ↓ モーション情報 ↓ */

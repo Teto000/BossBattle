@@ -17,6 +17,7 @@
 #include "game.h"
 #include "player.h"
 #include "fade.h"
+#include "hp.h"
 
 //------------------------
 // グローバル変数
@@ -52,6 +53,10 @@ CEnemy::CEnemy() : CObject(0)
 	m_vtxMin = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//大きさの最小値
 	m_worldMin = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//ワールド上の最大値
 	m_worldMax = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//ワールド上の最小値
+	m_fLife = 0.0f;			//体力
+	m_fRemLife = 0.0f;		//残り体力(%)
+	m_fMaxLife = 0.0f;		//最大体力
+	m_pHP = nullptr;		//HP
 
 	/* ↓ モデル情報 ↓ */
 	for (int i = 0; i < MAX_ENEMY_PARTS; i++)
@@ -82,8 +87,12 @@ CEnemy::~CEnemy()
 //========================
 HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 {
+	//初期値の設定
 	m_pos = pos;
 	m_nCntMotion = 1;
+	m_fLife = 300.0f;		//体力
+	m_fRemLife = 100.0f;	//残り体力(%)
+	m_fMaxLife = m_fLife;	//最大体力
 
 	//--------------------
 	// モデルの生成
@@ -104,6 +113,12 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 	// 線の表示
 	//-----------------------
 	SetLine();
+
+	//-----------------------
+	// HPの生成
+	//-----------------------
+	m_pHP = CHP::Create(D3DXVECTOR3(0.0f, 50.0f, 200.0f), 200.0f, 10.0f);
+	m_pHP->SetLife(m_fLife, m_fRemLife);	//HPの設定
 
 	return S_OK;
 }
@@ -160,7 +175,21 @@ void CEnemy::Update()
 	//----------------------------
 	if (CGame::GetPlayer()->GetCollisionPlayer())
 	{//プレイヤーと当たっているなら
-		CGame::SetEnemyState();
+		m_fLife--;	//体力の減少
+
+		//残り体力を計算
+		m_fRemLife = m_fLife * 100 / m_fMaxLife;
+
+		//HPの設定
+		m_pHP->SetLife(m_fLife, m_fRemLife);
+	}
+
+	//----------------------------
+	// 死亡時処理
+	//----------------------------
+	if (m_fLife <= 0)
+	{//体力が尽きたら
+		CGame::SetEnemyState();	//敵が死んだ状態
 
 		//消去
 		Uninit();

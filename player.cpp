@@ -43,8 +43,9 @@ CPlayer::CPlayer() : CObject(0)
 	m_worldMin = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//ワールド上の最大値
 	m_worldMax = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//ワールド上の最小値
 	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//大きさ
-	m_fLife = 0;								//体力
-	m_fRemLife = 0;								//残り体力
+	m_fLife = 0.0f;								//体力
+	m_fRemLife = 0.0f;							//残り体力(%)
+	m_fMaxLife = 0.0f;							//最大体力
 	m_nCntAttackTime = 0;						//攻撃時間
 	fSizeWidth = 0.0f;							//サイズ(幅)
 	fSizeDepth = 0.0f;							//サイズ(奥行き)
@@ -104,8 +105,9 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	m_pos = pos;			//位置
 	fSizeWidth = 30.0f;		//モデルの幅
 	fSizeDepth = 30.0f;		//モデルの奥行き
-	m_fLife = 100.0f;		//HP
-	m_fRemLife = 100.0f;	//残りHP
+	m_fLife = 300.0f;		//体力
+	m_fRemLife = 100.0f;	//残り体力(%)
+	m_fMaxLife = m_fLife;	//最大体力
 
 	//ワールドマトリックスの初期化
 	D3DXMatrixIdentity(&m_mtxWorld);
@@ -234,6 +236,20 @@ void CPlayer::Update()
 	// 線の更新
 	//-------------------------
 	UpdateLine();
+
+	//-------------------------
+	// 体力の減少
+	//-------------------------
+	if (CInputKeyboard::Press(DIK_0))
+	{
+		m_fLife--;	//体力の減少
+
+		//残り体力を計算
+		m_fRemLife = m_fLife * 100 / m_fMaxLife;
+
+		//HPの設定
+		m_pHP->SetLife(m_fLife, m_fRemLife);
+	}
 }
 
 //========================
