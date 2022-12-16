@@ -844,10 +844,10 @@ void CPlayer::MoveJoypad()
 //===========================
 void CPlayer::Attack()
 {
-	if (CInputKeyboard::Trigger(DIK_RETURN))
-	{//ENTERキーが押されたら
+	if (CInputKeyboard::Trigger(DIK_RETURN) && m_type != MOTION_TYPE_ATTACK)
+	{//ENTERキーが押された & 攻撃モーション中じゃないなら
 		//攻撃モーションにする
-		m_type = MOTION_TYPE_ATTACK;
+		ChangeMotion(MOTION_TYPE_ATTACK);
 	}
 
 	if (m_type == MOTION_TYPE_ATTACK)

@@ -250,7 +250,7 @@ bool CInputJoypad::Press(CInputJoypad::JOYKEY Key)
 }
 
 //--------------------------------------------------
-// ジョイパッドのプレス処理(プレイヤー指定なし)
+// ジョイパッドのトリガー処理(プレイヤー指定なし)
 //--------------------------------------------------
 bool CInputJoypad::Trigger(CInputJoypad::JOYKEY Key)
 {

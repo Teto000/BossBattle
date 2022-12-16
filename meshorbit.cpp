@@ -12,6 +12,9 @@
 #include "meshorbit.h"
 #include "application.h"
 #include "renderer.h"
+#include "game.h"
+#include "player.h"
+#include "model.h"
 
 //==========================
 // コンストラクタ
@@ -20,8 +23,10 @@ CMeshOrbit::CMeshOrbit() : CObject(0)
 {
 	m_localpos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//ローカル座標
 	m_worldPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//ワールド座標
-	D3DXMatrixIdentity(m_pMtxParent);				//親のマトリックス
-	m_pVtxBuff = nullptr;							//頂点バッファへのポインタ
+	D3DXMatrixIdentity(&m_mtxWorld);	//ワールドマトリックス
+	D3DXMatrixIdentity(m_pMtxParent);	//親のマトリックス
+	m_pVtxBuff = nullptr;				//頂点バッファへのポインタ
+	m_pIdxBuff = nullptr;				//インデックスバッファへのポインタ
 }
 
 //==========================
@@ -29,7 +34,8 @@ CMeshOrbit::CMeshOrbit() : CObject(0)
 //==========================
 CMeshOrbit::~CMeshOrbit()
 {
-
+	assert(m_pVtxBuff);
+	assert(m_pIdxBuff);
 }
 
 //==========================
@@ -45,7 +51,12 @@ HRESULT CMeshOrbit::Init(D3DXVECTOR3 pos)
 //==========================
 void CMeshOrbit::Uninit()
 {
-
+	//頂点バッファの破壊
+	if (m_pVtxBuff != nullptr)
+	{
+		m_pVtxBuff->Release();
+		m_pVtxBuff = nullptr;
+	}
 }
 
 //==========================
@@ -89,7 +100,44 @@ void CMeshOrbit::Update()
 //==========================
 void CMeshOrbit::Draw()
 {
+	LPDIRECT3DDEVICE9 pDevice = CApplication::GetRenderer()->GetDevice();	//デバイスの取得
 
+	//------------------------------------
+	// マトリックス
+	//------------------------------------
+	D3DXMATRIX mtxRot, mtxTrans;	//計算用マトリックス
+
+	//ワールドマトリックスの初期化
+	D3DXMatrixIdentity(&m_mtxWorld);
+
+	//剣の向きを取得
+	D3DXVECTOR3 swordRot(CGame::GetPlayer()->GetModel(6)->GetRot());
+
+	//向きを反映
+	D3DXMatrixRotationYawPitchRoll(&mtxRot, swordRot.y, swordRot.x, swordRot.z);
+	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxRot);
+
+	//剣の位置を取得
+	D3DXVECTOR3 swordPos(CGame::GetPlayer()->GetModel(6)->GetPos());
+
+	//位置を反映
+	D3DXMatrixTranslation(&mtxTrans, swordPos.x, swordPos.y, swordPos.z);
+	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxTrans);
+
+	//ワールドマトリックスの設定
+	pDevice->SetTransform(D3DTS_WORLD, &m_mtxWorld);
+
+	//------------------------------------
+	// 頂点
+	//------------------------------------
+	//頂点バッファをデータストリームに設定
+	pDevice->SetStreamSource(0, m_pVtxBuff, 0, sizeof(VERTEX_3D));
+
+	//インデックスバッファをデータストリームに設定
+	pDevice->SetIndices(m_pIdxBuff);
+
+	//頂点フォーマットの設定
+	pDevice->SetFVF(FVF_VERTEX_3D);
 }
 
 //==========================

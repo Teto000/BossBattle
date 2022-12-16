@@ -57,8 +57,10 @@ private:
 	//------------------
 	D3DXVECTOR3 m_localpos;				//ローカル座標
 	D3DXVECTOR3 m_worldPos;				//ワールド座標
+	D3DXMATRIX	m_mtxWorld;				//ワールドマトリックス
 	D3DXMATRIX* m_pMtxParent;			//軌跡の親モデルのマトリックス
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;	//頂点バッファへのポインタ
+	LPDIRECT3DINDEXBUFFER9	m_pIdxBuff;	//インデックスバッファへのポインタ
 };
 
 #endif

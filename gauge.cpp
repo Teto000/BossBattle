@@ -92,6 +92,14 @@ void CGauge::SetLife(float fLife, float fRemLife)
 }
 
 //===========================
+// HP‚Ìİ’è
+//===========================
+void CGauge::SetPos(D3DXVECTOR3 pos)
+{
+	m_pos = pos;
+}
+
+//===========================
 // HPŒ¸­‚Ìˆ—
 //===========================
 void CGauge::SubHP()

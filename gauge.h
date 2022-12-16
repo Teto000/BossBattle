@@ -32,6 +32,7 @@ public:
 
 	void SetLife(float fLife, float fRemLife);	//HP‚Ìİ’è
 	void SubHP();	//HPŒ¸­‚Ìˆ—
+	void SetPos(D3DXVECTOR3 pos);	//ˆÊ’u‚Ìİ’è
 
 protected:
 	//------------------
