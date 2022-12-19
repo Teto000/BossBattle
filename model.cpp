@@ -14,6 +14,7 @@
 #include "light.h"
 #include "game.h"
 #include "player.h"
+#include "enemy.h"
 #include "texture.h"
 
 //========================
@@ -298,49 +299,31 @@ void CModel::DrawShadow()
 }
 
 //===========================
-// 位置の設定
+// 攻撃の当たり判定
 //===========================
-void CModel::SetPos(D3DXVECTOR3 pos)
+bool CModel::GetCollisionAttack()
 {
-	m_pos = pos;
-}
+	D3DXVECTOR3 worldPos(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3 offset(0.0f, 0.0f, 0.0f);
 
-//===========================
-// 向きの設定
-//===========================
-void CModel::SetRot(D3DXVECTOR3 rot)
-{
-	m_rot = rot;
-}
+	//剣先までのオフセットを加算した位置を取得
+	D3DXVec3TransformCoord(&worldPos, &offset, &m_mtxWorld);
 
-//===========================
-// 親モデルの設定
-//===========================
-void CModel::SetParent(CModel* pModel)
-{
-	m_pModel = pModel;
-}
+	//----------------------------------
+	// 剣先を中心とした球の当たり判定
+	//----------------------------------
+	//敵の位置を取得
+	D3DXVECTOR3 enemyPos(CGame::GetEnemy()->GetPosition());
 
-//===========================
-// 位置の取得
-//===========================
-D3DXVECTOR3 CModel::GetPos()
-{
-	return m_pos;
-}
+	//2点間の距離を求める
+	D3DXVECTOR3 distance = worldPos - enemyPos;
 
-//===========================
-// 向きの取得
-//===========================
-D3DXVECTOR3 CModel::GetRot()
-{
-	return m_rot;
-}
+	//当たり判定
+	if (sqrtf(pow(distance.x, 2) + pow(distance.y, 2) + pow(distance.z, 2))
+		< 100.0f)
+	{
+		return true;
+	}
 
-//==============================
-// ワールドマトリックスの取得
-//==============================
-D3DXMATRIX CModel::GetmtxWorld()
-{
-	return m_mtxWorld;
+	return false;
 }

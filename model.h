@@ -40,18 +40,19 @@ public:
 	//----------------
 	// セッター
 	//----------------
-	void SetPos(D3DXVECTOR3 pos);		//位置の設定
-	void SetRot(D3DXVECTOR3 rot);		//向きの設定
-	void SetRotX(float rotX) { m_rot.x = rotX; };	//X軸の回転量を設定
-	void SetParent(CModel* pModel);		//親モデルの設定
+	void SetPos(D3DXVECTOR3 pos)	{ m_pos = pos; }		//位置の設定
+	void SetRot(D3DXVECTOR3 rot)	{ m_rot = rot; }		//向きの設定
+	void SetRotX(float rotX)		{ m_rot.x = rotX; };	//X軸の回転量を設定
+	void SetParent(CModel* pModel)	{ m_pModel = pModel; }	//親モデルの設定
 
 	//----------------
 	// ゲッター
 	//----------------
-	D3DXVECTOR3 GetPos();		//位置の取得
-	D3DXVECTOR3 GetRot();		//向きの取得
-	D3DXMATRIX GetmtxWorld();	//ワールドマトリックスの取得
-	LPD3DXMESH GetMesh() { return m_pMesh; };	//メッシュ情報の取得
+	D3DXVECTOR3 GetPos()		{ return m_pos; }		//位置の取得
+	D3DXVECTOR3 GetRot()		{ return m_rot; }		//向きの取得
+	D3DXMATRIX GetmtxWorld()	{ return m_mtxWorld; }	//ワールドマトリックスの取得
+	LPD3DXMESH GetMesh()		{ return m_pMesh; };	//メッシュ情報の取得
+	bool GetCollisionAttack();	//攻撃の当たり判定
 
 	//----------------
 	// 静的メンバ関数
@@ -60,7 +61,7 @@ public:
 		LPCTSTR text, CModel* model, D3DXVECTOR3 pos, D3DXVECTOR3 rot);
 
 private:
-	void DrawShadow();			//影の描画
+	void DrawShadow();	//影の描画
 
 private:
 	//----------------

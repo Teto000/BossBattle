@@ -932,8 +932,11 @@ void CPlayer::SetRot()
 //========================
 void CPlayer::SetLine()
 {
-	//線の色
-	D3DXCOLOR lineCol(1.0f, 0.0f, 0.0f, 1.0f);
+	D3DXMATRIX mtxTrans;	//計算用マトリックス
+
+	//位置を反映
+	D3DXMatrixTranslation(&mtxTrans, m_pos.x, m_pos.y, m_pos.z);
+	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxTrans);
 
 	//ワールド変換行列を使ってMin,Maxを求める
 	D3DXVec3TransformCoord(&m_worldMin, &m_vtxMin, &m_mtxWorld);
@@ -943,62 +946,10 @@ void CPlayer::SetLine()
 	D3DXVECTOR3 min = m_worldMin;
 	D3DXVECTOR3 max = m_worldMax;
 
-	//-----------------------------------
-	// 下辺
-	//-----------------------------------
-	D3DXVECTOR3 start = D3DXVECTOR3(min.x, min.y, min.z);
-	D3DXVECTOR3 end = D3DXVECTOR3(max.x, min.y, min.z);
-	m_pLine[0] = CLine::Create(m_pos, start, end, lineCol);
-
-	start = D3DXVECTOR3(min.x, min.y, min.z);
-	end = D3DXVECTOR3(min.x, min.y, max.z);
-	m_pLine[1] = CLine::Create(m_pos, start, end, lineCol);
-
-	start = D3DXVECTOR3(max.x, min.y, min.z);
-	end = D3DXVECTOR3(max.x, min.y, max.z);
-	m_pLine[2] = CLine::Create(m_pos, start, end, lineCol);
-
-	start = D3DXVECTOR3(min.x, min.y, max.z);
-	end = D3DXVECTOR3(max.x, min.y, max.z);
-	m_pLine[3] = CLine::Create(m_pos, start, end, lineCol);
-
-	//-----------------------------------
-	// 上辺
-	//-----------------------------------
-	start = D3DXVECTOR3(min.x, max.y, min.z);
-	end = D3DXVECTOR3(max.x, max.y, min.z);
-	m_pLine[4] = CLine::Create(m_pos, start, end, lineCol);
-
-	start = D3DXVECTOR3(min.x, max.y, min.z);
-	end = D3DXVECTOR3(min.x, max.y, max.z);
-	m_pLine[5] = CLine::Create(m_pos, start, end, lineCol);
-
-	start = D3DXVECTOR3(max.x, max.y, min.z);
-	end = D3DXVECTOR3(max.x, max.y, max.z);
-	m_pLine[6] = CLine::Create(m_pos, start, end, lineCol);
-
-	start = D3DXVECTOR3(min.x, max.y, max.z);
-	end = D3DXVECTOR3(max.x, max.y, max.z);
-	m_pLine[7] = CLine::Create(m_pos, start, end, lineCol);
-
-	//-----------------------------------
-	// 縦辺
-	//-----------------------------------
-	start = D3DXVECTOR3(min.x, min.y, min.z);
-	end = D3DXVECTOR3(min.x, max.y, min.z);
-	m_pLine[8] = CLine::Create(m_pos, start, end, lineCol);
-
-	start = D3DXVECTOR3(min.x, min.y, max.z);
-	end = D3DXVECTOR3(min.x, max.y, max.z);
-	m_pLine[9] = CLine::Create(m_pos, start, end, lineCol);
-
-	start = D3DXVECTOR3(max.x, min.y, min.z);
-	end = D3DXVECTOR3(max.x, max.y, min.z);
-	m_pLine[10] = CLine::Create(m_pos, start, end, lineCol);
-
-	start = D3DXVECTOR3(max.x, min.y, max.z);
-	end = D3DXVECTOR3(max.x, max.y, max.z);
-	m_pLine[11] = CLine::Create(m_pos, start, end, lineCol);
+	for (int i = 0; i < nMaxLine; i++)
+	{
+		m_pLine[i] = CLine::CreateAll(m_pLine[i], i, m_pos, min, max);
+	}
 }
 
 //========================
@@ -1010,70 +961,17 @@ void CPlayer::UpdateLine()
 	D3DXVec3TransformCoord(&m_worldMin, &m_vtxMin, &m_mtxWorld);
 	D3DXVec3TransformCoord(&m_worldMax, &m_vtxMax, &m_mtxWorld);
 
-	//最大最小を求めなおす
-
-	//剣を含まないでけいさんする
-
 	//代入する値をまとめる
 	D3DXVECTOR3 min = m_worldMin;
 	D3DXVECTOR3 max = m_worldMax;
 
-	//-----------------------------------
-	// 下辺
-	//-----------------------------------
-	D3DXVECTOR3 start = D3DXVECTOR3(min.x, min.y, min.z);
-	D3DXVECTOR3 end = D3DXVECTOR3(max.x, min.y, min.z);
-	m_pLine[0]->SetLine(start, end);
-
-	start = D3DXVECTOR3(min.x, min.y, min.z);
-	end = D3DXVECTOR3(min.x, min.y, max.z);
-	m_pLine[1]->SetLine(start, end);
-
-	start = D3DXVECTOR3(max.x, min.y, min.z);
-	end = D3DXVECTOR3(max.x, min.y, max.z);
-	m_pLine[2]->SetLine(start, end);
-
-	start = D3DXVECTOR3(min.x, min.y, max.z);
-	end = D3DXVECTOR3(max.x, min.y, max.z);
-	m_pLine[3]->SetLine(start, end);
-
-	//-----------------------------------
-	// 上辺
-	//-----------------------------------
-	start = D3DXVECTOR3(min.x, max.y, min.z);
-	end = D3DXVECTOR3(max.x, max.y, min.z);
-	m_pLine[4]->SetLine(start, end);
-
-	start = D3DXVECTOR3(min.x, max.y, min.z);
-	end = D3DXVECTOR3(min.x, max.y, max.z);
-	m_pLine[5]->SetLine(start, end);
-
-	start = D3DXVECTOR3(max.x, max.y, min.z);
-	end = D3DXVECTOR3(max.x, max.y, max.z);
-	m_pLine[6]->SetLine(start, end);
-
-	start = D3DXVECTOR3(min.x, max.y, max.z);
-	end = D3DXVECTOR3(max.x, max.y, max.z);
-	m_pLine[7]->SetLine(start, end);
-
-	//-----------------------------------
-	// 縦辺
-	//-----------------------------------
-	start = D3DXVECTOR3(min.x, min.y, min.z);
-	end = D3DXVECTOR3(min.x, max.y, min.z);
-	m_pLine[8]->SetLine(start, end);
-
-	start = D3DXVECTOR3(min.x, min.y, max.z);
-	end = D3DXVECTOR3(min.x, max.y, max.z);
-	m_pLine[9]->SetLine(start, end);
-
-	start = D3DXVECTOR3(max.x, min.y, min.z);
-	end = D3DXVECTOR3(max.x, max.y, min.z);
-	m_pLine[10]->SetLine(start, end);
-
-	start = D3DXVECTOR3(max.x, min.y, max.z);
-	end = D3DXVECTOR3(max.x, max.y, max.z);
-	m_pLine[11]->SetLine(start, end);
+	for (int i = 0; i < nMaxLine; i++)
+	{
+		if (m_pLine[i])
+		{
+			m_pLine[i]->SetLinePos(i, min, max);
+		}
+	}
 }
 
 //===========================

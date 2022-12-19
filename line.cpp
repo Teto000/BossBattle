@@ -213,10 +213,177 @@ CLine* CLine::Create(
 }
 
 //===========================
-// 線の位置の設定
+// 全ての線の生成
 //===========================
-void CLine::SetLine(D3DXVECTOR3 start, D3DXVECTOR3 end)
+CLine* CLine::CreateAll(CLine* line, int nNumber,
+					D3DXVECTOR3 pos, D3DXVECTOR3 min, D3DXVECTOR3 max)
 {
-	m_start = start;
-	m_end = end;
+	//変数
+	D3DXVECTOR3 start(0.0f, 0.0f, 0.0f);		//開始位置
+	D3DXVECTOR3 end(0.0f, 0.0f, 0.0f);			//終了位置
+	D3DXCOLOR lineCol(1.0f, 0.0f, 0.0f, 1.0f);	//線の色
+
+	//-----------------------------------
+	// 下辺
+	//-----------------------------------
+	switch (nNumber)
+	{
+	case 0:
+		start = D3DXVECTOR3(min.x, min.y, min.z);
+		end = D3DXVECTOR3(max.x, min.y, min.z);
+		line = CLine::Create(pos, start, end, lineCol);
+		break;
+
+	case 1:
+		start = D3DXVECTOR3(min.x, min.y, min.z);
+		end = D3DXVECTOR3(min.x, min.y, max.z);
+		line = CLine::Create(pos, start, end, lineCol);
+		break;
+
+	case 2:
+		start = D3DXVECTOR3(max.x, min.y, min.z);
+		end = D3DXVECTOR3(max.x, min.y, max.z);
+		line = CLine::Create(pos, start, end, lineCol);
+		break;
+
+	case 3:
+		start = D3DXVECTOR3(min.x, min.y, max.z);
+		end = D3DXVECTOR3(max.x, min.y, max.z);
+		line = CLine::Create(pos, start, end, lineCol);
+		break;
+
+	//-----------------------------------
+	// 上辺
+	//-----------------------------------
+	case 4:
+		start = D3DXVECTOR3(min.x, max.y, min.z);
+		end = D3DXVECTOR3(max.x, max.y, min.z);
+		line = CLine::Create(pos, start, end, lineCol);
+		break;
+
+	case 5:
+		start = D3DXVECTOR3(min.x, max.y, min.z);
+		end = D3DXVECTOR3(min.x, max.y, max.z);
+		line = CLine::Create(pos, start, end, lineCol);
+		break;
+
+	case 6:
+		start = D3DXVECTOR3(max.x, max.y, min.z);
+		end = D3DXVECTOR3(max.x, max.y, max.z);
+		line = CLine::Create(pos, start, end, lineCol);
+		break;
+
+	case 7:
+		start = D3DXVECTOR3(min.x, max.y, max.z);
+		end = D3DXVECTOR3(max.x, max.y, max.z);
+		line = CLine::Create(pos, start, end, lineCol);
+		break;
+
+	//-----------------------------------
+	// 縦辺
+	//-----------------------------------
+	case 8:
+		start = D3DXVECTOR3(min.x, min.y, min.z);
+		end = D3DXVECTOR3(min.x, max.y, min.z);
+		line = CLine::Create(pos, start, end, lineCol);
+		break;
+
+	case 9:
+		start = D3DXVECTOR3(min.x, min.y, max.z);
+		end = D3DXVECTOR3(min.x, max.y, max.z);
+		line = CLine::Create(pos, start, end, lineCol);
+		break;
+
+	case 10:
+		start = D3DXVECTOR3(max.x, min.y, min.z);
+		end = D3DXVECTOR3(max.x, max.y, min.z);
+		line = CLine::Create(pos, start, end, lineCol);
+		break;
+
+	case 11:
+		start = D3DXVECTOR3(max.x, min.y, max.z);
+		end = D3DXVECTOR3(max.x, max.y, max.z);
+		line = CLine::Create(pos, start, end, lineCol);
+		break;
+	}
+
+	return line;
+}
+
+//===========================
+// 線の開始終了位置を設定
+//===========================
+void CLine::SetLinePos(int nNumber, D3DXVECTOR3 min, D3DXVECTOR3 max)
+{
+	//-----------------------------------
+	// 下辺
+	//-----------------------------------
+	switch (nNumber)
+	{
+	case 0:
+		m_start = D3DXVECTOR3(min.x, min.y, min.z);
+		m_end = D3DXVECTOR3(max.x, min.y, min.z);
+		break;
+
+	case 1:
+		m_start = D3DXVECTOR3(min.x, min.y, min.z);
+		m_end = D3DXVECTOR3(min.x, min.y, max.z);
+		break;
+
+	case 2:
+		m_start = D3DXVECTOR3(max.x, min.y, min.z);
+		m_end = D3DXVECTOR3(max.x, min.y, max.z);
+		break;
+
+	case 3:
+		m_start = D3DXVECTOR3(min.x, min.y, max.z);
+		m_end = D3DXVECTOR3(max.x, min.y, max.z);
+		break;
+
+		//-----------------------------------
+		// 上辺
+		//-----------------------------------
+	case 4:
+		m_start = D3DXVECTOR3(min.x, max.y, min.z);
+		m_end = D3DXVECTOR3(max.x, max.y, min.z);
+		break;
+
+	case 5:
+		m_start = D3DXVECTOR3(min.x, max.y, min.z);
+		m_end = D3DXVECTOR3(min.x, max.y, max.z);
+		break;
+
+	case 6:
+		m_start = D3DXVECTOR3(max.x, max.y, min.z);
+		m_end = D3DXVECTOR3(max.x, max.y, max.z);
+		break;
+
+	case 7:
+		m_start = D3DXVECTOR3(min.x, max.y, max.z);
+		m_end = D3DXVECTOR3(max.x, max.y, max.z);
+		break;
+
+		//-----------------------------------
+		// 縦辺
+		//-----------------------------------
+	case 8:
+		m_start = D3DXVECTOR3(min.x, min.y, min.z);
+		m_end = D3DXVECTOR3(min.x, max.y, min.z);
+		break;
+
+	case 9:
+		m_start = D3DXVECTOR3(min.x, min.y, max.z);
+		m_end = D3DXVECTOR3(min.x, max.y, max.z);
+		break;
+
+	case 10:
+		m_start = D3DXVECTOR3(max.x, min.y, min.z);
+		m_end = D3DXVECTOR3(max.x, max.y, min.z);
+		break;
+
+	case 11:
+		m_start = D3DXVECTOR3(max.x, min.y, max.z);
+		m_end = D3DXVECTOR3(max.x, max.y, max.z);
+		break;
+	}
 }

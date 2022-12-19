@@ -122,7 +122,7 @@ private:
 	//----------------
 	// ’è”
 	//----------------
-	static const int nMaxLine = 128;		//Å‘å‘Ì—Í
+	static const int nMaxLine = 12;			//ü‚ÌÅ‘å”
 	static const int nWheelRotValue = 10;	//ƒ^ƒCƒ„‚Ì‰ñ“]—Ê
 	static const float fSpeed;				//ˆÚ“®‘¬“x
 
