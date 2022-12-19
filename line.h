@@ -38,6 +38,7 @@ public:
 	//-------------------
 	// セッター
 	//-------------------
+	void SetPos(D3DXVECTOR3 pos) { m_pos = pos; }
 	static CLine* CreateAll(CLine* line, int nNumber,
 		D3DXVECTOR3 pos, D3DXVECTOR3 min, D3DXVECTOR3 max);
 	void SetLinePos(int nNumber, D3DXVECTOR3 min, D3DXVECTOR3 max);

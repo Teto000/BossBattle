@@ -98,6 +98,7 @@ public:
 	D3DXMATRIX GetmtxWorld()		   { return m_mtxWorld; }		//ワールドマトリックスの取得
 	CModel* GetModel(int nNum)		   { return m_pModel[nNum]; }	//モデルの取得
 	BATTLEMODE GetMode()			   { return m_battleMode; }		//バトルモードの取得
+	MOTION_TYPE GetMotion()			   { return m_type; }			//モーションの種類の取得
 	bool GetCollisionPlayer();	//当たり判定の取得
 
 	//----------------

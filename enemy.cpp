@@ -190,8 +190,8 @@ void CEnemy::Update()
 	//----------------------------
 	// 剣との当たり判定
 	//----------------------------
-	if (/*CGame::GetPlayer()->GetMode() == CPlayer::BATTLEMODE_ATTACK
-		&& */CGame::GetPlayer()->GetModel(6)->GetCollisionAttack())
+	if (CGame::GetPlayer()->GetMotion() == CPlayer::MOTION_TYPE_ATTACK
+		&& CGame::GetPlayer()->GetModel(4)->GetCollisionAttack())
 	{//プレイヤーが攻撃中 & 剣と当たっているなら
 		m_fLife--;	//体力の減少
 
@@ -417,12 +417,6 @@ void CEnemy::SetLine()
 //========================
 void CEnemy::UpdateLine()
 {
-	D3DXMATRIX mtxTrans;	//計算用マトリックス
-
-	//位置を反映
-	D3DXMatrixTranslation(&mtxTrans, m_pos.x, m_pos.y, m_pos.z);
-	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxTrans);
-
 	//ワールド変換行列を使ってMin,Maxを求める
 	D3DXVec3TransformCoord(&m_worldMin, &m_vtxMin, &m_mtxWorld);
 	D3DXVec3TransformCoord(&m_worldMax, &m_vtxMax, &m_mtxWorld);

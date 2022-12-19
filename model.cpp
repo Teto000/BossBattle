@@ -16,6 +16,8 @@
 #include "player.h"
 #include "enemy.h"
 #include "texture.h"
+#include "line.h"
+#include "debug_proc.h"
 
 //========================
 // コンストラクタ
@@ -25,6 +27,14 @@ CModel::CModel()
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//位置の設定
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//向きの設定
 	m_pModel = nullptr;
+	
+	for (int i = 0; i < nMaxLine; i++)
+	{
+		if (m_pLine[i])
+		{
+			m_pLine[i] = nullptr;
+		}
+	}
 }
 
 //========================
@@ -298,13 +308,78 @@ void CModel::DrawShadow()
 	pDevice->SetMaterial(&matDef);
 }
 
+//========================
+// 線の設置
+//========================
+void CModel::SetLine()
+{
+	/*D3DXMATRIX mtxTrans;	//計算用マトリックス
+	D3DXVECTOR3 worldPos(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3 offset(0.0f, 10.0f, 80.0f);
+
+	//剣先までのオフセットを加算した位置を取得
+	D3DXVec3TransformCoord(&worldPos, &offset, &m_mtxWorld);
+
+	//位置を反映
+	D3DXMatrixTranslation(&mtxTrans, worldPos.x, worldPos.y, worldPos.z);
+	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxTrans);
+
+	//-----------------------
+	// モデルの大きさを設定
+	//-----------------------
+	m_vtxMin = D3DXVECTOR3(-30.0f, -30.0f, -30.0f);
+	m_vtxMax = D3DXVECTOR3(30.0f, 30.0f, 30.0f);
+
+	//ワールド変換行列を使ってMin,Maxを求める
+	D3DXVec3TransformCoord(&m_worldMin, &m_vtxMin, &m_mtxWorld);
+	D3DXVec3TransformCoord(&m_worldMax, &m_vtxMax, &m_mtxWorld);
+
+	for (int i = 0; i < nMaxLine; i++)
+	{
+		m_pLine[i] = CLine::CreateAll(m_pLine[i], i, worldPos, m_worldMin, m_worldMax);
+	}*/
+}
+
+//========================
+// 線の情報の更新
+//========================
+void CModel::UpdateLine()
+{
+	/*//ワールド変換行列を使ってMin,Maxを求める
+	D3DXMATRIX mtxTrans;	//計算用マトリックス
+	D3DXVECTOR3 worldPos(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3 offset(0.0f, 0.0f, 0.0f);
+
+	//剣先までのオフセットを加算した位置を取得
+	D3DXVec3TransformCoord(&worldPos, &offset, &m_mtxWorld);
+
+	//-----------------------
+	// モデルの大きさを設定
+	//-----------------------
+	m_vtxMin = D3DXVECTOR3(-30.0f, -30.0f, -30.0f);
+	m_vtxMax = D3DXVECTOR3(30.0f, 30.0f, 30.0f);
+
+	//ワールド変換行列を使ってMin,Maxを求める
+	D3DXVec3TransformCoord(&m_worldMin, &m_vtxMin, &m_mtxWorld);
+	D3DXVec3TransformCoord(&m_worldMax, &m_vtxMax, &m_mtxWorld);
+
+	for (int i = 0; i < nMaxLine; i++)
+	{
+		if (m_pLine[i])
+		{
+			//m_pLine[i]->SetPos(worldPos);
+			m_pLine[i]->SetLinePos(i, m_worldMin, m_worldMax);
+		}
+	}*/
+}
+
 //===========================
 // 攻撃の当たり判定
 //===========================
 bool CModel::GetCollisionAttack()
 {
 	D3DXVECTOR3 worldPos(0.0f, 0.0f, 0.0f);
-	D3DXVECTOR3 offset(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3 offset(0.0f, 0.0f, -80.0f);
 
 	//剣先までのオフセットを加算した位置を取得
 	D3DXVec3TransformCoord(&worldPos, &offset, &m_mtxWorld);
@@ -317,10 +392,12 @@ bool CModel::GetCollisionAttack()
 
 	//2点間の距離を求める
 	D3DXVECTOR3 distance = worldPos - enemyPos;
+	float a = sqrtf(D3DXVec3Dot(&distance, &distance));
 
-	//当たり判定
-	if (sqrtf(pow(distance.x, 2) + pow(distance.y, 2) + pow(distance.z, 2))
-		< 100.0f)
+	CDebugProc::Print("Distance : %f",a);
+
+	//当たり判定								//球の範囲(半径+半径)
+	if (sqrtf(D3DXVec3Dot(&distance, &distance)) < 150.0f)
 	{
 		return true;
 	}

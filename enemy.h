@@ -90,7 +90,7 @@ private:
 	//----------------
 	// ’è”
 	//----------------
-	static const int nMaxLine = 12;
+	static const int nMaxLine = 24;
 
 	//----------------
 	// ƒƒ“ƒo•Ï”

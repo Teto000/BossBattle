@@ -47,8 +47,8 @@ HRESULT CGauge::Init(D3DXVECTOR3 pos)
 	CBillBoard::SetSize(m_fWidth, m_fHeight);
 
 	//頂点座標の設定
-	CBillBoard::SetVtxCIE_Gauge(m_pos, m_fWidth / 2,
-		-m_fWidth / 2 + (m_fLength * 100), m_fHeight / 2, m_fHeight / 2);
+	CBillBoard::SetVtxCIE_Gauge(m_pos, -m_fWidth / 2, -m_fWidth / 2 + (m_fLength * 100)
+		, -m_fHeight / 2, m_fHeight / 2);
 
 	CBillBoard::SetTexture(CTexture::TEXTURE_NONE);	//テクスチャの設定
 

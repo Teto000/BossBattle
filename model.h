@@ -12,6 +12,11 @@
 //--------------------------------
 #include "object.h"
 
+//--------------------------------
+// 前方宣言
+//--------------------------------
+class CLine;	//ライン
+
 //================================
 // モデルクラスの定義
 //================================
@@ -44,6 +49,8 @@ public:
 	void SetRot(D3DXVECTOR3 rot)	{ m_rot = rot; }		//向きの設定
 	void SetRotX(float rotX)		{ m_rot.x = rotX; };	//X軸の回転量を設定
 	void SetParent(CModel* pModel)	{ m_pModel = pModel; }	//親モデルの設定
+	void SetLine();			//線の設置
+	void UpdateLine();		//線の更新
 
 	//----------------
 	// ゲッター
@@ -65,6 +72,11 @@ private:
 
 private:
 	//----------------
+	// 定数
+	//----------------
+	static const int nMaxLine = 12;			//線の最大数
+
+	//----------------
 	// メンバ変数
 	//----------------
 	D3DXMATRIX m_mtxWorld;		//ワールドマトリックス
@@ -74,6 +86,11 @@ private:
 	CModel* m_pModel;			//親モデルへのポインタ
 	LPCTSTR m_modelName;		//モデルのパス
 	MODELTYPE m_type;			//種類
+	CLine* m_pLine[nMaxLine];	//ライン
+	D3DXVECTOR3 m_vtxMax;		//大きさの最大値
+	D3DXVECTOR3 m_vtxMin;		//大きさの最小値
+	D3DXVECTOR3 m_worldMin;		//ワールド上の最大値
+	D3DXVECTOR3	m_worldMax;		//ワールド上の最小値
 
 	/* ↓ モデル情報 ↓ */
 	LPD3DXMESH m_pMesh;			//メッシュ情報へのポインタ
