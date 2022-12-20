@@ -45,6 +45,7 @@ CPlayer::CPlayer() : CObject(0)
 	m_worldMin = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//ワールド上の最大値
 	m_worldMax = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//ワールド上の最小値
 	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//大きさ
+	m_nNumCombo = 0;							//コンボ数
 	fSizeWidth = 0.0f;							//サイズ(幅)
 	fSizeDepth = 0.0f;							//サイズ(奥行き)
 	m_type = MOTION_TYPE_IDOL;					//現在のモーション
@@ -114,14 +115,15 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	//--------------------
 	// 初期値の設定
 	//--------------------
-	m_pos = pos;					//位置
-	fSizeWidth = 30.0f;				//モデルの幅
-	fSizeDepth = 30.0f;				//モデルの奥行き
+	m_pos = pos;						//位置
+	fSizeWidth = 30.0f;					//モデルの幅
+	fSizeDepth = 30.0f;					//モデルの奥行き
 	m_status.fLife = 300.0f;			//体力
-	m_status.fRemLife = 100.0f;		//残り体力(%)
+	m_status.fRemLife = 100.0f;			//残り体力(%)
 	m_status.fMaxLife = m_status.fLife;	//最大体力
-	m_status.nAttack = 20;			//攻撃力
-	m_status.fSpeed = 7.0f;			//速度
+	m_status.nAttack = 20;				//攻撃力
+	m_nNumCombo = 0;					//コンボ数
+	m_status.fSpeed = 7.0f;				//速度
 
 	//ワールドマトリックスの初期化
 	D3DXMatrixIdentity(&m_mtxWorld);
@@ -161,7 +163,7 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	//-----------------------
 	// コンボ数表示
 	//-----------------------
-	m_pCombo = CCombo::Create(D3DXVECTOR3(1000.0f, 360.0f, 0.0f), 23);
+	m_pCombo = CCombo::Create(D3DXVECTOR3(1000.0f, 360.0f, 0.0f), m_nNumCombo);
 
 	return S_OK;
 }
@@ -244,6 +246,14 @@ void CPlayer::Update()
 		// モードチェンジ
 		//-------------------------
 		ChangeMode();
+
+		//-------------------------
+		// コンボ数の加算
+		//-------------------------
+		if (CInputKeyboard::Trigger(DIK_P))
+		{
+			m_nNumCombo = m_pCombo->AddNumber(1);
+		}
 	}
 
 	//-------------------------

@@ -159,6 +159,7 @@ private:
 	D3DXVECTOR3 m_size;			//大きさ
 	D3DXVECTOR3 m_worldMin;		//ワールド上の最大値
 	D3DXVECTOR3	m_worldMax;		//ワールド上の最小値
+	int m_nNumCombo;			//コンボ数
 	float fSizeWidth;			//サイズ(幅)
 	float fSizeDepth;			//サイズ(奥行き)
 	float m_rotWheel;			//タイヤの回転量

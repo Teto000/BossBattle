@@ -34,6 +34,8 @@ public:
 	void Update();
 	void Draw();
 
+	int AddNumber(int nNum);	//数値の加算
+
 	//----------------
 	// ゲッター
 	//----------------
@@ -48,7 +50,6 @@ public:
 
 private:
 	void SetNumber();			//数値の設定
-	int AddNumber(int nNum);	//数値の加算
 
 private:
 	//------------------
