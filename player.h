@@ -101,6 +101,7 @@ public:
 	void SetPosition(D3DXVECTOR3 pos) { m_pos = pos; }					//位置の設定
 	void SetAttack(float nAttack)	  { m_status.nAttack = nAttack; }	//攻撃力の設定
 	void SetSpeed(float fSpeed)		  { m_status.fSpeed = fSpeed; }		//速度の設定
+	void AddCombo(int nNumber);	//コンボ数の加算
 
 	//----------------
 	// ゲッター

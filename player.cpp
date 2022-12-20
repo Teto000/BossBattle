@@ -246,14 +246,6 @@ void CPlayer::Update()
 		// ƒ‚[ƒhƒ`ƒFƒ“ƒW
 		//-------------------------
 		ChangeMode();
-
-		//-------------------------
-		// ƒRƒ“ƒ{”‚Ì‰ÁZ
-		//-------------------------
-		if (CInputKeyboard::Trigger(DIK_P))
-		{
-			m_nNumCombo = m_pCombo->AddNumber(1);
-		}
 	}
 
 	//-------------------------
@@ -873,12 +865,18 @@ void CPlayer::MoveJoypad()
 //===========================
 void CPlayer::Attack()
 {
+	//-----------------------------------
+	// UŒ‚ƒ‚[ƒVƒ‡ƒ“‚ÖˆÚs
+	//-----------------------------------
 	if (CInputKeyboard::Trigger(DIK_RETURN) && m_type != MOTION_TYPE_ATTACK)
 	{//ENTERƒL[‚ª‰Ÿ‚³‚ê‚½ & UŒ‚ƒ‚[ƒVƒ‡ƒ“’†‚¶‚á‚È‚¢‚È‚ç
 		//UŒ‚ƒ‚[ƒVƒ‡ƒ“‚É‚·‚é
 		ChangeMotion(MOTION_TYPE_ATTACK);
 	}
 
+	//-----------------------------------
+	// ƒ‚[ƒVƒ‡ƒ“‚ÆUŒ‚ŠÔ‚ğ‡‚í‚¹‚é
+	//-----------------------------------
 	if (m_type == MOTION_TYPE_ATTACK)
 	{//UŒ‚ƒ‚[ƒVƒ‡ƒ“’†‚È‚ç
 		int nAttackFream = 0;
@@ -899,6 +897,18 @@ void CPlayer::Attack()
 			//UŒ‚ŠÔ‚ğ‰ÁZ
 			m_status.nAttackTime++;
 		}
+	}
+
+	//-----------------------------------
+	// Œ•‚Æ‚Ì“–‚½‚è”»’è
+	//-----------------------------------
+	if (m_type == CPlayer::MOTION_TYPE_ATTACK && m_pModel[4]->GetCollisionAttack())
+	{//ƒvƒŒƒCƒ„[‚ªUŒ‚’† & Œ•‚Æ“–‚½‚Á‚Ä‚¢‚é‚È‚ç
+	 //UŒ‚—Í•ª“G‚Ì‘Ì—Í‚ğŒ¸­
+		CGame::GetEnemy()->SubLife(m_status.nAttack);
+
+		//ƒRƒ“ƒ{”‚Ì‰ÁZ
+		CGame::GetPlayer()->AddCombo(1);
 	}
 }
 
@@ -1070,4 +1080,12 @@ bool CPlayer::GetCollisionPlayer()
 	}
 
 	return false;
+}
+
+//===========================
+// ƒRƒ“ƒ{”‚Ì‰ÁZ
+//===========================
+void CPlayer::AddCombo(int nNumber)
+{
+	m_nNumCombo = m_pCombo->AddNumber(nNumber);
 }

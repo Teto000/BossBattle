@@ -64,6 +64,7 @@ public:
 	// セッター
 	//----------------
 	void SetPosition(D3DXVECTOR3 pos) { m_pos = pos; }			//位置の設定
+	void SubLife(float fDamage);	//HP減少時の処理
 
 	//----------------
 	// ゲッター

@@ -188,24 +188,6 @@ void CEnemy::Update()
 	}*/
 
 	//----------------------------
-	// 剣との当たり判定
-	//----------------------------
-	if (CGame::GetPlayer()->GetMotion() == CPlayer::MOTION_TYPE_ATTACK
-		&& CGame::GetPlayer()->GetModel(4)->GetCollisionAttack())
-	{//プレイヤーが攻撃中 & 剣と当たっているなら
-		//プレイヤーの攻撃力を取得
-		float fDamage = CGame::GetPlayer()->GetStatus().nAttack;
-
-		m_fLife -= fDamage;	//体力の減少
-
-		//残り体力を計算
-		m_fRemLife = m_fLife * 100 / m_fMaxLife;
-
-		//HPの設定
-		m_pHP->SetLife(m_fLife, m_fRemLife);
-	}
-
-	//----------------------------
 	// 死亡時処理
 	//----------------------------
 	if (m_fLife <= 0)
@@ -435,4 +417,18 @@ void CEnemy::UpdateLine()
 			m_pLine[i]->SetLinePos(i, min, max);
 		}
 	}
+}
+
+//========================
+// HP減少時の処理
+//========================
+void CEnemy::SubLife(float fDamage)
+{
+	m_fLife -= fDamage;	//体力の減少
+
+	//残り体力を計算
+	m_fRemLife = m_fLife * 100 / m_fMaxLife;
+
+	//HPの設定
+	m_pHP->SetLife(m_fLife, m_fRemLife);
 }
