@@ -193,7 +193,10 @@ void CEnemy::Update()
 	if (CGame::GetPlayer()->GetMotion() == CPlayer::MOTION_TYPE_ATTACK
 		&& CGame::GetPlayer()->GetModel(4)->GetCollisionAttack())
 	{//プレイヤーが攻撃中 & 剣と当たっているなら
-		m_fLife--;	//体力の減少
+		//プレイヤーの攻撃力を取得
+		float fDamage = CGame::GetPlayer()->GetStatus().nAttack;
+
+		m_fLife -= fDamage;	//体力の減少
 
 		//残り体力を計算
 		m_fRemLife = m_fLife * 100 / m_fMaxLife;

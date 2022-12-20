@@ -45,6 +45,25 @@ public:
 		KEY aKey[MAX_PARTS];
 	};
 
+	//モーション情報
+	struct MOTION_SET
+	{
+		bool bLoop;					//ループするかどうか
+		int nNumKey;				//キーの最大数
+		KEY_SET aKeySet[MAX_KEY];	//キーセット情報
+	};
+
+	//プレイヤーのステータス
+	struct PLAYER_STATUS
+	{
+		int nAttackTime;//攻撃時間
+		float nAttack;	//攻撃力
+		float fSpeed;	//速度
+		float fLife;	//体力
+		float fRemLife;	//残り体力(%)
+		float fMaxLife;	//最大体力
+	};
+
 	//モーションの種類
 	enum MOTION_TYPE
 	{
@@ -52,14 +71,6 @@ public:
 		MOTION_TYPE_MOVE,		//移動
 		MOTION_TYPE_ATTACK,		//攻撃
 		MOTION_TYPE_MAX
-	};
-
-	//モーション情報
-	struct MOTION_SET
-	{
-		bool bLoop;					//ループするかどうか
-		int nNumKey;				//キーの最大数
-		KEY_SET aKeySet[MAX_KEY];	//キーセット情報
 	};
 
 	//プレイヤーのモード
@@ -86,7 +97,9 @@ public:
 	//----------------
 	// セッター
 	//----------------
-	void SetPosition(D3DXVECTOR3 pos) { m_pos = pos; }	//位置の設定
+	void SetPosition(D3DXVECTOR3 pos) { m_pos = pos; }					//位置の設定
+	void SetAttack(float nAttack)	  { m_status.nAttack = nAttack; }	//攻撃力の設定
+	void SetSpeed(float fSpeed)		  { m_status.fSpeed = fSpeed; }		//速度の設定
 
 	//----------------
 	// ゲッター
@@ -97,6 +110,7 @@ public:
 	float GetHeight() override		   { return 0.0f; }				//高さの取得
 	D3DXMATRIX GetmtxWorld()		   { return m_mtxWorld; }		//ワールドマトリックスの取得
 	CModel* GetModel(int nNum)		   { return m_pModel[nNum]; }	//モデルの取得
+	PLAYER_STATUS GetStatus()		   { return m_status; }			//ステータスの取得
 	BATTLEMODE GetMode()			   { return m_battleMode; }		//バトルモードの取得
 	MOTION_TYPE GetMotion()			   { return m_type; }			//モーションの種類の取得
 	bool GetCollisionPlayer();	//当たり判定の取得
@@ -107,6 +121,9 @@ public:
 	static CPlayer* Create();
 
 private:
+	//---------------------
+	// プライベート関数
+	//---------------------
 	void SetModel();											//モデルの設定
 	void SetMotion(MOTION_TYPE type, bool bLoop, int nNumKey);	//モーションの設定
 	void ChangeMotion(MOTION_TYPE type);	//モーションの変更
@@ -125,7 +142,8 @@ private:
 	//----------------
 	static const int nMaxLine = 12;			//線の最大数
 	static const int nWheelRotValue = 10;	//タイヤの回転量
-	static const float fSpeed;				//移動速度
+	static const float fDefaultAttack;		//基本の攻撃力
+	static const float fDefaultSpeed;		//基本の速度
 
 	//----------------
 	// メンバ変数
@@ -140,13 +158,10 @@ private:
 	D3DXVECTOR3 m_size;			//大きさ
 	D3DXVECTOR3 m_worldMin;		//ワールド上の最大値
 	D3DXVECTOR3	m_worldMax;		//ワールド上の最小値
-	int m_nCntAttackTime;		//攻撃時間
-	float m_fLife;				//体力
-	float m_fRemLife;			//残り体力(%)
-	float m_fMaxLife;			//最大体力
 	float fSizeWidth;			//サイズ(幅)
 	float fSizeDepth;			//サイズ(奥行き)
 	float m_rotWheel;			//タイヤの回転量
+	PLAYER_STATUS m_status;		//ステータス
 	BATTLEMODE m_battleMode;	//バトルモード
 	CHP*  m_pHP;				//HP
 

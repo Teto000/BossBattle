@@ -28,7 +28,8 @@
 //------------------------
 // 静的メンバ変数宣言
 //------------------------
-const float CPlayer::fSpeed = 7.0f;			//移動速度
+const float CPlayer::fDefaultAttack = 20.0f;	//基本の攻撃力
+const float CPlayer::fDefaultSpeed = 7.0f;		//基本の速度
 
 //========================
 // コンストラクタ
@@ -43,15 +44,19 @@ CPlayer::CPlayer() : CObject(0)
 	m_worldMin = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//ワールド上の最大値
 	m_worldMax = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//ワールド上の最小値
 	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//大きさ
-	m_fLife = 0.0f;								//体力
-	m_fRemLife = 0.0f;							//残り体力(%)
-	m_fMaxLife = 0.0f;							//最大体力
-	m_nCntAttackTime = 0;						//攻撃時間
 	fSizeWidth = 0.0f;							//サイズ(幅)
 	fSizeDepth = 0.0f;							//サイズ(奥行き)
 	m_type = MOTION_TYPE_IDOL;					//現在のモーション
 	m_battleMode = BATTLEMODE_NONE;				//バトルモード
 	m_pHP = nullptr;							//HP
+
+	//ステータス
+	m_status.nAttack = 0;			//攻撃力
+	m_status.nAttackTime = 0;		//攻撃時間
+	m_status.fSpeed = 0.0f;		//速度
+	m_status.fLife = 0.0f;		//体力
+	m_status.fRemLife = 0.0f;		//残り体力(%)
+	m_status.fMaxLife = 0.0f;		//最大体力
 
 	//モデル
 	for (int i = 0; i < MAX_PARTS; i++)
@@ -69,7 +74,9 @@ CPlayer::CPlayer() : CObject(0)
 	m_nCurrentKey = 0;
 	m_nCntMotion = 0;
 
-	//キーセット情報の初期化
+	//----------------------------
+	// キーセット情報の初期化
+	//----------------------------
 	for (int nCnt = 0; nCnt < MOTION_TYPE_MAX; nCnt++)
 	{
 		for (int i = 0; i < MOTION_TYPE_MAX; i++)
@@ -102,12 +109,17 @@ CPlayer::~CPlayer()
 //========================
 HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 {
-	m_pos = pos;			//位置
-	fSizeWidth = 30.0f;		//モデルの幅
-	fSizeDepth = 30.0f;		//モデルの奥行き
-	m_fLife = 300.0f;		//体力
-	m_fRemLife = 100.0f;	//残り体力(%)
-	m_fMaxLife = m_fLife;	//最大体力
+	//--------------------
+	// 初期値の設定
+	//--------------------
+	m_pos = pos;					//位置
+	fSizeWidth = 30.0f;				//モデルの幅
+	fSizeDepth = 30.0f;				//モデルの奥行き
+	m_status.fLife = 300.0f;			//体力
+	m_status.fRemLife = 100.0f;		//残り体力(%)
+	m_status.fMaxLife = m_status.fLife;	//最大体力
+	m_status.nAttack = 20;			//攻撃力
+	m_status.fSpeed = 7.0f;			//速度
 
 	//ワールドマトリックスの初期化
 	D3DXMatrixIdentity(&m_mtxWorld);
@@ -117,7 +129,7 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 
 	//HPの生成
 	m_pHP = CHP::Create(D3DXVECTOR3(0.0f, 50.0f, 0.0f), 200.0f, 10.0f);
-	m_pHP->SetLife(m_fLife, m_fRemLife);	//HPの設定
+	m_pHP->SetLife(m_status.fLife, m_status.fRemLife);	//HPの設定
 
 	//--------------------
 	// モデルの生成
@@ -138,8 +150,6 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	// 線の表示
 	//-----------------------
 	//SetLine();
-
-	m_pModel[4]->SetLine();
 
 	//-----------------------
 	// モーションの読み込み
@@ -239,20 +249,18 @@ void CPlayer::Update()
 	//-------------------------
 	//UpdateLine();
 
-	m_pModel[4]->UpdateLine();
-
 	//-------------------------
 	// 体力の減少
 	//-------------------------
 	if (CInputKeyboard::Press(DIK_0))
 	{
-		m_fLife--;	//体力の減少
+		m_status.fLife--;	//体力の減少
 
 		//残り体力を計算
-		m_fRemLife = m_fLife * 100 / m_fMaxLife;
+		m_status.fRemLife = m_status.fLife * 100 / m_status.fMaxLife;
 
 		//HPの設定
-		m_pHP->SetLife(m_fLife, m_fRemLife);
+		m_pHP->SetLife(m_status.fLife, m_status.fRemLife);
 	}
 }
 
@@ -671,20 +679,20 @@ void CPlayer::MoveKeyboard(int nUpKey, int nDownKey, int nLeftKey, int nRightKey
 	{//Aキーが押された
 		if (CInputKeyboard::Press(nUpKey))
 		{//Wキーが押された
-			m_pos.x += sinf(cameraRot.y - D3DX_PI * 0.25f) * fSpeed;	//左奥移動
-			m_pos.z += cosf(cameraRot.y - D3DX_PI * 0.25f) * fSpeed;
+			m_pos.x += sinf(cameraRot.y - D3DX_PI * 0.25f) * m_status.fSpeed;	//左奥移動
+			m_pos.z += cosf(cameraRot.y - D3DX_PI * 0.25f) * m_status.fSpeed;
 			m_rotDest.y = cameraRot.y + D3DX_PI * 0.75f;	//向きの切り替え
 		}
 		else if (CInputKeyboard::Press(nDownKey))
 		{//Sキーが押された
-			m_pos.x += sinf(cameraRot.y - D3DX_PI * 0.75f) * fSpeed;	//左前移動
-			m_pos.z += cosf(cameraRot.y - D3DX_PI * 0.75f) * fSpeed;
+			m_pos.x += sinf(cameraRot.y - D3DX_PI * 0.75f) * m_status.fSpeed;	//左前移動
+			m_pos.z += cosf(cameraRot.y - D3DX_PI * 0.75f) * m_status.fSpeed;
 			m_rotDest.y = cameraRot.y + D3DX_PI * 0.25f;
 		}
 		else
 		{
-			m_pos.x -= sinf(cameraRot.y + D3DX_PI * 0.5f) * fSpeed;	//左移動
-			m_pos.z -= cosf(cameraRot.y + D3DX_PI * 0.5f) * fSpeed;
+			m_pos.x -= sinf(cameraRot.y + D3DX_PI * 0.5f) * m_status.fSpeed;	//左移動
+			m_pos.z -= cosf(cameraRot.y + D3DX_PI * 0.5f) * m_status.fSpeed;
 			m_rotDest.y = cameraRot.y + D3DX_PI * 0.5f;
 		}
 	}
@@ -692,33 +700,33 @@ void CPlayer::MoveKeyboard(int nUpKey, int nDownKey, int nLeftKey, int nRightKey
 	{//Dキーが押された
 		if (CInputKeyboard::Press(nUpKey))
 		{//Wキーが押された
-			m_pos.x += sinf(cameraRot.y + D3DX_PI * 0.25f) * fSpeed;	//右奥移動
-			m_pos.z += cosf(cameraRot.y + D3DX_PI * 0.25f) * fSpeed;
+			m_pos.x += sinf(cameraRot.y + D3DX_PI * 0.25f) * m_status.fSpeed;	//右奥移動
+			m_pos.z += cosf(cameraRot.y + D3DX_PI * 0.25f) * m_status.fSpeed;
 			m_rotDest.y = cameraRot.y - D3DX_PI * 0.75f;
 		}
 		else if (CInputKeyboard::Press(nDownKey))
 		{//Sキーが押された
-			m_pos.x += sinf(cameraRot.y + D3DX_PI * 0.75f) * fSpeed;	//右前移動
-			m_pos.z += cosf(cameraRot.y + D3DX_PI * 0.75f) * fSpeed;
+			m_pos.x += sinf(cameraRot.y + D3DX_PI * 0.75f) * m_status.fSpeed;	//右前移動
+			m_pos.z += cosf(cameraRot.y + D3DX_PI * 0.75f) * m_status.fSpeed;
 			m_rotDest.y = cameraRot.y - D3DX_PI * 0.25f;
 		}
 		else
 		{
-			m_pos.x += sinf(cameraRot.y + D3DX_PI * 0.5f) * fSpeed;	//右移動
-			m_pos.z += cosf(cameraRot.y + D3DX_PI * 0.5f) * fSpeed;
+			m_pos.x += sinf(cameraRot.y + D3DX_PI * 0.5f) * m_status.fSpeed;	//右移動
+			m_pos.z += cosf(cameraRot.y + D3DX_PI * 0.5f) * m_status.fSpeed;
 			m_rotDest.y = cameraRot.y - D3DX_PI * 0.5f;
 		}
 	}
 	else if (CInputKeyboard::Press(nUpKey))
 	{//Wキーが押された
-		m_pos.x -= sinf(cameraRot.y + D3DX_PI * 1.0f) * fSpeed;	//奥移動
-		m_pos.z -= cosf(cameraRot.y + D3DX_PI * 1.0f) * fSpeed;
+		m_pos.x -= sinf(cameraRot.y + D3DX_PI * 1.0f) * m_status.fSpeed;	//奥移動
+		m_pos.z -= cosf(cameraRot.y + D3DX_PI * 1.0f) * m_status.fSpeed;
 		m_rotDest.y = cameraRot.y + D3DX_PI * 1.0f;
 	}
 	else if (CInputKeyboard::Press(nDownKey))
 	{//Sキーが押された
-		m_pos.x -= sinf(cameraRot.y + D3DX_PI * 0.0f) * fSpeed;	//前移動
-		m_pos.z -= cosf(cameraRot.y + D3DX_PI * 0.0f) * fSpeed;
+		m_pos.x -= sinf(cameraRot.y + D3DX_PI * 0.0f) * m_status.fSpeed;	//前移動
+		m_pos.z -= cosf(cameraRot.y + D3DX_PI * 0.0f) * m_status.fSpeed;
 		m_rotDest.y = cameraRot.y + D3DX_PI * 0.0f;
 	}
 
@@ -769,20 +777,20 @@ void CPlayer::MoveJoypad()
 		// スティックを倒した方向へ移動する
 		if (stick.y <= -fMoveValue)
 		{//右奥移動
-			m_pos.x += sinf(cameraRot.y + D3DX_PI * 0.25f) * fSpeed;
-			m_pos.z += cosf(cameraRot.y + D3DX_PI * 0.25f) * fSpeed;
+			m_pos.x += sinf(cameraRot.y + D3DX_PI * 0.25f) * m_status.fSpeed;
+			m_pos.z += cosf(cameraRot.y + D3DX_PI * 0.25f) * m_status.fSpeed;
 			m_rotDest.y = cameraRot.y - D3DX_PI * 0.75f;	//向きの切り替え
 		}
 		else if (stick.y >= fMoveValue)
 		{//右前移動
-			m_pos.x += sinf(cameraRot.y + D3DX_PI * 0.75f) * fSpeed;
-			m_pos.z += cosf(cameraRot.y + D3DX_PI * 0.75f) * fSpeed;
+			m_pos.x += sinf(cameraRot.y + D3DX_PI * 0.75f) * m_status.fSpeed;
+			m_pos.z += cosf(cameraRot.y + D3DX_PI * 0.75f) * m_status.fSpeed;
 			m_rotDest.y = cameraRot.y - D3DX_PI * 0.25f;
 		}
 		else
 		{
-			m_pos.x += sinf(cameraRot.y + D3DX_PI * fMoveValue) * fSpeed;
-			m_pos.z += cosf(cameraRot.y + D3DX_PI * fMoveValue) * fSpeed;
+			m_pos.x += sinf(cameraRot.y + D3DX_PI * fMoveValue) * m_status.fSpeed;
+			m_pos.z += cosf(cameraRot.y + D3DX_PI * fMoveValue) * m_status.fSpeed;
 			m_rotDest.y = cameraRot.y - D3DX_PI * fMoveValue;
 		}
 	}
@@ -793,20 +801,20 @@ void CPlayer::MoveJoypad()
 	{
 		if (stick.y <= -fMoveValue)
 		{//左奥移動
-			m_pos.x += sinf(cameraRot.y - D3DX_PI * 0.25f) * fSpeed;
-			m_pos.z += cosf(cameraRot.y - D3DX_PI * 0.25f) * fSpeed;
+			m_pos.x += sinf(cameraRot.y - D3DX_PI * 0.25f) * m_status.fSpeed;
+			m_pos.z += cosf(cameraRot.y - D3DX_PI * 0.25f) * m_status.fSpeed;
 			m_rotDest.y = cameraRot.y + D3DX_PI * 0.75f;
 		}
 		else if (stick.y >= fMoveValue)
 		{//左前移動
-			m_pos.x += sinf(cameraRot.y - D3DX_PI * 0.75f) * fSpeed;
-			m_pos.z += cosf(cameraRot.y - D3DX_PI * 0.75f) * fSpeed;
+			m_pos.x += sinf(cameraRot.y - D3DX_PI * 0.75f) * m_status.fSpeed;
+			m_pos.z += cosf(cameraRot.y - D3DX_PI * 0.75f) * m_status.fSpeed;
 			m_rotDest.y = cameraRot.y + D3DX_PI * 0.25f;
 		}
 		else
 		{
-			m_pos.x -= sinf(cameraRot.y + D3DX_PI * fMoveValue) * fSpeed;
-			m_pos.z -= cosf(cameraRot.y + D3DX_PI * fMoveValue) * fSpeed;
+			m_pos.x -= sinf(cameraRot.y + D3DX_PI * fMoveValue) * m_status.fSpeed;
+			m_pos.z -= cosf(cameraRot.y + D3DX_PI * fMoveValue) * m_status.fSpeed;
 			m_rotDest.y = cameraRot.y + D3DX_PI * fMoveValue;
 		}
 	}
@@ -815,8 +823,8 @@ void CPlayer::MoveJoypad()
 	//-----------------------------------
 	else if (stick.y <= -fMoveValue)
 	{
-		m_pos.x -= sinf(cameraRot.y + D3DX_PI * 1.0f) * fSpeed;
-		m_pos.z -= cosf(cameraRot.y + D3DX_PI * 1.0f) * fSpeed;
+		m_pos.x -= sinf(cameraRot.y + D3DX_PI * 1.0f) * m_status.fSpeed;
+		m_pos.z -= cosf(cameraRot.y + D3DX_PI * 1.0f) * m_status.fSpeed;
 		m_rotDest.y = cameraRot.y + D3DX_PI * 1.0f;
 	}
 	//-----------------------------------
@@ -824,8 +832,8 @@ void CPlayer::MoveJoypad()
 	//-----------------------------------
 	else if (stick.y >= fMoveValue)
 	{
-		m_pos.x -= sinf(cameraRot.y + D3DX_PI * 0.0f) * fSpeed;
-		m_pos.z -= cosf(cameraRot.y + D3DX_PI * 0.0f) * fSpeed;
+		m_pos.x -= sinf(cameraRot.y + D3DX_PI * 0.0f) * m_status.fSpeed;
+		m_pos.z -= cosf(cameraRot.y + D3DX_PI * 0.0f) * m_status.fSpeed;
 		m_rotDest.y = cameraRot.y + D3DX_PI * 0.0f;
 	}
 
@@ -863,16 +871,16 @@ void CPlayer::Attack()
 			nAttackFream += m_aMotionSet[m_type].aKeySet[i].nFrame;
 		}
 
-		if (nAttackFream <= m_nCntAttackTime)
+		if (nAttackFream <= m_status.nAttackTime)
 		{//攻撃時間が攻撃モーションのフレーム数の合計を超えたら
 			//待機モーションにする
 			ChangeMotion(MOTION_TYPE_IDOL);
-			m_nCntAttackTime = 0;
+			m_status.nAttackTime = 0;	//攻撃時間のリセット
 		}
 		else
 		{
 			//攻撃時間を加算
-			m_nCntAttackTime++;
+			m_status.nAttackTime++;
 		}
 	}
 }
@@ -882,6 +890,9 @@ void CPlayer::Attack()
 //===========================
 void CPlayer::ChangeMode()
 {
+	//-------------------------------
+	// モードの切り替え
+	//-------------------------------
 	if (CInputKeyboard::Trigger(DIK_1))
 	{
 		m_battleMode = BATTLEMODE_ATTACK;
@@ -893,6 +904,29 @@ void CPlayer::ChangeMode()
 	else if (CInputKeyboard::Trigger(DIK_3))
 	{
 		m_battleMode = BATTLEMODE_COMBO;
+	}
+
+	//-------------------------------
+	// モード別ステータスのリセット
+	//-------------------------------
+	SetAttack(fDefaultAttack);	//攻撃力
+	SetSpeed(fDefaultSpeed);	//速度
+
+	//-------------------------------
+	// モードごとの処理
+	//-------------------------------
+	switch (m_battleMode)
+	{
+	case BATTLEMODE_ATTACK:
+		SetAttack(fDefaultAttack * 1.5f);	//攻撃力の強化
+		break;
+	case BATTLEMODE_SPEED:
+		SetSpeed(fDefaultSpeed * 2.0f);	//速度の強化
+		break;
+	case BATTLEMODE_COMBO:
+		break;
+	default:
+		break;
 	}
 }
 

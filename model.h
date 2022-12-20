@@ -49,8 +49,6 @@ public:
 	void SetRot(D3DXVECTOR3 rot)	{ m_rot = rot; }		//向きの設定
 	void SetRotX(float rotX)		{ m_rot.x = rotX; };	//X軸の回転量を設定
 	void SetParent(CModel* pModel)	{ m_pModel = pModel; }	//親モデルの設定
-	void SetLine();			//線の設置
-	void UpdateLine();		//線の更新
 
 	//----------------
 	// ゲッター
