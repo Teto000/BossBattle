@@ -39,6 +39,9 @@
     <Filter Include="00_Main\Object\Billboard\Gauge">
       <UniqueIdentifier>{d71e9d37-6968-4db4-b964-ec06ec744310}</UniqueIdentifier>
     </Filter>
+    <Filter Include="00_Main\Object\Object2D\Number">
+      <UniqueIdentifier>{bd2bf617-3d31-42e5-a421-d2e71f3300b5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -140,6 +143,12 @@
     <ClCompile Include="billboard.cpp">
       <Filter>00_Main\Object\Billboard</Filter>
     </ClCompile>
+    <ClCompile Include="number.cpp">
+      <Filter>00_Main\Object\Object2D\Number</Filter>
+    </ClCompile>
+    <ClCompile Include="combo.cpp">
+      <Filter>00_Main\Object\Object2D\Number</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -240,6 +249,12 @@
     </ClInclude>
     <ClInclude Include="billboard.h">
       <Filter>00_Main\Object\Billboard</Filter>
+    </ClInclude>
+    <ClInclude Include="number.h">
+      <Filter>00_Main\Object\Object2D\Number</Filter>
+    </ClInclude>
+    <ClInclude Include="combo.h">
+      <Filter>00_Main\Object\Object2D\Number</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

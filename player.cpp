@@ -24,6 +24,7 @@
 #include "line.h"
 #include "enemy.h"
 #include "hp.h"
+#include "combo.h"
 
 //------------------------
 // 静的メンバ変数宣言
@@ -49,6 +50,7 @@ CPlayer::CPlayer() : CObject(0)
 	m_type = MOTION_TYPE_IDOL;					//現在のモーション
 	m_battleMode = BATTLEMODE_NONE;				//バトルモード
 	m_pHP = nullptr;							//HP
+	m_pCombo = nullptr;							//コンボ
 
 	//ステータス
 	m_status.nAttack = 0;			//攻撃力
@@ -155,6 +157,11 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	// モーションの読み込み
 	//-----------------------
 	GetFileMotion();
+
+	//-----------------------
+	// コンボ数表示
+	//-----------------------
+	m_pCombo = CCombo::Create(D3DXVECTOR3(1000.0f, 360.0f, 0.0f), 23);
 
 	return S_OK;
 }

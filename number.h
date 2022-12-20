@@ -1,11 +1,11 @@
 //===================================================
 //
-// メッセージヘッダー
+// 数値表示用ヘッダー
 // Author : Sato Teruto
 //
 //===================================================
-#ifndef _MESSAGE_H_
-#define _MESSAGE_H_	//二重インクルード防止
+#ifndef _NUMBER_H_
+#define _NUMBER_H_	//二重インクルード防止
 
 //-------------------------------
 // インクルード
@@ -13,20 +13,13 @@
 #include "object2d.h"
 
 //================================
-// メッセージクラス
+// ナンバークラス
 //================================
-class CMessage : public CObject2D
+class CNumber : public CObject2D
 {
 public:
-	enum MESSAGE
-	{
-		MESSAGE_NONE = 0,
-		MESSAGE_CLEAR,		//クリア
-		MESSAGE_MAX
-	};
-
-	CMessage();		//コンストラクタ
-	~CMessage();	//デストラクタ
+	CNumber();				//コンストラクタ
+	~CNumber() override;	//デストラクタ
 
 	//------------------
 	// メンバ関数
@@ -37,17 +30,21 @@ public:
 	void Draw() override;
 
 	//------------------
+	// セッター
+	//------------------
+	void Set(int nDigit);	//数値の設定
+
+	//------------------
 	// 静的メンバ変数
 	//------------------
-	static CMessage* Create(D3DXVECTOR3 pos, MESSAGE message);
+	static CNumber* Create(D3DXVECTOR3 pos, int nValue);
 
 private:
 	//------------------
 	// メンバ変数
 	//------------------
-	D3DXCOLOR m_col;	//色
-	int m_nCntTime;		//時間カウント
-	MESSAGE m_message;	//メッセージ
+	int m_nValue;	//数値
+	int m_nDigit;	//桁数
 };
 
 #endif

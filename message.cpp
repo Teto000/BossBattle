@@ -48,7 +48,7 @@ HRESULT CMessage::Init(D3DXVECTOR3 pos)
 
 	CObject2D::SetSize(m_fWidth, m_fHeight);
 
-	CObject2D::SetTexture(CTexture::TEXTRURE_CLEAR);
+	CObject2D::SetTexture(CTexture::TEXTURE_CLEAR);
 
 	return S_OK;
 }

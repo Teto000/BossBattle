@@ -24,7 +24,8 @@ public: /* 定義 */
 		TEXTURE_RESULT,			//リザルト
 		TEXTURE_GROUND,			//地面
 		TEXTURE_AIM,			//照準
-		TEXTRURE_CLEAR,			//クリア
+		TEXTURE_CLEAR,			//クリア
+		TEXTURE_NUMBER,			//数値
 		TEXTURE_MAX,
 		TEXTURE_NONE,			//使用しない
 	};

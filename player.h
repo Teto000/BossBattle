@@ -18,6 +18,7 @@
 class CModel;	//モデル
 class CLine;	//ライン
 class CHP;		//HP
+class CCombo;	//コンボ
 
 //--------------------------------
 // マクロ定義
@@ -164,6 +165,7 @@ private:
 	PLAYER_STATUS m_status;		//ステータス
 	BATTLEMODE m_battleMode;	//バトルモード
 	CHP*  m_pHP;				//HP
+	CCombo* m_pCombo;			//コンボ
 
 	/* ↓ モデル情報 ↓ */
 	CModel*  m_pModel[MAX_PARTS];		//モデル
