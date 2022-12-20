@@ -46,6 +46,7 @@ CPlayer::CPlayer() : CObject(0)
 	m_worldMax = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//ワールド上の最小値
 	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//大きさ
 	m_nNumCombo = 0;							//コンボ数
+	m_status.nComboValue = 0;					//コンボの加算値
 	fSizeWidth = 0.0f;							//サイズ(幅)
 	fSizeDepth = 0.0f;							//サイズ(奥行き)
 	m_bDamage = false;							//ダメージを与えた
@@ -57,8 +58,8 @@ CPlayer::CPlayer() : CObject(0)
 	//ステータス
 	m_status.nAttack = 0;			//攻撃力
 	m_status.nAttackTime = 0;		//攻撃時間
-	m_status.fSpeed = 0.0f;		//速度
-	m_status.fLife = 0.0f;		//体力
+	m_status.fSpeed = 0.0f;			//速度
+	m_status.fLife = 0.0f;			//体力
 	m_status.fRemLife = 0.0f;		//残り体力(%)
 	m_status.fMaxLife = 0.0f;		//最大体力
 
@@ -125,6 +126,7 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	m_status.fMaxLife = m_status.fLife;	//最大体力
 	m_status.nAttack = 20;				//攻撃力
 	m_nNumCombo = 0;					//コンボ数
+	m_status.nComboValue = 1;			//コンボの加算値
 	m_status.fSpeed = 7.0f;				//速度
 
 	//ワールドマトリックスの初期化
@@ -905,13 +907,14 @@ void CPlayer::Attack()
 	//-----------------------------------
 	// 剣との当たり判定
 	//-----------------------------------
-	if (m_type == CPlayer::MOTION_TYPE_ATTACK && m_pModel[4]->GetCollisionAttack() && !m_bDamage)
+	if (m_type == CPlayer::MOTION_TYPE_ATTACK && m_pModel[nSwordNumber]->GetCollisionAttack()
+		&& !m_bDamage)
 	{//プレイヤーが攻撃中 & 剣と当たっている & ダメージを与えていないなら
 		//攻撃力分敵の体力を減少
 		CGame::GetEnemy()->SubLife(m_status.nAttack);
 
 		//コンボ数の加算
-		CGame::GetPlayer()->AddCombo(1);
+		CGame::GetPlayer()->AddCombo(m_status.nComboValue);
 
 		//ダメージを与えた状態にする
 		m_bDamage = true;
@@ -942,8 +945,9 @@ void CPlayer::ChangeMode()
 	//-------------------------------
 	// モード別ステータスのリセット
 	//-------------------------------
-	SetAttack(fDefaultAttack);	//攻撃力
-	SetSpeed(fDefaultSpeed);	//速度
+	SetAttack(fDefaultAttack);		//攻撃力
+	SetSpeed(fDefaultSpeed);		//速度
+	SetComboValue(1);				//コンボの加算値
 
 	//-------------------------------
 	// モードごとの処理
@@ -951,12 +955,13 @@ void CPlayer::ChangeMode()
 	switch (m_battleMode)
 	{
 	case BATTLEMODE_ATTACK:
-		SetAttack(fDefaultAttack * 1.5f);	//攻撃力の強化
+		SetAttack(fDefaultAttack * 2.0f);			//攻撃力の強化
 		break;
 	case BATTLEMODE_SPEED:
-		SetSpeed(fDefaultSpeed * 2.0f);	//速度の強化
+		SetSpeed(fDefaultSpeed * 2.0f);				//速度の強化
 		break;
 	case BATTLEMODE_COMBO:
+		SetComboValue(m_status.nComboValue * 2);	//コンボ加算の強化
 		break;
 	default:
 		break;

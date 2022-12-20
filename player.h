@@ -57,12 +57,13 @@ public:
 	//プレイヤーのステータス
 	struct PLAYER_STATUS
 	{
-		int nAttackTime;//攻撃時間
-		float nAttack;	//攻撃力
-		float fSpeed;	//速度
-		float fLife;	//体力
-		float fRemLife;	//残り体力(%)
-		float fMaxLife;	//最大体力
+		int nAttackTime;	//攻撃時間
+		int nComboValue;	//コンボの加算値
+		float nAttack;		//攻撃力
+		float fSpeed;		//速度
+		float fLife;		//体力
+		float fRemLife;		//残り体力(%)
+		float fMaxLife;		//最大体力
 	};
 
 	//モーションの種類
@@ -98,9 +99,10 @@ public:
 	//----------------
 	// セッター
 	//----------------
-	void SetPosition(D3DXVECTOR3 pos) { m_pos = pos; }					//位置の設定
-	void SetAttack(float nAttack)	  { m_status.nAttack = nAttack; }	//攻撃力の設定
-	void SetSpeed(float fSpeed)		  { m_status.fSpeed = fSpeed; }		//速度の設定
+	void SetPosition(D3DXVECTOR3 pos) { m_pos = pos; }						//位置の設定
+	void SetAttack(float nAttack)	  { m_status.nAttack = nAttack; }		//攻撃力の設定
+	void SetSpeed(float fSpeed)		  { m_status.fSpeed = fSpeed; }			//速度の設定
+	void SetComboValue(int nValue)    { m_status.nComboValue = nValue; }	//コンボの加算値の設定
 	void AddCombo(int nNumber);	//コンボ数の加算
 
 	//----------------
@@ -142,10 +144,11 @@ private:
 	//----------------
 	// 定数
 	//----------------
-	static const int nMaxLine = 12;			//線の最大数
-	static const int nWheelRotValue = 10;	//タイヤの回転量
-	static const float fDefaultAttack;		//基本の攻撃力
-	static const float fDefaultSpeed;		//基本の速度
+	static const int nMaxLine = 12;				//線の最大数
+	static const int nWheelRotValue = 10;		//タイヤの回転量
+	static const int nSwordNumber = 4;			//剣モデルの番号
+	static const float fDefaultAttack;			//基本の攻撃力
+	static const float fDefaultSpeed;			//基本の速度
 
 	//----------------
 	// メンバ変数

@@ -110,9 +110,6 @@ HRESULT CMesh::Init(D3DXVECTOR3 pos)
 		{
 			//頂点座標の設定
 			{
-				//ランダムな位置の設定
-				int nRand = rand() % 80;
-
 				D3DXVECTOR3 vtxPos(-(m_fMaxWidth / 2) + (m_fMeshWidth * x), 0.0f, (m_fMaxWidth / 2) - (m_fMeshWidth * z));
 				pVtx[x + (z * (m_nCntVtx))].pos = vtxPos;
 			}
