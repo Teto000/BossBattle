@@ -35,8 +35,8 @@ CNumber::~CNumber()
 HRESULT CNumber::Init(D3DXVECTOR3 pos)
 {
 	//初期値の設定
-	m_fWidth = 50.0f;
-	m_fHeight = 50.0f;
+	m_fWidth = 60.0f;
+	m_fHeight = 80.0f;
 
 	//オブジェクトの初期化
 	CObject2D::Init(pos);

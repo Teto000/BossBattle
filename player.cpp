@@ -48,6 +48,7 @@ CPlayer::CPlayer() : CObject(0)
 	m_nNumCombo = 0;							//コンボ数
 	fSizeWidth = 0.0f;							//サイズ(幅)
 	fSizeDepth = 0.0f;							//サイズ(奥行き)
+	m_bDamage = false;							//ダメージを与えた
 	m_type = MOTION_TYPE_IDOL;					//現在のモーション
 	m_battleMode = BATTLEMODE_NONE;				//バトルモード
 	m_pHP = nullptr;							//HP
@@ -93,6 +94,7 @@ CPlayer::CPlayer() : CObject(0)
 			m_aMotionSet[nCnt].bLoop = false;
 			m_aMotionSet[nCnt].aKeySet[i].nFrame = 0;	//フレーム数
 		}
+
 
 		m_aMotionSet[nCnt].nNumKey = 0;
 		m_aMotionSet[nCnt].bLoop = false;
@@ -891,6 +893,7 @@ void CPlayer::Attack()
 			//待機モーションにする
 			ChangeMotion(MOTION_TYPE_IDOL);
 			m_status.nAttackTime = 0;	//攻撃時間のリセット
+			m_bDamage = false;			//ダメージを与えていない状態にする
 		}
 		else
 		{
@@ -902,13 +905,16 @@ void CPlayer::Attack()
 	//-----------------------------------
 	// 剣との当たり判定
 	//-----------------------------------
-	if (m_type == CPlayer::MOTION_TYPE_ATTACK && m_pModel[4]->GetCollisionAttack())
-	{//プレイヤーが攻撃中 & 剣と当たっているなら
-	 //攻撃力分敵の体力を減少
+	if (m_type == CPlayer::MOTION_TYPE_ATTACK && m_pModel[4]->GetCollisionAttack() && !m_bDamage)
+	{//プレイヤーが攻撃中 & 剣と当たっている & ダメージを与えていないなら
+		//攻撃力分敵の体力を減少
 		CGame::GetEnemy()->SubLife(m_status.nAttack);
 
 		//コンボ数の加算
 		CGame::GetPlayer()->AddCombo(1);
+
+		//ダメージを与えた状態にする
+		m_bDamage = true;
 	}
 }
 

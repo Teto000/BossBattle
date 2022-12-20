@@ -164,6 +164,7 @@ private:
 	float fSizeWidth;			//サイズ(幅)
 	float fSizeDepth;			//サイズ(奥行き)
 	float m_rotWheel;			//タイヤの回転量
+	bool m_bDamage;				//ダメージを与えた
 	PLAYER_STATUS m_status;		//ステータス
 	BATTLEMODE m_battleMode;	//バトルモード
 	CHP*  m_pHP;				//HP

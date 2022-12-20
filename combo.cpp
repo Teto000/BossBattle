@@ -47,7 +47,7 @@ HRESULT CCombo::Init(D3DXVECTOR3 pos)
 	//------------------------------
 	for (int i = 0; i < nMaxDigits; i++)
 	{
-		D3DXVECTOR3 numberPos = D3DXVECTOR3(m_pos.x + (40.0f * i), m_pos.y, m_pos.z);
+		D3DXVECTOR3 numberPos = D3DXVECTOR3(m_pos.x + (50.0f * i), m_pos.y, m_pos.z);
 		m_pNumber[i] = CNumber::Create(numberPos, m_nNumCombo);
 		m_pNumber[i]->Set(i);
 	}

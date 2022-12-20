@@ -38,7 +38,8 @@ public:
 	bool GetLockOn() { return m_bLockOn; };	//ロックオン状態の取得
 
 private:
-	void Turn();
+	void Turn();		//旋回
+	void SetLockOn();	//ロックオン処理
 
 private:
 	//------------------

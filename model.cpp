@@ -327,9 +327,10 @@ bool CModel::GetCollisionAttack()
 
 	//2点間の距離を求める
 	D3DXVECTOR3 distance = worldPos - enemyPos;
-	float a = sqrtf(D3DXVec3Dot(&distance, &distance));
+	float fDist = sqrtf(D3DXVec3Dot(&distance, &distance));
 
-	CDebugProc::Print("プレイヤー・敵間の距離 : %f",a);
+	//プレイヤーと敵との距離を表示
+	CDebugProc::Print("プレイヤー・敵間の距離 : %f", fDist);
 
 	//当たり判定								//球の範囲(半径+半径)
 	if (sqrtf(D3DXVec3Dot(&distance, &distance)) < 150.0f)

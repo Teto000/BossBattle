@@ -16,6 +16,7 @@
 #include "game.h"
 #include "player.h"
 #include "enemy.h"
+#include "debug_proc.h"
 
 //===========================
 // コンストラクタ
@@ -74,14 +75,11 @@ void CCamera::Update(void)
 {
 	LPDIRECT3DDEVICE9 pDevice = CApplication::GetRenderer()->GetDevice();	//デバイスの取得
 
-	// ジョイパッドでの操作
-	CInputJoypad* joypad = CApplication::GetJoypad();
-
 	//回転
 	Turn();
 
 	//ロックオン状態の切り替え
-	if (CInputKeyboard::Trigger(DIK_SPACE)/* || joypad->Press(CInputJoypad::JOYKEY_RIGHT_SHOULDER)*/)
+	if (CInputKeyboard::Trigger(DIK_SPACE))
 	{
 		//ロックオン状態を切り替え
 		m_bLockOn = !m_bLockOn;
@@ -96,7 +94,7 @@ void CCamera::Update(void)
 	//----------------------------------------
 	// カメラ内のプレイヤーの位置設定
 	//----------------------------------------
-	if (CInputKeyboard::Press(DIK_LEFT))
+	/*if (CInputKeyboard::Press(DIK_LEFT))
 	{
 		m_posV.x += 5.0f;
 		m_posR.x += 5.0f;
@@ -116,7 +114,7 @@ void CCamera::Update(void)
 	{
 		m_posV.z += 5.0f;
 		m_posR.z += 5.0f;
-	}
+	}*/
 
 	//----------------------------------------
 	// 行列を使ったカメラ制御
@@ -143,10 +141,6 @@ void CCamera::Update(void)
 	//ワールド変換行列を使ってposV,posRを求める
 	D3DXVec3TransformCoord(&m_worldPosR, &m_posR, &m_mtxWorld);
 	D3DXVec3TransformCoord(&m_worldPosV, &m_posV, &m_mtxWorld);
-
-	//目的の座標を更新
-	m_posVDest = m_worldPosV;
-	m_posRDest = m_worldPosR;
 
 	//----------------------------------------
 	// ロックオン処理
@@ -192,6 +186,10 @@ void CCamera::Update(void)
 	{
 		m_rot.y += D3DX_PI * 2;
 	}
+
+	//視点・注視点の表示
+	CDebugProc::Print("視点：%f,%f,%f", m_worldPosV.x, m_worldPosV.y, m_worldPosV.z);
+	CDebugProc::Print("注視点：%f,%f,%f", m_worldPosR.x, m_worldPosR.y, m_worldPosR.z);
 }
 
 //========================
@@ -295,6 +293,14 @@ void CCamera::Turn()
 	{//終了フラグが立ってるなら
 		m_rot.y -= m_TSPEED / 3;
 	}
+}
+
+//========================
+// ロックオン処理
+//========================
+void CCamera::SetLockOn()
+{
+
 }
 
 //========================
