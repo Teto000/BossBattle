@@ -52,7 +52,7 @@ void CCamera::Init(void)
 	// 視点・注視点・上方向を設定する
 	//---------------------------------
 	m_posV = D3DXVECTOR3(0.0f, 200.0f, -400.0f);
-	m_posR = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_posR = D3DXVECTOR3(0.0f, 100.0f, 0.0f);
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_worldPosV = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_worldPosR = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -139,8 +139,8 @@ void CCamera::Update(void)
 	pDevice->SetTransform(D3DTS_WORLD, &m_mtxWorld);
 
 	//ワールド変換行列を使ってposV,posRを求める
-	D3DXVec3TransformCoord(&m_worldPosR, &m_posR, &m_mtxWorld);
-	D3DXVec3TransformCoord(&m_worldPosV, &m_posV, &m_mtxWorld);
+	D3DXVec3TransformCoord(&m_posRDest, &m_posR, &m_mtxWorld);
+	D3DXVec3TransformCoord(&m_posVDest, &m_posV, &m_mtxWorld);
 
 	//----------------------------------------
 	// ロックオン処理
@@ -155,7 +155,7 @@ void CCamera::Update(void)
 	if (m_bLockOn)
 	{//ロックオン状態なら
 		//注視点をロックオン位置に設定
-		m_worldPosR = lockOnPos;
+		m_posRDest = lockOnPos;
 
 		//プレイヤー位置とロックオン位置間のベクトルを求める
 		D3DXVECTOR3 vec = lockOnPos - playerPos;
@@ -165,9 +165,9 @@ void CCamera::Update(void)
 
 		//視点の位置を設定
 		{
-			float posV_y = m_worldPosV.y;				//y座標を保存
-			m_worldPosV = playerPos + (-vec) * 500.0f;	//視点の位置を変更
-			m_worldPosV.y = posV_y;						//y座標を戻す
+			float posV_y = m_posVDest.y;				//y座標を保存
+			m_posVDest = playerPos + (-vec) * 500.0f;	//視点の位置を変更
+			m_posVDest.y = posV_y;						//y座標を戻す
 		}
 
 		//カメラの角度をロックオン先に合わせる
@@ -186,6 +186,10 @@ void CCamera::Update(void)
 	{
 		m_rot.y += D3DX_PI * 2;
 	}
+
+	//減衰
+	m_worldPosR += (m_posRDest - m_worldPosR) * 0.1f;
+	m_worldPosV += (m_posVDest - m_worldPosV) * 0.1f;
 
 	//視点・注視点の表示
 	CDebugProc::Print("視点：%f,%f,%f", m_worldPosV.x, m_worldPosV.y, m_worldPosV.z);
