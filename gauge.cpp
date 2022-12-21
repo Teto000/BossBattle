@@ -57,7 +57,7 @@ HRESULT CGauge::Init(D3DXVECTOR3 pos)
 	//---------------------------
 	// ÉtÉåÅ[ÉÄÇÃê∂ê¨
 	//---------------------------
-	m_pFream = CFream::Create(m_pos, m_fWidth + 30.0f, m_fHeight + 30.0f);
+	m_pFream = CFream::Create(m_pos, m_fWidth + 10.0f, m_fHeight + 10.0f);
 
 	return S_OK;
 }

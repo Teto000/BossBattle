@@ -65,34 +65,85 @@ CObject::~CObject()
 //=============================
 void CObject::ReleaseAll(bool bFinish)
 {
-	if (!m_Top[m_nPriority])
-	{//Topがnullなら
-		return;
-	}
-
-	CObject* pObj = m_Top[m_nPriority];
-
-	while (pObj)
-	{//pObjがnullじゃないなら
-		//次のオブジェクトを保存
-		CObject* pObjNext = pObj->m_pNext;
-
-		//終了処理
-		pObj->Uninit();
-		pObj->Release();
-
-		//次のオブジェクトのアドレスを代入
-		pObj = pObjNext;
-	}
-
-	//-------------------
-	// 死亡処理
-	//-------------------
-	pObj = m_Top[m_nPriority];
-
-	while (pObj)
+	for (int i = 0; i < nMaxPriority; i++)
 	{
-		if (bFinish == true)
+		if (!m_Top[i])
+		{//Topがnullなら
+			return;
+		}
+
+		CObject* pObj = m_Top[i];
+
+		while (pObj)
+		{//pObjがnullじゃないなら
+			//次のオブジェクトを保存
+			CObject* pObjNext = pObj->m_pNext;
+
+			//終了処理
+			pObj->Uninit();
+			pObj->Release();
+
+			//次のオブジェクトのアドレスを代入
+			pObj = pObjNext;
+		}
+
+		//-------------------
+		// 死亡処理
+		//-------------------
+		pObj = m_Top[i];
+
+		while (pObj)
+		{
+			if (bFinish == true)
+			{
+				//次のオブジェクトを保存
+				CObject* pObjNext = pObj->m_pNext;
+
+				if (pObj->m_bDeath == true)
+				{
+					//消去処理
+					pObj->Death(pObj);
+				}
+
+				//次のオブジェクトのアドレスを代入
+				pObj = pObjNext;
+			}
+		}
+	}
+}
+
+//=============================
+// 全て更新
+//=============================
+void CObject::UpdateAll()
+{
+	for (int i = 0; i < OBJTYPE_MAX; i++)
+	{
+		if (!m_Top[i])
+		{//Topがnullなら
+			return;
+		}
+
+		CObject* pObj = m_Top[i];
+
+		while (pObj)
+		{//pObjがnullじゃないなら
+			//次のオブジェクトを保存
+			CObject* pObjNext = pObj->m_pNext;
+
+			//更新処理
+			pObj->Update();
+
+			//次のオブジェクトのアドレスを代入
+			pObj = pObjNext;
+		}
+
+		//-------------------
+		// 死亡処理
+		//-------------------
+		pObj = m_Top[i];
+
+		while (pObj)
 		{
 			//次のオブジェクトを保存
 			CObject* pObjNext = pObj->m_pNext;
@@ -110,69 +161,27 @@ void CObject::ReleaseAll(bool bFinish)
 }
 
 //=============================
-// 全て更新
-//=============================
-void CObject::UpdateAll()
-{
-	if (!m_Top[m_nPriority])
-	{//Topがnullなら
-		return;
-	}
-
-	CObject* pObj = m_Top[m_nPriority];
-
-	while (pObj)
-	{//pObjがnullじゃないなら
-		//次のオブジェクトを保存
-		CObject* pObjNext = pObj->m_pNext;
-
-		//更新処理
-		pObj->Update();
-
-		//次のオブジェクトのアドレスを代入
-		pObj = pObjNext;
-	}
-
-	//-------------------
-	// 死亡処理
-	//-------------------
-	pObj = m_Top[m_nPriority];
-
-	while (pObj)
-	{
-		//次のオブジェクトを保存
-		CObject* pObjNext = pObj->m_pNext;
-
-		if (pObj->m_bDeath == true)
-		{
-			//消去処理
-			pObj->Death(pObj);
-		}
-
-		//次のオブジェクトのアドレスを代入
-		pObj = pObjNext;
-	}
-}
-
-//=============================
 // 全て描画
 //=============================
 void CObject::DrawAll()
 {
-	if (!m_Top[m_nPriority])
-	{//Topがnullなら
-		return;
-	}
+	for (int i = 0; i < OBJTYPE_MAX; i++)
+	{
+		if (!m_Top[i])
+		{//Topがnullなら
+			return;
+		}
 
-	CObject* pObj = m_Top[m_nPriority];
+		CObject* pObj = m_Top[i];
 
-	while (pObj)
-	{//pObjがnullじゃないなら
-		//描画処理
-		pObj->Draw();
+		while (pObj)
+		{//pObjがnullじゃないなら
+			//描画処理
+			pObj->Draw();
 
-		//次のオブジェクトのアドレスを代入
-		pObj = pObj->m_pNext;
+			//次のオブジェクトのアドレスを代入
+			pObj = pObj->m_pNext;
+		}
 	}
 }
 

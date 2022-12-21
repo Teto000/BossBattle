@@ -36,7 +36,7 @@ HRESULT CFream::Init(D3DXVECTOR3 pos)
 	CObject2D::SetSize(m_fWidth, m_fHeight);
 
 	//色の設定
-	CObject2D::SetColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
+	CObject2D::SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 
 	//テクスチャの設定
 	CObject2D::SetTexture(CTexture::TEXTURE_NONE);
