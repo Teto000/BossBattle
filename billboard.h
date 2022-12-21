@@ -35,12 +35,12 @@ public:
 	//----------------
 	// セッター
 	//----------------
-	void SetPos(D3DXVECTOR3 pos);					//位置の設定
+	void SetPos(D3DXVECTOR3 pos) { m_pos = pos; }	//位置の設定
 	D3DXVECTOR3 AddMove(D3DXVECTOR3 move);			//移動量の加算
 	void SetSize(float fWidth, float fHeight);		//大きさの設定
 	void SetColor(D3DXCOLOR col); 					//色の設定
-	void SetVtxCIE_Gauge(D3DXVECTOR3 pos, float fWidth1,
-						float fWidth2, float fHeight1, float fHeight2);	//頂点座標の設定
+	void SetVtxCIE_Gauge(float fWidth1
+		, float fWidth2, float fHeight1, float fHeight2);	//頂点座標の設定
 
 	/* ↓テクスチャ↓ */
 	void SetTexCIE(float left, float fRight);	//テクスチャ座標の設定

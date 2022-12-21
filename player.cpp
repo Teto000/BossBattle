@@ -135,8 +135,10 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	//回転マトリックスの初期化
 	D3DXMatrixIdentity(&m_mtxRot);
 
-	//HPの生成
-	m_pHP = CHP::Create(D3DXVECTOR3(0.0f, 50.0f, 0.0f), 200.0f, 10.0f);
+	//--------------------
+	// HPの生成
+	//--------------------
+	m_pHP = CHP::Create(D3DXVECTOR3(300.0f, 50.0f, 0.0f), 500.0f, 30.0f);
 	m_pHP->SetLife(m_status.fLife, m_status.fRemLife);	//HPの設定
 
 	//--------------------

@@ -228,15 +228,8 @@ void CBillBoard::Draw()
 }
 
 //===========================
-// 位置の設定
-//===========================
-void CBillBoard::SetPos(D3DXVECTOR3 pos)
-{
-	m_pos = pos;
-}
-
-//===========================
 // 移動量の加算
+// 引数：移動量
 //===========================
 D3DXVECTOR3 CBillBoard::AddMove(D3DXVECTOR3 move)
 {
@@ -247,6 +240,7 @@ D3DXVECTOR3 CBillBoard::AddMove(D3DXVECTOR3 move)
 
 //===========================
 // 大きさの設定
+// 引数：幅、高さ
 //===========================
 void CBillBoard::SetSize(float fWidth, float fHeight)
 {
@@ -256,6 +250,7 @@ void CBillBoard::SetSize(float fWidth, float fHeight)
 
 //===========================
 // テクスチャ座標の設定
+// 引数：左、右
 //===========================
 void CBillBoard::SetTexCIE(float left, float fRight)
 {
@@ -276,9 +271,9 @@ void CBillBoard::SetTexCIE(float left, float fRight)
 
 //===========================
 // 頂点座標の設定(ゲージ)
+// 引数：左、右、上、下
 //===========================
-void CBillBoard::SetVtxCIE_Gauge(D3DXVECTOR3 pos,
-	float fLeft, float fRight, float fUp, float fDown)
+void CBillBoard::SetVtxCIE_Gauge(float fLeft, float fRight, float fUp, float fDown)
 {
 	VERTEX_3D*pVtx;		//頂点情報へのポインタ
 
@@ -297,6 +292,7 @@ void CBillBoard::SetVtxCIE_Gauge(D3DXVECTOR3 pos,
 
 //===========================
 // 頂点カラーの設定
+// 引数：色
 //===========================
 void CBillBoard::SetColor(D3DXCOLOR col)
 {
@@ -320,6 +316,7 @@ void CBillBoard::SetColor(D3DXCOLOR col)
 
 //===========================
 // テクスチャの設定
+// 引数：テクスチャ名
 //===========================
 void CBillBoard::SetTexture(CTexture::TEXTURE texture)
 {

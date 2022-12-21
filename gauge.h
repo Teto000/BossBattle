@@ -10,12 +10,12 @@
 //--------------------------------
 // インクルード
 //--------------------------------
-#include "billboard.h"
+#include "object2D.h"
 
 //--------------------------------
 // ゲージクラス
 //--------------------------------
-class CGauge : public CBillBoard
+class CGauge : public CObject2D
 {
 public:
 	CGauge();

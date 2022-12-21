@@ -120,7 +120,7 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 	//-----------------------
 	// HP‚Ì¶¬
 	//-----------------------
-	m_pHP = CHP::Create(D3DXVECTOR3(0.0f, 50.0f, 200.0f), 200.0f, 10.0f);
+	m_pHP = CHP::Create(D3DXVECTOR3(1000.0f, 670.0f, 0.0f), 500.0f, 30.0f);
 	m_pHP->SetLife(m_fLife, m_fRemLife);	//HP‚Ìİ’è
 
 	return S_OK;
