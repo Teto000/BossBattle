@@ -32,6 +32,8 @@ HRESULT CHP::Init(D3DXVECTOR3 pos)
 {
 	CGauge::Init(pos);
 
+	CGauge::SetType(m_type);
+
 	return S_OK;
 }
 
@@ -62,7 +64,7 @@ void CHP::Draw()
 //==========================
 // ¶¬
 //==========================
-CHP* CHP::Create(D3DXVECTOR3 pos, float fWidth, float fHeight)
+CHP* CHP::Create(D3DXVECTOR3 pos, float fWidth, float fHeight, HPTYPE type)
 {
 	CHP *pHP = nullptr;
 
@@ -77,6 +79,7 @@ CHP* CHP::Create(D3DXVECTOR3 pos, float fWidth, float fHeight)
 		pHP->m_pos = pos;			//ˆÊ’u
 		pHP->m_fWidth = fWidth;		//•
 		pHP->m_fHeight = fHeight;	//‚‚³
+		pHP->m_type = type;			//Ží—Þ
 
 		//‰Šú‰»
 		pHP->Init(D3DXVECTOR3(pos));

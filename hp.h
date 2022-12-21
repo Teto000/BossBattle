@@ -18,6 +18,14 @@
 class CHP : public CGauge
 {
 public:
+	enum HPTYPE
+	{
+		HPTYPE_NONE = 0,
+		HPTYPE_PLAYER,
+		HPTYPE_ENEMY,
+		HPTYPE_MAX
+	};
+
 	CHP();				//コンストラクタ
 	~CHP() override;	//デストラクタ
 
@@ -32,7 +40,13 @@ public:
 	//------------------
 	// 静的メンバ関数
 	//------------------
-	static CHP* Create(D3DXVECTOR3 pos, float fWidth, float fHeight);
+	static CHP* Create(D3DXVECTOR3 pos, float fWidth, float fHeight, HPTYPE type);
+
+private:
+	//------------------
+	// メンバ変数
+	//------------------
+	HPTYPE m_type;	//種類
 };
 
 #endif
