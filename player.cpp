@@ -47,6 +47,7 @@ CPlayer::CPlayer() : CObject(0)
 	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//大きさ
 	m_nNumCombo = 0;							//コンボ数
 	m_status.nComboValue = 0;					//コンボの加算値
+	m_nCntModeTime = 0;							//モード終了までの時間を数える
 	fSizeWidth = 0.0f;							//サイズ(幅)
 	fSizeDepth = 0.0f;							//サイズ(奥行き)
 	m_bDamage = false;							//ダメージを与えた
@@ -139,9 +140,9 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	// HPの生成
 	//--------------------
 	{
-		//D3DXVECTOR3 hpPos(300.0f, 50.0f, 0.0f);
-		//m_pHP = CHP::Create(hpPos, 500.0f, 30.0f, CHP::HPTYPE_PLAYER);
-		//m_pHP->SetLife(m_status.fLife, m_status.fRemLife);	//HPの設定
+		D3DXVECTOR3 hpPos(300.0f, 50.0f, 0.0f);
+		m_pHP = CHP::Create(hpPos, 500.0f, 30.0f, CHP::HPTYPE_PLAYER);
+		m_pHP->SetLife(m_status.fLife, m_status.fRemLife);	//HPの設定
 	}
 
 	//--------------------
@@ -970,6 +971,21 @@ void CPlayer::ChangeMode()
 		break;
 	default:
 		break;
+	}
+
+	//-------------------------------
+	// モードのリセット処理
+	//-------------------------------
+	if (m_battleMode != BATTLEMODE_NONE)
+	{//通常モード以外なら
+		m_nCntModeTime++;
+
+		if (m_nCntModeTime >= nResetModeTime)
+		{//一定時間が経過したら
+			//通常モードに戻す
+			m_battleMode = BATTLEMODE_NONE;
+			m_nCntModeTime = 0;
+		}
 	}
 }
 

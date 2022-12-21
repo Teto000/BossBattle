@@ -148,6 +148,7 @@ private:
 	static const int nMaxLine = 12;				//線の最大数
 	static const int nWheelRotValue = 10;		//タイヤの回転量
 	static const int nSwordNumber = 4;			//剣モデルの番号
+	static const int nResetModeTime = 600;		//モードチェンジ終了までの時間
 	static const float fDefaultAttack;			//基本の攻撃力
 	static const float fDefaultSpeed;			//基本の速度
 
@@ -165,6 +166,7 @@ private:
 	D3DXVECTOR3 m_worldMin;		//ワールド上の最大値
 	D3DXVECTOR3	m_worldMax;		//ワールド上の最小値
 	int m_nNumCombo;			//コンボ数
+	int m_nCntModeTime;			//モード終了までの時間を数える
 	float fSizeWidth;			//サイズ(幅)
 	float fSizeDepth;			//サイズ(奥行き)
 	float m_rotWheel;			//タイヤの回転量
