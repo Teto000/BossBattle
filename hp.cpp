@@ -85,6 +85,7 @@ CHP* CHP::Create(D3DXVECTOR3 pos, float fWidth, float fHeight, HPTYPE type)
 
 		//‰Šú‰»
 		pHP->Init(D3DXVECTOR3(pos));
+		pHP->SetObjType(OBJTYPE_GAUGE);
 	}
 
 	return pHP;

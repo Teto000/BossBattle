@@ -89,6 +89,7 @@ CFream* CFream::Create(D3DXVECTOR3 pos, float fWidth, float fHeight)
 
 		//‰Šú‰»
 		pFream->Init(D3DXVECTOR3(pos));
+		pFream->SetObjType(OBJTYPE_GAUGE);
 	}
 
 	return pFream;

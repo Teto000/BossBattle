@@ -85,7 +85,7 @@ HRESULT CGame::Init()
 	//メッシュフィールドの生成
 	m_pMeshField = CMeshField::Create();
 
-	//スカイの生成
+	//空の生成
 	//m_pSky = CSky::Create();
 
 	//2Dポリゴンの生成

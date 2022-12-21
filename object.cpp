@@ -16,7 +16,6 @@
 //------------------------
 CObject* CObject::m_Top[nMaxPriority] = {};		//最初のオブジェクト
 CObject* CObject::m_Current[nMaxPriority] = {};	//最後のオブジェクト
-int CObject::m_nPriority = 0;					//プライオリティの番号
 
 //=============================
 // コンストラクタ
@@ -69,7 +68,7 @@ void CObject::ReleaseAll(bool bFinish)
 	{
 		if (!m_Top[i])
 		{//Topがnullなら
-			return;
+			continue;
 		}
 
 		CObject* pObj = m_Top[i];
@@ -117,11 +116,11 @@ void CObject::ReleaseAll(bool bFinish)
 //=============================
 void CObject::UpdateAll()
 {
-	for (int i = 0; i < OBJTYPE_MAX; i++)
+	for (int i = 0; i < nMaxPriority; i++)
 	{
 		if (!m_Top[i])
 		{//Topがnullなら
-			return;
+			continue;
 		}
 
 		CObject* pObj = m_Top[i];
@@ -132,7 +131,10 @@ void CObject::UpdateAll()
 			CObject* pObjNext = pObj->m_pNext;
 
 			//更新処理
-			pObj->Update();
+			if (pObj->m_bDeath != true)
+			{
+				pObj->Update();
+			}
 
 			//次のオブジェクトのアドレスを代入
 			pObj = pObjNext;
@@ -165,11 +167,11 @@ void CObject::UpdateAll()
 //=============================
 void CObject::DrawAll()
 {
-	for (int i = 0; i < OBJTYPE_MAX; i++)
+	for (int i = 0; i < nMaxPriority; i++)
 	{
 		if (!m_Top[i])
 		{//Topがnullなら
-			return;
+			continue;
 		}
 
 		CObject* pObj = m_Top[i];
@@ -221,13 +223,13 @@ void CObject::Death(CObject* pObj)
 	//----------------------------------
 	if (m_pPrev == nullptr)
 	{//自分が先頭なら
-	 //次のオブジェクトを先頭にする
+		//次のオブジェクトを先頭にする
 		m_Top[m_nPriority] = m_pNext;
 	}
 
 	if (m_pNext == nullptr)
 	{//自分が最後なら
-	 //次のオブジェクトを最後にする
+		//次のオブジェクトを最後にする
 		m_Current[m_nPriority] = m_pPrev;
 	}
 

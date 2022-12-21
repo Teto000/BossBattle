@@ -139,9 +139,9 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	// HP‚Ì¶¬
 	//--------------------
 	{
-		D3DXVECTOR3 hpPos(300.0f, 50.0f, 0.0f);
-		m_pHP = CHP::Create(hpPos, 500.0f, 30.0f, CHP::HPTYPE_PLAYER);
-		m_pHP->SetLife(m_status.fLife, m_status.fRemLife);	//HP‚Ìİ’è
+		//D3DXVECTOR3 hpPos(300.0f, 50.0f, 0.0f);
+		//m_pHP = CHP::Create(hpPos, 500.0f, 30.0f, CHP::HPTYPE_PLAYER);
+		//m_pHP->SetLife(m_status.fLife, m_status.fRemLife);	//HP‚Ìİ’è
 	}
 
 	//--------------------

@@ -67,14 +67,6 @@ HRESULT CGauge::Init(D3DXVECTOR3 pos)
 //==========================
 void CGauge::Uninit()
 {
-	//フレームの消去
-	if (m_pFream != nullptr)
-	{//nullじゃないなら
-		m_pFream->Uninit();
-		delete m_pFream;
-		m_pFream = nullptr;
-	}
-
 	CObject2D::Uninit();
 }
 
@@ -83,6 +75,7 @@ void CGauge::Uninit()
 //==========================
 void CGauge::Update()
 {
+
 	CObject2D::Update();
 
 	//HP減少時の処理
@@ -117,6 +110,14 @@ void CGauge::SubHP()
 		CObject2D::SetVtxCIE_Gauge(m_pos, -m_fWidth / 2,
 			-m_fWidth / 2 + m_fLength, -m_fHeight / 2, m_fHeight / 2);
 	}
+	else if (m_fRemLife <= 0 && m_fLife <= 0)
+	{//HPが0になった かつ 体力がなかったら
+		//フレームの消去
+		if (m_pFream != nullptr)
+		{//nullじゃないなら
+			m_pFream->Uninit();
+		}
+	}
 
 	//-------------------------
 	// HPごとの処理
@@ -143,16 +144,6 @@ void CGauge::SubHP()
 	{//エネミーのHPなら
 		//オレンジ色にする
 		CObject2D::SetColor(D3DXCOLOR(1.0f, 0.5f, 0.0f, 1.0f));
-	}
-
-	//-----------------------
-	// 体力が尽きた処理
-	//-----------------------
-	if (m_fRemLife <= 0 && m_fLife <= 0)
-	{//HPが0になった かつ 体力がなかったら
-		//HPバーの消去
-		Uninit();
-		return;
 	}
 }
 

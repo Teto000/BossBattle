@@ -115,7 +115,7 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 	//-----------------------
 	// 線の表示
 	//-----------------------
-	SetLine();
+	//SetLine();
 
 	//-----------------------
 	// HPの生成
@@ -174,7 +174,7 @@ void CEnemy::Update()
 	//-------------------------
 	// 線の更新
 	//-------------------------
-	UpdateLine();
+	//UpdateLine();
 
 	//----------------------------
 	// プレイヤーとの当たり判定
@@ -196,6 +196,12 @@ void CEnemy::Update()
 	if (m_fLife <= 0)
 	{//体力が尽きたら
 		CGame::SetEnemyState();	//敵が死んだ状態
+
+		//HPバーの消去
+		if (m_pHP != nullptr)
+		{//nullじゃないなら
+			m_pHP->Uninit();
+		}
 
 		//消去
 		Uninit();
