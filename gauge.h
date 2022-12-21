@@ -13,6 +13,11 @@
 #include "object2D.h"
 
 //--------------------------------
+// 前方宣言
+//--------------------------------
+class CFream;	//フレーム処理
+
+//--------------------------------
 // ゲージクラス
 //--------------------------------
 class CGauge : public CObject2D
@@ -57,6 +62,7 @@ protected:
 	float m_fHeight;	//高さ
 	float m_fLength;	//HPバーの長さ
 	GAUGETYPE m_type;	//種類
+	CFream* m_pFream;	//フレーム
 };
 
 #endif

@@ -1,6 +1,6 @@
 //===================================================
 //
-// HPの処理
+// ゲージのフレーム処理
 // Author : Sato Teruto
 //
 //===================================================
@@ -8,21 +8,19 @@
 //-----------------------
 // インクルード
 //-----------------------
-#include "hp.h"
 #include "fream.h"
 
 //==========================
 // コンストラクタ
 //==========================
-CHP::CHP() : CGauge(0)
+CFream::CFream() : CObject2D(0)
 {
-
 }
 
 //==========================
 // デストラクタ
 //==========================
-CHP::~CHP()
+CFream::~CFream()
 {
 
 }
@@ -30,11 +28,18 @@ CHP::~CHP()
 //==========================
 // 初期化
 //==========================
-HRESULT CHP::Init(D3DXVECTOR3 pos)
+HRESULT CFream::Init(D3DXVECTOR3 pos)
 {
-	CGauge::Init(pos);
+	CObject2D::Init(pos);
 
-	CGauge::SetType(m_type);
+	//大きさの設定
+	CObject2D::SetSize(m_fWidth, m_fHeight);
+
+	//色の設定
+	CObject2D::SetColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
+
+	//テクスチャの設定
+	CObject2D::SetTexture(CTexture::TEXTURE_NONE);
 
 	return S_OK;
 }
@@ -42,50 +47,49 @@ HRESULT CHP::Init(D3DXVECTOR3 pos)
 //==========================
 // 終了
 //==========================
-void CHP::Uninit()
+void CFream::Uninit()
 {
-	CGauge::Uninit();
+	CObject2D::Uninit();
 }
 
 //==========================
 // 更新
 //==========================
-void CHP::Update()
+void CFream::Update()
 {
-	CGauge::Update();
+	CObject2D::Update();
 }
 
 //==========================
 // 描画
 //==========================
-void CHP::Draw()
+void CFream::Draw()
 {
-	CGauge::Draw();
+	CObject2D::Draw();
 }
 
 //==========================
 // 生成
 //==========================
-CHP* CHP::Create(D3DXVECTOR3 pos, float fWidth, float fHeight, HPTYPE type)
+CFream* CFream::Create(D3DXVECTOR3 pos, float fWidth, float fHeight)
 {
-	CHP *pHP = nullptr;
+	CFream *pFream = nullptr;
 
 	//----------------------------------
 	// ポリゴンの生成と初期化
 	//----------------------------------
-	pHP = new CHP;	//生成
+	pFream = new CFream;	//生成
 
-	if (pHP != nullptr)
+	if (pFream != nullptr)
 	{//NULLチェック
 		//変数に代入
-		pHP->m_pos = pos;			//位置
-		pHP->m_fWidth = fWidth;		//幅
-		pHP->m_fHeight = fHeight;	//高さ
-		pHP->m_type = type;			//種類
+		pFream->m_pos = pos;			//位置
+		pFream->m_fWidth = fWidth;		//幅
+		pFream->m_fHeight = fHeight;	//高さ
 
 		//初期化
-		pHP->Init(D3DXVECTOR3(pos));
+		pFream->Init(D3DXVECTOR3(pos));
 	}
 
-	return pHP;
+	return pFream;
 }

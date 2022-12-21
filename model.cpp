@@ -170,8 +170,8 @@ void CModel::Draw(D3DMATRIX* mtxPlayer)
 
 	for (int nCntMat = 0; nCntMat < (int)m_nNumMat; nCntMat++)
 	{
-		if (nCntMat == 4 && CGame::GetPlayer())
-		{//剣のマテリアル & プレイヤーがnullじゃないなら
+		if (nCntMat == CGame::GetPlayer()->GetSwordNumber())
+		{//剣のマテリアルなら
 			if (CGame::GetPlayer()->GetMode() == CPlayer::BATTLEMODE_ATTACK)
 			{//アタックモードのとき
 				//マテリアルの色の設定

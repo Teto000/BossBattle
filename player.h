@@ -117,6 +117,7 @@ public:
 	PLAYER_STATUS GetStatus()		   { return m_status; }			//ステータスの取得
 	BATTLEMODE GetMode()			   { return m_battleMode; }		//バトルモードの取得
 	MOTION_TYPE GetMotion()			   { return m_type; }			//モーションの種類の取得
+	const int GetSwordNumber()		   { return nSwordNumber; }		//剣モデルの番号を取得
 	bool GetCollisionPlayer();	//当たり判定の取得
 
 	//----------------

@@ -9,6 +9,7 @@
 // インクルード
 //-----------------------
 #include "gauge.h"
+#include "fream.h"
 
 //==========================
 // コンストラクタ
@@ -24,6 +25,7 @@ CGauge::CGauge(int nPriority) : CObject2D(nPriority)
 	m_fWidth = 0.0f;	//幅
 	m_fHeight = 0.0f;	//高さ
 	m_fLength = 0.0f;	//HPバーの長さ
+	m_pFream = nullptr;	//フレーム
 }
 
 //==========================
@@ -52,6 +54,11 @@ HRESULT CGauge::Init(D3DXVECTOR3 pos)
 
 	CObject2D::SetTexture(CTexture::TEXTURE_NONE);	//テクスチャの設定
 
+	//---------------------------
+	// フレームの生成
+	//---------------------------
+	m_pFream = CFream::Create(m_pos, m_fWidth + 30.0f, m_fHeight + 30.0f);
+
 	return S_OK;
 }
 
@@ -60,6 +67,14 @@ HRESULT CGauge::Init(D3DXVECTOR3 pos)
 //==========================
 void CGauge::Uninit()
 {
+	//フレームの消去
+	if (m_pFream != nullptr)
+	{//nullじゃないなら
+		m_pFream->Uninit();
+		delete m_pFream;
+		m_pFream = nullptr;
+	}
+
 	CObject2D::Uninit();
 }
 
@@ -108,13 +123,7 @@ void CGauge::SubHP()
 	//-------------------------
 	if (m_type == GAUGETYPE_PLAYER)
 	{//プレイヤーのHPなら
-		if (m_fRemLife <= 0 && m_fLife <= 0)
-		{//HPが0になった かつ 体力がなかったら
-			//HPバーの消去
-			Uninit();
-			return;
-		}
-		else if (m_fRemLife <= 20)
+		if (m_fRemLife <= 20)
 		{//HPが20%以下になったら
 			//赤色にする
 			CObject2D::SetColor(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
@@ -134,13 +143,16 @@ void CGauge::SubHP()
 	{//エネミーのHPなら
 		//オレンジ色にする
 		CObject2D::SetColor(D3DXCOLOR(1.0f, 0.5f, 0.0f, 1.0f));
+	}
 
-		if (m_fRemLife <= 0 && m_fLife <= 0)
-		{//HPが0になった かつ 体力がなかったら
-			//HPバーの消去
-			Uninit();
-			return;
-		}
+	//-----------------------
+	// 体力が尽きた処理
+	//-----------------------
+	if (m_fRemLife <= 0 && m_fLife <= 0)
+	{//HPが0になった かつ 体力がなかったら
+		//HPバーの消去
+		Uninit();
+		return;
 	}
 }
 

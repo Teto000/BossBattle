@@ -960,7 +960,7 @@ void CPlayer::ChangeMode()
 	switch (m_battleMode)
 	{
 	case BATTLEMODE_ATTACK:
-		SetAttack(fDefaultAttack * 2.0f);			//UŒ‚—Í‚Ì‹­‰»
+		SetAttack(fDefaultAttack * 5.0f);			//UŒ‚—Í‚Ì‹­‰»
 		break;
 	case BATTLEMODE_SPEED:
 		SetSpeed(fDefaultSpeed * 2.0f);				//‘¬“x‚Ì‹­‰»

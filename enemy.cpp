@@ -121,7 +121,7 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 	// HP‚Ì¶¬
 	//-----------------------
 	{
-		D3DXVECTOR3 hpPos(1000.0f, 670.0f, 0.0f);
+		D3DXVECTOR3 hpPos(980.0f, 50.0f, 0.0f);
 		m_pHP = CHP::Create(hpPos, 500.0f, 30.0f, CHP::HPTYPE_ENEMY);
 		m_pHP->SetLife(m_fLife, m_fRemLife);	//HP‚Ìİ’è
 	}

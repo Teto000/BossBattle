@@ -149,6 +149,9 @@
     <ClCompile Include="combo.cpp">
       <Filter>00_Main\Object\Object2D\Number</Filter>
     </ClCompile>
+    <ClCompile Include="fream.cpp">
+      <Filter>00_Main\Object\Object2D\Gauge</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -255,6 +258,9 @@
     </ClInclude>
     <ClInclude Include="combo.h">
       <Filter>00_Main\Object\Object2D\Number</Filter>
+    </ClInclude>
+    <ClInclude Include="fream.h">
+      <Filter>00_Main\Object\Object2D\Gauge</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
