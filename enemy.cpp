@@ -53,6 +53,7 @@ CEnemy::CEnemy() : CObject(0)
 	m_vtxMin = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//大きさの最小値
 	m_worldMin = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//ワールド上の最大値
 	m_worldMax = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//ワールド上の最小値
+	m_nMoveTime = 0;		//移動までの時間
 	m_fLife = 0.0f;			//体力
 	m_fRemLife = 0.0f;		//残り体力(%)
 	m_fMaxLife = 0.0f;		//最大体力
@@ -171,6 +172,45 @@ void CEnemy::Update()
 	//-------------------
 	SetMotion(true);
 
+	m_nMoveTime++;
+
+	//移動までの時間をカウント
+	if (m_nMoveTime >= 300)
+	{
+		//------------------------------
+		// プレイヤーの方を向く
+		//------------------------------
+		//プレイヤーの位置を取得
+		D3DXVECTOR3 playerPos(CGame::GetPlayer()->GetPosition());
+
+		//2点間の距離を求める
+		float X = m_pos.x - playerPos.x;
+		float Z = m_pos.z - playerPos.z;
+
+		//角度の設定
+		float angle = atan2f(X, Z);
+
+		//向きの設定
+		m_rot = D3DXVECTOR3(0.0f, angle, 0.0f);
+
+		//------------------------------
+		// プレイヤーに向かって移動
+		//------------------------------
+		//プレイヤーと敵のベクトルを求める
+		D3DXVECTOR3 vec(playerPos - m_pos);
+
+		//ベクトルの正規化
+		D3DXVec3Normalize(&vec, &vec);
+
+		//プレイヤーに向かって移動
+		m_pos += vec;
+
+		if (m_nMoveTime >= 600)
+		{
+			m_nMoveTime = 0;
+		}
+	}
+	
 	//-------------------------
 	// 線の更新
 	//-------------------------
