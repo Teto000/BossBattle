@@ -86,6 +86,7 @@ private:
 	void SetMotion(bool bLoop);	//モーションの設定
 	void SetLine();		//線の設置
 	void UpdateLine();	//線の更新
+	void Move();		//移動
 
 private:
 	//----------------

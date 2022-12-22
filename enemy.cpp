@@ -174,43 +174,10 @@ void CEnemy::Update()
 
 	m_nMoveTime++;
 
-	//------------------------------
-	// プレイヤーの方を向く
-	//------------------------------
-	//プレイヤーの位置を取得
-	D3DXVECTOR3 playerPos(CGame::GetPlayer()->GetPosition());
-
-	//2点間の距離を求める
-	float X = m_pos.x - playerPos.x;
-	float Z = m_pos.z - playerPos.z;
-
-	//角度の設定
-	float angle = atan2f(X, Z);
-
-	//向きの設定
-	m_rotDest = D3DXVECTOR3(0.0f, angle, 0.0f);
-	m_rot += (m_rotDest - m_rot) * 0.03f;
-
-	//移動までの時間をカウント
-	if (m_nMoveTime >= 300)
-	{
-		//------------------------------
-		// プレイヤーに向かって移動
-		//------------------------------
-		//プレイヤーと敵のベクトルを求める
-		D3DXVECTOR3 vec(playerPos - m_pos);
-
-		//ベクトルの正規化
-		D3DXVec3Normalize(&vec, &vec);
-
-		//プレイヤーに向かって移動
-		m_pos += vec * 1.5f;
-
-		if (m_nMoveTime >= 600)
-		{
-			m_nMoveTime = 0;
-		}
-	}
+	//------------------------
+	// 敵の移動
+	//------------------------
+	Move();
 	
 	//-------------------------
 	// 線の更新
@@ -481,4 +448,77 @@ void CEnemy::SubLife(float fDamage)
 
 	//HPの設定
 	m_pHP->SetLife(m_fLife, m_fRemLife);
+}
+
+//========================
+// 移動
+//========================
+void CEnemy::Move()
+{
+	//------------------------------
+	// プレイヤーの方を向く
+	//------------------------------
+	//プレイヤーの位置を取得
+	D3DXVECTOR3 playerPos(CGame::GetPlayer()->GetPosition());
+
+	//2点間の距離を求める
+	float X = m_pos.x - playerPos.x;
+	float Z = m_pos.z - playerPos.z;
+
+	//角度の設定
+	float angle = atan2f(X, Z);
+
+	//向きの設定
+	m_rotDest = D3DXVECTOR3(0.0f, angle, 0.0f);
+
+	//-------------------------------
+	// 目的の角度の正規化
+	//-------------------------------
+	if (m_rotDest.y - m_rot.y > D3DX_PI)
+	{//回転したい角度が180以上なら
+		m_rotDest.y -= D3DX_PI * 2;
+	}
+	else if (m_rotDest.y - m_rot.y < -D3DX_PI)
+	{//回転したい角度が-180以下なら
+		m_rotDest.y += D3DX_PI * 2;
+	}
+
+	//-------------------------------
+	// 目的の角度まで回転する
+	//-------------------------------
+	m_rot.y += (m_rotDest.y - m_rot.y) * 0.03f;	//減衰処理
+
+	//-------------------------------
+	// 角度の正規化
+	//-------------------------------
+	if (m_rot.y > D3DX_PI)
+	{//角度が180以上なら
+		m_rot.y -= D3DX_PI * 2;
+	}
+	else if (m_rot.y < -D3DX_PI)
+	{//角度が-180以下なら
+		m_rot.y += D3DX_PI * 2;
+	}
+
+	//移動までの時間をカウント
+	if (m_nMoveTime >= 300)
+	{
+		//------------------------------
+		// プレイヤーに向かって移動
+		//------------------------------
+		//プレイヤーと敵のベクトルを求める
+		D3DXVECTOR3 vec(playerPos - m_pos);
+
+		//ベクトルの正規化
+		D3DXVec3Normalize(&vec, &vec);
+
+		//プレイヤーに向かって移動
+		m_pos += vec * 1.5f;
+
+		//移動後一定時間でカウントをリセット
+		if (m_nMoveTime >= 800)
+		{
+			m_nMoveTime = 0;
+		}
+	}
 }
