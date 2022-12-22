@@ -246,33 +246,36 @@ void CPlayer::Update()
 		}
 	}
 
-	if (!CGame::GetFinish() && !m_bStyle)
-	{//終了フラグが立っていない & スタイル表示中じゃないなら
-		//-------------------------
-		// 移動
-		//-------------------------
-		// ジョイパッドでの操作
-		CInputJoypad* joypad = CApplication::GetJoypad();
+	if (!CGame::GetFinish())
+	{//終了フラグが立っていないなら
+		if (!m_bStyle)
+		{//スタイル表示中じゃないなら
+			//-------------------------
+			// 移動
+			//-------------------------
+			// ジョイパッドでの操作
+			CInputJoypad* joypad = CApplication::GetJoypad();
 
-		if (m_type != MOTION_TYPE_ATTACK)
-		{//攻撃中じゃないなら
-			if (!joypad->IsJoyPadUse(0))
-			{//ジョイパッドが使われていないなら
-				MoveKeyboard(DIK_W, DIK_S, DIK_A, DIK_D);	//キーボード
+			if (m_type != MOTION_TYPE_ATTACK)
+			{//攻撃中じゃないなら
+				if (!joypad->IsJoyPadUse(0))
+				{//ジョイパッドが使われていないなら
+					MoveKeyboard(DIK_W, DIK_S, DIK_A, DIK_D);	//キーボード
+				}
+				else
+				{
+					MoveJoypad();	//ジョイパッド
+				}
 			}
-			else
-			{
-				MoveJoypad();	//ジョイパッド
-			}
+
+			//タイヤの回転
+			m_pModel[0]->SetRotX(m_rotWheel);
+
+			//-------------------------
+			// 攻撃処理
+			//-------------------------
+			Attack();
 		}
-
-		//タイヤの回転
-		m_pModel[0]->SetRotX(m_rotWheel);
-
-		//-------------------------
-		// 攻撃処理
-		//-------------------------
-		Attack();
 
 		//-------------------------
 		// モードチェンジ
