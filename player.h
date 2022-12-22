@@ -15,10 +15,11 @@
 //--------------------------------
 // 前方宣言
 //--------------------------------
-class CModel;	//モデル
-class CLine;	//ライン
-class CHP;		//HP
-class CCombo;	//コンボ
+class CModel;		//モデル
+class CLine;		//ライン
+class CHP;			//HP
+class CCombo;		//コンボ
+class CStyleShift;	//スタイルシフト
 
 //--------------------------------
 // マクロ定義
@@ -75,14 +76,14 @@ public:
 		MOTION_TYPE_MAX
 	};
 
-	//プレイヤーのモード
-	enum BATTLEMODE
+	//戦闘スタイル
+	enum BATTLESTYLE
 	{
-		BATTLEMODE_NONE = 0,	//通常
-		BATTLEMODE_ATTACK,		//攻撃
-		BATTLEMODE_SPEED,		//速度
-		BATTLEMODE_COMBO,		//連撃
-		BATTLEMODE_MAX
+		BATTLESTYLE_NONE = 0,	//通常
+		BATTLESTYLE_ATTACK,		//攻撃
+		BATTLESTYLE_SPEED,		//速度
+		BATTLESTYLE_COMBO,		//連撃
+		BATTLESTYLE_MAX
 	};
 
 	CPlayer();				//コンストラクタ
@@ -115,7 +116,7 @@ public:
 	D3DXMATRIX GetmtxWorld()		   { return m_mtxWorld; }		//ワールドマトリックスの取得
 	CModel* GetModel(int nNum)		   { return m_pModel[nNum]; }	//モデルの取得
 	PLAYER_STATUS GetStatus()		   { return m_status; }			//ステータスの取得
-	BATTLEMODE GetMode()			   { return m_battleMode; }		//バトルモードの取得
+	BATTLESTYLE GetStyle()			   { return m_battleStyle; }		//バトルモードの取得
 	MOTION_TYPE GetMotion()			   { return m_type; }			//モーションの種類の取得
 	const int GetSwordNumber()		   { return nSwordNumber; }		//剣モデルの番号を取得
 	bool GetCollisionPlayer();	//当たり判定の取得
@@ -171,10 +172,12 @@ private:
 	float fSizeDepth;			//サイズ(奥行き)
 	float m_rotWheel;			//タイヤの回転量
 	bool m_bDamage;				//ダメージを与えた
+	bool m_bStyle;				//スタイルを表示したか
 	PLAYER_STATUS m_status;		//ステータス
-	BATTLEMODE m_battleMode;	//バトルモード
+	BATTLESTYLE m_battleStyle;	//バトルモード
 	CHP*  m_pHP;				//HP
 	CCombo* m_pCombo;			//コンボ
+	CStyleShift* m_pStyleShift;	//スタイルシフト
 
 	/* ↓ モデル情報 ↓ */
 	CModel*  m_pModel[MAX_PARTS];		//モデル

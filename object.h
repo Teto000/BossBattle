@@ -35,6 +35,7 @@ public:
 		OBJTYPE_MESHORBIT,	//軌跡
 		OBJTYPE_GAUGE,		//ゲージ
 		OBJTYPE_NUMBER,		//数値
+		OBJTYPE_STYLESHIFT,	//スタイルシフト
 		OBJTYPE_MAX,
 	};
 

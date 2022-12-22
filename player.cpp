@@ -25,6 +25,7 @@
 #include "enemy.h"
 #include "hp.h"
 #include "combo.h"
+#include "style_shift.h"
 
 //------------------------
 // 静的メンバ変数宣言
@@ -50,11 +51,13 @@ CPlayer::CPlayer() : CObject(0)
 	m_nCntModeTime = 0;							//モード終了までの時間を数える
 	fSizeWidth = 0.0f;							//サイズ(幅)
 	fSizeDepth = 0.0f;							//サイズ(奥行き)
-	m_bDamage = false;							//ダメージを与えた
+	m_bDamage = false;							//ダメージを与えたか
+	m_bStyle = false;							//スタイルを表示したか
 	m_type = MOTION_TYPE_IDOL;					//現在のモーション
-	m_battleMode = BATTLEMODE_NONE;				//バトルモード
+	m_battleStyle = BATTLESTYLE_NONE;			//バトルモード
 	m_pHP = nullptr;							//HP
 	m_pCombo = nullptr;							//コンボ
+	m_pStyleShift = nullptr;					//スタイルシフト
 
 	//ステータス
 	m_status.nAttack = 0;			//攻撃力
@@ -174,6 +177,11 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	// コンボ数表示
 	//-----------------------
 	m_pCombo = CCombo::Create(D3DXVECTOR3(1000.0f, 360.0f, 0.0f), m_nNumCombo);
+
+	//-----------------------
+	// スタイルの表示
+	//-----------------------
+	m_pStyleShift = CStyleShift::Create(D3DXVECTOR3(m_pos.x + 100.0f, m_pos.y + 50.0f, m_pos.z));
 
 	return S_OK;
 }
@@ -932,20 +940,39 @@ void CPlayer::Attack()
 //===========================
 void CPlayer::ChangeMode()
 {
-	//-------------------------------
-	// モードの切り替え
-	//-------------------------------
-	if (CInputKeyboard::Trigger(DIK_1))
-	{
-		m_battleMode = BATTLEMODE_ATTACK;
+	if (CInputKeyboard::Press(DIK_Z))
+	{//Zキーが押されたとき
+		if (!m_bStyle)
+		{//スタイルが表示されていないなら
+			//スタイルを表示
+			m_pStyleShift->SetStyle(true);
+			m_bStyle = true;	//スタイルを表示している状態
+		}
+
+		//-------------------------------
+		// スタイルの切り替え
+		//-------------------------------
+		if (CInputKeyboard::Trigger(DIK_1))
+		{
+			m_battleStyle = BATTLESTYLE_ATTACK;
+		}
+		else if (CInputKeyboard::Trigger(DIK_2))
+		{
+			m_battleStyle = BATTLESTYLE_SPEED;
+		}
+		else if (CInputKeyboard::Trigger(DIK_3))
+		{
+			m_battleStyle = BATTLESTYLE_COMBO;
+		}
 	}
-	else if (CInputKeyboard::Trigger(DIK_2))
+	else if (CInputKeyboard::Release(DIK_Z))
 	{
-		m_battleMode = BATTLEMODE_SPEED;
-	}
-	else if (CInputKeyboard::Trigger(DIK_3))
-	{
-		m_battleMode = BATTLEMODE_COMBO;
+		if (m_bStyle && m_pStyleShift)
+		{//スタイルが表示されている & nullじゃないなら
+			//表示を消す
+			m_pStyleShift->SetStyle(false);
+			m_bStyle = false;	//スタイルを表示していない状態
+		}
 	}
 
 	//-------------------------------
@@ -958,15 +985,15 @@ void CPlayer::ChangeMode()
 	//-------------------------------
 	// モードごとの処理
 	//-------------------------------
-	switch (m_battleMode)
+	switch (m_battleStyle)
 	{
-	case BATTLEMODE_ATTACK:
+	case BATTLESTYLE_ATTACK:
 		SetAttack(fDefaultAttack * 5.0f);			//攻撃力の強化
 		break;
-	case BATTLEMODE_SPEED:
+	case BATTLESTYLE_SPEED:
 		SetSpeed(fDefaultSpeed * 2.0f);				//速度の強化
 		break;
-	case BATTLEMODE_COMBO:
+	case BATTLESTYLE_COMBO:
 		SetComboValue(m_status.nComboValue * 2);	//コンボ加算の強化
 		break;
 	default:
@@ -976,14 +1003,14 @@ void CPlayer::ChangeMode()
 	//-------------------------------
 	// モードのリセット処理
 	//-------------------------------
-	if (m_battleMode != BATTLEMODE_NONE)
+	if (m_battleStyle != BATTLESTYLE_NONE)
 	{//通常モード以外なら
 		m_nCntModeTime++;
 
 		if (m_nCntModeTime >= nResetModeTime)
 		{//一定時間が経過したら
 			//通常モードに戻す
-			m_battleMode = BATTLEMODE_NONE;
+			m_battleStyle = BATTLESTYLE_NONE;
 			m_nCntModeTime = 0;
 		}
 	}

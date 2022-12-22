@@ -172,16 +172,16 @@ void CModel::Draw(D3DMATRIX* mtxPlayer)
 	{
 		if (nCntMat == CGame::GetPlayer()->GetSwordNumber())
 		{//剣のマテリアルなら
-			if (CGame::GetPlayer()->GetMode() == CPlayer::BATTLEMODE_ATTACK)
+			if (CGame::GetPlayer()->GetStyle() == CPlayer::BATTLESTYLE_ATTACK)
 			{//アタックモードのとき
 				//マテリアルの色の設定
 				pMat[nCntMat].MatD3D.Diffuse = D3DXCOLOR(1.0f, 0.0f, 0.0f, 0.7f);
 			}
-			else if (CGame::GetPlayer()->GetMode() == CPlayer::BATTLEMODE_SPEED)
+			else if (CGame::GetPlayer()->GetStyle() == CPlayer::BATTLESTYLE_SPEED)
 			{//スピードモードのとき
 				pMat[nCntMat].MatD3D.Diffuse = D3DXCOLOR(0.0f, 0.0f, 1.0f, 0.7f);
 			}
-			else if (CGame::GetPlayer()->GetMode() == CPlayer::BATTLEMODE_COMBO)
+			else if (CGame::GetPlayer()->GetStyle() == CPlayer::BATTLESTYLE_COMBO)
 			{//コンボモードのとき
 				pMat[nCntMat].MatD3D.Diffuse = D3DXCOLOR(0.0f, 1.0f, 0.0f, 0.7f);
 			}

@@ -53,7 +53,7 @@ public:
 	float GetWidth() override { return m_fWidth; }			//•‚Ìæ“¾
 	float GetHeight() override { return m_fHeight; }		//‚‚³‚Ìæ“¾
 
-private:
+protected:
 	//----------------
 	// ƒƒ“ƒo•Ï”
 	//----------------

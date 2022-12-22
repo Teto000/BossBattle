@@ -152,6 +152,9 @@
     <ClCompile Include="fream.cpp">
       <Filter>00_Main\Object\Object2D\Gauge</Filter>
     </ClCompile>
+    <ClCompile Include="style_shift.cpp">
+      <Filter>00_Main\Object\Billboard</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -261,6 +264,9 @@
     </ClInclude>
     <ClInclude Include="fream.h">
       <Filter>00_Main\Object\Object2D\Gauge</Filter>
+    </ClInclude>
+    <ClInclude Include="style_shift.h">
+      <Filter>00_Main\Object\Billboard</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
