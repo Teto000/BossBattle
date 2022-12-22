@@ -143,6 +143,14 @@ void CGame::Update()
 			//リザルト画面に移行
 			CApplication::GetFade()->SetFade(CApplication::MODE_RESULT);
 		}
+		else if (nCntFinish >= 120)
+		{//カウントが2秒以上(クリアの文字が消えたら)
+			if (CInputKeyboard::Trigger(DIK_RETURN))
+			{//ENTERキーが押されたら
+				//リザルト画面に移行
+				CApplication::GetFade()->SetFade(CApplication::MODE_RESULT);
+			}
+		}
 	}
 
 	//----------------------------
@@ -152,16 +160,4 @@ void CGame::Update()
 	{
 		m_pCamera->Update();
 	}
-
-	//----------------------------
-	// 画面遷移
-	//----------------------------
-	/*if (CInputKeyboard::Trigger(DIK_RETURN))
-	{
-		//リザルト画面に移行
-		CApplication::GetFade()->SetFade(CApplication::MODE_RESULT);
-
-		//SEの再生
-		CSound::PlaySound(CSound::SOUND_LABEL_SE_BUTTOM);
-	}*/
 }

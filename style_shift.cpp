@@ -33,8 +33,8 @@ CStyleShift::~CStyleShift()
 HRESULT CStyleShift::Init(D3DXVECTOR3 pos)
 {
 	//初期値の設定
-	m_fWidth = 80.0f;	//幅
-	m_fHeight = 80.0f;	//高さ
+	m_fWidth = 70.0f;	//幅
+	m_fHeight = 70.0f;	//高さ
 
 	CBillBoard::Init(pos);
 
@@ -51,15 +51,15 @@ HRESULT CStyleShift::Init(D3DXVECTOR3 pos)
 		break;
 
 	case STYLE_TYPE_SPEED:
-		m_col = D3DXCOLOR(0.0f, 0.0f, 1.0f, 0.0f);	//色
+		m_col = D3DXCOLOR(0.0f, 0.0f, 1.0f, 0.0f);
 		break;
 
 	case STYLE_TYPE_COMBO:
-		m_col = D3DXCOLOR(0.0f, 1.0f, 0.0f, 0.0f);	//色
+		m_col = D3DXCOLOR(0.0f, 1.0f, 0.0f, 0.0f);
 		break;
 
 	default:
-		m_col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f);	//色
+		m_col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f);
 		break;
 	}
 

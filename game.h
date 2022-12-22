@@ -48,12 +48,11 @@ public:
 	//------------------
 	// ゲッター
 	//------------------
-	static bool GetFinish() { return m_bFinish; }		//終了フラグを取得
-	static CCamera*	GetCamera() { return m_pCamera; }	//カメラの取得
-	static CPlayer*	GetPlayer() { return m_pPlayer; }	//プレイヤーの取得
-	static CEnemy*	GetEnemy() { return m_pEnemy; }		//エネミーの取得
-	static CMeshField*	GetMeshField()
-			{ return m_pMeshField; }	//メッシュフィールドの取得
+	static bool GetFinish()			   { return m_bFinish; }		//終了フラグを取得
+	static CCamera*	GetCamera()		   { return m_pCamera; }		//カメラの取得
+	static CPlayer*	GetPlayer()		   { return m_pPlayer; }		//プレイヤーの取得
+	static CEnemy*	GetEnemy()		   { return m_pEnemy; }			//エネミーの取得
+	static CMeshField*	GetMeshField() { return m_pMeshField; }		//メッシュフィールドの取得
 
 private:
 	//-------------------

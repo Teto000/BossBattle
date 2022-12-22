@@ -116,9 +116,10 @@ public:
 	D3DXMATRIX GetmtxWorld()		   { return m_mtxWorld; }		//ワールドマトリックスの取得
 	CModel* GetModel(int nNum)		   { return m_pModel[nNum]; }	//モデルの取得
 	PLAYER_STATUS GetStatus()		   { return m_status; }			//ステータスの取得
-	BATTLESTYLE GetStyle()			   { return m_battleStyle; }		//バトルモードの取得
+	BATTLESTYLE GetStyle()			   { return m_battleStyle; }	//バトルモードの取得
 	MOTION_TYPE GetMotion()			   { return m_type; }			//モーションの種類の取得
 	const int GetSwordNumber()		   { return nSwordNumber; }		//剣モデルの番号を取得
+	bool GetStyleState()			   { return m_bStyle; }			//スタイルの表示状態を取得
 	bool GetCollisionPlayer();	//当たり判定の取得
 
 	//----------------
