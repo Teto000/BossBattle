@@ -370,7 +370,7 @@ CPlayer* CPlayer::Create()
 	CPlayer *pPlayer = nullptr;
 
 	//----------------------------------
-	// ƒ|ƒŠƒSƒ“‚Ì¶¬‚Æ‰Šú‰»
+	// ¶¬‚Æ‰Šú‰»
 	//----------------------------------
 	pPlayer = new CPlayer;	//¶¬
 

@@ -83,10 +83,10 @@ HRESULT CGame::Init()
 	}
 
 	//メッシュフィールドの生成
-	m_pMeshField = CMeshField::Create();
+	//m_pMeshField = CMeshField::Create();
 
 	//空の生成
-	//m_pSky = CSky::Create();
+	m_pSky = CSky::Create(CTexture::TEXTURE_GROUND);
 
 	//2Dポリゴンの生成
 	m_pPolygon = CPolygon::Create(CPolygon::POLYGONTYPE_AIM);
