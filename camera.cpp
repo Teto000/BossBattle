@@ -194,6 +194,7 @@ void CCamera::Update(void)
 	//視点・注視点の表示
 	CDebugProc::Print("視点：%f,%f,%f", m_worldPosV.x, m_worldPosV.y, m_worldPosV.z);
 	CDebugProc::Print("注視点：%f,%f,%f", m_worldPosR.x, m_worldPosR.y, m_worldPosR.z);
+	CDebugProc::Print("回転：%f,%f,%f", m_rot.x, m_rot.y, m_rot.z);
 }
 
 //========================

@@ -174,25 +174,26 @@ void CEnemy::Update()
 
 	m_nMoveTime++;
 
+	//------------------------------
+	// プレイヤーの方を向く
+	//------------------------------
+	//プレイヤーの位置を取得
+	D3DXVECTOR3 playerPos(CGame::GetPlayer()->GetPosition());
+
+	//2点間の距離を求める
+	float X = m_pos.x - playerPos.x;
+	float Z = m_pos.z - playerPos.z;
+
+	//角度の設定
+	float angle = atan2f(X, Z);
+
+	//向きの設定
+	m_rotDest = D3DXVECTOR3(0.0f, angle, 0.0f);
+	m_rot += (m_rotDest - m_rot) * 0.03f;
+
 	//移動までの時間をカウント
 	if (m_nMoveTime >= 300)
 	{
-		//------------------------------
-		// プレイヤーの方を向く
-		//------------------------------
-		//プレイヤーの位置を取得
-		D3DXVECTOR3 playerPos(CGame::GetPlayer()->GetPosition());
-
-		//2点間の距離を求める
-		float X = m_pos.x - playerPos.x;
-		float Z = m_pos.z - playerPos.z;
-
-		//角度の設定
-		float angle = atan2f(X, Z);
-
-		//向きの設定
-		m_rot = D3DXVECTOR3(0.0f, angle, 0.0f);
-
 		//------------------------------
 		// プレイヤーに向かって移動
 		//------------------------------
@@ -203,7 +204,7 @@ void CEnemy::Update()
 		D3DXVec3Normalize(&vec, &vec);
 
 		//プレイヤーに向かって移動
-		m_pos += vec;
+		m_pos += vec * 1.5f;
 
 		if (m_nMoveTime >= 600)
 		{

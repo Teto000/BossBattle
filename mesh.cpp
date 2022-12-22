@@ -71,7 +71,7 @@ HRESULT CMesh::Init(D3DXVECTOR3 pos)
 	m_nNumVtx = (m_nNumDivision + 1) * (m_nNumDivision + 1);							//頂点数
 	m_nNumPolygon = m_nNumDivision * m_nNumDivision * 2 + (m_nNumDivision - 1) * 4;		//ポリゴン数
 	m_nNumIndex = (m_nNumDivision + 1) * 2 * m_nNumDivision + (m_nNumDivision - 1) * 2;	//インデックス数
-	m_fMaxWidth = 1200.0f;								//メッシュフィールドの最大幅
+	m_fMaxWidth = 2400.0f;								//メッシュフィールドの最大幅
 	m_fMeshWidth = (m_fMaxWidth / m_nNumDivision);		//メッシュフィールドの幅
 	m_fTexSize = (1.0f / m_nNumDivision);				//テクスチャの分割サイズ
 
