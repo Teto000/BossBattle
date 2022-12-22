@@ -26,6 +26,7 @@ public: /* 定義 */
 		TEXTURE_AIM,			//照準
 		TEXTURE_CLEAR,			//クリア
 		TEXTURE_NUMBER,			//数値
+		TEXTURE_SKY,			//空
 		TEXTURE_MAX,
 		TEXTURE_NONE,			//使用しない
 	};

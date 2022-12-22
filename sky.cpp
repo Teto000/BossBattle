@@ -84,27 +84,33 @@ HRESULT CSky::Init(D3DXVECTOR3 pos)
 	//----------------------------------
 	// 頂点情報の設定
 	//----------------------------------
-	float rotDiffZ = (D3DX_PI * 2.0f / (m_vertical - 1));	//Z方向の分割した一片
+	float rotDiffZ = (D3DX_PI * 2.0f / (m_vertical - 1));		//Z方向の分割した一片
 
 	for (int z = 0; z < m_vertical; z++)
 	{
 		float rotDiffX = (D3DX_PI * 2.0f / (m_vertical - 1));	//X方向の分割した一片
-		float rotZ = rotDiffZ * (z + 1);			//Zの角度を設定
+		float rotZ = rotDiffZ * z;						//Zの角度を設定
 
 		for (int x = 0; x < m_vertical; x++)
 		{
-			float rotX = rotDiffX * (x + 1);		//xの角度を設定
+			float rotX = rotDiffX * x;					//xの角度を設定
 
 			//頂点座標の設定
-			pVtx[0].pos.x = sinf(rotX) * sinf(rotZ) * 100.0f;
-			pVtx[0].pos.y = cosf(rotX) * 100.0f;
-			pVtx[0].pos.z = sinf(rotX) * cosf(rotZ) * 100.0f;
+			pVtx[0].pos.x = sinf(rotX) * sinf(rotZ) * 1000.0f;
+			pVtx[0].pos.y = cosf(rotX) * 1000.0f;
+			pVtx[0].pos.z = sinf(rotX) * cosf(rotZ) * 1000.0f;
 
 			//法線の設定
-			pVtx[0].nor = D3DXVECTOR3(cosf(rotX), 0.0f, sinf(rotX));
+			pVtx[0].nor = D3DXVECTOR3(sinf(rotX), 0.0f, cosf(rotZ));
 
 			//頂点カラーの設定
-			pVtx[0].col = D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f);
+			pVtx[0].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+
+			//テクスチャ座標の設定
+			/*pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
+			pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
+			pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
+			pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);*/
 
 			pVtx++;
 		}
@@ -265,70 +271,4 @@ CSky* CSky::Create(CTexture::TEXTURE texture)
 	}
 
 	return pSky;
-}
-
-//===========================
-// 頂点の法線を設定
-//===========================
-void CSky::SetVtxNor(VERTEX_3D* pVtx, WORD* pIdx)
-{
-	//--------------------------
-	// 頂点の位置を取得
-	//--------------------------
-	for (int nCnt = 0; nCnt < m_nNumIndex; nCnt++)
-	{//インデックス数分回す
-		m_VtxPos[nCnt] = pVtx[pIdx[nCnt]].pos;
-		//各頂点のベクトルを格納
-		m_VtxNor[pIdx[nCnt]] = pVtx[pIdx[nCnt]].nor;
-	}
-
-	//-----------------------------
-	// 頂点の法線ベクトルを設定
-	//-----------------------------
-	for (int nNumIdx = 0; nNumIdx < (m_nNumIndex - 2); nNumIdx++)
-	{
-		//ポリゴンの頂点の位置を取得
-		D3DXVECTOR3 P1 = m_VtxPos[nNumIdx + 0];
-		D3DXVECTOR3 P2 = m_VtxPos[nNumIdx + 1];
-		D3DXVECTOR3 P3 = m_VtxPos[nNumIdx + 2];
-
-		//縮退ポリゴンの除外
-		if (P1 == P2 || P2 == P3 || P3 == P1)
-		{
-			nNumIdx++;
-			continue;
-		}
-
-		//-------------------------
-		// 面法線ベクトルを計算
-		//-------------------------
-		D3DXVECTOR3 V1 = P2 - P1;
-		D3DXVECTOR3 V2 = P3 - P2;
-
-		//外積計算(3次元)
-		D3DXVec3Cross(&m_Normal, &V1, &V2);
-
-		//ベクトルの正規化
-		D3DXVec3Normalize(&m_Normal, &m_Normal);
-
-		//-------------------------
-		// 法線の向きを揃える
-		//-------------------------
-		if (nNumIdx % 2 != 0)
-		{//奇数なら
-			m_Normal *= -1;
-		}
-
-		//-------------------------
-		// 頂点ベクトルを計算
-		//-------------------------
-		//面法線ベクトルを加算
-		m_VtxNor[pIdx[nNumIdx]] += m_Normal;
-
-		//ベクトルの正規化
-		D3DXVec3Normalize(&m_VtxNor[pIdx[nNumIdx]], &m_VtxNor[pIdx[nNumIdx]]);
-
-		//ベクトルの設定
-		pVtx[pIdx[nNumIdx]].nor = m_VtxNor[pIdx[nNumIdx]];
-	}
 }
