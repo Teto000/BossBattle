@@ -177,7 +177,7 @@ private:
 	BATTLESTYLE m_battleStyle;	//バトルモード
 	CHP*  m_pHP;				//HP
 	CCombo* m_pCombo;			//コンボ
-	CStyleShift* m_pStyleShift;	//スタイルシフト
+	CStyleShift* m_pStyleShift[BATTLESTYLE_MAX];	//スタイルシフト
 
 	/* ↓ モデル情報 ↓ */
 	CModel*  m_pModel[MAX_PARTS];		//モデル

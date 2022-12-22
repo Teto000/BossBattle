@@ -57,7 +57,6 @@ CPlayer::CPlayer() : CObject(0)
 	m_battleStyle = BATTLESTYLE_NONE;			//バトルモード
 	m_pHP = nullptr;							//HP
 	m_pCombo = nullptr;							//コンボ
-	m_pStyleShift = nullptr;					//スタイルシフト
 
 	//ステータス
 	m_status.nAttack = 0;			//攻撃力
@@ -77,6 +76,12 @@ CPlayer::CPlayer() : CObject(0)
 	for (int i = 0; i < nMaxLine; i++)
 	{
 		m_pLine[i] = nullptr;
+	}
+
+	//スタイル
+	for (int i = 0; i < BATTLESTYLE_MAX; i++)
+	{
+		m_pStyleShift[i] = nullptr;
 	}
 
 	/* ↓ モーション情報 ↓ */
@@ -181,7 +186,16 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	//-----------------------
 	// スタイルの表示
 	//-----------------------
-	m_pStyleShift = CStyleShift::Create(D3DXVECTOR3(m_pos.x + 100.0f, m_pos.y + 50.0f, m_pos.z));
+	{
+		D3DXVECTOR3 firstPos(m_pos.x - 100.0f, m_pos.y + 180.0f, m_pos.z);
+		m_pStyleShift[0] = CStyleShift::Create(firstPos, CStyleShift::STYLE_TYPE_ATTACK);
+
+		D3DXVECTOR3 secondPos(m_pos.x, m_pos.y + 200.0f, m_pos.z);
+		m_pStyleShift[1] = CStyleShift::Create(secondPos, CStyleShift::STYLE_TYPE_SPEED);
+
+		D3DXVECTOR3 thirdPos(m_pos.x + 100.0f, m_pos.y + 180.0f, m_pos.z);
+		m_pStyleShift[2] = CStyleShift::Create(thirdPos, CStyleShift::STYLE_TYPE_COMBO);
+	}
 
 	return S_OK;
 }
@@ -944,8 +958,16 @@ void CPlayer::ChangeMode()
 	{//Zキーが押されたとき
 		if (!m_bStyle)
 		{//スタイルが表示されていないなら
-			//スタイルを表示
-			m_pStyleShift->SetStyle(true);
+			//------------------
+			// スタイルを表示
+			//------------------
+			for (int i = 0; i < BATTLESTYLE_MAX; i++)
+			{
+				if (m_pStyleShift[i])
+				{//nullじゃないなら
+					m_pStyleShift[i]->SetStyle(true);
+				}
+			}
 			m_bStyle = true;	//スタイルを表示している状態
 		}
 
@@ -969,8 +991,16 @@ void CPlayer::ChangeMode()
 	{
 		if (m_bStyle && m_pStyleShift)
 		{//スタイルが表示されている & nullじゃないなら
-			//表示を消す
-			m_pStyleShift->SetStyle(false);
+			//------------------
+			// 表示を消す
+			//------------------
+			for (int i = 0; i < BATTLESTYLE_MAX; i++)
+			{
+				if (m_pStyleShift[i])
+				{//nullじゃないなら
+					m_pStyleShift[i]->SetStyle(false);
+				}
+			}
 			m_bStyle = false;	//スタイルを表示していない状態
 		}
 	}

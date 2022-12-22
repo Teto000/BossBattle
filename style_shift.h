@@ -18,6 +18,15 @@
 class CStyleShift : public CBillBoard
 {
 public:
+	enum STYLE_TYPE
+	{
+		STYLE_TYPE_NONE = 0,
+		STYLE_TYPE_ATTACK,
+		STYLE_TYPE_SPEED,
+		STYLE_TYPE_COMBO,
+		STYLE_TYPE_MAX
+	};
+
 	CStyleShift();				//コンストラクタ
 	~CStyleShift() override;	//デストラクタ
 
@@ -37,13 +46,14 @@ public:
 	//------------------
 	// 静的メンバ関数
 	//------------------
-	static CStyleShift* Create(D3DXVECTOR3 pos);
+	static CStyleShift* Create(D3DXVECTOR3 pos, STYLE_TYPE type);
 
 private:
 	//------------------
 	// メンバ変数
 	//------------------
-	bool m_bFlash;	//明るくするか
+	bool m_bFlash;		//明るくするか
+	STYLE_TYPE m_type;	//スタイルの種類
 };
 
 #endif

@@ -33,20 +33,38 @@ CStyleShift::~CStyleShift()
 HRESULT CStyleShift::Init(D3DXVECTOR3 pos)
 {
 	//初期値の設定
-	m_fWidth = 100.0f;	//幅
-	m_fHeight = 100.0f;	//高さ
-	m_col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f);	//色
+	m_fWidth = 80.0f;	//幅
+	m_fHeight = 80.0f;	//高さ
 
 	CBillBoard::Init(pos);
 
 	//大きさの設定
 	CBillBoard::SetSize(m_fWidth, m_fHeight);
 
-	//色の設定
-	CBillBoard::SetColor(m_col);
-
 	//テクスチャの設定
 	CBillBoard::SetTexture(CTexture::TEXTURE_NONE);
+
+	switch (m_type)
+	{
+	case STYLE_TYPE_ATTACK:
+		m_col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 0.0f);	//色
+		break;
+
+	case STYLE_TYPE_SPEED:
+		m_col = D3DXCOLOR(0.0f, 0.0f, 1.0f, 0.0f);	//色
+		break;
+
+	case STYLE_TYPE_COMBO:
+		m_col = D3DXCOLOR(0.0f, 1.0f, 0.0f, 0.0f);	//色
+		break;
+
+	default:
+		m_col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f);	//色
+		break;
+	}
+
+	//色の設定
+	CBillBoard::SetColor(m_col);
 
 	return S_OK;
 }
@@ -88,7 +106,7 @@ void CStyleShift::Draw()
 //========================
 // 生成
 //========================
-CStyleShift* CStyleShift::Create(D3DXVECTOR3 pos)
+CStyleShift* CStyleShift::Create(D3DXVECTOR3 pos, STYLE_TYPE type)
 {
 	CStyleShift *pStyleShift = nullptr;
 
@@ -99,6 +117,9 @@ CStyleShift* CStyleShift::Create(D3DXVECTOR3 pos)
 
 	if (pStyleShift != nullptr)
 	{//NULLチェック
+		//メンバ変数に代入
+		pStyleShift->m_type = type;	//種類
+
 		//初期化
 		pStyleShift->Init(pos);
 		pStyleShift->SetObjType(OBJTYPE_STYLESHIFT);
@@ -121,11 +142,13 @@ void CStyleShift::SetStyle(bool flash)
 	switch (m_bFlash)
 	{
 	case true:
-		CBillBoard::SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f));
+		m_col.a = 0.5f;
 		break;
 
 	case false:
-		CBillBoard::SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
+		m_col.a = 0.0f;
 		break;
 	}
+
+	CBillBoard::SetColor(m_col);
 }
