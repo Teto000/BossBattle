@@ -36,6 +36,7 @@ public:
 	// セッター
 	//----------------
 	void SetPos(D3DXVECTOR3 pos) { m_pos = pos; }	//位置の設定
+	void SetRot(D3DXVECTOR3 rot) { m_rot = rot; }	//向きの設定
 	D3DXVECTOR3 AddMove(D3DXVECTOR3 move);			//移動量の加算
 	void SetSize(float fWidth, float fHeight);		//大きさの設定
 	void SetColor(D3DXCOLOR col); 					//色の設定

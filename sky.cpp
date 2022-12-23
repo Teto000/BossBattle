@@ -89,11 +89,11 @@ HRESULT CSky::Init(D3DXVECTOR3 pos)
 	for (int z = 0; z < m_vertical; z++)
 	{
 		float rotDiffX = (D3DX_PI * 2.0f / (m_vertical - 1));	//X方向の分割した一片
-		float rotZ = rotDiffZ * z;						//Zの角度を設定
+		float rotZ = rotDiffZ * z;		//Zの角度を設定
 
 		for (int x = 0; x < m_vertical; x++)
 		{
-			float rotX = rotDiffX * x;					//xの角度を設定
+			float rotX = rotDiffX * x;	//xの角度を設定
 
 			//頂点座標の設定
 			pVtx[0].pos.x = sinf(rotX) * sinf(rotZ) * 10000.0f;
@@ -104,7 +104,7 @@ HRESULT CSky::Init(D3DXVECTOR3 pos)
 			pVtx[0].nor = D3DXVECTOR3(sinf(rotX), 0.0f, cosf(rotZ));
 
 			//頂点カラーの設定
-			pVtx[0].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+			pVtx[0].col = D3DXCOLOR(0.6f, 0.8f, 0.9f, 1.0f);	//水色
 
 			//テクスチャ座標の設定
 			/*pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);

@@ -86,7 +86,7 @@ HRESULT CGame::Init()
 	m_pMeshField = CMeshField::Create();
 
 	//‹ó‚Ì¶¬
-	m_pSky = CSky::Create(CTexture::TEXTURE_SKY);
+	m_pSky = CSky::Create(CTexture::TEXTURE_NONE);
 
 	//2Dƒ|ƒŠƒSƒ“‚Ì¶¬
 	m_pPolygon = CPolygon::Create(CPolygon::POLYGONTYPE_AIM);

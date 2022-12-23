@@ -52,6 +52,7 @@ private:
 	//------------------
 	// メンバ変数
 	//------------------
+	D3DXVECTOR3 stylePos;
 	bool m_bFlash;		//明るくするか
 	STYLE_TYPE m_type;	//スタイルの種類
 };

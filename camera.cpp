@@ -298,6 +298,16 @@ void CCamera::Turn()
 	{//終了フラグが立ってるなら
 		m_rot.y -= m_TSPEED / 3;
 	}
+
+	//上下旋回の上限値追加
+	if (m_rot.x >= 1.2f)
+	{
+		m_rot.x = 1.2f;
+	}
+	else if (m_rot.x <= -0.3f)
+	{
+		m_rot.x = -0.3f;
+	}
 }
 
 //========================

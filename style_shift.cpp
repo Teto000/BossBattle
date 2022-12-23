@@ -10,13 +10,15 @@
 //------------------------
 #include "style_shift.h"
 #include "texture.h"
+#include "game.h"
+#include "player.h"
 
 //========================
 // コンストラクタ
 //========================
 CStyleShift::CStyleShift() : CBillBoard(0)
 {
-	
+	stylePos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 }
 
 //========================
@@ -35,8 +37,9 @@ HRESULT CStyleShift::Init(D3DXVECTOR3 pos)
 	//初期値の設定
 	m_fWidth = 70.0f;	//幅
 	m_fHeight = 70.0f;	//高さ
+	stylePos = pos;
 
-	CBillBoard::Init(pos);
+	CBillBoard::Init(stylePos);
 
 	//大きさの設定
 	CBillBoard::SetSize(m_fWidth, m_fHeight);
@@ -82,6 +85,7 @@ void CStyleShift::Uninit()
 //========================
 void CStyleShift::Update()
 {
+
 	CBillBoard::Update();
 
 	//-----------------------
@@ -93,6 +97,34 @@ void CStyleShift::Update()
 		CBillBoard::SetColor(m_col);
 	}
 
+	//-----------------------------
+	// プレイヤーの位置を参照
+	//-----------------------------
+	D3DXMATRIX playerMtx;
+
+	D3DXMatrixIdentity(&playerMtx);
+
+	if (CGame::GetPlayer())
+	{
+		playerMtx = CGame::GetPlayer()->GetmtxWorld();
+	}
+
+	D3DXVECTOR3 worldPos(0.0f, 0.0f, 0.0f);
+	D3DXVec3TransformCoord(&worldPos, &stylePos, &playerMtx);
+	CBillBoard::SetPos(worldPos);
+
+	//-----------------------------
+	// 向きの設定
+	//-----------------------------
+	/*D3DXVECTOR3 rot(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3 worldRot(0.0f, 0.0f, 0.0f);
+	D3DXMATRIX mtxRot;
+
+	D3DXMatrixRotationYawPitchRoll(&mtxRot, rot.y, rot.x, rot.z);
+	D3DXMatrixMultiply(&playerMtx, &playerMtx, &mtxRot);
+
+	D3DXVec3TransformCoord(&worldRot, &rot, &playerMtx);
+	CBillBoard::SetRot(worldRot);*/
 }
 
 //========================
