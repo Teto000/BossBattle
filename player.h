@@ -110,6 +110,7 @@ public:
 	// ゲッター
 	//----------------
 	D3DXVECTOR3 GetPosition() override { return m_pos; }			//位置の取得
+	D3DXVECTOR3 GetWorldPos();										//ワールド座標を取得
 	D3DXVECTOR3 GetRot()			   { return m_rot; }			//向きの取得
 	float GetWidth() override		   { return 0.0f; }				//幅の取得
 	float GetHeight() override		   { return 0.0f; }				//高さの取得

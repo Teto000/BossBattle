@@ -171,7 +171,7 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	//-----------------------
 	// 線の表示
 	//-----------------------
-	//SetLine();
+	SetLine();
 
 	//-----------------------
 	// モーションの読み込み
@@ -291,7 +291,7 @@ void CPlayer::Update()
 	//-------------------------
 	// 線の更新
 	//-------------------------
-	//UpdateLine();
+	UpdateLine();
 
 	//-------------------------
 	// 体力の減少
@@ -1137,14 +1137,29 @@ void CPlayer::UpdateLine()
 bool CPlayer::GetCollisionPlayer()
 {
 	//-----------------------------
+	// 行列を元に戻す
+	//-----------------------------
+	//ワールド座標を求める
+	D3DXVECTOR3 worldPos(0.0f, 0.0f, 0.0f);		//ワールド上の座標
+	D3DXVec3TransformCoord(&worldPos, &m_pos, &m_mtxWorld);
+
+	//逆行列を求める
+	D3DXMATRIX invMtxWorld;		//逆行列の値を入れる
+	D3DXMatrixInverse(&invMtxWorld, NULL, &m_mtxWorld);
+
+	//逆行列を使ってローカル座標を求める
+	D3DXVECTOR3 localPos(0.0f, 0.0f, 0.0f);		//ローカル上の座標
+	D3DXVec3TransformCoord(&localPos, &worldPos, &invMtxWorld);
+
+	//-----------------------------
 	// プレイヤーの端の設定
 	//-----------------------------
-	float fLeft = m_pos.x - (m_size.x / 2);		//プレイヤーの左端
-	float fRight = m_pos.x + (m_size.x / 2);	//プレイヤーの右端
-	float fTop = m_pos.y + (m_size.y / 2);		//プレイヤーの上端
-	float fBottom = m_pos.y - (m_size.y / 2);	//プレイヤーの下端
-	float fFront = m_pos.z - (m_size.z / 2);	//プレイヤーの前端
-	float fBack = m_pos.z + (m_size.z / 2);		//プレイヤーの後端
+	float fLeft = localPos.x - (m_size.x / 2);		//プレイヤーの左端
+	float fRight = localPos.x + (m_size.x / 2);	//プレイヤーの右端
+	float fTop = localPos.y + (m_size.y / 2);		//プレイヤーの上端
+	float fBottom = localPos.y - (m_size.y / 2);	//プレイヤーの下端
+	float fFront = localPos.z - (m_size.z / 2);	//プレイヤーの前端
+	float fBack = localPos.z + (m_size.z / 2);		//プレイヤーの後端
 
 	//-----------------------------
 	// 敵の情報を取得
@@ -1180,4 +1195,16 @@ bool CPlayer::GetCollisionPlayer()
 void CPlayer::AddCombo(int nNumber)
 {
 	m_nNumCombo = m_pCombo->AddNumber(nNumber);
+}
+
+//===========================
+// ワールド座標の取得
+//===========================
+D3DXVECTOR3 CPlayer::GetWorldPos()
+{
+	D3DXVECTOR3 worldPos(0.0f, 0.0f, 0.0f);
+
+	D3DXVec3TransformCoord(&worldPos, &m_pos, &m_mtxWorld);
+
+	return worldPos;
 }

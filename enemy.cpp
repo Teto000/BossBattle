@@ -177,7 +177,7 @@ void CEnemy::Update()
 	//------------------------
 	// 敵の移動
 	//------------------------
-	Move();
+	//Move();
 	
 	//-------------------------
 	// 線の更新
@@ -187,7 +187,7 @@ void CEnemy::Update()
 	//----------------------------
 	// プレイヤーとの当たり判定
 	//----------------------------
-	/*if (CGame::GetPlayer()->GetCollisionPlayer())
+	if (CGame::GetPlayer()->GetCollisionPlayer())
 	{//プレイヤーと当たっているなら
 		m_fLife--;	//体力の減少
 
@@ -196,7 +196,7 @@ void CEnemy::Update()
 
 		//HPの設定
 		m_pHP->SetLife(m_fLife, m_fRemLife);
-	}*/
+	}
 
 	//----------------------------
 	// 死亡時処理
