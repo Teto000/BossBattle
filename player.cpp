@@ -1131,10 +1131,11 @@ void CPlayer::UpdateLine()
 	}
 }
 
-//===========================
+//=================================
 // プレイヤーの当たり判定
-//===========================
-bool CPlayer::GetCollisionPlayer()
+// 引数：相手の位置、相手の大きさ
+//=================================
+bool CPlayer::GetCollisionPlayer(D3DXVECTOR3 targetPos, D3DXVECTOR3 targetSize)
 {
 	//-----------------------------
 	// 行列を元に戻す
@@ -1162,26 +1163,14 @@ bool CPlayer::GetCollisionPlayer()
 	float fBack = localPos.z + (m_size.z / 2);		//プレイヤーの後端
 
 	//-----------------------------
-	// 敵の情報を取得
-	//-----------------------------
-	D3DXVECTOR3 enemyPos(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	D3DXVECTOR3 enemySize(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-
-	if (CGame::GetEnemy() != nullptr)
-	{
-		enemyPos = CGame::GetEnemy()->GetPosition();	//位置
-		enemySize = CGame::GetEnemy()->GetSize();		//大きさ
-	}
-
-	//-----------------------------
 	// 当たり判定
 	//-----------------------------
-	if (enemyPos.x + enemySize.x >= fLeft
-		&& enemyPos.x - enemySize.x <= fRight
-		&& enemyPos.y + enemySize.y >= fTop
-		&& enemyPos.y - enemySize.y <= fBottom
-		&& enemyPos.z + enemySize.z >= fFront
-		&& enemyPos.z - enemySize.z <= fBack)
+	if (targetPos.x + targetSize.x >= fLeft
+		&& targetPos.x - targetSize.x <= fRight
+		&& targetPos.y + targetSize.y >= fTop
+		&& targetPos.y - targetSize.y <= fBottom
+		&& targetPos.z + targetSize.z >= fFront
+		&& targetPos.z - targetSize.z <= fBack)
 	{//敵とプレイヤーが当たった
 		return true;
 	}

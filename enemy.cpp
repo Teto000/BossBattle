@@ -187,7 +187,7 @@ void CEnemy::Update()
 	//----------------------------
 	// プレイヤーとの当たり判定
 	//----------------------------
-	if (CGame::GetPlayer()->GetCollisionPlayer())
+	if (CGame::GetPlayer()->GetCollisionPlayer(m_pos, m_size))
 	{//プレイヤーと当たっているなら
 		m_fLife--;	//体力の減少
 
