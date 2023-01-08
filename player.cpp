@@ -171,7 +171,7 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	//-----------------------
 	// 線の表示
 	//-----------------------
-	SetLine();
+	//SetLine();
 
 	//-----------------------
 	// モーションの読み込み
@@ -291,7 +291,7 @@ void CPlayer::Update()
 	//-------------------------
 	// 線の更新
 	//-------------------------
-	UpdateLine();
+	//UpdateLine();
 
 	//-------------------------
 	// 体力の減少
@@ -1069,7 +1069,8 @@ void CPlayer::SetRot()
 	//-------------------------------
 	// 目的の角度まで回転する
 	//-------------------------------
-	m_rot.y += (m_rotDest.y - m_rot.y) * 0.05f;	//減衰処理
+	//m_rot.y += (m_rotDest.y - m_rot.y) * 0.05f;	//減衰処理
+	m_rot.y = 2.355f;
 
 	//-------------------------------
 	// 角度の正規化
@@ -1135,7 +1136,8 @@ void CPlayer::UpdateLine()
 // プレイヤーの当たり判定
 // 引数：相手の位置、相手の大きさ
 //=================================
-bool CPlayer::GetCollisionPlayer(D3DXVECTOR3 targetPos, D3DXVECTOR3 targetSize)
+bool CPlayer::GetCollisionPlayer(D3DXVECTOR3 targetPos
+	, D3DXVECTOR3 targetSize, D3DXMATRIX targetMtx)
 {
 	//-----------------------------
 	// 行列を元に戻す
@@ -1156,21 +1158,28 @@ bool CPlayer::GetCollisionPlayer(D3DXVECTOR3 targetPos, D3DXVECTOR3 targetSize)
 	// プレイヤーの端の設定
 	//-----------------------------
 	float fLeft = localPos.x - (m_size.x / 2);		//プレイヤーの左端
-	float fRight = localPos.x + (m_size.x / 2);	//プレイヤーの右端
+	float fRight = localPos.x + (m_size.x / 2);		//プレイヤーの右端
 	float fTop = localPos.y + (m_size.y / 2);		//プレイヤーの上端
 	float fBottom = localPos.y - (m_size.y / 2);	//プレイヤーの下端
-	float fFront = localPos.z - (m_size.z / 2);	//プレイヤーの前端
+	float fFront = localPos.z - (m_size.z / 2);		//プレイヤーの前端
 	float fBack = localPos.z + (m_size.z / 2);		//プレイヤーの後端
+
+	//-----------------------------
+	// 相手の行列を元に戻す
+	//-----------------------------
+	D3DXVec3TransformCoord(&worldPos, &targetPos, &targetMtx);
+	D3DXMatrixInverse(&invMtxWorld, NULL, &targetMtx);
+	D3DXVec3TransformCoord(&localPos, &worldPos, &invMtxWorld);
 
 	//-----------------------------
 	// 当たり判定
 	//-----------------------------
-	if (targetPos.x + targetSize.x >= fLeft
-		&& targetPos.x - targetSize.x <= fRight
-		&& targetPos.y + targetSize.y >= fTop
-		&& targetPos.y - targetSize.y <= fBottom
-		&& targetPos.z + targetSize.z >= fFront
-		&& targetPos.z - targetSize.z <= fBack)
+	if (localPos.x + targetSize.x >= fLeft
+		&& localPos.x - targetSize.x <= fRight
+		&& localPos.y + targetSize.y >= fTop
+		&& localPos.y - targetSize.y <= fBottom
+		&& localPos.z + targetSize.z >= fFront
+		&& localPos.z - targetSize.z <= fBack)
 	{//敵とプレイヤーが当たった
 		return true;
 	}

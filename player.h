@@ -121,7 +121,8 @@ public:
 	MOTION_TYPE GetMotion()			   { return m_type; }			//モーションの種類の取得
 	const int GetSwordNumber()		   { return nSwordNumber; }		//剣モデルの番号を取得
 	bool GetStyleState()			   { return m_bStyle; }			//スタイルの表示状態を取得
-	bool GetCollisionPlayer(D3DXVECTOR3 targetPos, D3DXVECTOR3 targetSize);	//当たり判定の取得
+	bool GetCollisionPlayer(D3DXVECTOR3 targetPos
+		, D3DXVECTOR3 targetSize, D3DXMATRIX targetMtx);	//当たり判定の取得
 
 	//----------------
 	// 静的メンバ関数

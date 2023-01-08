@@ -178,6 +178,7 @@ void CEnemy::Update()
 	// 敵の移動
 	//------------------------
 	//Move();
+	m_rot.y = 0.785f;
 	
 	//-------------------------
 	// 線の更新
@@ -187,7 +188,7 @@ void CEnemy::Update()
 	//----------------------------
 	// プレイヤーとの当たり判定
 	//----------------------------
-	if (CGame::GetPlayer()->GetCollisionPlayer(m_pos, m_size))
+	if (CGame::GetPlayer()->GetCollisionPlayer(m_pos, m_size, m_mtxWorld))
 	{//プレイヤーと当たっているなら
 		m_fLife--;	//体力の減少
 
