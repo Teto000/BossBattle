@@ -177,8 +177,7 @@ void CEnemy::Update()
 	//------------------------
 	// 敵の移動
 	//------------------------
-	//Move();
-	m_rot.y = 0.785f;
+	Move();
 	
 	//-------------------------
 	// 線の更新
@@ -190,7 +189,7 @@ void CEnemy::Update()
 	//----------------------------
 	if (CGame::GetPlayer()->GetCollisionPlayer(m_pos, m_size, m_mtxWorld))
 	{//プレイヤーと当たっているなら
-		m_fLife--;	//体力の減少
+		//m_fLife--;	//体力の減少
 
 		//残り体力を計算
 		m_fRemLife = m_fLife * 100 / m_fMaxLife;

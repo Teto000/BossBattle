@@ -39,6 +39,7 @@ const float CPlayer::fDefaultSpeed = 7.0f;		//基本の速度
 CPlayer::CPlayer() : CObject(0)
 {
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//位置
+	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//前の位置
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//移動量
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//向き
 	m_vtxMax = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//大きさの最大値
@@ -226,6 +227,9 @@ void CPlayer::Uninit()
 //========================
 void CPlayer::Update()
 {
+	//1つ前の位置を保存
+	m_posOld = m_pos;
+
 	//-------------------------
 	// モーションのリセット
 	//-------------------------
@@ -1069,8 +1073,7 @@ void CPlayer::SetRot()
 	//-------------------------------
 	// 目的の角度まで回転する
 	//-------------------------------
-	//m_rot.y += (m_rotDest.y - m_rot.y) * 0.05f;	//減衰処理
-	m_rot.y = 2.355f;
+	m_rot.y += (m_rotDest.y - m_rot.y) * 0.05f;	//減衰処理
 
 	//-------------------------------
 	// 角度の正規化
@@ -1172,16 +1175,52 @@ bool CPlayer::GetCollisionPlayer(D3DXVECTOR3 targetPos
 	D3DXVec3TransformCoord(&localPos, &worldPos, &invMtxWorld);
 
 	//-----------------------------
+	// 相手の端の設定
+	//-----------------------------
+	float fTargetLeft = localPos.x + targetSize.x;		//相手の左端
+	float fTargetRight = localPos.x - targetSize.x;		//相手の右端
+	float fTargetTop = localPos.y + targetSize.y;		//相手の上端
+	float fTargetBottom = localPos.y - targetSize.y;	//相手の下端
+	float fTargetFront = localPos.z + targetSize.z;		//相手の前端
+	float fTargetBack = localPos.z - targetSize.z;		//相手の後端
+
+	//-----------------------------
 	// 当たり判定
 	//-----------------------------
-	if (localPos.x + targetSize.x >= fLeft
-		&& localPos.x - targetSize.x <= fRight
-		&& localPos.y + targetSize.y >= fTop
-		&& localPos.y - targetSize.y <= fBottom
-		&& localPos.z + targetSize.z >= fFront
-		&& localPos.z - targetSize.z <= fBack)
-	{//敵とプレイヤーが当たった
-		return true;
+	if (fTargetTop >= fTop && fTargetBottom <= fBottom)
+	{//上下の範囲内なら
+		//--------------------------
+		// 前後の当たり判定
+		//--------------------------
+		if (fTargetLeft >= fLeft && fTargetRight <= fRight)
+		{//左右の範囲内なら
+			if (fTargetFront >= fFront && fTargetFront < m_posOld.z - (m_size.z / 2))
+			{
+				m_pos.z = targetPos.z + targetSize.z + (m_size.z / 2);
+				return true;
+			}
+			else if (fTargetBack <= fBack && fTargetBack > m_posOld.z - (m_size.z / 2))
+			{
+				m_pos.z = targetPos.z - targetSize.z - (m_size.z / 2);
+				return true;
+			}
+		}
+		//--------------------------
+		// 左右の当たり判定
+		//--------------------------
+		if (fTargetFront >= fFront && fTargetBack <= fBack)
+		{//前後の範囲内なら
+			if (fTargetLeft >= fLeft && fTargetLeft < m_posOld.x + (m_size.x / 2))
+			{
+				m_pos.x = targetPos.x + targetSize.x + (m_size.x / 2);
+				return true;
+			}
+			else if (fTargetRight <= fRight && fTargetRight > m_posOld.x - (m_size.x / 2))
+			{
+				m_pos.x = targetPos.x - targetSize.x - (m_size.x / 2);
+				return true;
+			}
+		}
 	}
 
 	return false;
