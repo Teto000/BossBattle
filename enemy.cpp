@@ -172,11 +172,10 @@ void CEnemy::Update()
 	//-------------------
 	SetMotion(true);
 
-	m_nMoveTime++;
-
 	//------------------------
 	// 敵の移動
 	//------------------------
+	m_nMoveTime++;
 	Move();
 	
 	//-------------------------
@@ -513,7 +512,8 @@ void CEnemy::Move()
 		D3DXVec3Normalize(&vec, &vec);
 
 		//プレイヤーに向かって移動
-		m_pos += vec * 1.5f;
+		m_move = vec * 1.5f;
+		m_pos += m_move;
 
 		//移動後一定時間でカウントをリセット
 		if (m_nMoveTime >= 800)
