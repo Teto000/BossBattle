@@ -96,9 +96,9 @@ HRESULT CSky::Init(D3DXVECTOR3 pos)
 			float rotX = rotDiffX * x;	//xの角度を設定
 
 			//頂点座標の設定
-			pVtx[0].pos.x = sinf(rotX) * sinf(rotZ) * 10000.0f;
-			pVtx[0].pos.y = cosf(rotX) * 10000.0f;
-			pVtx[0].pos.z = sinf(rotX) * cosf(rotZ) * 10000.0f;
+			pVtx[0].pos.x = sinf(rotX) * sinf(rotZ) * 100.0f;
+			pVtx[0].pos.y = cosf(rotX) * 100.0f;
+			pVtx[0].pos.z = sinf(rotX) * cosf(rotZ) * 100.0f;
 
 			//法線の設定
 			pVtx[0].nor = D3DXVECTOR3(sinf(rotX), 0.0f, cosf(rotZ));
@@ -128,7 +128,7 @@ HRESULT CSky::Init(D3DXVECTOR3 pos)
 	//----------------------------------
 	int nCnt = 0;
 
-	for (int Z = 0; Z < m_vertical; Z++)
+	for (int Z = 0; Z < (m_vertical - 1); Z++)
 	{
 		for (int X = 0; X < m_vertical; X++)
 		{
