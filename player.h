@@ -112,21 +112,23 @@ public:
 	D3DXVECTOR3 GetPosition() override { return m_pos; }			//位置の取得
 	D3DXVECTOR3 GetWorldPos();										//ワールド座標を取得
 	D3DXVECTOR3 GetRot()			   { return m_rot; }			//向きの取得
+	D3DXMATRIX GetmtxWorld()		   { return m_mtxWorld; }		//ワールドマトリックスの取得
 	float GetWidth() override		   { return 0.0f; }				//幅の取得
 	float GetHeight() override		   { return 0.0f; }				//高さの取得
-	D3DXMATRIX GetmtxWorld()		   { return m_mtxWorld; }		//ワールドマトリックスの取得
+	const int GetSwordNumber()		   { return nSwordNumber; }		//剣モデルの番号を取得
+	bool GetStyleState()			   { return m_bStyle; }			//スタイルの表示状態を取得
+	bool GetHitAttack()				   { return m_bHitAttack; }		//攻撃を当てたかを取得
 	CModel* GetModel(int nNum)		   { return m_pModel[nNum]; }	//モデルの取得
 	PLAYER_STATUS GetStatus()		   { return m_status; }			//ステータスの取得
 	BATTLESTYLE GetStyle()			   { return m_battleStyle; }	//バトルモードの取得
 	MOTION_TYPE GetMotion()			   { return m_type; }			//モーションの種類の取得
-	const int GetSwordNumber()		   { return nSwordNumber; }		//剣モデルの番号を取得
-	bool GetStyleState()			   { return m_bStyle; }			//スタイルの表示状態を取得
+
 	bool GetCollisionPlayer(D3DXVECTOR3 targetPos
 		, D3DXVECTOR3 targetSize, D3DXMATRIX targetMtx);	//当たり判定の取得
 
-	//----------------
+	//---------------------
 	// 静的メンバ関数
-	//----------------
+	//---------------------
 	static CPlayer* Create();
 
 private:
@@ -175,7 +177,7 @@ private:
 	float fSizeWidth;			//サイズ(幅)
 	float fSizeDepth;			//サイズ(奥行き)
 	float m_rotWheel;			//タイヤの回転量
-	bool m_bDamage;				//ダメージを与えた
+	bool m_bHitAttack;			//攻撃を当てた状態
 	bool m_bStyle;				//スタイルを表示したか
 	PLAYER_STATUS m_status;		//ステータス
 	BATTLESTYLE m_battleStyle;	//バトルモード

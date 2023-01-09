@@ -52,7 +52,7 @@ CPlayer::CPlayer() : CObject(0)
 	m_nCntModeTime = 0;							//モード終了までの時間を数える
 	fSizeWidth = 0.0f;							//サイズ(幅)
 	fSizeDepth = 0.0f;							//サイズ(奥行き)
-	m_bDamage = false;							//ダメージを与えたか
+	m_bHitAttack = false;							//ダメージを与えたか
 	m_bStyle = false;							//スタイルを表示したか
 	m_type = MOTION_TYPE_IDOL;					//現在のモーション
 	m_battleStyle = BATTLESTYLE_NONE;			//バトルモード
@@ -930,7 +930,7 @@ void CPlayer::Attack()
 			//待機モーションにする
 			ChangeMotion(MOTION_TYPE_IDOL);
 			m_status.nAttackTime = 0;	//攻撃時間のリセット
-			m_bDamage = false;			//ダメージを与えていない状態にする
+			m_bHitAttack = false;			//ダメージを与えていない状態にする
 		}
 		else
 		{
@@ -942,17 +942,17 @@ void CPlayer::Attack()
 	//-----------------------------------
 	// 剣との当たり判定
 	//-----------------------------------
-	if (m_type == CPlayer::MOTION_TYPE_ATTACK && m_pModel[nSwordNumber]->GetCollisionAttack()
-		&& !m_bDamage)
-	{//プレイヤーが攻撃中 & 剣と当たっている & ダメージを与えていないなら
+	if (m_type == CPlayer::MOTION_TYPE_ATTACK
+		&& m_pModel[nSwordNumber]->GetCollisionAttack()&& !m_bHitAttack)
+	{//プレイヤーが攻撃中 & 剣と当たっている & 攻撃を当てていないなら
 		//攻撃力分敵の体力を減少
 		CGame::GetEnemy()->SubLife(m_status.nAttack);
 
 		//コンボ数の加算
 		CGame::GetPlayer()->AddCombo(m_status.nComboValue);
 
-		//ダメージを与えた状態にする
-		m_bDamage = true;
+		//攻撃を当てた状態にする
+		m_bHitAttack = true;
 	}
 }
 
