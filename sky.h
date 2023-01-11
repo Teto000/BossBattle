@@ -44,9 +44,6 @@ public:
 	static CSky* Create(CTexture::TEXTURE texture);
 
 private:
-	void SetVtxNor(VERTEX_3D* pVtx, WORD* pIdx);	//’¸“_‚Ì–@ü‚ğİ’è
-
-private:
 	//------------------
 	// ’è”
 	//------------------
