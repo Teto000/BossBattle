@@ -111,6 +111,7 @@ private:
 	float m_fLife;				//体力
 	float m_fRemLife;			//残り体力(%)
 	float m_fMaxLife;			//最大体力
+	bool m_bNockBack;			//ノックバックしたか
 	CModel*  m_pModel[MAX_ENEMY_PARTS];	//モデル
 	CLine*	 m_pLine[nMaxLine];			//ライン
 	CHP*	 m_pHP;						//HP

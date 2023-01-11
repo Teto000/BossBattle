@@ -57,6 +57,7 @@ CEnemy::CEnemy() : CObject(0)
 	m_fLife = 0.0f;			//体力
 	m_fRemLife = 0.0f;		//残り体力(%)
 	m_fMaxLife = 0.0f;		//最大体力
+	m_bNockBack = false;	//ノックバックしたか
 	m_pHP = nullptr;		//HP
 
 	/* ↓ モデル情報 ↓ */
@@ -171,7 +172,12 @@ void CEnemy::Update()
 	// 敵の移動
 	//------------------------
 	//m_nMoveTime++;
-	//Move();
+	Move();
+
+	if (m_pos.y >= 0.0f)
+	{
+		m_pos.y -= 2.0f;
+	}
 
 	//-------------------
 	// モーション
@@ -198,8 +204,16 @@ void CEnemy::Update()
 
 		D3DXVec3Normalize(&vec,&vec);	//ベクトルの正規化
 
-		//逆ベクトル方向に移動
-		m_pos += -vec * 1.5f;
+		if (!m_bNockBack)
+		{//ノックバックしていないなら
+			m_pos += -vec * 7.0f;	//逆ベクトル方向に移動
+			m_pos.y += 50.0f;		//上昇
+			m_bNockBack = true;
+		}
+	}
+	else
+	{
+		m_bNockBack = false;
 	}
 
 	//----------------------------
