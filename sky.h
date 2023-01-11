@@ -64,6 +64,7 @@ private:
 	int m_nNumPolygon;		//ポリゴン数
 	int m_nNumIndex;		//インデックス数
 	int m_vertical;			//垂直方向の分割数
+	float m_fWidth;			//幅
 
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;	//頂点バッファへのポインタ
 	CTexture::TEXTURE m_texture;		//テクスチャ

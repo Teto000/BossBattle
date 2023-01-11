@@ -27,6 +27,7 @@ CSky::CSky() : CObject(0)
 	m_nNumPolygon = 0;		//ポリゴン数
 	m_nNumIndex = 0;		//インデックス数
 	m_vertical = 0;			//垂直方向の分割数
+	m_fWidth = 0.0f;		//幅
 
 	m_pVtxBuff = nullptr;	//頂点バッファへのポインタ
 	m_pIdxBuff = nullptr;	//インデックスバッファへのポインタ
@@ -46,6 +47,7 @@ CSky::~CSky()
 HRESULT CSky::Init(D3DXVECTOR3 pos)
 {
 	m_vertical = 20;		//分割数
+	m_fWidth = 10000.0f;	//幅
 
 	LPDIRECT3DDEVICE9 pDevice = CApplication::GetRenderer()->GetDevice();	//デバイスの取得
 
@@ -96,24 +98,20 @@ HRESULT CSky::Init(D3DXVECTOR3 pos)
 			float rotX = rotDiffX * x;	//xの角度を設定
 
 			//頂点座標の設定
-			pVtx[0].pos.x = sinf(rotX) * sinf(rotZ) * 100.0f;
-			pVtx[0].pos.y = cosf(rotX) * 100.0f + 150.0f;
-			pVtx[0].pos.z = sinf(rotX) * cosf(rotZ) * 100.0f;
+			pVtx[0].pos.x = sinf(rotX) * sinf(rotZ) * m_fWidth;
+			pVtx[0].pos.y = cosf(rotX) * m_fWidth;
+			pVtx[0].pos.z = sinf(rotX) * cosf(rotZ) * m_fWidth;
 
 			//法線の設定
 			pVtx[0].nor = D3DXVECTOR3(sinf(rotX), 0.0f, cosf(rotZ));
 
 			//頂点カラーの設定
-			//pVtx[0].col = D3DXCOLOR(0.6f, 0.8f, 0.9f, 1.0f);	//水色
 			pVtx[0].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 
 			//テクスチャ座標の設定
-			float fTexSize = 1.0f / m_vertical;	//一つ分の大きさ
-
-			pVtx[0].tex = D3DXVECTOR2(fTexSize * x, fTexSize * z);
-			pVtx[1].tex = D3DXVECTOR2(fTexSize * (x + 1), fTexSize * z);
-			pVtx[2].tex = D3DXVECTOR2(fTexSize * x, fTexSize * (z + 1));
-			pVtx[3].tex = D3DXVECTOR2(fTexSize * (x + 1), fTexSize * (z + 1));
+			float fTexX = 1.0f / m_vertical * x;
+			float fTexY = 1.0f / m_vertical * z;
+			pVtx[0].tex = D3DXVECTOR2(fTexY, -fTexX * 2);
 
 			pVtx++;
 		}

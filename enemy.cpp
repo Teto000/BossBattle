@@ -167,6 +167,12 @@ void CEnemy::Update()
 		}
 	}
 
+	//------------------------
+	// 敵の移動
+	//------------------------
+	//m_nMoveTime++;
+	//Move();
+
 	//-------------------
 	// モーション
 	//-------------------
@@ -180,13 +186,20 @@ void CEnemy::Update()
 	//----------------------------
 	// プレイヤーとの当たり判定
 	//----------------------------
-	if (!CGame::GetPlayer()->GetCollisionPlayer(m_pos, m_size, m_mtxWorld))
-	{//プレイヤーと当たってないなら
-		//------------------------
-		// 敵の移動
-		//------------------------
-		//m_nMoveTime++;
-		//Move();
+	CGame::GetPlayer()->GetCollisionPlayer(m_pos, m_size, m_mtxWorld);
+
+	if (CGame::GetPlayer()->GetHitAttack())
+	{//プレイヤーが攻撃を当てた状態なら
+		//プレイヤーの位置を取得
+		D3DXVECTOR3 playerPos = CGame::GetPlayer()->GetPosition();
+
+		//敵とプレイヤー間のベクトルを計算
+		D3DXVECTOR3 vec = playerPos - m_pos;
+
+		D3DXVec3Normalize(&vec,&vec);	//ベクトルの正規化
+
+		//逆ベクトル方向に移動
+		m_pos += -vec * 1.5f;
 	}
 
 	//----------------------------
