@@ -8,6 +8,7 @@
 //------------------------
 // インクルード
 //------------------------
+#include <cmath>
 #include "enemy.h"
 #include "object.h"
 #include "application.h"
@@ -477,14 +478,33 @@ void CEnemy::SubLife(float fDamage)
 //========================
 void CEnemy::Attack()
 {
-	//攻撃時間
-	int nMaxAttackTime = 300;
+	//変数宣言
+	int nMaxAttackTime = 120;				//攻撃時間
+	float fAttackErea = 120.0f;				//敵の攻撃範囲
+	float fMoveErea = fAttackErea - 50.0f;	//敵の移動範囲
 
-	//攻撃までの時間を加算
-	m_nAttackTime++;
+	//プレイヤーの位置を取得
+	D3DXVECTOR3 playerPos = CGame::GetPlayer()->GetPosition();
 
-	if (CGame::GetPlayer()->GetCollisionPlayer(m_pos, m_size, m_mtxWorld))
-	{//プレイヤーと当たってるなら
+	//敵とプレイヤー間の距離を計算
+	D3DXVECTOR3 vec = playerPos - m_pos;
+
+	//距離の絶対値を計算
+	float fDistance = fabs((vec.x + vec.z) / 2);
+
+	if (fDistance >= fMoveErea)
+	{//プレイヤーが範囲内にいないなら
+		//-------------------------
+		// プレイヤーまで移動
+		//-------------------------
+		Move();
+	}
+
+	if (fDistance <= fAttackErea)
+	{//プレイヤーが範囲内にいるなら
+		//攻撃までの時間を加算
+		m_nAttackTime++;
+
 		//-------------------------
 		// 攻撃処理
 		//-------------------------
@@ -492,13 +512,6 @@ void CEnemy::Attack()
 		{//攻撃時間が値に達したら
 			CGame::GetPlayer()->SubLife(1);
 		}
-	}
-	else
-	{
-		//-------------------------
-		// プレイヤーまで移動
-		//-------------------------
-		Move();
 	}
 }
 
