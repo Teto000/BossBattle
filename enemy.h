@@ -86,6 +86,7 @@ private:
 	void SetMotion(bool bLoop);	//モーションの設定
 	void SetLine();		//線の設置
 	void UpdateLine();	//線の更新
+	void Attack();		//攻撃
 	void Move();		//移動
 
 private:
@@ -108,6 +109,7 @@ private:
 	D3DXVECTOR3	m_worldMax;		//ワールド上の最小値
 	D3DXVECTOR3 m_size;			//大きさ
 	int m_nMoveTime;			//移動までの時間
+	int m_nAttackTime;			//攻撃までの時間
 	float m_fLife;				//体力
 	float m_fRemLife;			//残り体力(%)
 	float m_fMaxLife;			//最大体力

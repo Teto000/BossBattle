@@ -155,6 +155,9 @@
     <ClCompile Include="sky.cpp">
       <Filter>Main\Object\Mesh</Filter>
     </ClCompile>
+    <ClCompile Include="damage.cpp">
+      <Filter>Main\Object\Object2D\Number</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -267,6 +270,9 @@
     </ClInclude>
     <ClInclude Include="sky.h">
       <Filter>Main\Object\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="damage.h">
+      <Filter>Main\Object\Object2D\Number</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

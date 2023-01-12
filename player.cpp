@@ -1234,6 +1234,20 @@ void CPlayer::AddCombo(int nNumber)
 	m_nNumCombo = m_pCombo->AddNumber(nNumber);
 }
 
+//========================
+// HP減少時の処理
+//========================
+void CPlayer::SubLife(float fDamage)
+{
+	m_status.fLife -= fDamage;	//体力の減少
+
+	//残り体力を計算
+	m_status.fRemLife = m_status.fLife * 100 / m_status.fMaxLife;
+
+	//HPの設定
+	m_pHP->SetLife(m_status.fLife, m_status.fRemLife);
+}
+
 //===========================
 // ワールド座標の取得
 //===========================

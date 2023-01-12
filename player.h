@@ -104,7 +104,8 @@ public:
 	void SetAttack(float nAttack)	  { m_status.nAttack = nAttack; }		//攻撃力の設定
 	void SetSpeed(float fSpeed)		  { m_status.fSpeed = fSpeed; }			//速度の設定
 	void SetComboValue(int nValue)    { m_status.nComboValue = nValue; }	//コンボの加算値の設定
-	void AddCombo(int nNumber);	//コンボ数の加算
+	void AddCombo(int nNumber);		//コンボ数の加算
+	void SubLife(float fDamage);	//HP減少時の処理
 
 	//----------------
 	// ゲッター

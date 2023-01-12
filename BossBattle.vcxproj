@@ -157,6 +157,7 @@
     <ClCompile Include="billboard.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="combo.cpp" />
+    <ClCompile Include="damage.cpp" />
     <ClCompile Include="debug_proc.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="fade.cpp" />
@@ -196,6 +197,7 @@
     <ClInclude Include="billboard.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="combo.h" />
+    <ClInclude Include="damage.h" />
     <ClInclude Include="debug_proc.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="fade.h" />

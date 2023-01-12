@@ -117,6 +117,10 @@ void CGauge::SubHP()
 		{//null‚¶‚á‚È‚¢‚È‚ç
 			m_pFream->Uninit();
 		}
+
+		//I—¹ˆ—
+		Uninit();
+		return;
 	}
 
 	//-------------------------

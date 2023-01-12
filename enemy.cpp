@@ -169,15 +169,9 @@ void CEnemy::Update()
 	}
 
 	//------------------------
-	// 敵の移動
+	// 攻撃処理
 	//------------------------
-	//m_nMoveTime++;
-	Move();
-
-	if (m_pos.y >= 0.0f)
-	{
-		m_pos.y -= 2.0f;
-	}
+	Attack();
 
 	//-------------------
 	// モーション
@@ -190,12 +184,16 @@ void CEnemy::Update()
 	//UpdateLine();
 
 	//----------------------------
-	// プレイヤーとの当たり判定
+	// 攻撃を受けた処理
 	//----------------------------
-	CGame::GetPlayer()->GetCollisionPlayer(m_pos, m_size, m_mtxWorld);
-
 	if (CGame::GetPlayer()->GetHitAttack())
 	{//プレイヤーが攻撃を当てた状態なら
+		//攻撃までの時間をリセット
+		m_nAttackTime = 0;
+
+		//--------------------------------
+		// ノックバックする処理
+		//--------------------------------
 		//プレイヤーの位置を取得
 		D3DXVECTOR3 playerPos = CGame::GetPlayer()->GetPosition();
 
@@ -214,6 +212,12 @@ void CEnemy::Update()
 	else
 	{
 		m_bNockBack = false;
+	}
+
+	//重力
+	if (m_pos.y >= 0.0f)
+	{//飛んでいるなら
+		m_pos.y -= 2.0f;
 	}
 
 	//----------------------------
@@ -469,7 +473,37 @@ void CEnemy::SubLife(float fDamage)
 }
 
 //========================
-// 移動
+// 攻撃処理
+//========================
+void CEnemy::Attack()
+{
+	//攻撃時間
+	int nMaxAttackTime = 300;
+
+	//攻撃までの時間を加算
+	m_nAttackTime++;
+
+	if (CGame::GetPlayer()->GetCollisionPlayer(m_pos, m_size, m_mtxWorld))
+	{//プレイヤーと当たってるなら
+		//-------------------------
+		// 攻撃処理
+		//-------------------------
+		if (m_nAttackTime >= nMaxAttackTime)
+		{//攻撃時間が値に達したら
+			CGame::GetPlayer()->SubLife(1);
+		}
+	}
+	else
+	{
+		//-------------------------
+		// プレイヤーまで移動
+		//-------------------------
+		Move();
+	}
+}
+
+//========================
+// 移動処理
 //========================
 void CEnemy::Move()
 {
@@ -518,26 +552,16 @@ void CEnemy::Move()
 		m_rot.y += D3DX_PI * 2;
 	}
 
-	//移動までの時間をカウント
-	if (m_nMoveTime >= 300)
-	{
-		//------------------------------
-		// プレイヤーに向かって移動
-		//------------------------------
-		//プレイヤーと敵のベクトルを求める
-		D3DXVECTOR3 vec(playerPos - m_pos);
+	//------------------------------
+	// プレイヤーに向かって移動
+	//------------------------------
+	//プレイヤーと敵のベクトルを求める
+	D3DXVECTOR3 vec(playerPos - m_pos);
 
-		//ベクトルの正規化
-		D3DXVec3Normalize(&vec, &vec);
+	//ベクトルの正規化
+	D3DXVec3Normalize(&vec, &vec);
 
-		//プレイヤーに向かって移動
-		m_move = vec * 1.5f;
-		m_pos += m_move;
-
-		//移動後一定時間でカウントをリセット
-		if (m_nMoveTime >= 800)
-		{
-			m_nMoveTime = 0;
-		}
-	}
+	//プレイヤーに向かって移動
+	m_move = vec * 1.5f;
+	m_pos += m_move;
 }
