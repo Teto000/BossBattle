@@ -25,6 +25,7 @@
 #include "enemy.h"
 #include "hp.h"
 #include "combo.h"
+#include "damage.h"
 #include "style_shift.h"
 
 //------------------------
@@ -52,12 +53,13 @@ CPlayer::CPlayer() : CObject(0)
 	m_nCntModeTime = 0;							//モード終了までの時間を数える
 	fSizeWidth = 0.0f;							//サイズ(幅)
 	fSizeDepth = 0.0f;							//サイズ(奥行き)
-	m_bHitAttack = false;							//ダメージを与えたか
+	m_bHitAttack = false;						//ダメージを与えたか
 	m_bStyle = false;							//スタイルを表示したか
 	m_type = MOTION_TYPE_IDOL;					//現在のモーション
 	m_battleStyle = BATTLESTYLE_NONE;			//バトルモード
 	m_pHP = nullptr;							//HP
 	m_pCombo = nullptr;							//コンボ
+	m_pDamage = nullptr;						//ダメージ
 
 	//ステータス
 	m_status.nAttack = 0;			//攻撃力
@@ -182,7 +184,7 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	//-----------------------
 	// コンボ数表示
 	//-----------------------
-	m_pCombo = CCombo::Create(D3DXVECTOR3(1000.0f, 360.0f, 0.0f), m_nNumCombo);
+	m_pCombo = CCombo::Create(D3DXVECTOR3(1100.0f, 360.0f, 0.0f), m_nNumCombo);
 
 	//-----------------------
 	// スタイルの表示
@@ -953,6 +955,14 @@ void CPlayer::Attack()
 
 		//攻撃を当てた状態にする
 		m_bHitAttack = true;
+
+		//--------------------
+		// ダメージ数の表示
+		//--------------------
+		//当たった位置の画面上の座標を求める
+
+		//ダメージ数の表示
+		//m_pDamage = CDamage::Create(pos, m_status.nAttack);
 	}
 }
 

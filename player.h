@@ -19,6 +19,7 @@ class CModel;		//モデル
 class CLine;		//ライン
 class CHP;			//HP
 class CCombo;		//コンボ
+class CDamage;		//ダメージ
 class CStyleShift;	//スタイルシフト
 
 //--------------------------------
@@ -184,6 +185,7 @@ private:
 	BATTLESTYLE m_battleStyle;	//バトルモード
 	CHP*  m_pHP;				//HP
 	CCombo* m_pCombo;			//コンボ
+	CDamage* m_pDamage;			//ダメージ
 	CStyleShift* m_pStyleShift[BATTLESTYLE_MAX];	//スタイルシフト
 
 	/* ↓ モデル情報 ↓ */

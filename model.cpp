@@ -189,7 +189,6 @@ void CModel::Draw(D3DMATRIX* mtxPlayer)
 			{//それ以外なら
 				pMat[nCntMat].MatD3D.Diffuse = D3DXCOLOR(1.0f, 1.0f, 0.3f, 0.7f);
 			}
-
 		}
 
 		//マテリアルの設定

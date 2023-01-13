@@ -187,6 +187,9 @@ void CEnemy::Update()
 	//----------------------------
 	// 攻撃を受けた処理
 	//----------------------------
+	//プレイヤーとの当たり判定
+	CGame::GetPlayer()->GetCollisionPlayer(m_pos, m_size, m_mtxWorld);
+
 	if (CGame::GetPlayer()->GetHitAttack())
 	{//プレイヤーが攻撃を当てた状態なら
 		//攻撃までの時間をリセット
@@ -480,8 +483,8 @@ void CEnemy::Attack()
 {
 	//変数宣言
 	int nMaxAttackTime = 120;				//攻撃時間
-	float fAttackErea = 120.0f;				//敵の攻撃範囲
-	float fMoveErea = fAttackErea - 50.0f;	//敵の移動範囲
+	float fAttackArea = 120.0f;				//敵の攻撃範囲
+	float fMoveArea = fAttackArea - 50.0f;	//敵の移動範囲
 
 	//プレイヤーの位置を取得
 	D3DXVECTOR3 playerPos = CGame::GetPlayer()->GetPosition();
@@ -492,22 +495,22 @@ void CEnemy::Attack()
 	//距離の絶対値を計算
 	float fDistance = fabs((vec.x + vec.z) / 2);
 
-	if (fDistance >= fMoveErea)
+	//-------------------------
+	// プレイヤーまで移動
+	//-------------------------
+	if (fDistance >= fMoveArea)
 	{//プレイヤーが範囲内にいないなら
-		//-------------------------
-		// プレイヤーまで移動
-		//-------------------------
 		Move();
 	}
 
-	if (fDistance <= fAttackErea)
+	//-------------------------
+	// 攻撃処理
+	//-------------------------
+	if (fDistance <= fAttackArea)
 	{//プレイヤーが範囲内にいるなら
 		//攻撃までの時間を加算
 		m_nAttackTime++;
 
-		//-------------------------
-		// 攻撃処理
-		//-------------------------
 		if (m_nAttackTime >= nMaxAttackTime)
 		{//攻撃時間が値に達したら
 			CGame::GetPlayer()->SubLife(1);
