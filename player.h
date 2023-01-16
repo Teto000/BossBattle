@@ -73,7 +73,8 @@ public:
 	{
 		MOTION_TYPE_IDOL = 0,	//‘Ò‹@
 		MOTION_TYPE_MOVE,		//ˆÚ“®
-		MOTION_TYPE_ATTACK,		//UŒ‚
+		MOTION_TYPE_ATTACK_1,	//’ÊíUŒ‚(1’i–Ú)
+		MOTION_TYPE_ATTACK_2,	//’ÊíUŒ‚(2’i–Ú)
 		MOTION_TYPE_MAX
 	};
 

@@ -235,7 +235,7 @@ void CPlayer::Update()
 	//-------------------------
 	// モーションのリセット
 	//-------------------------
-	if (m_type != MOTION_TYPE_ATTACK)
+	if (m_type != MOTION_TYPE_ATTACK_2)
 	{//攻撃モーションじゃないなら
 		//待機モーションにする
 		ChangeMotion(MOTION_TYPE_IDOL);
@@ -262,7 +262,7 @@ void CPlayer::Update()
 			// ジョイパッドでの操作
 			CInputJoypad* joypad = CApplication::GetJoypad();
 
-			if (m_type != MOTION_TYPE_ATTACK)
+			if (m_type != MOTION_TYPE_ATTACK_2)
 			{//攻撃中じゃないなら
 				if (!joypad->IsJoyPadUse(0))
 				{//ジョイパッドが使われていないなら
@@ -706,7 +706,7 @@ void CPlayer::ChangeMotion(MOTION_TYPE type)
 	m_type = type;
 
 	//モーション情報の初期化
-	if (m_type == MOTION_TYPE_ATTACK)
+	if (m_type == MOTION_TYPE_ATTACK_2)
 	{
 		m_nCurrentKey = 0;
 		m_nCntMotion = 0;
@@ -909,16 +909,16 @@ void CPlayer::Attack()
 	//-----------------------------------
 	// 攻撃モーションへ移行
 	//-----------------------------------
-	if (CInputKeyboard::Trigger(DIK_RETURN) && m_type != MOTION_TYPE_ATTACK)
+	if (CInputKeyboard::Trigger(DIK_RETURN) && m_type != MOTION_TYPE_ATTACK_2)
 	{//ENTERキーが押された & 攻撃モーション中じゃないなら
 		//攻撃モーションにする
-		ChangeMotion(MOTION_TYPE_ATTACK);
+		ChangeMotion(MOTION_TYPE_ATTACK_2);
 	}
 
 	//-----------------------------------
 	// モーションと攻撃時間を合わせる
 	//-----------------------------------
-	if (m_type == MOTION_TYPE_ATTACK)
+	if (m_type == MOTION_TYPE_ATTACK_2)
 	{//攻撃モーション中なら
 		int nAttackFream = 0;
 		for (int i = 0; i < m_aMotionSet[m_type].nNumKey; i++)
@@ -944,7 +944,7 @@ void CPlayer::Attack()
 	//-----------------------------------
 	// 剣との当たり判定
 	//-----------------------------------
-	if (m_type == CPlayer::MOTION_TYPE_ATTACK
+	if (m_type == CPlayer::MOTION_TYPE_ATTACK_2
 		&& m_pModel[nSwordNumber]->GetCollisionAttack()&& !m_bHitAttack)
 	{//プレイヤーが攻撃中 & 剣と当たっている & 攻撃を当てていないなら
 		//攻撃力分敵の体力を減少

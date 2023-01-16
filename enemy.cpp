@@ -42,6 +42,11 @@ CEnemy::KEY_SET g_aKeySet[] =	//キーセット情報
 	},
 };
 
+//------------------------
+// 静的メンバ変数宣言
+//------------------------
+const float CEnemy::fDefGravity = 0.8f;	//基本の重力
+
 //========================
 // コンストラクタ
 //========================
@@ -58,6 +63,7 @@ CEnemy::CEnemy() : CObject(0)
 	m_fLife = 0.0f;			//体力
 	m_fRemLife = 0.0f;		//残り体力(%)
 	m_fMaxLife = 0.0f;		//最大体力
+	m_fGravity = 0.0f;		//重力の値
 	m_bNockBack = false;	//ノックバックしたか
 	m_pHP = nullptr;		//HP
 
@@ -93,9 +99,10 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 	//初期値の設定
 	m_pos = pos;
 	m_nCntMotion = 1;
-	m_fLife = 300.0f;		//体力
-	m_fRemLife = 100.0f;	//残り体力(%)
-	m_fMaxLife = m_fLife;	//最大体力
+	m_fLife = 300.0f;			//体力
+	m_fRemLife = 100.0f;		//残り体力(%)
+	m_fMaxLife = m_fLife;		//最大体力
+	m_fGravity = fDefGravity;	//重力の値
 
 	//ワールドマトリックスの初期化
 	D3DXMatrixIdentity(&m_mtxWorld);
@@ -192,8 +199,9 @@ void CEnemy::Update()
 
 	if (CGame::GetPlayer()->GetHitAttack())
 	{//プレイヤーが攻撃を当てた状態なら
-		//攻撃までの時間をリセット
-		m_nAttackTime = 0;
+		//リセット
+		m_nAttackTime = 0;			//攻撃までの時間
+		m_fGravity = fDefGravity;	//重力の値
 
 		//--------------------------------
 		// ノックバックする処理
@@ -218,10 +226,18 @@ void CEnemy::Update()
 		m_bNockBack = false;
 	}
 
-	//重力
+	//---------------------
+	// 重力の加算
+	//---------------------
 	if (m_pos.y >= 0.0f)
 	{//飛んでいるなら
-		m_pos.y -= 2.0f;
+		m_pos.y -= m_fGravity;
+		m_fGravity += 0.2f;
+	}
+	else
+	{//地面に着いたら
+		//重力の値をリセット
+		m_fGravity = fDefGravity;
 	}
 
 	//----------------------------

@@ -93,7 +93,8 @@ private:
 	//----------------
 	// 定数
 	//----------------
-	static const int nMaxLine = 24;
+	static const int nMaxLine = 24;	//線の最大数
+	static const float fDefGravity;	//基本の重力
 
 	//----------------
 	// メンバ変数
@@ -113,6 +114,7 @@ private:
 	float m_fLife;				//体力
 	float m_fRemLife;			//残り体力(%)
 	float m_fMaxLife;			//最大体力
+	float m_fGravity;			//重力の値
 	bool m_bNockBack;			//ノックバックしたか
 	CModel*  m_pModel[MAX_ENEMY_PARTS];	//モデル
 	CLine*	 m_pLine[nMaxLine];			//ライン
