@@ -107,6 +107,7 @@ CPlayer::CPlayer() : CObject(0)
 
 			m_aMotionSet[nCnt].bLoop = false;			//ループするかどうか
 			m_aMotionSet[nCnt].nStartCollision = 0;		//当たり判定の開始時間
+			m_aMotionSet[nCnt].nNextAtkTime;			//次の攻撃の入力開始時間
 			m_aMotionSet[nCnt].aKeySet[i].nFrame = 0;	//フレーム数
 		}
 
@@ -290,7 +291,7 @@ void CPlayer::Update()
 		//-------------------------
 		// モードチェンジ
 		//-------------------------
-		ChangeMode();
+		//ChangeMode();
 	}
 
 	//-------------------------
@@ -465,6 +466,14 @@ void CPlayer::GetFileMotion()
 				{//頭文字がNUM_KEYなら
 					//文字列からキーの最大数を読み取る
 					sscanf(cText, "%s = %d", &cTextHead, &m_aMotionSet[nNumMotion].nStartCollision);
+				}
+				//------------------------
+				// 次の攻撃入力開始時間
+				//------------------------
+				else if (strcmp(&cTextHead[0], "NEXT_ATTACK") == 0)
+				{//頭文字がNUM_KEYなら
+					//文字列からキーの最大数を読み取る
+					sscanf(cText, "%s = %d", &cTextHead, &m_aMotionSet[nNumMotion].nNextAtkTime);
 				}
 				//------------------------
 				// キーの最大数
@@ -922,8 +931,10 @@ void CPlayer::Attack(MOTION_TYPE type, MOTION_TYPE next)
 		//-----------------------------------
 		// 攻撃の切り替え
 		//-----------------------------------
-		if (CInputKeyboard::Trigger(DIK_M) && nOutRigor > m_status.nAttackTime)
-		{//攻撃ボタンを押された & 硬直前フレームなら
+		if (CInputKeyboard::Trigger(DIK_RETURN)
+			&& nOutRigor > m_status.nAttackTime
+			&& m_status.nAttackTime >= m_aMotionSet[m_type].nNextAtkTime)
+		{//攻撃ボタンを押された & 硬直前のフレーム & 入力開始時間の後なら
 			m_status.bNextAttack = true;	//次の攻撃フラグをオン
 		}
 

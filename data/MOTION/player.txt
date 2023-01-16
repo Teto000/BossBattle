@@ -255,6 +255,7 @@ END_MOTIONSET
 MOTIONSET
 	LOOP = 0		# ループするかどうか[0:ループしない / 1:ループする]
 	COLLISION = 5	# 当たり判定の開始時間
+	NEXT_ATTACK = 5 # 次の攻撃の入力開始時間
 	NUM_KEY = 4		# キー数
 
 	KEYSET			# --- << KEY : 0 / 4 >> ---
@@ -416,6 +417,7 @@ END_MOTIONSET
 MOTIONSET
 	LOOP = 0		# ループするかどうか[0:ループしない / 1:ループする]
 	COLLISION = 5	# 当たり判定の開始時間
+	NEXT_ATTACK = 5 # 次の攻撃の入力開始時間
 	NUM_KEY = 2		# キー数
 
 	KEYSET			# --- << KEY : 0 / 2 >> ---

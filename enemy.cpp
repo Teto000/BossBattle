@@ -99,7 +99,7 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 	//初期値の設定
 	m_pos = pos;
 	m_nCntMotion = 1;
-	m_fLife = 300.0f;			//体力
+	m_fLife = 900.0f;			//体力
 	m_fRemLife = 100.0f;		//残り体力(%)
 	m_fMaxLife = m_fLife;		//最大体力
 	m_fGravity = fDefGravity;	//重力の値
@@ -232,7 +232,7 @@ void CEnemy::Update()
 	if (m_pos.y >= 0.0f)
 	{//飛んでいるなら
 		m_pos.y -= m_fGravity;
-		m_fGravity += 0.2f;
+		m_fGravity += 2.0f;
 	}
 	else
 	{//地面に着いたら

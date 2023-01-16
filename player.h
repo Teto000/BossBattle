@@ -53,6 +53,7 @@ public:
 	{
 		bool bLoop;					//ループするかどうか
 		int nStartCollision;		//当たり判定の開始時間
+		int nNextAtkTime;			//次の攻撃の入力開始時間
 		int nNumKey;				//キーの最大数
 		KEY_SET aKeySet[MAX_KEY];	//キーセット情報
 	};
