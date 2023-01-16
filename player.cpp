@@ -105,7 +105,8 @@ CPlayer::CPlayer() : CObject(0)
 				m_aMotionSet[nCnt].aKeySet[i].aKey[j].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//向き
 			}
 
-			m_aMotionSet[nCnt].bLoop = false;
+			m_aMotionSet[nCnt].bLoop = false;			//ループするかどうか
+			m_aMotionSet[nCnt].nStartCollision = 0;		//当たり判定の開始時間
 			m_aMotionSet[nCnt].aKeySet[i].nFrame = 0;	//フレーム数
 		}
 
@@ -458,6 +459,14 @@ void CPlayer::GetFileMotion()
 					}
 				}
 				//------------------------
+				// 当たり判定の開始時間
+				//------------------------
+				else if (strcmp(&cTextHead[0], "COLLISION") == 0)
+				{//頭文字がNUM_KEYなら
+					//文字列からキーの最大数を読み取る
+					sscanf(cText, "%s = %d", &cTextHead, &m_aMotionSet[nNumMotion].nStartCollision);
+				}
+				//------------------------
 				// キーの最大数
 				//------------------------
 				else if (strcmp(&cTextHead[0], "NUM_KEY") == 0)
@@ -679,13 +688,12 @@ void CPlayer::ChangeMotion(MOTION_TYPE type)
 
 	//モーション情報の初期化
 	if (GetOutAttack(false))
-	{
+	{//どれか攻撃モーションなら
 		m_nCurrentKey = 0;
 		m_nCntMotion = 0;
+		m_status.nAttackTime = 0;	//攻撃時間のリセット
+		m_bHitAttack = false;		//ダメージを与えていない状態にする
 	}
-
-	m_status.nAttackTime = 0;	//攻撃時間のリセット
-	m_bHitAttack = false;		//ダメージを与えていない状態にする
 }
 
 //=====================================
@@ -941,8 +949,10 @@ void CPlayer::Attack(MOTION_TYPE type, MOTION_TYPE next)
 		//-----------------------------------
 		// 剣との当たり判定
 		//-----------------------------------
-		if (m_pModel[nSwordNumber]->GetCollisionAttack() && !m_bHitAttack)
-		{//剣と当たっている & 攻撃を当てていないなら
+		if (m_pModel[nSwordNumber]->GetCollisionAttack()
+			&& !m_bHitAttack
+			&& m_status.nAttackTime >= m_aMotionSet[m_type].nStartCollision)
+		{//剣と当たっている & 攻撃を当てていない & 当たり判定の有効時間なら
 			//攻撃力分敵の体力を減少
 			CGame::GetEnemy()->SubLife(m_status.nAttack);
 
