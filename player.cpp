@@ -54,6 +54,7 @@ CPlayer::CPlayer() : CObject(0)
 	fSizeWidth = 0.0f;							//サイズ(幅)
 	fSizeDepth = 0.0f;							//サイズ(奥行き)
 	m_bHitAttack = false;						//ダメージを与えたか
+	bChangeAttack = false;						//攻撃が切り替わった状態
 	m_bStyle = false;							//スタイルを表示したか
 	m_type = MOTION_IDOL;						//現在のモーション
 	m_battleStyle = BATTLESTYLE_NONE;			//バトルモード
@@ -110,7 +111,6 @@ CPlayer::CPlayer() : CObject(0)
 			m_aMotionSet[nCnt].nNextAtkTime;			//次の攻撃の入力開始時間
 			m_aMotionSet[nCnt].aKeySet[i].nFrame = 0;	//フレーム数
 		}
-
 
 		m_aMotionSet[nCnt].nNumKey = 0;
 		m_aMotionSet[nCnt].bLoop = false;
@@ -285,6 +285,16 @@ void CPlayer::Update()
 			//--------------------------------
 			// 攻撃処理
 			//--------------------------------
+			/*switch (m_type)
+			{
+			case MOTION_ATTACK_2:
+				Attack(MOTION_ATTACK_2, MOTION_ATTACK_3);
+				break;
+
+			default:
+				Attack(MOTION_ATTACK_1, MOTION_ATTACK_2);
+				break;
+			}*/
 			Attack(MOTION_ATTACK_1, MOTION_ATTACK_2);
 		}
 
@@ -938,18 +948,20 @@ void CPlayer::Attack(MOTION_TYPE type, MOTION_TYPE next)
 			m_status.bNextAttack = true;	//次の攻撃フラグをオン
 		}
 
-		if (m_status.bNextAttack && nOutRigor <= m_status.nAttackTime)
-		{//攻撃切り替えフラグがオン & 硬直以外のフレーム数を超えた
+		if (m_status.bNextAttack && nOutRigor <= m_status.nAttackTime && !bChangeAttack)
+		{//攻撃切り替えフラグがオン & 硬直以外のフレーム数を超えた & 攻撃が切り替わっていないなら
 			ChangeMotion(next);
 			m_status.bNextAttack = false;
+			bChangeAttack = true;
 		}
 		//------------------------------------------
 		// フレーム数の加算
 		//------------------------------------------
-		else if (nAttackFream <= m_status.nAttackTime)
+		if (nAttackFream <= m_status.nAttackTime)
 		{//攻撃時間が攻撃モーションのフレーム数の合計を超えたら
 			//待機モーションにする
 			ChangeMotion(MOTION_IDOL);
+			bChangeAttack = false;
 		}
 		else
 		{

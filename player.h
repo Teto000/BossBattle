@@ -26,7 +26,7 @@ class CStyleShift;	//スタイルシフト
 // マクロ定義
 //--------------------------------
 #define MAX_PARTS	(7)		//モデルパーツの最大数
-#define MAX_KEY		(4)		//キーの最大数
+#define MAX_KEY		(5)		//キーの最大数
 
 //================================
 // プレイヤークラスの定義
@@ -78,6 +78,7 @@ public:
 		MOTION_MOVE,		//移動
 		MOTION_ATTACK_1,	//通常攻撃(1段目)
 		MOTION_ATTACK_2,	//通常攻撃(2段目)
+		MOTION_ATTACK_3,	//通常攻撃(3段目)
 		MOTION_MAX
 	};
 
@@ -185,6 +186,7 @@ private:
 	float fSizeDepth;			//サイズ(奥行き)
 	float m_rotWheel;			//タイヤの回転量
 	bool m_bHitAttack;			//攻撃を当てた状態
+	bool bChangeAttack;			//攻撃が切り替わった状態
 	bool m_bStyle;				//スタイルを表示したか
 	PLAYER_STATUS m_status;		//ステータス
 	BATTLESTYLE m_battleStyle;	//バトルモード
@@ -198,10 +200,10 @@ private:
 	CLine* m_pLine[nMaxLine];			//ライン
 
 	/* ↓ モーション情報 ↓ */
-	int m_nCurrentKey;							//現在のキー番号
-	int m_nCntMotion;							//モーションカウンター
+	int m_nCurrentKey;						//現在のキー番号
+	int m_nCntMotion;						//モーションカウンター
 	MOTION_SET m_aMotionSet[MOTION_MAX];	//モーション情報
-	MOTION_TYPE m_type;							//現在のモーション
+	MOTION_TYPE m_type;						//現在のモーション
 
 	/* ↓ クォータニオン ↓ */
 	D3DXMATRIX		m_mtxRot;		//回転マトリックス(保存用)
