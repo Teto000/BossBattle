@@ -55,7 +55,7 @@ CPlayer::CPlayer() : CObject(0)
 	fSizeDepth = 0.0f;							//サイズ(奥行き)
 	m_bHitAttack = false;						//ダメージを与えたか
 	m_bStyle = false;							//スタイルを表示したか
-	m_type = MOTION_TYPE_IDOL;					//現在のモーション
+	m_type = MOTION_IDOL;						//現在のモーション
 	m_battleStyle = BATTLESTYLE_NONE;			//バトルモード
 	m_pHP = nullptr;							//HP
 	m_pCombo = nullptr;							//コンボ
@@ -68,6 +68,7 @@ CPlayer::CPlayer() : CObject(0)
 	m_status.fLife = 0.0f;			//体力
 	m_status.fRemLife = 0.0f;		//残り体力(%)
 	m_status.fMaxLife = 0.0f;		//最大体力
+	m_status.bNextAttack = false;	//次の攻撃に繋げるかどうか
 
 	//モデル
 	for (int i = 0; i < MAX_PARTS; i++)
@@ -94,9 +95,9 @@ CPlayer::CPlayer() : CObject(0)
 	//----------------------------
 	// キーセット情報の初期化
 	//----------------------------
-	for (int nCnt = 0; nCnt < MOTION_TYPE_MAX; nCnt++)
+	for (int nCnt = 0; nCnt < MOTION_MAX; nCnt++)
 	{
-		for (int i = 0; i < MOTION_TYPE_MAX; i++)
+		for (int i = 0; i < MOTION_MAX; i++)
 		{
 			for (int j = 0; j < MAX_PARTS; j++)
 			{
@@ -235,10 +236,11 @@ void CPlayer::Update()
 	//-------------------------
 	// モーションのリセット
 	//-------------------------
-	if (m_type != MOTION_TYPE_ATTACK_2)
+	if (m_type != MOTION_ATTACK_1
+		&& m_type != MOTION_ATTACK_2)
 	{//攻撃モーションじゃないなら
 		//待機モーションにする
-		ChangeMotion(MOTION_TYPE_IDOL);
+		ChangeMotion(MOTION_IDOL);
 	}
 
 	//-------------------------
@@ -262,7 +264,8 @@ void CPlayer::Update()
 			// ジョイパッドでの操作
 			CInputJoypad* joypad = CApplication::GetJoypad();
 
-			if (m_type != MOTION_TYPE_ATTACK_2)
+			if (m_type != MOTION_ATTACK_1
+				&& m_type != MOTION_ATTACK_2)
 			{//攻撃中じゃないなら
 				if (!joypad->IsJoyPadUse(0))
 				{//ジョイパッドが使われていないなら
@@ -280,7 +283,7 @@ void CPlayer::Update()
 			//-------------------------
 			// 攻撃処理
 			//-------------------------
-			Attack();
+			Attack(MOTION_ATTACK_1, MOTION_ATTACK_2);
 		}
 
 		//-------------------------
@@ -706,11 +709,15 @@ void CPlayer::ChangeMotion(MOTION_TYPE type)
 	m_type = type;
 
 	//モーション情報の初期化
-	if (m_type == MOTION_TYPE_ATTACK_2)
+	if (m_type == MOTION_ATTACK_1
+		|| m_type == MOTION_ATTACK_2)
 	{
 		m_nCurrentKey = 0;
 		m_nCntMotion = 0;
 	}
+
+	m_status.nAttackTime = 0;	//攻撃時間のリセット
+	m_bHitAttack = false;		//ダメージを与えていない状態にする
 }
 
 //=====================================
@@ -795,7 +802,7 @@ void CPlayer::MoveKeyboard(int nUpKey, int nDownKey, int nLeftKey, int nRightKey
 	else
 	{//どれかが押されているなら
 		//移動モーションにする
-		ChangeMotion(MOTION_TYPE_MOVE);
+		ChangeMotion(MOTION_MOVE);
 	}
 }
 
@@ -904,65 +911,80 @@ void CPlayer::MoveJoypad()
 //===========================
 // 攻撃処理
 //===========================
-void CPlayer::Attack()
+void CPlayer::Attack(MOTION_TYPE type, MOTION_TYPE next)
 {
 	//-----------------------------------
 	// 攻撃モーションへ移行
 	//-----------------------------------
-	if (CInputKeyboard::Trigger(DIK_RETURN) && m_type != MOTION_TYPE_ATTACK_2)
+	if (CInputKeyboard::Trigger(DIK_RETURN)
+		&& m_type != MOTION_ATTACK_1
+		&& m_type != MOTION_ATTACK_2)
 	{//ENTERキーが押された & 攻撃モーション中じゃないなら
 		//攻撃モーションにする
-		ChangeMotion(MOTION_TYPE_ATTACK_2);
+		ChangeMotion(type);
 	}
 
-	//-----------------------------------
-	// モーションと攻撃時間を合わせる
-	//-----------------------------------
-	if (m_type == MOTION_TYPE_ATTACK_2)
+	if (m_type == MOTION_ATTACK_1
+		|| m_type == MOTION_ATTACK_2)
 	{//攻撃モーション中なら
+		//-----------------------------------
+		// モーションと攻撃時間を合わせる
+		//-----------------------------------
 		int nAttackFream = 0;
+		int nOutRigor = 0;
 		for (int i = 0; i < m_aMotionSet[m_type].nNumKey; i++)
 		{//キー数-1回分回す
 			//攻撃モーションのフレーム数を合計する
 			nAttackFream += m_aMotionSet[m_type].aKeySet[i].nFrame;
+
+			if (i != m_aMotionSet[m_type].nNumKey - 1)
+			{//硬直キーじゃないなら
+				//フレーム数を加算
+				nOutRigor += m_aMotionSet[m_type].aKeySet[i].nFrame;
+			}
 		}
 
-		if (nAttackFream <= m_status.nAttackTime)
+		//-----------------------------------
+		// 攻撃の切り替え
+		//-----------------------------------
+		if (CInputKeyboard::Trigger(DIK_M) && nOutRigor > m_status.nAttackTime)
+		{//攻撃ボタンを押された & 硬直前フレームなら
+			m_status.bNextAttack = true;	//次の攻撃フラグをオン
+		}
+
+		if (m_status.bNextAttack && nOutRigor <= m_status.nAttackTime)
+		{//攻撃切り替えフラグがオン & 硬直以外のフレーム数を超えた
+			ChangeMotion(next);
+			m_status.bNextAttack = false;
+		}
+		//-----------------------------------
+		// フレーム数の加算
+		//-----------------------------------
+		else if (nAttackFream <= m_status.nAttackTime)
 		{//攻撃時間が攻撃モーションのフレーム数の合計を超えたら
 			//待機モーションにする
-			ChangeMotion(MOTION_TYPE_IDOL);
-			m_status.nAttackTime = 0;	//攻撃時間のリセット
-			m_bHitAttack = false;			//ダメージを与えていない状態にする
+			ChangeMotion(MOTION_IDOL);
 		}
 		else
 		{
 			//攻撃時間を加算
 			m_status.nAttackTime++;
 		}
-	}
 
-	//-----------------------------------
-	// 剣との当たり判定
-	//-----------------------------------
-	if (m_type == CPlayer::MOTION_TYPE_ATTACK_2
-		&& m_pModel[nSwordNumber]->GetCollisionAttack()&& !m_bHitAttack)
-	{//プレイヤーが攻撃中 & 剣と当たっている & 攻撃を当てていないなら
-		//攻撃力分敵の体力を減少
-		CGame::GetEnemy()->SubLife(m_status.nAttack);
+		//-----------------------------------
+		// 剣との当たり判定
+		//-----------------------------------
+		if (m_pModel[nSwordNumber]->GetCollisionAttack() && !m_bHitAttack)
+		{//剣と当たっている & 攻撃を当てていないなら
+			//攻撃力分敵の体力を減少
+			CGame::GetEnemy()->SubLife(m_status.nAttack);
 
-		//コンボ数の加算
-		CGame::GetPlayer()->AddCombo(m_status.nComboValue);
+			//コンボ数の加算
+			CGame::GetPlayer()->AddCombo(m_status.nComboValue);
 
-		//攻撃を当てた状態にする
-		m_bHitAttack = true;
-
-		//--------------------
-		// ダメージ数の表示
-		//--------------------
-		//当たった位置の画面上の座標を求める
-
-		//ダメージ数の表示
-		//m_pDamage = CDamage::Create(pos, m_status.nAttack);
+			//攻撃を当てた状態にする
+			m_bHitAttack = true;
+		}
 	}
 }
 

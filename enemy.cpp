@@ -45,7 +45,7 @@ CEnemy::KEY_SET g_aKeySet[] =	//キーセット情報
 //------------------------
 // 静的メンバ変数宣言
 //------------------------
-const float CEnemy::fDefGravity = 0.8f;	//基本の重力
+const float CEnemy::fDefGravity = 1.0f;	//基本の重力
 
 //========================
 // コンストラクタ

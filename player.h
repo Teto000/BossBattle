@@ -66,16 +66,17 @@ public:
 		float fLife;		//体力
 		float fRemLife;		//残り体力(%)
 		float fMaxLife;		//最大体力
+		bool bNextAttack;	//次の攻撃に繋げるかどうか
 	};
 
 	//モーションの種類
 	enum MOTION_TYPE
 	{
-		MOTION_TYPE_IDOL = 0,	//待機
-		MOTION_TYPE_MOVE,		//移動
-		MOTION_TYPE_ATTACK_1,	//通常攻撃(1段目)
-		MOTION_TYPE_ATTACK_2,	//通常攻撃(2段目)
-		MOTION_TYPE_MAX
+		MOTION_IDOL = 0,	//待機
+		MOTION_MOVE,		//移動
+		MOTION_ATTACK_1,	//通常攻撃(1段目)
+		MOTION_ATTACK_2,	//通常攻撃(2段目)
+		MOTION_MAX
 	};
 
 	//戦闘スタイル
@@ -140,11 +141,11 @@ private:
 	//---------------------
 	void SetModel();											//モデルの設定
 	void SetMotion(MOTION_TYPE type, bool bLoop, int nNumKey);	//モーションの設定
-	void ChangeMotion(MOTION_TYPE type);	//モーションの変更
-	void GetFileMotion();					//ファイルを使ったモーションの取得
+	void ChangeMotion(MOTION_TYPE type);				//モーションの変更
+	void GetFileMotion();								//ファイルを使ったモーションの取得
 	void MoveKeyboard(int nUpKey, int nDownKey, int nLeftKey, int nRightKey);	//移動
-	void MoveJoypad();		//ジョイパッドを使った移動
-	void Attack();			//攻撃処理
+	void MoveJoypad();									//ジョイパッドを使った移動
+	void Attack(MOTION_TYPE type, MOTION_TYPE next);	//攻撃処理
 	void ChangeMode();		//モードチェンジ
 	void SetRot();			//角度の設定
 	void SetLine();			//線の設置
@@ -196,7 +197,7 @@ private:
 	/* ↓ モーション情報 ↓ */
 	int m_nCurrentKey;							//現在のキー番号
 	int m_nCntMotion;							//モーションカウンター
-	MOTION_SET m_aMotionSet[MOTION_TYPE_MAX];	//モーション情報
+	MOTION_SET m_aMotionSet[MOTION_MAX];	//モーション情報
 	MOTION_TYPE m_type;							//現在のモーション
 
 	/* ↓ クォータニオン ↓ */
