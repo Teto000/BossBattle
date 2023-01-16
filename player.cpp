@@ -301,20 +301,6 @@ void CPlayer::Update()
 	// 線の更新
 	//-------------------------
 	//UpdateLine();
-
-	//-------------------------
-	// 体力の減少
-	//-------------------------
-	if (CInputKeyboard::Press(DIK_0))
-	{
-		m_status.fLife--;	//体力の減少
-
-		//残り体力を計算
-		m_status.fRemLife = m_status.fLife * 100 / m_status.fMaxLife;
-
-		//HPの設定
-		m_pHP->SetLife(m_status.fLife, m_status.fRemLife);
-	}
 }
 
 //========================
@@ -332,23 +318,6 @@ void CPlayer::Draw()
 	//モデルの向きを反映
 	D3DXMatrixRotationYawPitchRoll(&mtxRot, m_rot.y, m_rot.x, m_rot.z);
 	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxRot);
-
-	//---------------------------------------
-	// クォータニオンを使った回転の反映
-	//---------------------------------------
-	/*//クォータニオン作成
-	//引数：クォータニオン、回転軸、回転角
-	D3DXQuaternionRotationAxis(&m_quat, &m_vecAxis, m_fValueRot);
-
-	//クォータニオンから回転マトリックスを作成
-	//引数：回転マトリックス、クォータニオン
-	D3DXMatrixRotationQuaternion(&mtxRot, &m_quat);
-
-	//回転マトリックス(保存用)に反映
-	D3DXMatrixMultiply(&m_mtxRot, &m_mtxRot, &mtxRot);
-
-	//ワールドマトリックスに反映
-	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &m_mtxRot);*/
 
 	//モデルの位置を反映
 	D3DXMatrixTranslation(&mtxTrans, m_pos.x, m_pos.y, m_pos.z);
@@ -709,8 +678,7 @@ void CPlayer::ChangeMotion(MOTION_TYPE type)
 	m_type = type;
 
 	//モーション情報の初期化
-	if (m_type == MOTION_ATTACK_1
-		|| m_type == MOTION_ATTACK_2)
+	if (GetOutAttack(false))
 	{
 		m_nCurrentKey = 0;
 		m_nCntMotion = 0;
@@ -924,8 +892,7 @@ void CPlayer::Attack(MOTION_TYPE type, MOTION_TYPE next)
 		ChangeMotion(type);
 	}
 
-	if (m_type == MOTION_ATTACK_1
-		|| m_type == MOTION_ATTACK_2)
+	if (GetOutAttack(false))
 	{//攻撃モーション中なら
 		//-----------------------------------
 		// モーションと攻撃時間を合わせる
@@ -986,6 +953,40 @@ void CPlayer::Attack(MOTION_TYPE type, MOTION_TYPE next)
 			m_bHitAttack = true;
 		}
 	}
+}
+
+//===========================
+// 攻撃状態かどうかを返す
+// 引数：trueでand,falseでor
+//===========================
+bool CPlayer::GetOutAttack(bool and)
+{
+	switch (and)
+	{
+	case true:
+		//---------------------
+		// 攻撃状態全部なら
+		//---------------------
+		if (m_type == MOTION_ATTACK_1
+			&& m_type == MOTION_ATTACK_2)
+		{
+			return true;
+		}
+		break;
+
+	case false:
+		//---------------------
+		// 攻撃状態どれかなら
+		//---------------------
+		if (m_type == MOTION_ATTACK_1
+			|| m_type == MOTION_ATTACK_2)
+		{
+			return true;
+		}
+		break;
+	}
+
+	return false;
 }
 
 //===========================

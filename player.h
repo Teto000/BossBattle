@@ -52,6 +52,7 @@ public:
 	struct MOTION_SET
 	{
 		bool bLoop;					//ループするかどうか
+		int nStartCollision;		//当たり判定の開始時間
 		int nNumKey;				//キーの最大数
 		KEY_SET aKeySet[MAX_KEY];	//キーセット情報
 	};
@@ -146,10 +147,11 @@ private:
 	void MoveKeyboard(int nUpKey, int nDownKey, int nLeftKey, int nRightKey);	//移動
 	void MoveJoypad();									//ジョイパッドを使った移動
 	void Attack(MOTION_TYPE type, MOTION_TYPE next);	//攻撃処理
-	void ChangeMode();		//モードチェンジ
-	void SetRot();			//角度の設定
-	void SetLine();			//線の設置
-	void UpdateLine();		//線の更新
+	bool GetOutAttack(bool and);	//攻撃状態かどうかを返す
+	void ChangeMode();				//モードチェンジ
+	void SetRot();					//角度の設定
+	void SetLine();					//線の設置
+	void UpdateLine();				//線の更新
 
 private:
 	//----------------
