@@ -976,8 +976,20 @@ void CPlayer::Attack(MOTION_TYPE type, MOTION_TYPE next)
 			&& !m_bHitAttack
 			&& m_status.nAttackTime >= m_aMotionSet[m_type].nStartCollision)
 		{//Œ•‚Æ“–‚½‚Á‚Ä‚¢‚é & UŒ‚‚ð“–‚Ä‚Ä‚¢‚È‚¢ & “–‚½‚è”»’è‚Ì—LŒøŽžŠÔ‚È‚ç
-			//UŒ‚—Í•ª“G‚Ì‘Ì—Í‚ðŒ¸­
-			CGame::GetEnemy()->SubLife(m_status.nAttack);
+
+			if (CGame::GetEnemy()->GetState() != CEnemy::ENEMYSTATE_BREAK)
+			{//“G‚ªƒuƒŒƒCƒNó‘Ô‚¶‚á‚È‚¢‚È‚ç
+				//UŒ‚—Í•ª“G‚Ì‘Ì—Í‚ðŒ¸­
+				CGame::GetEnemy()->SubGauge(m_status.nAttack, CEnemy::GAUGE_HP);
+
+				//ƒuƒŒƒCƒNƒQ[ƒW‚ÌŒ¸­
+				CGame::GetEnemy()->SubGauge(m_status.nAttack, CEnemy::GAUGE_BREAK);
+			}
+			else
+			{
+				//ƒNƒŠƒeƒBƒJƒ‹ƒ_ƒ[ƒW•ª“G‚Ì‘Ì—Í‚ðŒ¸­
+				CGame::GetEnemy()->SubGauge((m_status.nAttack * 1.5f), CEnemy::GAUGE_HP);
+			}
 
 			//ƒRƒ“ƒ{”‚Ì‰ÁŽZ
 			CGame::GetPlayer()->AddCombo(m_status.nComboValue);

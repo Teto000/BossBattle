@@ -24,6 +24,7 @@ const char* CTexture::s_FileName[] =
 	"data/TEXTURE/Ground.jpg",		//地面
 	"data/TEXTURE/Aim.png",			//照準
 	"data/TEXTURE/Clear.png",		//クリア
+	"data/TEXTURE/Break.png",		//ブレイク
 	"data/TEXTURE/Number.png",		//数値
 	"data/TEXTURE/Sky.jpg",			//空
 };

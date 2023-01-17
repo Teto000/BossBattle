@@ -25,6 +25,7 @@ public: /* 定義 */
 		TEXTURE_GROUND,			//地面
 		TEXTURE_AIM,			//照準
 		TEXTURE_CLEAR,			//クリア
+		TEXTURE_BREAK,			//ブレイク
 		TEXTURE_NUMBER,			//数値
 		TEXTURE_SKY,			//空
 		TEXTURE_MAX,

@@ -19,6 +19,7 @@
 #include "player.h"
 #include "fade.h"
 #include "hp.h"
+#include "message.h"
 
 //------------------------
 // グローバル変数
@@ -60,12 +61,20 @@ CEnemy::CEnemy() : CObject(0)
 	m_worldMin = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//ワールド上の最大値
 	m_worldMax = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//ワールド上の最小値
 	m_nMoveTime = 0;		//移動までの時間
+	m_nBreakTime = 0;		//ブレイク状態の時間
 	m_fLife = 0.0f;			//体力
 	m_fRemLife = 0.0f;		//残り体力(%)
 	m_fMaxLife = 0.0f;		//最大体力
 	m_fGravity = 0.0f;		//重力の値
+	m_fBreak = 0.0f;
+	m_fRemBreak = 0.0f;
+	m_fMaxBreak = 0.0f;
 	m_bNockBack = false;	//ノックバックしたか
-	m_pHP = nullptr;		//HP
+
+	for (int i = 0; i < GAUGE_MAX; i++)
+	{
+		m_pHP[i] = nullptr;		//HP
+	}
 
 	/* ↓ モデル情報 ↓ */
 	for (int i = 0; i < MAX_ENEMY_PARTS; i++)
@@ -99,10 +108,14 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 	//初期値の設定
 	m_pos = pos;
 	m_nCntMotion = 1;
-	m_fLife = 900.0f;			//体力
+	m_fLife = 3000.0f;			//体力
 	m_fRemLife = 100.0f;		//残り体力(%)
 	m_fMaxLife = m_fLife;		//最大体力
 	m_fGravity = fDefGravity;	//重力の値
+
+	m_fBreak = 100.0f;
+	m_fRemBreak = 100.0f;
+	m_fMaxBreak = m_fBreak;
 
 	//ワールドマトリックスの初期化
 	D3DXMatrixIdentity(&m_mtxWorld);
@@ -128,12 +141,18 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 	//SetLine();
 
 	//-----------------------
-	// HPの生成
+	// ゲージの生成
 	//-----------------------
 	{
+		//HP
 		D3DXVECTOR3 hpPos(SCREEN_WIDTH / 2, 60.0f, 0.0f);
-		m_pHP = CHP::Create(hpPos, 800.0f, 20.0f, CHP::GAUGETYPE_HP_ENEMY);
-		m_pHP->SetLife(m_fLife, m_fRemLife);	//HPの設定
+		m_pHP[GAUGE_HP] = CHP::Create(hpPos, 800.0f, 20.0f, CHP::GAUGETYPE_HP_ENEMY);
+		m_pHP[GAUGE_HP]->SetLife(m_fLife, m_fRemLife);	//HPの設定
+
+		//ブレイクゲージ
+		D3DXVECTOR3 breakpPos(SCREEN_WIDTH / 2, 100.0f, 0.0f);
+		m_pHP[GAUGE_BREAK] = CHP::Create(breakpPos, 800.0f, 15.0f, CHP::GAUGETYPE_BREAK);
+		m_pHP[GAUGE_BREAK]->SetLife(m_fBreak, m_fRemBreak);	//HPの設定
 	}
 
 	return S_OK;
@@ -176,10 +195,39 @@ void CEnemy::Update()
 		}
 	}
 
-	//------------------------
-	// 攻撃処理
-	//------------------------
-	Attack();
+	//プレイヤーとの当たり判定
+	CGame::GetPlayer()->GetCollisionPlayer(m_pos, m_size, m_mtxWorld);
+
+	if (m_state == ENEMYSTATE_BREAK)
+	{//ブレイク状態なら
+		//----------------------------
+		// ノックバックする処理
+		//----------------------------
+		NockBack();
+
+		//------------------------
+		// ブレイク状態から復帰
+		//------------------------
+		m_nBreakTime++;	//時間を数える
+
+		if (m_nBreakTime >= 600)
+		{//一定時間経過
+			m_state = ENEMYSTATE_NONE;	//ブレイク状態を回復
+			m_nBreakTime = 0;			//時間のリセット
+
+			//ブレイクゲージ
+			D3DXVECTOR3 breakpPos(SCREEN_WIDTH / 2, 100.0f, 0.0f);
+			m_pHP[GAUGE_BREAK] = CHP::Create(breakpPos, 800.0f, 15.0f, CHP::GAUGETYPE_BREAK);
+			m_pHP[GAUGE_BREAK]->SetLife(m_fBreak, m_fRemBreak);	//HPの設定
+		}
+	}
+	else
+	{//敵がブレイクしていないなら
+		//------------------------
+		// 攻撃処理
+		//------------------------
+		Attack();
+	}
 
 	//-------------------
 	// モーション
@@ -190,41 +238,6 @@ void CEnemy::Update()
 	// 線の更新
 	//-------------------------
 	//UpdateLine();
-
-	//----------------------------
-	// 攻撃を受けた処理
-	//----------------------------
-	//プレイヤーとの当たり判定
-	CGame::GetPlayer()->GetCollisionPlayer(m_pos, m_size, m_mtxWorld);
-
-	if (CGame::GetPlayer()->GetHitAttack())
-	{//プレイヤーが攻撃を当てた状態なら
-		//リセット
-		m_nAttackTime = 0;			//攻撃までの時間
-		m_fGravity = fDefGravity;	//重力の値
-
-		//--------------------------------
-		// ノックバックする処理
-		//--------------------------------
-		//プレイヤーの位置を取得
-		D3DXVECTOR3 playerPos = CGame::GetPlayer()->GetPosition();
-
-		//敵とプレイヤー間のベクトルを計算
-		D3DXVECTOR3 vec = playerPos - m_pos;
-
-		D3DXVec3Normalize(&vec,&vec);	//ベクトルの正規化
-
-		if (!m_bNockBack)
-		{//ノックバックしていないなら
-			m_pos += -vec * 7.0f;	//逆ベクトル方向に移動
-			m_pos.y += 50.0f;		//上昇
-			m_bNockBack = true;
-		}
-	}
-	else
-	{
-		m_bNockBack = false;
-	}
 
 	//---------------------
 	// 重力の加算
@@ -248,9 +261,12 @@ void CEnemy::Update()
 		CGame::SetEnemyState();	//敵が死んだ状態
 
 		//HPバーの消去
-		if (m_pHP != nullptr)
-		{//nullじゃないなら
-			m_pHP->Uninit();
+		for (int i = 0; i < GAUGE_MAX; i++)
+		{
+			if (m_pHP[i] != nullptr)
+			{//nullじゃないなら
+				m_pHP[i]->Uninit();
+			}
 		}
 
 		//消去
@@ -481,15 +497,45 @@ void CEnemy::UpdateLine()
 //========================
 // HP減少時の処理
 //========================
-void CEnemy::SubLife(float fDamage)
+void CEnemy::SubGauge(float fDamage, GAUGE type)
 {
-	m_fLife -= fDamage;	//体力の減少
+	switch (type)
+	{
+	//-----------------------
+	// HPを減らす処理
+	//-----------------------
+	case GAUGE_HP:
+		m_fLife -= fDamage;	//体力の減少
 
-	//残り体力を計算
-	m_fRemLife = m_fLife * 100 / m_fMaxLife;
+		//残り体力を計算
+		m_fRemLife = m_fLife * 100 / m_fMaxLife;
 
-	//HPの設定
-	m_pHP->SetLife(m_fLife, m_fRemLife);
+		//HPの設定
+		m_pHP[GAUGE_HP]->SetLife(m_fLife, m_fRemLife);
+		break;
+
+	//--------------------------------
+	// ブレイクゲージを減らす処理
+	//--------------------------------
+	case GAUGE_BREAK:
+		m_fBreak -= (fDamage / 3);
+
+		m_fRemBreak = m_fBreak * 100 / m_fMaxBreak;
+
+		if (m_fBreak < 0 || m_fRemBreak < 0)
+		{
+			m_fBreak = m_fMaxBreak;
+			m_fRemBreak = m_fBreak * 100 / m_fMaxBreak;
+
+			m_state = ENEMYSTATE_BREAK;
+		}
+
+		m_pHP[GAUGE_BREAK]->SetLife(m_fBreak, m_fRemBreak);
+		break;
+
+	default:
+		break;
+	}
 }
 
 //========================
@@ -531,6 +577,41 @@ void CEnemy::Attack()
 		{//攻撃時間が値に達したら
 			CGame::GetPlayer()->SubLife(1);
 		}
+	}
+}
+
+//========================
+// ノックバックする処理
+//========================
+void CEnemy::NockBack()
+{
+	if (CGame::GetPlayer()->GetHitAttack())
+	{//プレイヤーが攻撃を当てた状態なら
+		//リセット
+		m_nAttackTime = 0;			//攻撃までの時間
+		m_fGravity = fDefGravity;	//重力の値
+
+		//--------------------------------
+		// ノックバックする処理
+		//--------------------------------
+		//プレイヤーの位置を取得
+		D3DXVECTOR3 playerPos = CGame::GetPlayer()->GetPosition();
+
+		//敵とプレイヤー間のベクトルを計算
+		D3DXVECTOR3 vec = playerPos - m_pos;
+
+		D3DXVec3Normalize(&vec, &vec);	//ベクトルの正規化
+
+		if (!m_bNockBack)
+		{//ノックバックしていないなら
+			m_pos += -vec * 7.0f;	//逆ベクトル方向に移動
+			m_pos.y += 50.0f;		//上昇
+			m_bNockBack = true;
+		}
+	}
+	else
+	{
+		m_bNockBack = false;
 	}
 }
 

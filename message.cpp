@@ -11,6 +11,7 @@
 #include "message.h"
 #include "renderer.h"
 #include "game.h"
+#include "enemy.h"
 
 //=======================
 // コンストラクタ
@@ -48,7 +49,19 @@ HRESULT CMessage::Init(D3DXVECTOR3 pos)
 
 	CObject2D::SetSize(m_fWidth, m_fHeight);
 
-	CObject2D::SetTexture(CTexture::TEXTURE_CLEAR);
+	switch (m_message)
+	{
+	case MESSAGE_CLEAR:
+		CObject2D::SetTexture(CTexture::TEXTURE_CLEAR);
+		break;
+
+	case MESSAGE_BREAK:
+		CObject2D::SetTexture(CTexture::TEXTURE_BREAK);
+		break;
+
+	default:
+		break;
+	}
 
 	return S_OK;
 }
@@ -69,8 +82,9 @@ void CMessage::Update()
 	CObject2D::Update();
 
 	//時間カウント
-	if (CGame::GetFinish())
-	{//終了フラグが立っているなら
+	if (CGame::GetFinish()
+		|| CGame::GetEnemy()->GetState() == CEnemy::ENEMYSTATE_BREAK)
+	{//終了フラグが立っている || 敵がブレイク状態なら
 		m_nCntTime++;
 	}
 
@@ -82,13 +96,13 @@ void CMessage::Update()
 		m_col.a -= 0.02f;	//透明度の減少
 	}
 
+	if (m_col.a < 0.0f)
+	{//完全に透明なら
+		m_nCntTime = 0;
+	}
+
 	//色の設定
 	CObject2D::SetColor(m_col);
-
-	if (m_col.a <= 0.0f)
-	{//完全に透明になったら
-		Uninit();
-	}
 }
 
 //=======================
@@ -96,14 +110,35 @@ void CMessage::Update()
 //=======================
 void CMessage::Draw()
 {
-	if (CGame::GetFinish())
-	{//終了フラグが立っているなら
-		CObject2D::Draw();
+	switch (m_message)
+	{
+	case MESSAGE_CLEAR:
+		if (CGame::GetFinish())
+		{//終了フラグが立っているなら
+			CObject2D::Draw();
+		}
+		break;
+
+	case MESSAGE_BREAK:
+		if (CGame::GetEnemy()->GetState() == CEnemy::ENEMYSTATE_BREAK)
+		{//敵がブレイク状態なら
+			CObject2D::Draw();
+		}
+		else
+		{//敵がブレイク状態じゃなくなったら
+			m_col.a = 1.0f;	//透明度を最大にする
+			CObject2D::SetColor(m_col);	//色の設定
+		}
+		break;
+
+	default:
+		break;
 	}
 }
 
 //=======================
 // 生成
+// 引数：位置、種類
 //=======================
 CMessage *CMessage::Create(D3DXVECTOR3 pos, MESSAGE message)
 {

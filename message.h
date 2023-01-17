@@ -22,6 +22,7 @@ public:
 	{
 		MESSAGE_NONE = 0,
 		MESSAGE_CLEAR,		//クリア
+		MESSAGE_BREAK,		//ブレイク
 		MESSAGE_MAX
 	};
 

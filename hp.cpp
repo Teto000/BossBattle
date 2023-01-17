@@ -10,6 +10,8 @@
 //-----------------------
 #include "hp.h"
 #include "fream.h"
+#include "game.h"
+#include "enemy.h"
 
 //==========================
 // コンストラクタ
@@ -89,6 +91,17 @@ void CHP::Update()
 	case GAUGETYPE_HP_ENEMY:
 		//オレンジ色にする
 		CObject2D::SetColor(D3DXCOLOR(1.0f, 0.5f, 0.0f, 1.0f));
+		break;
+
+	//----------------------------
+	// ブレイクゲージ
+	//----------------------------
+	case GAUGETYPE_BREAK:
+		//オレンジ色にする
+		CObject2D::SetColor(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+		break;
+
+	default:
 		break;
 	}
 }

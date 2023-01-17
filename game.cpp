@@ -95,6 +95,7 @@ HRESULT CGame::Init()
 	{
 		D3DXVECTOR3 pos(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f);
 		m_pMessage = CMessage::Create(pos, CMessage::MESSAGE_CLEAR);
+		m_pMessage = CMessage::Create(pos, CMessage::MESSAGE_BREAK);
 	}
 
 	//BGMÇÃçƒê∂

@@ -26,7 +26,7 @@ class CHP;		//HP
 #define MAX_ENEMY_KEY	(2)		//キーの最大数
 
 //================================
-// プレイヤークラスの定義
+// エネミークラスの定義
 //================================
 class CEnemy : public CObject
 {
@@ -49,6 +49,20 @@ public:
 		KEY aKey[MAX_ENEMY_PARTS];
 	};
 
+	enum ENEMYSTATE
+	{
+		ENEMYSTATE_NONE = 0,
+		ENEMYSTATE_BREAK,
+		ENEMYSTATE_MAX
+	};
+
+	enum GAUGE
+	{
+		GAUGE_HP = 0,
+		GAUGE_BREAK,
+		GAUGE_MAX
+	};
+
 	CEnemy();			//コンストラクタ
 	~CEnemy() override;	//デストラクタ
 
@@ -64,7 +78,7 @@ public:
 	// セッター
 	//----------------
 	void SetPosition(D3DXVECTOR3 pos) { m_pos = pos; }			//位置の設定
-	void SubLife(float fDamage);	//HP減少時の処理
+	void SubGauge(float fDamage, GAUGE type);	//ゲージ減少時の処理
 
 	//----------------
 	// ゲッター
@@ -75,6 +89,7 @@ public:
 	float GetHeight() override			{ return 0.0f; }		//高さの取得
 	D3DXVECTOR3 GetSize()				{ return m_size; }		//大きさの取得
 	D3DXMATRIX GetmtxWorld()			{ return m_mtxWorld; }	//ワールドマトリックスの取得
+	ENEMYSTATE GetState()				{ return m_state; }		//敵の状態の取得
 
 	//----------------
 	// 静的メンバ関数
@@ -87,6 +102,7 @@ private:
 	void SetLine();		//線の設置
 	void UpdateLine();	//線の更新
 	void Attack();		//攻撃
+	void NockBack();	//ノックバックする処理
 	void Move();		//移動
 
 private:
@@ -111,14 +127,19 @@ private:
 	D3DXVECTOR3 m_size;			//大きさ
 	int m_nMoveTime;			//移動までの時間
 	int m_nAttackTime;			//攻撃までの時間
+	int m_nBreakTime;			//ブレイク状態の時間
 	float m_fLife;				//体力
 	float m_fRemLife;			//残り体力(%)
 	float m_fMaxLife;			//最大体力
 	float m_fGravity;			//重力の値
+	float m_fBreak;
+	float m_fRemBreak;
+	float m_fMaxBreak;
 	bool m_bNockBack;			//ノックバックしたか
 	CModel*  m_pModel[MAX_ENEMY_PARTS];	//モデル
 	CLine*	 m_pLine[nMaxLine];			//ライン
-	CHP*	 m_pHP;						//HP
+	CHP*	 m_pHP[GAUGE_MAX];			//HP
+	ENEMYSTATE m_state;					//敵の状態
 
 
 	/* ↓ モーション情報 ↓ */
