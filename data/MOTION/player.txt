@@ -253,10 +253,10 @@ END_MOTIONSET
 # [2] 通常攻撃１
 #---------------------------------------
 MOTIONSET
-	LOOP = 0		# ループするかどうか[0:ループしない / 1:ループする]
-	COLLISION = 8	# 当たり判定の開始時間
-	NEXT_ATTACK = 5 # 次の攻撃の入力開始時間
-	NUM_KEY = 4		# キー数
+	LOOP = 0		 # ループするかどうか[0:ループしない / 1:ループする]
+	COLLISION = 8	 # 当たり判定の開始時間
+	NEXT_ATTACK = 10 # 次の攻撃の入力開始時間
+	NUM_KEY = 4		 # キー数
 
 	KEYSET			# --- << KEY : 0 / 4 >> ---
 		FRAME = 5	# 剣を振り上げる時間
@@ -415,10 +415,10 @@ END_MOTIONSET
 # [3] 通常攻撃2
 #---------------------------------------
 MOTIONSET
-	LOOP = 0		# ループするかどうか[0:ループしない / 1:ループする]
-	COLLISION = 5	# 当たり判定の開始時間
-	NEXT_ATTACK = 5 # 次の攻撃の入力開始時間
-	NUM_KEY = 2		# キー数
+	LOOP = 0		 # ループするかどうか[0:ループしない / 1:ループする]
+	COLLISION = 5	 # 当たり判定の開始時間
+	NEXT_ATTACK = 15 # 次の攻撃の入力開始時間
+	NUM_KEY = 2		 # キー数
 
 	KEYSET			# --- << KEY : 0 / 2 >> ---
 		FRAME = 30
@@ -459,7 +459,7 @@ MOTIONSET
 	END_KEYSET
 
 	KEYSET			# --- << KEY : 1 / 2 >> ---
-		FRAME = 30
+		FRAME = 3
 		KEY	# ----- [ 0 ] -----
 			POS = 0.00 0.00 0.00
 			ROT = 0.00 0.00 0.00

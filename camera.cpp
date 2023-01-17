@@ -32,7 +32,7 @@ CCamera::CCamera()
 	m_rotDest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_vecU = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_TSPEED = 0.0f;
-	m_bLockOn = false;
+	m_bLockOn = true;
 }
 
 //===========================

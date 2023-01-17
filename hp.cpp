@@ -111,7 +111,17 @@ void CHP::Update()
 //==========================
 void CHP::Draw()
 {
-	CGauge::Draw();
+	if (m_type == GAUGETYPE_BREAK)
+	{
+		if (CGame::GetEnemy()->GetState() != CEnemy::ENEMYSTATE_BREAK)
+		{
+			CGauge::Draw();
+		}
+	}
+	else
+	{
+		CGauge::Draw();
+	}
 }
 
 //==========================

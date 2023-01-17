@@ -972,31 +972,41 @@ void CPlayer::Attack(MOTION_TYPE type, MOTION_TYPE next)
 		//------------------------------------------
 		// 剣との当たり判定
 		//------------------------------------------
-		if (m_pModel[nSwordNumber]->GetCollisionAttack()
-			&& !m_bHitAttack
-			&& m_status.nAttackTime >= m_aMotionSet[m_type].nStartCollision)
-		{//剣と当たっている & 攻撃を当てていない & 当たり判定の有効時間なら
+		HitSword();
+	}
+}
 
-			if (CGame::GetEnemy()->GetState() != CEnemy::ENEMYSTATE_BREAK)
-			{//敵がブレイク状態じゃないなら
-				//攻撃力分敵の体力を減少
-				CGame::GetEnemy()->SubGauge(m_status.nAttack, CEnemy::GAUGE_HP);
+//================================
+// 剣との当たり判定
+//================================
+void CPlayer::HitSword()
+{
+	if (m_pModel[nSwordNumber]->GetCollisionAttack()
+		&& !m_bHitAttack
+		&& m_status.nAttackTime >= m_aMotionSet[m_type].nStartCollision)
+	{//剣と当たっている & 攻撃を当てていない & 当たり判定の有効時間なら
+		//-----------------------------
+		// ブレイク状態かどうか
+		//-----------------------------
+		if (CGame::GetEnemy()->GetState() != CEnemy::ENEMYSTATE_BREAK)
+		{//敵がブレイク状態じゃないなら
+			//攻撃力分敵の体力を減少
+			CGame::GetEnemy()->SubGauge(m_status.nAttack, CEnemy::GAUGE_HP);
 
-				//ブレイクゲージの減少
-				CGame::GetEnemy()->SubGauge(m_status.nAttack, CEnemy::GAUGE_BREAK);
-			}
-			else
-			{
-				//クリティカルダメージ分敵の体力を減少
-				CGame::GetEnemy()->SubGauge((m_status.nAttack * 1.5f), CEnemy::GAUGE_HP);
-			}
-
-			//コンボ数の加算
-			CGame::GetPlayer()->AddCombo(m_status.nComboValue);
-
-			//攻撃を当てた状態にする
-			m_bHitAttack = true;
+			//ブレイクゲージの減少
+			CGame::GetEnemy()->SubGauge(m_status.nAttack, CEnemy::GAUGE_BREAK);
 		}
+		else
+		{
+			//クリティカルダメージ分敵の体力を減少
+			CGame::GetEnemy()->SubGauge((m_status.nAttack * 1.5f), CEnemy::GAUGE_HP);
+		}
+
+		//コンボ数の加算
+		CGame::GetPlayer()->AddCombo(m_status.nComboValue);
+
+		//攻撃を当てた状態にする
+		m_bHitAttack = true;
 	}
 }
 

@@ -215,10 +215,16 @@ void CEnemy::Update()
 			m_state = ENEMYSTATE_NONE;	//ブレイク状態を回復
 			m_nBreakTime = 0;			//時間のリセット
 
-			//ブレイクゲージ
-			D3DXVECTOR3 breakpPos(SCREEN_WIDTH / 2, 100.0f, 0.0f);
-			m_pHP[GAUGE_BREAK] = CHP::Create(breakpPos, 800.0f, 15.0f, CHP::GAUGETYPE_BREAK);
-			m_pHP[GAUGE_BREAK]->SetLife(m_fBreak, m_fRemBreak);	//HPの設定
+			//ブレイクゲージを最大にする
+			m_fBreak = m_fMaxBreak;
+			m_fRemBreak = m_fBreak * 100 / m_fMaxBreak;
+
+			//ブレイクゲージの生成
+			{
+				D3DXVECTOR3 breakpPos(SCREEN_WIDTH / 2, 100.0f, 0.0f);
+				m_pHP[GAUGE_BREAK] = CHP::Create(breakpPos, 800.0f, 15.0f, CHP::GAUGETYPE_BREAK);
+				m_pHP[GAUGE_BREAK]->SetLife(m_fBreak, m_fRemBreak);	//HPの設定
+			}
 		}
 	}
 	else
@@ -518,15 +524,13 @@ void CEnemy::SubGauge(float fDamage, GAUGE type)
 	// ブレイクゲージを減らす処理
 	//--------------------------------
 	case GAUGE_BREAK:
-		m_fBreak -= (fDamage / 3);
+		m_fBreak -= round(fDamage / 3);
 
 		m_fRemBreak = m_fBreak * 100 / m_fMaxBreak;
 
-		if (m_fBreak < 0 || m_fRemBreak < 0)
-		{
-			m_fBreak = m_fMaxBreak;
-			m_fRemBreak = m_fBreak * 100 / m_fMaxBreak;
-
+		if (m_fBreak < 0 && m_fRemBreak < 0)
+		{//ブレイクゲージが尽きたら
+			//ブレイク状態にする
 			m_state = ENEMYSTATE_BREAK;
 		}
 

@@ -150,8 +150,8 @@ HRESULT CMesh::Init(D3DXVECTOR3 pos)
 			//èkëﬁÉ|ÉäÉSÉìÇÃí«â¡
 			if (X == m_nNumDivision)
 			{
-				pIdx[nCnt] = X + Z * m_nCntVtx;
-				pIdx[nCnt + 1] = (Z + 2) * m_nCntVtx;
+				pIdx[nCnt] = (WORD)(X + Z * m_nCntVtx);
+				pIdx[nCnt + 1] = (WORD)((Z + 2) * m_nCntVtx);
 
 				nCnt += 2;
 			}
