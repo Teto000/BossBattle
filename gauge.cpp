@@ -75,7 +75,6 @@ void CGauge::Uninit()
 //==========================
 void CGauge::Update()
 {
-
 	CObject2D::Update();
 
 	//HP減少時の処理
@@ -93,7 +92,7 @@ void CGauge::Draw()
 //===========================
 // HP減少時の処理
 //===========================
-void CGauge::SubHP()
+bool CGauge::SubHP()
 {
 	//-------------------------
 	// 頂点座標の設定
@@ -120,35 +119,10 @@ void CGauge::SubHP()
 
 		//終了処理
 		Uninit();
-		return;
+		return true;
 	}
 
-	//-------------------------
-	// HPごとの処理
-	//-------------------------
-	if (m_type == GAUGETYPE_PLAYER)
-	{//プレイヤーのHPなら
-		if (m_fRemLife <= 20)
-		{//HPが20%以下になったら
-			//赤色にする
-			CObject2D::SetColor(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
-		}
-		else if (m_fRemLife <= 50)
-		{//HPが50%以下になったら
-			//黄色にする
-			CObject2D::SetColor(D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f));
-		}
-		else
-		{
-			//緑色にする
-			CObject2D::SetColor(D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f));
-		}
-	}
-	else if (m_type == GAUGETYPE_ENEMY)
-	{//エネミーのHPなら
-		//オレンジ色にする
-		CObject2D::SetColor(D3DXCOLOR(1.0f, 0.5f, 0.0f, 1.0f));
-	}
+	return false;
 }
 
 //===========================
@@ -158,23 +132,4 @@ void CGauge::SetLife(float fLife, float fRemLife)
 {
 	m_fLife = fLife;
 	m_fRemLife = fRemLife;
-}
-
-//===========================
-// 種類の設定
-//===========================
-void CGauge::SetType(int nNum)
-{
-	switch (nNum)
-	{
-	case GAUGETYPE_PLAYER:
-		m_type = GAUGETYPE_PLAYER;
-		break;
-
-	case GAUGETYPE_ENEMY:
-		m_type = GAUGETYPE_ENEMY;
-		break;
-	default:
-		break;
-	}
 }

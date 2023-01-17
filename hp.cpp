@@ -34,8 +34,6 @@ HRESULT CHP::Init(D3DXVECTOR3 pos)
 {
 	CGauge::Init(pos);
 
-	CGauge::SetType(m_type);
-
 	return S_OK;
 }
 
@@ -53,6 +51,46 @@ void CHP::Uninit()
 void CHP::Update()
 {
 	CGauge::Update();
+
+	if (SubHP())
+	{//ゲージが消えていたら
+		return;
+	}
+
+	//-------------------------
+	// 種類ごとの処理
+	//-------------------------
+	switch (m_type)
+	{
+	//----------------------------
+	// プレイヤーのHP
+	//----------------------------
+	case GAUGETYPE_HP_PLAYER:
+		if (m_fRemLife <= 20)
+		{//HPが20%以下になったら
+			//赤色にする
+			CObject2D::SetColor(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+		}
+		else if (m_fRemLife <= 50)
+		{//HPが50%以下になったら
+			//黄色にする
+			CObject2D::SetColor(D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f));
+		}
+		else
+		{
+			//緑色にする
+			CObject2D::SetColor(D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f));
+		}
+		break;
+
+	//----------------------------
+	// 敵のHP
+	//----------------------------
+	case GAUGETYPE_HP_ENEMY:
+		//オレンジ色にする
+		CObject2D::SetColor(D3DXCOLOR(1.0f, 0.5f, 0.0f, 1.0f));
+		break;
+	}
 }
 
 //==========================
@@ -66,7 +104,7 @@ void CHP::Draw()
 //==========================
 // 生成
 //==========================
-CHP* CHP::Create(D3DXVECTOR3 pos, float fWidth, float fHeight, HPTYPE type)
+CHP* CHP::Create(D3DXVECTOR3 pos, float fWidth, float fHeight, GAUGETYPE type)
 {
 	CHP *pHP = nullptr;
 
