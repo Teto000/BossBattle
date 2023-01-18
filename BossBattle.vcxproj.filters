@@ -158,6 +158,9 @@
     <ClCompile Include="hp.cpp">
       <Filter>Main\Object\Object2D\Gauge</Filter>
     </ClCompile>
+    <ClCompile Include="utility.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -273,6 +276,9 @@
     </ClInclude>
     <ClInclude Include="damage.h">
       <Filter>Main\Object\Object2D\Number</Filter>
+    </ClInclude>
+    <ClInclude Include="utility.h">
+      <Filter>Main</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

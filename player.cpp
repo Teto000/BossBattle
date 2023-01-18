@@ -27,6 +27,7 @@
 #include "combo.h"
 #include "damage.h"
 #include "style_shift.h"
+#include "utility.h"
 
 //-------------------------------
 // 静的メンバ変数宣言
@@ -313,6 +314,11 @@ void CPlayer::Update()
 	// 線の更新
 	//--------------------------------
 	//UpdateLine();
+
+	//--------------------------------
+	// 敵との当たり判定
+	//--------------------------------
+	GetCollisionEnemy();
 }
 
 //=============================
@@ -1251,91 +1257,45 @@ void CPlayer::UpdateLine()
 // プレイヤーの当たり判定
 // 引数：相手の位置、相手の大きさ
 //======================================
-bool CPlayer::GetCollisionPlayer(D3DXVECTOR3 targetPos
-	, D3DXVECTOR3 targetSize, D3DXMATRIX targetMtx)
+void CPlayer::GetCollisionEnemy()
 {
-	//------------------------------------
-	// 行列を元に戻す
-	//------------------------------------
-	//ワールド座標を求める
-	D3DXVECTOR3 worldPos(0.0f, 0.0f, 0.0f);		//ワールド上の座標
-	D3DXVec3TransformCoord(&worldPos, &m_pos, &m_mtxWorld);
+	//--------------------------
+	// 敵の情報を取得
+	//--------------------------
+	D3DXVECTOR3 enemyPos(CGame::GetEnemy()->GetPosition());
+	D3DXVECTOR3 enemySize(CGame::GetEnemy()->GetSize());
+	D3DXMATRIX enemyMtx(CGame::GetEnemy()->GetmtxWorld());
 
-	//逆行列を求める
-	D3DXMATRIX invMtxWorld;		//逆行列の値を入れる
-	D3DXMatrixInverse(&invMtxWorld, NULL, &m_mtxWorld);
+	//--------------------------
+	// 当たり判定の処理
+	//--------------------------
+	CUtility::COLLISION coll = CUtility::Collision(m_pos, m_posOld, m_size, m_mtxWorld
+		, enemyPos, enemySize, enemyMtx);
 
-	//逆行列を使ってローカル座標を求める
-	D3DXVECTOR3 localPos(0.0f, 0.0f, 0.0f);		//ローカル上の座標
-	D3DXVec3TransformCoord(&localPos, &worldPos, &invMtxWorld);
+	//--------------------------
+	// 当たった方向に応じた処理
+	//--------------------------
+	switch (coll)
+	{
+	case CUtility::COLLISION_FRONT:
+		m_pos.z = enemyPos.z + enemySize.z + (m_size.z / 2);
+		break;
 
-	//------------------------------------
-	// プレイヤーの端の設定
-	//------------------------------------
-	float fLeft = localPos.x - (m_size.x / 2);		//プレイヤーの左端
-	float fRight = localPos.x + (m_size.x / 2);		//プレイヤーの右端
-	float fTop = localPos.y + (m_size.y / 2);		//プレイヤーの上端
-	float fBottom = localPos.y - (m_size.y / 2);	//プレイヤーの下端
-	float fFront = localPos.z - (m_size.z / 2);		//プレイヤーの前端
-	float fBack = localPos.z + (m_size.z / 2);		//プレイヤーの後端
+	case CUtility::COLLISION_BACK:
+		m_pos.z = enemyPos.z - enemySize.z - (m_size.z / 2);
+		break;
 
-	//------------------------------------
-	// 相手の行列を元に戻す
-	//------------------------------------
-	D3DXVec3TransformCoord(&worldPos, &targetPos, &targetMtx);
-	D3DXMatrixInverse(&invMtxWorld, NULL, &targetMtx);
-	D3DXVec3TransformCoord(&localPos, &worldPos, &invMtxWorld);
+	case CUtility::COLLISION_LEFT:
+		m_pos.x = enemyPos.x + enemySize.x + (m_size.x / 2);
+		break;
 
-	//------------------------------------
-	// 相手の端の設定
-	//------------------------------------
-	float fTargetLeft = localPos.x + targetSize.x;		//相手の左端
-	float fTargetRight = localPos.x - targetSize.x;		//相手の右端
-	float fTargetTop = localPos.y + targetSize.y;		//相手の上端
-	float fTargetBottom = localPos.y - targetSize.y;	//相手の下端
-	float fTargetFront = localPos.z + targetSize.z;		//相手の前端
-	float fTargetBack = localPos.z - targetSize.z;		//相手の後端
+	case CUtility::COLLISION_RIGHT:
+		m_pos.x = enemyPos.x - enemySize.x - (m_size.x / 2);
+		break;
 
-	//------------------------------------
-	// 当たり判定
-	//------------------------------------
-	if (fTargetTop >= fTop && fTargetBottom <= fBottom)
-	{//上下の範囲内なら
-		//---------------------------------
-		// 前後の当たり判定
-		//---------------------------------
-		if (fTargetLeft >= fLeft && fTargetRight <= fRight)
-		{//左右の範囲内なら
-			if (fTargetFront >= fFront && fTargetFront < m_posOld.z - (m_size.z / 2))
-			{
-				m_pos.z = targetPos.z + targetSize.z + (m_size.z / 2);
-				return true;
-			}
-			else if (fTargetBack <= fBack && fTargetBack > m_posOld.z - (m_size.z / 2))
-			{
-				m_pos.z = targetPos.z - targetSize.z - (m_size.z / 2);
-				return true;
-			}
-		}
-		//---------------------------------
-		// 左右の当たり判定
-		//---------------------------------
-		if (fTargetFront >= fFront && fTargetBack <= fBack)
-		{//前後の範囲内なら
-			if (fTargetLeft >= fLeft && fTargetLeft < m_posOld.x + (m_size.x / 2))
-			{
-				m_pos.x = targetPos.x + targetSize.x + (m_size.x / 2);
-				return true;
-			}
-			else if (fTargetRight <= fRight && fTargetRight > m_posOld.x - (m_size.x / 2))
-			{
-				m_pos.x = targetPos.x - targetSize.x - (m_size.x / 2);
-				return true;
-			}
-		}
+	default:
+		break;
 	}
-
-	return false;
 }
 
 //================================

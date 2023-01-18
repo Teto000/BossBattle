@@ -195,9 +195,6 @@ void CEnemy::Update()
 		}
 	}
 
-	//プレイヤーとの当たり判定
-	CGame::GetPlayer()->GetCollisionPlayer(m_pos, m_size, m_mtxWorld);
-
 	if (m_state == ENEMYSTATE_BREAK)
 	{//ブレイク状態なら
 		//----------------------------
@@ -566,7 +563,7 @@ void CEnemy::Attack()
 	//-------------------------
 	if (fDistance >= fMoveArea)
 	{//プレイヤーが範囲内にいないなら
-		Move();
+		//Move();
 	}
 
 	//-------------------------
