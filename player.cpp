@@ -9,6 +9,7 @@
 // インクルード
 //-------------------------------
 #include <stdio.h>
+#include <stdlib.h>
 #include <assert.h>
 #include "player.h"
 #include "object.h"
@@ -491,6 +492,30 @@ void CPlayer::GetFileMotion()
 				{//頭文字がNUM_KEYなら
 					//文字列からキーの最大数を読み取る
 					sscanf(cText, "%s = %d", &cTextHead, &m_aMotionSet[nNumMotion].nNextAtkTime);
+				}
+				//-------------------------------
+				// 攻撃に必要なポイント数
+				//-------------------------------
+				else if (strcmp(&cTextHead[0], "NUM_POINT") == 0)
+				{//頭文字がNUM_KEYなら
+				 //文字列からキーの最大数を読み取る
+					sscanf(cText, "%s = %d", &cTextHead, &m_aMotionSet[nNumMotion].nNumPoint);
+				}
+				//-------------------------------
+				// クリティカル率
+				//-------------------------------
+				else if (strcmp(&cTextHead[0], "CRITICAL") == 0)
+				{//頭文字がNUM_KEYなら
+				 //文字列からキーの最大数を読み取る
+					sscanf(cText, "%s = %d", &cTextHead, &m_aMotionSet[nNumMotion].nCritical);
+				}
+				//-------------------------------
+				// ダメージ倍率
+				//-------------------------------
+				else if (strcmp(&cTextHead[0], "DAMAGE_MAG") == 0)
+				{//頭文字がNUM_KEYなら
+				 //文字列からキーの最大数を読み取る
+					sscanf(cText, "%s = %f", &cTextHead, &m_aMotionSet[nNumMotion].fDamageMag);
 				}
 				//-------------------------------
 				// キーの最大数
@@ -998,21 +1023,40 @@ void CPlayer::HitSword()
 		&& !m_bHitAttack
 		&& m_status.nAttackTime >= m_aMotionSet[m_type].nStartCollision)
 	{//剣と当たっている & 攻撃を当てていない & 当たり判定の有効時間なら
+		//技ごとのダメージ量を計算
+		float fDamage = m_status.nAttack * m_aMotionSet[m_type].fDamageMag;
+
+		//-----------------------------
+		// クリティカルかどうか
+		//-----------------------------
+		int nRand = rand() % 101;
+		bool bCritical = false;
+		if (nRand <= m_aMotionSet[m_type].nCritical)
+		{//ランダムな値がクリティカル率以内なら
+			fDamage *= 1.5f;	//ダメージ1.5倍
+			bCritical = true;	//クリティカル状態にする
+		}
+
 		//-----------------------------
 		// ブレイク状態かどうか
 		//-----------------------------
 		if (CGame::GetEnemy()->GetState() != CEnemy::ENEMYSTATE_BREAK)
 		{//敵がブレイク状態じゃないなら
 			//攻撃力分敵の体力を減少
-			CGame::GetEnemy()->SubGauge(m_status.nAttack, CEnemy::GAUGE_HP);
+			CGame::GetEnemy()->SubGauge(fDamage, CEnemy::GAUGE_HP);
 
 			//ブレイクゲージの減少
-			CGame::GetEnemy()->SubGauge(m_status.nAttack, CEnemy::GAUGE_BREAK);
+			CGame::GetEnemy()->SubGauge(fDamage, CEnemy::GAUGE_BREAK);
 		}
 		else
-		{
+		{//ブレイク状態なら
+			if (!bCritical)
+			{//クリティカル状態じゃないなら
+				fDamage *= 1.5f;	//ダメージ1.5倍
+			}
+
 			//クリティカルダメージ分敵の体力を減少
-			CGame::GetEnemy()->SubGauge((m_status.nAttack * 1.5f), CEnemy::GAUGE_HP);
+			CGame::GetEnemy()->SubGauge(fDamage, CEnemy::GAUGE_HP);
 		}
 
 		//コンボ数の加算

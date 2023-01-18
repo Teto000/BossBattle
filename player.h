@@ -51,9 +51,13 @@ public:
 	//モーション情報
 	struct MOTION_SET
 	{
-		bool bLoop;					//ループするかどうか
 		int nStartCollision;		//当たり判定の開始時間
 		int nNextAtkTime;			//次の攻撃の入力開始時間
+		int nNumPoint;				//消費ポイント数
+		int nCritical;				//クリティカル率
+		float fDamageMag;			//ダメージ倍率(magnification)
+		bool bLoop;					//ループするかどうか
+
 		int nNumKey;				//キーの最大数
 		KEY_SET aKeySet[MAX_KEY];	//キーセット情報
 	};
@@ -78,7 +82,7 @@ public:
 		MOTION_MOVE,		//移動
 		MOTION_ATTACK_1,	//通常攻撃(1段目)
 		MOTION_ATTACK_2,	//通常攻撃(2段目)
-		MOTION_ATTACK_3,	//通常攻撃(3段目)
+		//MOTION_ATTACK_3,	//通常攻撃(3段目)
 		MOTION_MAX
 	};
 
@@ -119,6 +123,7 @@ public:
 	D3DXVECTOR3 GetPosition() override { return m_pos; }			//位置の取得
 	D3DXVECTOR3 GetWorldPos();										//ワールド座標を取得
 	D3DXVECTOR3 GetRot()			   { return m_rot; }			//向きの取得
+	D3DXVECTOR3 GetSize()			   { return m_size; }			//大きさの取得
 	D3DXMATRIX GetmtxWorld()		   { return m_mtxWorld; }		//ワールドマトリックスの取得
 	float GetWidth() override		   { return 0.0f; }				//幅の取得
 	float GetHeight() override		   { return 0.0f; }				//高さの取得

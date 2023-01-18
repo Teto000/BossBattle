@@ -9,6 +9,7 @@
 // インクルード
 //------------------------
 #include "utility.h"
+#include "player.h"
 #include "enemy.h"
 
 //=======================================
@@ -151,8 +152,18 @@ D3DXVECTOR3 CUtility::GetCollisionPos(D3DXVECTOR3 pos, D3DXVECTOR3 posOld
 		//-----------------------------
 		// 相手の種類ごとの処理
 		//-----------------------------
-		if (targetType == CObject::OBJTYPE_ENEMY)
-		{//相手の種類が敵なら
+		if (targetType == CObject::OBJTYPE_PLAYER)
+		{//相手がプレイヤーなら
+			//ダウンキャスト
+			CPlayer* pPlayer = (CPlayer*)pObj;
+
+			//情報の取得
+			targetPos = pPlayer->GetPosition();
+			targetSize = pPlayer->GetSize();
+			targetMtx = pPlayer->GetmtxWorld();
+		}
+		else if (targetType == CObject::OBJTYPE_ENEMY)
+		{//相手が敵なら
 			//ダウンキャスト
 			CEnemy* pEnemy = (CEnemy*)pObj;
 
@@ -165,13 +176,13 @@ D3DXVECTOR3 CUtility::GetCollisionPos(D3DXVECTOR3 pos, D3DXVECTOR3 posOld
 		//--------------------------
 		// 当たり判定の処理
 		//--------------------------
-		CUtility::COLLISION collision = CUtility::Collision(pos, posOld, size, mtx
+		CUtility::COLLISION direction = CUtility::Collision(pos, posOld, size, mtx
 			, targetPos, targetSize, targetMtx);
 
 		//--------------------------
 		// 当たった方向に応じた処理
 		//--------------------------
-		switch (collision)
+		switch (direction)
 		{
 		case CUtility::COLLISION_FRONT:
 			returnPos.z = targetPos.z + targetSize.z + (size.z / 2);
