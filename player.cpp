@@ -915,6 +915,12 @@ void CPlayer::Attack(MOTION_TYPE type, MOTION_TYPE next)
 		&& m_type != MOTION_ATTACK_1
 		&& m_type != MOTION_ATTACK_2)
 	{//ENTERキーが押された & 攻撃モーション中じゃないなら
+		//-----------------------------
+		// 敵のところまで移動する
+		//-----------------------------
+		D3DXVECTOR3 enemyPos = CGame::GetEnemy()->GetPosition();
+		MoveAccess(enemyPos);
+
 		//攻撃モーションにする
 		ChangeMotion(type);
 	}
@@ -1008,6 +1014,24 @@ void CPlayer::HitSword()
 		//攻撃を当てた状態にする
 		m_bHitAttack = true;
 	}
+}
+
+//================================
+// 目的の位置まで近づく処理
+//================================
+bool CPlayer::MoveAccess(D3DXVECTOR3 targetPos)
+{
+	//自分の位置と目的の位置のベクトルを求める
+	D3DXVECTOR3 vec(m_pos - targetPos);
+
+	//ベクトルの正規化
+	D3DXVec3Normalize(&vec, &vec);
+
+	//プレイヤーに向かって移動
+	m_move = vec * 1.5f;
+	m_pos += m_move;
+
+	return false;
 }
 
 //================================

@@ -219,7 +219,7 @@ void CEnemy::Update()
 			m_fBreak = m_fMaxBreak;
 			m_fRemBreak = m_fBreak * 100 / m_fMaxBreak;
 
-			//ブレイクゲージの生成
+			//ブレイクゲージの再生成
 			{
 				D3DXVECTOR3 breakpPos(SCREEN_WIDTH / 2, 100.0f, 0.0f);
 				m_pHP[GAUGE_BREAK] = CHP::Create(breakpPos, 800.0f, 15.0f, CHP::GAUGETYPE_BREAK);
