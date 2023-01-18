@@ -51,6 +51,7 @@ CPlayer::CPlayer() : CObject(0)
 	m_worldMax = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//ワールド上の最小値
 	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//大きさ
 	m_nNumCombo = 0;							//コンボ数
+	m_nCntHit = 0;								//ヒット数を数える
 	m_status.nComboValue = 0;					//コンボの加算値
 	m_nCntModeTime = 0;							//モード終了までの時間を数える
 	fSizeWidth = 0.0f;							//サイズ(幅)
@@ -481,7 +482,7 @@ void CPlayer::GetFileMotion()
 				// 当たり判定の開始時間
 				//-------------------------------
 				else if (strcmp(&cTextHead[0], "COLLISION") == 0)
-				{//頭文字がNUM_KEYなら
+				{//頭文字がCOLLISIONなら
 					//文字列からキーの最大数を読み取る
 					sscanf(cText, "%s = %d", &cTextHead, &m_aMotionSet[nNumMotion].nStartCollision);
 				}
@@ -489,7 +490,7 @@ void CPlayer::GetFileMotion()
 				// 次の攻撃入力開始時間
 				//-------------------------------
 				else if (strcmp(&cTextHead[0], "NEXT_ATTACK") == 0)
-				{//頭文字がNUM_KEYなら
+				{//頭文字がNEXT_ATTACKなら
 					//文字列からキーの最大数を読み取る
 					sscanf(cText, "%s = %d", &cTextHead, &m_aMotionSet[nNumMotion].nNextAtkTime);
 				}
@@ -497,7 +498,7 @@ void CPlayer::GetFileMotion()
 				// 攻撃に必要なポイント数
 				//-------------------------------
 				else if (strcmp(&cTextHead[0], "NUM_POINT") == 0)
-				{//頭文字がNUM_KEYなら
+				{//頭文字がNUM_POINTなら
 				 //文字列からキーの最大数を読み取る
 					sscanf(cText, "%s = %d", &cTextHead, &m_aMotionSet[nNumMotion].nNumPoint);
 				}
@@ -505,16 +506,24 @@ void CPlayer::GetFileMotion()
 				// クリティカル率
 				//-------------------------------
 				else if (strcmp(&cTextHead[0], "CRITICAL") == 0)
-				{//頭文字がNUM_KEYなら
-				 //文字列からキーの最大数を読み取る
+				{//頭文字がCRITICALなら
+					//文字列からキーの最大数を読み取る
 					sscanf(cText, "%s = %d", &cTextHead, &m_aMotionSet[nNumMotion].nCritical);
+				}
+				//-------------------------------
+				// ヒット数
+				//-------------------------------
+				else if (strcmp(&cTextHead[0], "NUM_HIT") == 0)
+				{//頭文字がNUM_HITなら
+				 //文字列からキーの最大数を読み取る
+					sscanf(cText, "%s = %d", &cTextHead, &m_aMotionSet[nNumMotion].nNumHit);
 				}
 				//-------------------------------
 				// ダメージ倍率
 				//-------------------------------
 				else if (strcmp(&cTextHead[0], "DAMAGE_MAG") == 0)
-				{//頭文字がNUM_KEYなら
-				 //文字列からキーの最大数を読み取る
+				{//頭文字がDAMAGE_MAGなら
+					//文字列からキーの最大数を読み取る
 					sscanf(cText, "%s = %f", &cTextHead, &m_aMotionSet[nNumMotion].fDamageMag);
 				}
 				//-------------------------------
@@ -1062,8 +1071,14 @@ void CPlayer::HitSword()
 		//コンボ数の加算
 		CGame::GetPlayer()->AddCombo(m_status.nComboValue);
 
-		//攻撃を当てた状態にする
-		m_bHitAttack = true;
+		//ヒット数の加算
+		m_nCntHit++;
+
+		if (m_nCntHit >= m_aMotionSet[m_type].nNumHit)
+		{//現在のヒット数が攻撃のヒット数以上なら
+			m_bHitAttack = true;	//攻撃を当てた状態にする
+			m_nCntHit = 0;			//ヒット数をリセット
+		}
 	}
 }
 

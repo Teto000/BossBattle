@@ -254,12 +254,14 @@ END_MOTIONSET
 #---------------------------------------
 MOTIONSET
 	LOOP = 0		 # ループするかどうか[0:ループしない / 1:ループする]
+	NUM_KEY = 4		 # キー数
+	
 	COLLISION = 8	 # 当たり判定の開始時間
 	NEXT_ATTACK = 10 # 次の攻撃の入力開始時間
 	NUM_POINT = 0	 # 攻撃に必要なポイント数
 	CRITICAL = 10    # クリティカル率(%)
+	NUM_HIT = 1		 # ヒット数
 	DAMAGE_MAG = 1.0 # ダメージ倍率
-	NUM_KEY = 4		 # キー数
 
 	KEYSET			# --- << KEY : 0 / 4 >> ---
 		FRAME = 3	# 剣を振り上げる時間
@@ -419,12 +421,14 @@ END_MOTIONSET
 #---------------------------------------
 MOTIONSET
 	LOOP = 0		 # ループするかどうか[0:ループしない / 1:ループする]
+	NUM_KEY = 2		 # キー数
+	
 	COLLISION = 5	 # 当たり判定の開始時間
 	NEXT_ATTACK = 5  # 次の攻撃の入力開始時間
 	NUM_POINT = 0	 # 攻撃に必要なポイント数
 	CRITICAL = 10    # クリティカル率(%)
+	NUM_HIT = 1		 # ヒット数
 	DAMAGE_MAG = 1.1 # ダメージ倍率
-	NUM_KEY = 2		 # キー数
 
 	KEYSET			# --- << KEY : 0 / 2 >> ---
 		FRAME = 20

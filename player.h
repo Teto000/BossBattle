@@ -51,15 +51,16 @@ public:
 	//モーション情報
 	struct MOTION_SET
 	{
+		bool bLoop;					//ループするかどうか
+		int nNumKey;				//キーの最大数
+		KEY_SET aKeySet[MAX_KEY];	//キーセット情報
+
 		int nStartCollision;		//当たり判定の開始時間
 		int nNextAtkTime;			//次の攻撃の入力開始時間
 		int nNumPoint;				//消費ポイント数
 		int nCritical;				//クリティカル率
+		int nNumHit;				//ヒット数
 		float fDamageMag;			//ダメージ倍率(magnification)
-		bool bLoop;					//ループするかどうか
-
-		int nNumKey;				//キーの最大数
-		KEY_SET aKeySet[MAX_KEY];	//キーセット情報
 	};
 
 	//プレイヤーのステータス
@@ -185,6 +186,7 @@ private:
 	D3DXVECTOR3 m_worldMin;		//ワールド上の最大値
 	D3DXVECTOR3	m_worldMax;		//ワールド上の最小値
 	int m_nNumCombo;			//コンボ数
+	int m_nCntHit;				//ヒット数を数える
 	int m_nCntModeTime;			//モード終了までの時間を数える
 	float fSizeWidth;			//サイズ(幅)
 	float fSizeDepth;			//サイズ(奥行き)
