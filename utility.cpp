@@ -9,6 +9,7 @@
 // インクルード
 //------------------------
 #include "utility.h"
+#include "enemy.h"
 
 //=======================================
 // コンストラクタ
@@ -110,4 +111,88 @@ CUtility::COLLISION CUtility::Collision(D3DXVECTOR3 pos, D3DXVECTOR3 posOld, D3D
 	}
 
 	return COLLISION_NONE;
+}
+
+//=======================================
+// 押し戻された位置を返す処理
+//=======================================
+D3DXVECTOR3 CUtility::GetCollisionPos(D3DXVECTOR3 pos, D3DXVECTOR3 posOld
+	, D3DXVECTOR3 size, D3DXMATRIX mtx, CObject::EObjType targetType)
+{
+	//変数宣言
+	D3DXVECTOR3 targetPos;		//相手の位置
+	D3DXVECTOR3 targetSize;		//相手の大きさ
+	D3DXMATRIX targetMtx;		//相手のマトリックス
+
+	D3DXVECTOR3 returnPos = pos;	//返す値の代入用変数
+
+	//--------------------------
+	// 相手の情報を取得
+	//--------------------------
+	for (int i = 0; i < CObject::GetMaxPriolity(); i++)
+	{//プライオリティ分回す
+		CObject* pObj;
+		pObj = CObject::GETObject(targetType, i);
+
+		if (pObj == nullptr)
+		{//nullなら戻す
+			continue;
+		}
+
+		//---------------------------
+		// オブジェクトの種類の取得
+		//---------------------------
+		CObject::EObjType type = pObj->GetObjType();
+		if (type != targetType)
+		{//オブジェクトの種類が目的の相手じゃないなら
+			continue;
+		}
+
+		//-----------------------------
+		// 相手の種類ごとの処理
+		//-----------------------------
+		if (targetType == CObject::OBJTYPE_ENEMY)
+		{//相手の種類が敵なら
+			//ダウンキャスト
+			CEnemy* pEnemy = (CEnemy*)pObj;
+
+			//情報の取得
+			targetPos = pEnemy->GetPosition();
+			targetSize = pEnemy->GetSize();
+			targetMtx = pEnemy->GetmtxWorld();
+		}
+
+		//--------------------------
+		// 当たり判定の処理
+		//--------------------------
+		CUtility::COLLISION collision = CUtility::Collision(pos, posOld, size, mtx
+			, targetPos, targetSize, targetMtx);
+
+		//--------------------------
+		// 当たった方向に応じた処理
+		//--------------------------
+		switch (collision)
+		{
+		case CUtility::COLLISION_FRONT:
+			returnPos.z = targetPos.z + targetSize.z + (size.z / 2);
+			break;
+
+		case CUtility::COLLISION_BACK:
+			returnPos.z = targetPos.z - targetSize.z - (size.z / 2);
+			break;
+
+		case CUtility::COLLISION_LEFT:
+			returnPos.x = targetPos.x + targetSize.x + (size.x / 2);
+			break;
+
+		case CUtility::COLLISION_RIGHT:
+			returnPos.x = targetPos.x - targetSize.x - (size.x / 2);
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	return returnPos;
 }

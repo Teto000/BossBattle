@@ -247,13 +247,27 @@ int CObject::GetNumAll()
 	return 0;
 }
 
-//=============================
+//========================================
 // オブジェクトの取得
-//=============================
-//CObject *CObject::GETObject(int nPriority, int nCnt)
-//{
-//	return m_pObject;
-//}
+// 引数：目的の種類、プライオリティ番号
+//========================================
+CObject *CObject::GETObject(EObjType type, int nNum)
+{
+	CObject* pObj = m_Top[nNum];	//pObjを先頭にする
+
+	while (pObj)
+	{//pObjがnullじゃないなら
+		//次のオブジェクトのアドレスを代入
+		pObj = pObj->m_pNext;
+
+		if (pObj && pObj->m_ObjType == type)
+		{//オブジェクトがnullじゃない & 目的の種類なら
+			return pObj;
+		}
+	}
+
+	return nullptr;
+}
 
 //=============================
 // オブジェクトの種類の設定

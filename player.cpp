@@ -318,7 +318,8 @@ void CPlayer::Update()
 	//--------------------------------
 	// 敵との当たり判定
 	//--------------------------------
-	GetCollisionEnemy();
+	m_pos = CUtility::GetCollisionPos(m_pos, m_posOld, m_size, m_mtxWorld
+										, CObject::OBJTYPE_ENEMY);
 }
 
 //=============================
@@ -1250,51 +1251,6 @@ void CPlayer::UpdateLine()
 		{
 			m_pLine[i]->SetLinePos(i, min, max);
 		}
-	}
-}
-
-//======================================
-// プレイヤーの当たり判定
-// 引数：相手の位置、相手の大きさ
-//======================================
-void CPlayer::GetCollisionEnemy()
-{
-	//--------------------------
-	// 敵の情報を取得
-	//--------------------------
-	D3DXVECTOR3 enemyPos(CGame::GetEnemy()->GetPosition());
-	D3DXVECTOR3 enemySize(CGame::GetEnemy()->GetSize());
-	D3DXMATRIX enemyMtx(CGame::GetEnemy()->GetmtxWorld());
-
-	//--------------------------
-	// 当たり判定の処理
-	//--------------------------
-	CUtility::COLLISION coll = CUtility::Collision(m_pos, m_posOld, m_size, m_mtxWorld
-		, enemyPos, enemySize, enemyMtx);
-
-	//--------------------------
-	// 当たった方向に応じた処理
-	//--------------------------
-	switch (coll)
-	{
-	case CUtility::COLLISION_FRONT:
-		m_pos.z = enemyPos.z + enemySize.z + (m_size.z / 2);
-		break;
-
-	case CUtility::COLLISION_BACK:
-		m_pos.z = enemyPos.z - enemySize.z - (m_size.z / 2);
-		break;
-
-	case CUtility::COLLISION_LEFT:
-		m_pos.x = enemyPos.x + enemySize.x + (m_size.x / 2);
-		break;
-
-	case CUtility::COLLISION_RIGHT:
-		m_pos.x = enemyPos.x - enemySize.x - (m_size.x / 2);
-		break;
-
-	default:
-		break;
 	}
 }
 

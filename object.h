@@ -16,6 +16,7 @@
 // マクロ定義
 //-------------------------------
 #define MAX_OBJECT		(512)	//オブジェクトの最大数
+#define MAX_PRIOLITY	(2)		//プライオリティの最大数
 
 //================================
 // オブジェクトクラス
@@ -60,7 +61,7 @@ public:
 	static void DrawAll();
 	static int GetNumAll();
 
-	//CObject *GETObject(int nPriority, int nCnt);
+	static CObject *GETObject(EObjType type, int nNum);
 	void SetObjType(EObjType ObjType);	//種類の設定
 	EObjType GetObjType();				//種類の取得
 
@@ -68,6 +69,7 @@ public:
 	virtual D3DXVECTOR3 GetPosition() = 0;
 	virtual float GetWidth() = 0;
 	virtual float GetHeight() = 0;
+	static const int GetMaxPriolity() { return nMaxPriority; }	//プライオリティの最大数を返す
 
 private:
 	void Death(CObject* pObj);

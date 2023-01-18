@@ -130,8 +130,6 @@ public:
 	BATTLESTYLE GetStyle()			   { return m_battleStyle; }	//バトルモードの取得
 	MOTION_TYPE GetMotion()			   { return m_type; }			//モーションの種類の取得
 
-	void GetCollisionEnemy();	//敵との当たり判定
-
 	//---------------------
 	// 静的メンバ関数
 	//---------------------
