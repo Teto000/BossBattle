@@ -57,7 +57,6 @@ public:
 	D3DXVECTOR3 GetRot()		{ return m_rot; }		//向きの取得
 	D3DXMATRIX GetmtxWorld()	{ return m_mtxWorld; }	//ワールドマトリックスの取得
 	LPD3DXMESH GetMesh()		{ return m_pMesh; };	//メッシュ情報の取得
-	bool GetCollisionAttack();	//攻撃の当たり判定
 
 	//----------------
 	// 静的メンバ関数

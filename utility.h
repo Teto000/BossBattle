@@ -41,6 +41,10 @@ public:
 	//‰Ÿ‚µ–ß‚³‚ê‚½ˆÊ’u‚ğ•Ô‚·ˆ—
 	static D3DXVECTOR3 GetCollisionPos(D3DXVECTOR3 pos, D3DXVECTOR3 posOld
 		, D3DXVECTOR3 size, D3DXMATRIX mtx, CObject::EObjType targetType);
+
+	//ƒ‚ƒfƒ‹æ‚Ì“–‚½‚è”»’è(‹…)
+	static bool ColliaionWeapon(D3DXVECTOR3 offset, float fDiameter,
+						D3DXMATRIX mtxWorld, CObject::EObjType type);
 };
 
 #endif _UTILITY_H_

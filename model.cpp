@@ -311,36 +311,3 @@ void CModel::DrawShadow()
 	//保持しているマテリアルを戻す
 	pDevice->SetMaterial(&matDef);
 }
-
-//===========================
-// 攻撃の当たり判定
-//===========================
-bool CModel::GetCollisionAttack()
-{
-	D3DXVECTOR3 worldPos(0.0f, 0.0f, 0.0f);
-	D3DXVECTOR3 offset(0.0f, 0.0f, -80.0f);
-
-	//剣先までのオフセットを加算した位置を取得
-	D3DXVec3TransformCoord(&worldPos, &offset, &m_mtxWorld);
-
-	//----------------------------------
-	// 剣先を中心とした球の当たり判定
-	//----------------------------------
-	//敵の位置を取得
-	D3DXVECTOR3 enemyPos(CGame::GetEnemy()->GetPosition());
-
-	//2点間の距離を求める
-	D3DXVECTOR3 distance = worldPos - enemyPos;
-	float fDist = sqrtf(D3DXVec3Dot(&distance, &distance));
-
-	//プレイヤーと敵との距離を表示
-	CDebugProc::Print("プレイヤー・敵間の距離 : %f", fDist);
-
-	//当たり判定								//球の範囲(半径+半径)
-	if (sqrtf(D3DXVec3Dot(&distance, &distance)) < 200.0f)
-	{
-		return true;
-	}
-
-	return false;
-}

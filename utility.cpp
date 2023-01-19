@@ -28,9 +28,10 @@ CUtility::~CUtility()
 
 }
 
-//=======================================
+//=============================================================================
 // 当たり判定の処理
-//=======================================
+// 引数：自分(位置、前の位置、大きさ、マトリックス)、相手(位置、大きさ、マトリックス)
+//=============================================================================
 CUtility::COLLISION CUtility::Collision(D3DXVECTOR3 pos, D3DXVECTOR3 posOld, D3DXVECTOR3 size, D3DXMATRIX mtx
 			, D3DXVECTOR3 targetPos, D3DXVECTOR3 targetSize, D3DXMATRIX targetMtx)
 {
@@ -114,9 +115,10 @@ CUtility::COLLISION CUtility::Collision(D3DXVECTOR3 pos, D3DXVECTOR3 posOld, D3D
 	return COLLISION_NONE;
 }
 
-//=======================================
+//=============================================================================
 // 押し戻された位置を返す処理
-//=======================================
+// 引数：位置、前の位置、大きさ、マトリックス、相手の種類
+//=============================================================================
 D3DXVECTOR3 CUtility::GetCollisionPos(D3DXVECTOR3 pos, D3DXVECTOR3 posOld
 	, D3DXVECTOR3 size, D3DXMATRIX mtx, CObject::EObjType targetType)
 {
@@ -206,4 +208,75 @@ D3DXVECTOR3 CUtility::GetCollisionPos(D3DXVECTOR3 pos, D3DXVECTOR3 posOld
 	}
 
 	return returnPos;
+}
+
+//=============================================================================
+// モデルの先の当たり判定(球)
+// 引数：オフセット座標、球の直径、ワールドマトリックス、相手の種類
+//==============================================================================
+bool CUtility::ColliaionWeapon(D3DXVECTOR3 offset,float fDiameter,
+								D3DXMATRIX mtxWorld, CObject::EObjType targetType)
+{
+	//変数宣言
+	D3DXVECTOR3 worldPos(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3 targetPos(0.0f, 0.0f, 0.0f);
+
+	//剣先までのオフセットを加算した位置を取得
+	D3DXVec3TransformCoord(&worldPos, &offset, &mtxWorld);
+
+	//--------------------------------------
+	// モデル先を中心とした球の当たり判定
+	//--------------------------------------
+	//相手の情報を取得
+	for (int i = 0; i < CObject::GetMaxPriolity(); i++)
+	{//プライオリティ分回す
+		CObject* pObj;
+		pObj = CObject::GETObject(targetType, i);
+
+		if (pObj == nullptr)
+		{//nullなら戻す
+			continue;
+		}
+
+		//---------------------------
+		// オブジェクトの種類の取得
+		//---------------------------
+		CObject::EObjType type = pObj->GetObjType();
+		if (type != targetType)
+		{//オブジェクトの種類が目的の相手じゃないなら
+			continue;
+		}
+
+		//-----------------------------
+		// 相手の種類ごとの処理
+		//-----------------------------
+		if (targetType == CObject::OBJTYPE_PLAYER)
+		{//相手がプレイヤーなら
+		 //ダウンキャスト
+			CPlayer* pPlayer = (CPlayer*)pObj;
+
+			//情報の取得
+			targetPos = pPlayer->GetPosition();
+		}
+		else if (targetType == CObject::OBJTYPE_ENEMY)
+		{//相手が敵なら
+		 //ダウンキャスト
+			CEnemy* pEnemy = (CEnemy*)pObj;
+
+			//情報の取得
+			targetPos = pEnemy->GetPosition();
+		}
+
+		//2点間の距離を求める
+		D3DXVECTOR3 distance = worldPos - targetPos;
+		float fDist = sqrtf(D3DXVec3Dot(&distance, &distance));
+
+		//当たり判定								//球の範囲(半径+半径)
+		if (sqrtf(D3DXVec3Dot(&distance, &distance)) < fDiameter)
+		{
+			return true;
+		}
+	}
+
+	return false;
 }

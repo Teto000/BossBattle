@@ -1041,7 +1041,9 @@ void CPlayer::Attack(MOTION_TYPE type, MOTION_TYPE next)
 //================================
 void CPlayer::HitSword()
 {
-	if (m_pModel[nSwordNumber]->GetCollisionAttack()
+	D3DXVECTOR3 offsetPos(0.0f, 0.0f, -80.0f);	//剣先までのオフセット
+
+	if (CUtility::ColliaionWeapon(offsetPos, 250.0f, m_mtxWorld, CObject::OBJTYPE_ENEMY)
 		&& !m_bFinishAttack
 		&& m_status.nAttackTime >= m_aMotionSet[m_type].nStartCollision)
 	{//剣と当たっている & 攻撃が終わっていない & 当たり判定の有効時間なら
