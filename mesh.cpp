@@ -73,7 +73,7 @@ HRESULT CMesh::Init(D3DXVECTOR3 pos)
 	m_nNumIndex = (m_nNumDivision + 1) * 2 * m_nNumDivision + (m_nNumDivision - 1) * 2;	//インデックス数
 	m_fMaxWidth = 3600.0f;								//メッシュフィールドの最大幅
 	m_fMeshWidth = (m_fMaxWidth / m_nNumDivision);		//メッシュフィールドの幅
-	m_fTexSize = (1.0f / m_nNumDivision);				//テクスチャの分割サイズ
+	m_fTexSize = (5.0f / m_nNumDivision);				//テクスチャの分割サイズ
 
 
 	//----------------------------------

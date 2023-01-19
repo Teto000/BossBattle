@@ -226,7 +226,7 @@ void CEnemy::Update()
 	if (m_pos.y >= 0.0f)
 	{//”ò‚ñ‚Å‚¢‚é‚È‚ç
 		m_pos.y -= m_fGravity;
-		m_fGravity += 1.5f;
+		m_fGravity += 2.0f;
 	}
 	else
 	{//’n–Ê‚É’…‚¢‚½‚ç
