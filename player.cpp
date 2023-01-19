@@ -52,11 +52,13 @@ CPlayer::CPlayer() : CObject(0)
 	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//大きさ
 	m_nNumCombo = 0;							//コンボ数
 	m_nCntHit = 0;								//ヒット数を数える
+	m_nHitTime = 0;								//ヒットまでの時間を数える
 	m_status.nComboValue = 0;					//コンボの加算値
 	m_nCntModeTime = 0;							//モード終了までの時間を数える
 	fSizeWidth = 0.0f;							//サイズ(幅)
 	fSizeDepth = 0.0f;							//サイズ(奥行き)
-	m_bHitAttack = false;						//ダメージを与えたか
+	m_bFinishAttack = false;						//ダメージを与えたか
+	m_bHit = false;							//1ヒットした状態
 	bChangeAttack = false;						//攻撃が切り替わった状態
 	m_bStyle = false;							//スタイルを表示したか
 	m_type = MOTION_IDOL;						//現在のモーション
@@ -515,8 +517,16 @@ void CPlayer::GetFileMotion()
 				//-------------------------------
 				else if (strcmp(&cTextHead[0], "NUM_HIT") == 0)
 				{//頭文字がNUM_HITなら
-				 //文字列からキーの最大数を読み取る
+					//文字列からキーの最大数を読み取る
 					sscanf(cText, "%s = %d", &cTextHead, &m_aMotionSet[nNumMotion].nNumHit);
+				}
+				//-------------------------------
+				// ヒット間隔
+				//-------------------------------
+				else if (strcmp(&cTextHead[0], "HIT_INTERVAL") == 0)
+				{//頭文字がHIT_INTERVALなら
+					//文字列からキーの最大数を読み取る
+					sscanf(cText, "%s = %d", &cTextHead, &m_aMotionSet[nNumMotion].nHitInterval);
 				}
 				//-------------------------------
 				// ダメージ倍率
@@ -752,7 +762,7 @@ void CPlayer::ChangeMotion(MOTION_TYPE type)
 		m_nCurrentKey = 0;
 		m_nCntMotion = 0;
 		m_status.nAttackTime = 0;	//攻撃時間のリセット
-		m_bHitAttack = false;		//ダメージを与えていない状態にする
+		m_bFinishAttack = false;		//ダメージを与えていない状態にする
 	}
 }
 
@@ -1029,55 +1039,73 @@ void CPlayer::Attack(MOTION_TYPE type, MOTION_TYPE next)
 void CPlayer::HitSword()
 {
 	if (m_pModel[nSwordNumber]->GetCollisionAttack()
-		&& !m_bHitAttack
+		&& !m_bFinishAttack
 		&& m_status.nAttackTime >= m_aMotionSet[m_type].nStartCollision)
-	{//剣と当たっている & 攻撃を当てていない & 当たり判定の有効時間なら
-		//技ごとのダメージ量を計算
-		float fDamage = m_status.nAttack * m_aMotionSet[m_type].fDamageMag;
+	{//剣と当たっている & 攻撃が終わっていない & 当たり判定の有効時間なら
+		//---------------------------------
+		// 指定回数ヒットさせる処理
+		//---------------------------------
+		if (!m_bHit)
+		{//攻撃が当たっていないなら
+			//技ごとのダメージ量を計算
+			float fDamage = m_status.nAttack * m_aMotionSet[m_type].fDamageMag;
 
-		//-----------------------------
-		// クリティカルかどうか
-		//-----------------------------
-		int nRand = rand() % 101;
-		bool bCritical = false;
-		if (nRand <= m_aMotionSet[m_type].nCritical)
-		{//ランダムな値がクリティカル率以内なら
-			fDamage *= 1.5f;	//ダメージ1.5倍
-			bCritical = true;	//クリティカル状態にする
-		}
-
-		//-----------------------------
-		// ブレイク状態かどうか
-		//-----------------------------
-		if (CGame::GetEnemy()->GetState() != CEnemy::ENEMYSTATE_BREAK)
-		{//敵がブレイク状態じゃないなら
-			//攻撃力分敵の体力を減少
-			CGame::GetEnemy()->SubGauge(fDamage, CEnemy::GAUGE_HP);
-
-			//ブレイクゲージの減少
-			CGame::GetEnemy()->SubGauge(fDamage, CEnemy::GAUGE_BREAK);
-		}
-		else
-		{//ブレイク状態なら
-			if (!bCritical)
-			{//クリティカル状態じゃないなら
+			//-----------------------------
+			// クリティカルかどうか
+			//-----------------------------
+			int nRand = rand() % 101;
+			bool bCritical = false;
+			if (nRand <= m_aMotionSet[m_type].nCritical)
+			{//ランダムな値がクリティカル率以内なら
 				fDamage *= 1.5f;	//ダメージ1.5倍
+				bCritical = true;	//クリティカル状態にする
 			}
 
-			//クリティカルダメージ分敵の体力を減少
-			CGame::GetEnemy()->SubGauge(fDamage, CEnemy::GAUGE_HP);
+			//-----------------------------
+			// ブレイク状態かどうか
+			//-----------------------------
+			if (CGame::GetEnemy()->GetState() != CEnemy::ENEMYSTATE_BREAK)
+			{//敵がブレイク状態じゃないなら
+				//攻撃力分敵の体力を減少
+				CGame::GetEnemy()->SubGauge(fDamage, CEnemy::GAUGE_HP);
+
+				//ブレイクゲージの減少
+				CGame::GetEnemy()->SubGauge(fDamage, CEnemy::GAUGE_BREAK);
+			}
+			else
+			{//ブレイク状態なら
+				if (!bCritical)
+				{//クリティカル状態じゃないなら
+					fDamage *= 1.5f;	//ダメージ1.5倍
+				}
+
+				//クリティカルダメージ分敵の体力を減少
+				CGame::GetEnemy()->SubGauge(fDamage, CEnemy::GAUGE_HP);
+			}
+
+			//コンボ数の加算
+			CGame::GetPlayer()->AddCombo(m_status.nComboValue);
+
+			m_nCntHit++;	//ヒット数を加算
+			m_bHit = true;	//攻撃が当たった状態
+
+			//------------------------------
+			// 攻撃の終了処理
+			//------------------------------
+			if (m_nCntHit >= m_aMotionSet[m_type].nNumHit)
+			{//現在のヒット数が攻撃のヒット数以上なら
+				m_bFinishAttack = true;	//攻撃が終わった状態にする
+				m_nCntHit = 0;			//ヒット数をリセット
+			}
 		}
-
-		//コンボ数の加算
-		CGame::GetPlayer()->AddCombo(m_status.nComboValue);
-
-		//ヒット数の加算
-		m_nCntHit++;
-
-		if (m_nCntHit >= m_aMotionSet[m_type].nNumHit)
-		{//現在のヒット数が攻撃のヒット数以上なら
-			m_bHitAttack = true;	//攻撃を当てた状態にする
-			m_nCntHit = 0;			//ヒット数をリセット
+		else if (m_bHit && m_nHitTime >= m_aMotionSet[m_type].nHitInterval)
+		{//攻撃が当たった & ヒットまでの時間がヒット間隔より大きいなら
+			m_bHit = false;		//攻撃が当たっていない状態
+			m_nHitTime = 0;		//ヒットまでの時間をリセット
+		}
+		else
+		{
+			m_nHitTime++;	//ヒットまでの時間を数える
 		}
 	}
 }

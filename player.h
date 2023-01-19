@@ -60,6 +60,7 @@ public:
 		int nNumPoint;				//消費ポイント数
 		int nCritical;				//クリティカル率
 		int nNumHit;				//ヒット数
+		int nHitInterval;			//ヒット間隔
 		float fDamageMag;			//ダメージ倍率(magnification)
 	};
 
@@ -130,7 +131,7 @@ public:
 	float GetHeight() override		   { return 0.0f; }				//高さの取得
 	const int GetSwordNumber()		   { return nSwordNumber; }		//剣モデルの番号を取得
 	bool GetStyleState()			   { return m_bStyle; }			//スタイルの表示状態を取得
-	bool GetHitAttack()				   { return m_bHitAttack; }		//攻撃を当てたかを取得
+	bool GetHitAttack()				   { return m_bFinishAttack; }		//攻撃を当てたかを取得
 	CModel* GetModel(int nNum)		   { return m_pModel[nNum]; }	//モデルの取得
 	PLAYER_STATUS GetStatus()		   { return m_status; }			//ステータスの取得
 	BATTLESTYLE GetStyle()			   { return m_battleStyle; }	//バトルモードの取得
@@ -187,13 +188,17 @@ private:
 	D3DXVECTOR3	m_worldMax;		//ワールド上の最小値
 	int m_nNumCombo;			//コンボ数
 	int m_nCntHit;				//ヒット数を数える
+	int m_nHitTime;				//ヒットまでの時間を数える
 	int m_nCntModeTime;			//モード終了までの時間を数える
 	float fSizeWidth;			//サイズ(幅)
 	float fSizeDepth;			//サイズ(奥行き)
 	float m_rotWheel;			//タイヤの回転量
-	bool m_bHitAttack;			//攻撃を当てた状態
+	bool m_bFinishAttack;		//攻撃が終わった状態
+	bool m_bHit;				//1ヒットした状態
 	bool bChangeAttack;			//攻撃が切り替わった状態
 	bool m_bStyle;				//スタイルを表示したか
+
+	//列挙型
 	PLAYER_STATUS m_status;		//ステータス
 	BATTLESTYLE m_battleStyle;	//バトルモード
 	CHP*  m_pHP;				//HP
