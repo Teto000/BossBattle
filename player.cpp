@@ -1005,8 +1005,10 @@ void CPlayer::Attack(MOTION_TYPE type, MOTION_TYPE next)
 			m_status.bNextAttack = true;	//次の攻撃フラグをオン
 		}
 
-		if (m_status.bNextAttack && nOutRigor <= m_status.nAttackTime && !bChangeAttack)
-		{//攻撃切り替えフラグがオン & 硬直以外のフレーム数を超えた & 攻撃が切り替わっていないなら
+		if (m_status.bNextAttack && nOutRigor <= m_status.nAttackTime
+			&& !bChangeAttack && m_bFinishAttack)
+		{//攻撃切り替えフラグがオン & 硬直以外のフレーム数を超えた
+		 //& 攻撃が切り替わっていないなら & 攻撃が終わっているなら
 			ChangeMotion(next);
 			m_status.bNextAttack = false;
 			bChangeAttack = true;

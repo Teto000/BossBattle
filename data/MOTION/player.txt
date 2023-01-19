@@ -260,7 +260,7 @@ MOTIONSET
 	NEXT_ATTACK = 10 # 次の攻撃の入力開始時間
 	NUM_POINT = 0	 # 攻撃に必要なポイント数
 	CRITICAL = 10    # クリティカル率(%)
-	NUM_HIT = 3		 # ヒット数
+	NUM_HIT = 1		 # ヒット数
 	HIT_INTERVAL = 0 # ヒット間隔
 	DAMAGE_MAG = 1.0 # ダメージ倍率
 
