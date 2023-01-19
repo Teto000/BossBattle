@@ -22,28 +22,6 @@
 #include "message.h"
 
 //------------------------
-// グローバル変数
-//------------------------
-CEnemy::KEY_SET g_aKeySet[] =	//キーセット情報
-{
-	//----------------------
-	// キー1
-	//----------------------
-	{ 40,	//フレーム数
-			//		Pos				Rot
-	{ { 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f },},
-	},
-
-	//----------------------
-	// キー2
-	//----------------------
-	{ 40,	//フレーム数
-			//		Pos				Rot
-	{ { 0.0f,0.0f,0.0f , 0.0f,0.0f,0.0f }, },	//剣
-	},
-};
-
-//------------------------
 // 静的メンバ変数宣言
 //------------------------
 const float CEnemy::fDefGravity = 1.0f;	//基本の重力
@@ -128,8 +106,8 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 	//-----------------------
 	// モデルの大きさを設定
 	//-----------------------
-	m_vtxMin = D3DXVECTOR3(-40.0f, 0.0f, -40.0f);
-	m_vtxMax = D3DXVECTOR3(40.0f, 130.0f, 40.0f);
+	m_vtxMin = D3DXVECTOR3(-80.0f, 0.0f, -150.0f);
+	m_vtxMax = D3DXVECTOR3(80.0f, 300.0f, 60.0f);
 
 	m_size.x = m_vtxMax.x - m_vtxMin.x;
 	m_size.y = m_vtxMax.y - m_vtxMin.y;
@@ -248,7 +226,7 @@ void CEnemy::Update()
 	if (m_pos.y >= 0.0f)
 	{//飛んでいるなら
 		m_pos.y -= m_fGravity;
-		m_fGravity += 2.0f;
+		m_fGravity += 1.5f;
 	}
 	else
 	{//地面に着いたら
@@ -345,8 +323,16 @@ CEnemy* CEnemy::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
 void CEnemy::SetModel()
 {
 	//モデル0
-	m_pModel[0] = CModel::Create("data\\MODEL\\enemy.x", nullptr,
+	m_pModel[0] = CModel::Create("data\\MODEL\\Enemy\\body.x", nullptr,
 		D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+
+	//モデル1
+	m_pModel[1] = CModel::Create("data\\MODEL\\Enemy\\armR.x", m_pModel[0],
+		D3DXVECTOR3(-200.0f, 50.0f, -80.0f), D3DXVECTOR3(0.0f, 0.0f, 0.5f));
+
+	//モデル2
+	m_pModel[2] = CModel::Create("data\\MODEL\\Enemy\\armL.x", m_pModel[0],
+		D3DXVECTOR3(200.0f, 50.0f, -80.0f), D3DXVECTOR3(0.0f, 0.0f, -0.5f));
 }
 
 //========================
@@ -354,100 +340,7 @@ void CEnemy::SetModel()
 //========================
 void CEnemy::SetMotion(bool bLoop)
 {
-	if (m_nCurrentKey + 1 >= MAX_ENEMY_KEY)
-	{//キーが最大数に達したら
-		if (bLoop)
-		{
-			m_nCurrentKey = 0;	//キー番号の初期化
-		}
-		else
-		{
-			return;
-		}
-	}
-
-	for (int i = 0; i < MAX_ENEMY_PARTS; i++)
-	{//モデルパーツ数分回す
-	 //-----------------------------------------
-	 // NULLチェック
-	 //-----------------------------------------
-		if (!m_pModel[i])
-		{//モデルパーツがnullなら
-			return;
-		}
-
-		//キー情報を持った変数
-		KEY key = g_aKeySet[m_nCurrentKey].aKey[i];
-		KEY keyNext = g_aKeySet[m_nCurrentKey + 1].aKey[i];
-
-		//-----------------------------------------
-		// 現在値を取得
-		//-----------------------------------------
-		//位置を取得
-		float fPosX = m_pModel[i]->GetPos().x;
-		float fPosY = m_pModel[i]->GetPos().y;
-		float fPosZ = m_pModel[i]->GetPos().z;
-
-		//向きを取得
-		float fRotX = m_pModel[i]->GetRot().x;
-		float fRotY = m_pModel[i]->GetRot().y;
-		float fRotZ = m_pModel[i]->GetRot().z;
-
-		//-----------------------------------------
-		// 差分の計算
-		// (終了値 - 開始値)
-		//-----------------------------------------
-		//位置
-		float fDifPosX = keyNext.fPosX - key.fPosX;
-		float fDifPosY = keyNext.fPosY - key.fPosY;
-		float fDifPosZ = keyNext.fPosZ - key.fPosZ;
-
-		//向き
-		float fDifRotX = keyNext.fRotX - key.fRotX;
-		float fDifRotY = keyNext.fRotY - key.fRotY;
-		float fDifRotZ = keyNext.fRotZ - key.fRotZ;
-
-		//-----------------------------------------
-		// 相対値の計算
-		// (モーションカウンター / フレーム数)
-		//-----------------------------------------
-		float fNumRelative = m_nCntMotion / (float)g_aKeySet[m_nCurrentKey].nFrame;
-
-		//-----------------------------------------
-		// 現在値の計算
-		// (開始値 + (差分 * 相対値))
-		//-----------------------------------------
-		//位置
-		fPosX += key.fPosX + (fDifPosX * fNumRelative);
-		fPosY += key.fPosY + (fDifPosY * fNumRelative);
-		fPosZ += key.fPosZ + (fDifPosZ * fNumRelative);
-
-		//向き
-		fRotX = key.fRotX + (fDifRotX * fNumRelative);
-		fRotY = key.fRotY + (fDifRotY * fNumRelative);
-		fRotZ = key.fRotZ + (fDifRotZ * fNumRelative);
-
-		//-----------------------------------------
-		// モデル情報の設定
-		//-----------------------------------------
-		//位置の設定
-		m_pModel[i]->SetPos(D3DXVECTOR3(fPosX, fPosY, fPosZ));
-
-		//向きの設定
-		m_pModel[i]->SetRot(D3DXVECTOR3(D3DXToRadian(fRotX), D3DXToRadian(fRotY), D3DXToRadian(fRotZ)));
-	}
-
-	//モーションカウンターを進める
-	m_nCntMotion++;
-
-	//-------------------------
-	// 初期化
-	//-------------------------
-	if (m_nCntMotion >= g_aKeySet[m_nCurrentKey].nFrame)
-	{//モーションカウンターが再生フレームに達したら
-		m_nCurrentKey++;	//キー番号を加算
-		m_nCntMotion = 0;	//モーションカウンターを初期化
-	}
+	
 }
 
 //========================
@@ -605,8 +498,8 @@ void CEnemy::NockBack()
 
 		if (!m_bNockBack)
 		{//ノックバックしていないなら
-			m_pos += -vec * 7.0f;	//逆ベクトル方向に移動
-			m_pos.y += 50.0f;		//上昇
+			m_pos += -vec * 2.0f;	//逆ベクトル方向に移動
+			m_pos.y += 100.0f;		//上昇
 			m_bNockBack = true;
 		}
 	}

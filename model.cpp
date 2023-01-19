@@ -170,26 +170,26 @@ void CModel::Draw(D3DMATRIX* mtxPlayer)
 
 	for (int nCntMat = 0; nCntMat < (int)m_nNumMat; nCntMat++)
 	{
-		if (nCntMat == CGame::GetPlayer()->GetSwordNumber())
-		{//剣のマテリアルなら
-			if (CGame::GetPlayer()->GetStyle() == CPlayer::BATTLESTYLE_ATTACK)
-			{//アタックモードのとき
-				//マテリアルの色の設定
-				pMat[nCntMat].MatD3D.Diffuse = D3DXCOLOR(1.0f, 0.0f, 0.0f, 0.7f);
-			}
-			else if (CGame::GetPlayer()->GetStyle() == CPlayer::BATTLESTYLE_SPEED)
-			{//スピードモードのとき
-				pMat[nCntMat].MatD3D.Diffuse = D3DXCOLOR(0.0f, 0.0f, 1.0f, 0.7f);
-			}
-			else if (CGame::GetPlayer()->GetStyle() == CPlayer::BATTLESTYLE_COMBO)
-			{//コンボモードのとき
-				pMat[nCntMat].MatD3D.Diffuse = D3DXCOLOR(0.0f, 1.0f, 0.0f, 0.7f);
-			}
-			else
-			{//それ以外なら
-				pMat[nCntMat].MatD3D.Diffuse = D3DXCOLOR(1.0f, 1.0f, 0.3f, 0.7f);
-			}
-		}
+		//if (nCntMat == CGame::GetPlayer()->GetSwordNumber())
+		//{//剣のマテリアルなら
+		//	if (CGame::GetPlayer()->GetStyle() == CPlayer::BATTLESTYLE_ATTACK)
+		//	{//アタックモードのとき
+		//		//マテリアルの色の設定
+		//		pMat[nCntMat].MatD3D.Diffuse = D3DXCOLOR(1.0f, 0.0f, 0.0f, 0.7f);
+		//	}
+		//	else if (CGame::GetPlayer()->GetStyle() == CPlayer::BATTLESTYLE_SPEED)
+		//	{//スピードモードのとき
+		//		pMat[nCntMat].MatD3D.Diffuse = D3DXCOLOR(0.0f, 0.0f, 1.0f, 0.7f);
+		//	}
+		//	else if (CGame::GetPlayer()->GetStyle() == CPlayer::BATTLESTYLE_COMBO)
+		//	{//コンボモードのとき
+		//		pMat[nCntMat].MatD3D.Diffuse = D3DXCOLOR(0.0f, 1.0f, 0.0f, 0.7f);
+		//	}
+		//	else
+		//	{//それ以外なら
+		//		pMat[nCntMat].MatD3D.Diffuse = D3DXCOLOR(1.0f, 1.0f, 0.3f, 0.7f);
+		//	}
+		//}
 
 		//マテリアルの設定
 		pDevice->SetMaterial(&pMat[nCntMat].MatD3D);
@@ -337,7 +337,7 @@ bool CModel::GetCollisionAttack()
 	CDebugProc::Print("プレイヤー・敵間の距離 : %f", fDist);
 
 	//当たり判定								//球の範囲(半径+半径)
-	if (sqrtf(D3DXVec3Dot(&distance, &distance)) < 150.0f)
+	if (sqrtf(D3DXVec3Dot(&distance, &distance)) < 200.0f)
 	{
 		return true;
 	}

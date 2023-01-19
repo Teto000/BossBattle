@@ -10,6 +10,7 @@
 //-------------------------------
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <assert.h>
 #include "player.h"
 #include "object.h"
@@ -149,6 +150,9 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	m_status.nComboValue = 1;			//コンボの加算値
 	m_status.fSpeed = 7.0f;				//速度
 
+	//時刻をもとにしたランダムな値を生成
+	srand((unsigned int)time(NULL));
+
 	//ワールドマトリックスの初期化
 	D3DXMatrixIdentity(&m_mtxWorld);
 
@@ -287,6 +291,9 @@ void CPlayer::Update()
 			//タイヤの回転
 			m_pModel[0]->SetRotX(m_rotWheel);
 
+			//向きを目的の角度に合わせる
+			SetRot();
+
 			//--------------------------------
 			// 攻撃処理
 			//--------------------------------
@@ -391,31 +398,31 @@ CPlayer* CPlayer::Create()
 void CPlayer::SetModel()
 {
 	//モデル0：タイヤ
-	m_pModel[0] = CModel::Create("data\\MODEL\\wheel.x", nullptr,
+	m_pModel[0] = CModel::Create("data\\MODEL\\Player\\wheel.x", nullptr,
 		D3DXVECTOR3(0.0f, 30.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	//モデル1：体
-	m_pModel[1] = CModel::Create("data\\MODEL\\body.x", nullptr,
+	m_pModel[1] = CModel::Create("data\\MODEL\\Player\\body.x", nullptr,
 		D3DXVECTOR3(0.0f, 30.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	//モデル2：頭
-	m_pModel[2] = CModel::Create("data\\MODEL\\head.x", m_pModel[1],
+	m_pModel[2] = CModel::Create("data\\MODEL\\Player\\head.x", m_pModel[1],
 		D3DXVECTOR3(0.0f, 105.0f, 12.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	//モデル3：右腕
-	m_pModel[3] = CModel::Create("data\\MODEL\\armR.x", m_pModel[1],
+	m_pModel[3] = CModel::Create("data\\MODEL\\Player\\armR.x", m_pModel[1],
 		D3DXVECTOR3(-25.0f, 85.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	//モデル4：右手
-	m_pModel[4] = CModel::Create("data\\MODEL\\handR.x", m_pModel[3],
+	m_pModel[4] = CModel::Create("data\\MODEL\\Player\\handR.x", m_pModel[3],
 		D3DXVECTOR3(-4.0f, -40.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	//モデル5：左腕
-	m_pModel[5] = CModel::Create("data\\MODEL\\armL.x", m_pModel[1],
+	m_pModel[5] = CModel::Create("data\\MODEL\\Player\\armL.x", m_pModel[1],
 		D3DXVECTOR3(25.0f, 85.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	//モデル6：左手
-	m_pModel[6] = CModel::Create("data\\MODEL\\handL.x", m_pModel[5],
+	m_pModel[6] = CModel::Create("data\\MODEL\\Player\\handL.x", m_pModel[5],
 		D3DXVECTOR3(4.0f, -40.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 }
 
@@ -833,9 +840,6 @@ void CPlayer::MoveKeyboard(int nUpKey, int nDownKey, int nLeftKey, int nRightKey
 		m_rotDest.y = cameraRot.y + D3DX_PI * 0.0f;
 	}
 
-	//向きを目的の角度に合わせる
-	SetRot();
-
 	//タイヤの回転量の加算
 	m_rotWheel += D3DXToRadian(-nWheelRotValue);
 
@@ -939,9 +943,6 @@ void CPlayer::MoveJoypad()
 		m_pos.z -= cosf(cameraRot.y + D3DX_PI * 0.0f) * m_status.fSpeed;
 		m_rotDest.y = cameraRot.y + D3DX_PI * 0.0f;
 	}
-
-	//向きを目的の角度に合わせる
-	SetRot();
 
 	//タイヤの回転量の加算
 	m_rotWheel += D3DXToRadian(-nWheelRotValue);
@@ -1055,7 +1056,7 @@ void CPlayer::HitSword()
 			//-----------------------------
 			// クリティカルかどうか
 			//-----------------------------
-			int nRand = rand() % 101;
+			int nRand = rand() % 101;	//0%～100%の値
 			bool bCritical = false;
 			if (nRand <= m_aMotionSet[m_type].nCritical)
 			{//ランダムな値がクリティカル率以内なら
@@ -1267,6 +1268,25 @@ void CPlayer::ChangeMode()
 void CPlayer::SetRot()
 {
 	//--------------------------------------
+	// 常に敵の方向を見る
+	//--------------------------------------
+	if (CGame::GetCamera()->GetLockOn())
+	{//ロックオン状態なら
+		//プレイヤーの位置を取得
+		D3DXVECTOR3 playerPos(CGame::GetEnemy()->GetPosition());
+
+		//2点間の距離を求める
+		float X = m_pos.x - playerPos.x;
+		float Z = m_pos.z - playerPos.z;
+
+		//角度の設定
+		float angle = atan2f(X, Z);
+
+		//向きの設定
+		m_rotDest = D3DXVECTOR3(0.0f, angle, 0.0f);
+	}
+
+	//--------------------------------------
 	// 目的の角度の正規化
 	//--------------------------------------
 	if (m_rotDest.y - m_rot.y > D3DX_PI)
@@ -1281,7 +1301,7 @@ void CPlayer::SetRot()
 	//--------------------------------------
 	// 目的の角度まで回転する
 	//--------------------------------------
-	m_rot.y += (m_rotDest.y - m_rot.y) * 0.05f;	//減衰処理
+	m_rot.y += (m_rotDest.y - m_rot.y) * 0.08f;	//減衰処理
 
 	//--------------------------------------
 	// 角度の正規化
