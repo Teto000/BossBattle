@@ -426,8 +426,8 @@ void CEnemy::Attack()
 {
 	//変数宣言
 	int nMaxAttackTime = 120;				//攻撃時間
-	float fAttackArea = 120.0f;				//敵の攻撃範囲
-	float fMoveArea = fAttackArea - 50.0f;	//敵の移動範囲
+	float fAttackArea = 250.0f;				//敵の攻撃範囲
+	float fMoveArea = fAttackArea - 100.0f;	//敵の移動範囲
 
 	//プレイヤーの位置を取得
 	D3DXVECTOR3 playerPos = CGame::GetPlayer()->GetPosition();
@@ -443,7 +443,7 @@ void CEnemy::Attack()
 	//-------------------------
 	if (fDistance >= fMoveArea)
 	{//プレイヤーが範囲内にいないなら
-		//Move();
+		Move();
 	}
 
 	//-------------------------

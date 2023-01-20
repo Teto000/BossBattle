@@ -769,7 +769,7 @@ void CPlayer::ChangeMotion(MOTION_TYPE type)
 		m_nCurrentKey = 0;
 		m_nCntMotion = 0;
 		m_status.nAttackTime = 0;	//攻撃時間のリセット
-		m_bFinishAttack = false;		//ダメージを与えていない状態にする
+		m_bFinishAttack = false;	//ダメージを与えていない状態にする
 	}
 }
 

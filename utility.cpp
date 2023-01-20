@@ -12,6 +12,14 @@
 #include "player.h"
 #include "enemy.h"
 
+//------------------------
+// 静的メンバ変数宣言
+//------------------------
+D3DXVECTOR3 CUtility::m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//位置
+D3DXVECTOR3 CUtility::m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//前の位置
+D3DXVECTOR3 CUtility::m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//大きさ
+D3DXMATRIX  CUtility::m_mtxWorld;	//ワールドマトリックス
+
 //=======================================
 // コンストラクタ
 //=======================================
@@ -32,19 +40,18 @@ CUtility::~CUtility()
 // 当たり判定の処理
 // 引数：自分(位置、前の位置、大きさ、マトリックス)、相手(位置、大きさ、マトリックス)
 //=============================================================================
-CUtility::COLLISION CUtility::Collision(D3DXVECTOR3 pos, D3DXVECTOR3 posOld, D3DXVECTOR3 size, D3DXMATRIX mtx
-			, D3DXVECTOR3 targetPos, D3DXVECTOR3 targetSize, D3DXMATRIX targetMtx)
+CUtility::COLLISION CUtility::Collision(D3DXVECTOR3 targetPos, D3DXVECTOR3 targetSize, D3DXMATRIX targetMtx)
 {
 	//------------------------------------
 	// 行列を元に戻す
 	//------------------------------------
 	//ワールド座標を求める
 	D3DXVECTOR3 worldPos(0.0f, 0.0f, 0.0f);		//ワールド上の座標
-	D3DXVec3TransformCoord(&worldPos, &pos, &mtx);
+	D3DXVec3TransformCoord(&worldPos, &m_pos, &m_mtxWorld);
 
 	//逆行列を求める
 	D3DXMATRIX invMtxWorld;						//逆行列の値を入れる
-	D3DXMatrixInverse(&invMtxWorld, NULL, &mtx);
+	D3DXMatrixInverse(&invMtxWorld, NULL, &m_mtxWorld);
 
 	//逆行列を使ってローカル座標を求める
 	D3DXVECTOR3 localPos(0.0f, 0.0f, 0.0f);		//ローカル上の座標
@@ -53,12 +60,12 @@ CUtility::COLLISION CUtility::Collision(D3DXVECTOR3 pos, D3DXVECTOR3 posOld, D3D
 	//------------------------------------
 	// 自分の端の設定
 	//------------------------------------
-	float fLeft = localPos.x - (size.x / 2);	//自分の左端
-	float fRight = localPos.x + (size.x / 2);	//自分の右端
-	float fTop = localPos.y + (size.y / 2);		//自分の上端
-	float fBottom = localPos.y - (size.y / 2);	//自分の下端
-	float fFront = localPos.z - (size.z / 2);	//自分の前端
-	float fBack = localPos.z + (size.z / 2);	//自分の後端
+	float fLeft = localPos.x - (m_size.x / 2);		//自分の左端
+	float fRight = localPos.x + (m_size.x / 2);		//自分の右端
+	float fTop = localPos.y + (m_size.y / 2);		//自分の上端
+	float fBottom = localPos.y - (m_size.y / 2);	//自分の下端
+	float fFront = localPos.z - (m_size.z / 2);		//自分の前端
+	float fBack = localPos.z + (m_size.z / 2);		//自分の後端
 
 	//------------------------------------
 	// 相手の行列を元に戻す
@@ -87,11 +94,11 @@ CUtility::COLLISION CUtility::Collision(D3DXVECTOR3 pos, D3DXVECTOR3 posOld, D3D
 		//---------------------------------
 		if (fTargetLeft >= fLeft && fTargetRight <= fRight)
 		{//左右の範囲内なら
-			if (fTargetFront >= fFront && fTargetFront < posOld.z - (size.z / 2))
+			if (fTargetFront >= fFront && fTargetFront < m_posOld.z - (m_size.z / 2))
 			{
 				return COLLISION_FRONT;
 			}
-			else if (fTargetBack <= fBack && fTargetBack > posOld.z - (size.z / 2))
+			else if (fTargetBack <= fBack && fTargetBack > m_posOld.z - (m_size.z / 2))
 			{
 				return COLLISION_BACK;
 			}
@@ -101,11 +108,11 @@ CUtility::COLLISION CUtility::Collision(D3DXVECTOR3 pos, D3DXVECTOR3 posOld, D3D
 		//---------------------------------
 		if (fTargetFront >= fFront && fTargetBack <= fBack)
 		{//前後の範囲内なら
-			if (fTargetLeft >= fLeft && fTargetLeft < posOld.x + (size.x / 2))
+			if (fTargetLeft >= fLeft && fTargetLeft < m_posOld.x + (m_size.x / 2))
 			{
 				return COLLISION_LEFT;
 			}
-			else if (fTargetRight <= fRight && fTargetRight > posOld.x - (size.x / 2))
+			else if (fTargetRight <= fRight && fTargetRight > m_posOld.x - (m_size.x / 2))
 			{
 				return COLLISION_RIGHT;
 			}
@@ -122,12 +129,16 @@ CUtility::COLLISION CUtility::Collision(D3DXVECTOR3 pos, D3DXVECTOR3 posOld, D3D
 D3DXVECTOR3 CUtility::GetCollisionPos(D3DXVECTOR3 pos, D3DXVECTOR3 posOld
 	, D3DXVECTOR3 size, D3DXMATRIX mtx, CObject::EObjType targetType)
 {
+	//引数に代入
+	m_pos = pos;		//位置
+	m_posOld = posOld;	//前の位置
+	m_size = size;		//大きさ
+	m_mtxWorld = mtx;	//ワールドマトリックス
+
 	//変数宣言
 	D3DXVECTOR3 targetPos;		//相手の位置
 	D3DXVECTOR3 targetSize;		//相手の大きさ
 	D3DXMATRIX targetMtx;		//相手のマトリックス
-
-	D3DXVECTOR3 returnPos = pos;	//返す値の代入用変数
 
 	//--------------------------
 	// 相手の情報を取得
@@ -178,8 +189,7 @@ D3DXVECTOR3 CUtility::GetCollisionPos(D3DXVECTOR3 pos, D3DXVECTOR3 posOld
 		//--------------------------
 		// 当たり判定の処理
 		//--------------------------
-		CUtility::COLLISION direction = CUtility::Collision(pos, posOld, size, mtx
-			, targetPos, targetSize, targetMtx);
+		CUtility::COLLISION direction = CUtility::Collision(targetPos, targetSize, targetMtx);
 
 		//--------------------------
 		// 当たった方向に応じた処理
@@ -187,19 +197,19 @@ D3DXVECTOR3 CUtility::GetCollisionPos(D3DXVECTOR3 pos, D3DXVECTOR3 posOld
 		switch (direction)
 		{
 		case CUtility::COLLISION_FRONT:
-			returnPos.z = targetPos.z + targetSize.z + (size.z / 2);
+			m_pos.z = targetPos.z + targetSize.z + (size.z / 2);
 			break;
 
 		case CUtility::COLLISION_BACK:
-			returnPos.z = targetPos.z - targetSize.z - (size.z / 2);
+			m_pos.z = targetPos.z - targetSize.z - (size.z / 2);
 			break;
 
 		case CUtility::COLLISION_LEFT:
-			returnPos.x = targetPos.x + targetSize.x + (size.x / 2);
+			m_pos.x = targetPos.x + targetSize.x + (size.x / 2);
 			break;
 
 		case CUtility::COLLISION_RIGHT:
-			returnPos.x = targetPos.x - targetSize.x - (size.x / 2);
+			m_pos.x = targetPos.x - targetSize.x - (size.x / 2);
 			break;
 
 		default:
@@ -207,7 +217,7 @@ D3DXVECTOR3 CUtility::GetCollisionPos(D3DXVECTOR3 pos, D3DXVECTOR3 posOld
 		}
 	}
 
-	return returnPos;
+	return m_pos;
 }
 
 //=============================================================================
