@@ -269,7 +269,6 @@ bool CUtility::ColliaionWeapon(D3DXVECTOR3 offset,float fDiameter,
 
 		//2“_ŠÔ‚Ì‹——£‚ğ‹‚ß‚é
 		D3DXVECTOR3 distance = worldPos - targetPos;
-		float fDist = sqrtf(D3DXVec3Dot(&distance, &distance));
 
 		//“–‚½‚è”»’è								//‹…‚Ì”ÍˆÍ(”¼Œa+”¼Œa)
 		if (sqrtf(D3DXVec3Dot(&distance, &distance)) < fDiameter)

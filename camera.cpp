@@ -156,6 +156,7 @@ void CCamera::Update(void)
 	{//ロックオン状態なら
 		//注視点をロックオン位置に設定
 		m_posRDest = lockOnPos;
+		m_posRDest.y += 100.0f;	//注視点の座標を高くする
 
 		//プレイヤー位置とロックオン位置間のベクトルを求める
 		D3DXVECTOR3 vec = lockOnPos - playerPos;

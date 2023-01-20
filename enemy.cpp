@@ -209,11 +209,6 @@ void CEnemy::Update()
 		//------------------------
 		Attack();
 	}
-
-	//-------------------
-	// モーション
-	//-------------------
-	SetMotion(true);
 	
 	//-------------------------
 	// 線の更新
@@ -333,14 +328,6 @@ void CEnemy::SetModel()
 	//モデル2
 	m_pModel[2] = CModel::Create("data\\MODEL\\Enemy\\armL.x", m_pModel[0],
 		D3DXVECTOR3(200.0f, 50.0f, -80.0f), D3DXVECTOR3(0.0f, 0.0f, -0.5f));
-}
-
-//========================
-// モーションの設定
-//========================
-void CEnemy::SetMotion(bool bLoop)
-{
-	
 }
 
 //========================

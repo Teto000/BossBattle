@@ -31,24 +31,6 @@ class CHP;		//HP
 class CEnemy : public CObject
 {
 public:
-	//キー要素
-	struct KEY
-	{
-		float fPosX;	//位置
-		float fPosY;
-		float fPosZ;
-		float fRotX;	//向き
-		float fRotY;
-		float fRotZ;
-	};
-
-	//キー情報
-	struct KEY_SET
-	{
-		int nFrame;	//フレーム数
-		KEY aKey[MAX_ENEMY_PARTS];
-	};
-
 	enum ENEMYSTATE
 	{
 		ENEMYSTATE_NONE = 0,
@@ -97,8 +79,7 @@ public:
 	static CEnemy* Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot);
 
 private:
-	void SetModel();			//モデルの設定
-	void SetMotion(bool bLoop);	//モーションの設定
+	void SetModel();	//モデルの設定
 	void SetLine();		//線の設置
 	void UpdateLine();	//線の更新
 	void Attack();		//攻撃
