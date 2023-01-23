@@ -200,6 +200,9 @@ void CEnemy::Update()
 				m_pHP[GAUGE_BREAK] = CHP::Create(breakpPos, 800.0f, 15.0f, CHP::GAUGETYPE_BREAK);
 				m_pHP[GAUGE_BREAK]->SetLife(m_fBreak, m_fRemBreak);	//HPの設定
 			}
+
+			//敵の高さの初期化
+			m_pos.y = 0.0f;
 		}
 	}
 	else
@@ -221,7 +224,7 @@ void CEnemy::Update()
 	if (m_pos.y >= 0.0f)
 	{//飛んでいるなら
 		m_pos.y -= m_fGravity;
-		m_fGravity += 2.0f;
+		m_fGravity += 3.0f;
 	}
 	else
 	{//地面に着いたら
@@ -323,11 +326,11 @@ void CEnemy::SetModel()
 
 	//モデル1
 	m_pModel[1] = CModel::Create("data\\MODEL\\Enemy\\armR.x", m_pModel[0],
-		D3DXVECTOR3(-200.0f, 50.0f, -80.0f), D3DXVECTOR3(0.0f, 0.0f, 0.5f));
+		D3DXVECTOR3(-200.0f, 80.0f, -80.0f), D3DXVECTOR3(0.0f, 0.0f, 0.5f));
 
 	//モデル2
 	m_pModel[2] = CModel::Create("data\\MODEL\\Enemy\\armL.x", m_pModel[0],
-		D3DXVECTOR3(200.0f, 50.0f, -80.0f), D3DXVECTOR3(0.0f, 0.0f, -0.5f));
+		D3DXVECTOR3(200.0f, 80.0f, -80.0f), D3DXVECTOR3(0.0f, 0.0f, -0.5f));
 }
 
 //========================
@@ -388,13 +391,19 @@ void CEnemy::SubGauge(float fDamage, GAUGE type)
 	// HPを減らす処理
 	//-----------------------
 	case GAUGE_HP:
-		m_fLife -= fDamage;	//体力の減少
+		m_fLife -= round(fDamage);	//体力の減少
 
 		//残り体力を計算
 		m_fRemLife = m_fLife * 100 / m_fMaxLife;
-
 		//HPの設定
 		m_pHP[GAUGE_HP]->SetLife(m_fLife, m_fRemLife);
+
+		if (m_fLife < 0 && m_fRemLife < 0
+			&& m_pHP[GAUGE_HP])
+		{//HPゲージが尽きたら
+			m_pHP[GAUGE_HP] = nullptr;
+			return;
+		}
 		break;
 
 	//--------------------------------
@@ -402,16 +411,17 @@ void CEnemy::SubGauge(float fDamage, GAUGE type)
 	//--------------------------------
 	case GAUGE_BREAK:
 		m_fBreak -= round(fDamage / 3);
-
 		m_fRemBreak = m_fBreak * 100 / m_fMaxBreak;
+		m_pHP[GAUGE_BREAK]->SetLife(m_fBreak, m_fRemBreak);
 
-		if (m_fBreak < 0 && m_fRemBreak < 0)
+		if (m_fBreak < 0 && m_fRemBreak < 0
+			&& m_pHP[GAUGE_BREAK])
 		{//ブレイクゲージが尽きたら
+			m_pHP[GAUGE_BREAK] = nullptr;
+
 			//ブレイク状態にする
 			m_state = ENEMYSTATE_BREAK;
 		}
-
-		m_pHP[GAUGE_BREAK]->SetLife(m_fBreak, m_fRemBreak);
 		break;
 
 	default:

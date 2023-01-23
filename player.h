@@ -26,7 +26,7 @@ class CStyleShift;	//スタイルシフト
 // マクロ定義
 //--------------------------------
 #define MAX_PARTS	(7)		//モデルパーツの最大数
-#define MAX_KEY		(5)		//キーの最大数
+#define MAX_KEY		(24)	//キーの最大数
 
 //================================
 // プレイヤークラスの定義
@@ -84,7 +84,7 @@ public:
 		MOTION_MOVE,		//移動
 		MOTION_ATTACK_1,	//通常攻撃(1段目)
 		MOTION_ATTACK_2,	//通常攻撃(2段目)
-		//MOTION_ATTACK_3,	//通常攻撃(3段目)
+		MOTION_ATTACK_SPIN,	//回転切り
 		MOTION_MAX
 	};
 

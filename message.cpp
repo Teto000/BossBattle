@@ -120,7 +120,8 @@ void CMessage::Draw()
 		break;
 
 	case MESSAGE_BREAK:
-		if (CGame::GetEnemy()->GetState() == CEnemy::ENEMYSTATE_BREAK)
+		if (CGame::GetEnemy() != nullptr 
+			&& CGame::GetEnemy()->GetState() == CEnemy::ENEMYSTATE_BREAK)
 		{//“G‚ªƒuƒŒƒCƒNó‘Ô‚È‚ç
 			CObject2D::Draw();
 		}

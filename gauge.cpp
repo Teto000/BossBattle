@@ -10,6 +10,7 @@
 //-----------------------
 #include "gauge.h"
 #include "fream.h"
+#include "game.h"
 
 //==========================
 // コンストラクタ
@@ -75,6 +76,7 @@ void CGauge::Uninit()
 //==========================
 void CGauge::Update()
 {
+
 	CObject2D::Update();
 
 	//HP減少時の処理

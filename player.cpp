@@ -248,7 +248,8 @@ void CPlayer::Update()
 	// モーションのリセット
 	//--------------------------------
 	if (m_type != MOTION_ATTACK_1
-		&& m_type != MOTION_ATTACK_2)
+		&& m_type != MOTION_ATTACK_2
+		&& m_type != MOTION_ATTACK_SPIN)
 	{//攻撃モーションじゃないなら
 		//待機モーションにする
 		ChangeMotion(MOTION_IDOL);
@@ -276,7 +277,8 @@ void CPlayer::Update()
 			CInputJoypad* joypad = CApplication::GetJoypad();
 
 			if (m_type != MOTION_ATTACK_1
-				&& m_type != MOTION_ATTACK_2)
+				&& m_type != MOTION_ATTACK_2
+				&& m_type != MOTION_ATTACK_SPIN)
 			{//攻撃中じゃないなら
 				if (!joypad->IsJoyPadUse(0))
 				{//ジョイパッドが使われていないなら
@@ -307,7 +309,7 @@ void CPlayer::Update()
 				Attack(MOTION_ATTACK_1, MOTION_ATTACK_2);
 				break;
 			}*/
-			Attack(MOTION_ATTACK_1, MOTION_ATTACK_2);
+			Attack(MOTION_ATTACK_SPIN, MOTION_ATTACK_2);
 		}
 
 		//--------------------------------
@@ -965,7 +967,8 @@ void CPlayer::Attack(MOTION_TYPE type, MOTION_TYPE next)
 	//------------------------------------------
 	if (CInputKeyboard::Trigger(DIK_RETURN)
 		&& m_type != MOTION_ATTACK_1
-		&& m_type != MOTION_ATTACK_2)
+		&& m_type != MOTION_ATTACK_2
+		&& m_type != MOTION_ATTACK_SPIN)
 	{//ENTERキーが押された & 攻撃モーション中じゃないなら
 		//-----------------------------
 		// 敵のところまで移動する
@@ -1009,7 +1012,7 @@ void CPlayer::Attack(MOTION_TYPE type, MOTION_TYPE next)
 		if (m_status.bNextAttack && nOutRigor <= m_status.nAttackTime
 			&& !bChangeAttack && m_bFinishAttack)
 		{//攻撃切り替えフラグがオン & 硬直以外のフレーム数を超えた
-		 //& 攻撃が切り替わっていないなら & 攻撃が終わっているなら
+			//& 攻撃が切り替わっていないなら & 攻撃が終わっているなら
 			ChangeMotion(next);
 			m_status.bNextAttack = false;
 			bChangeAttack = true;
@@ -1146,7 +1149,8 @@ bool CPlayer::GetOutAttack(bool and)
 		// 攻撃状態全部なら
 		//----------------------------
 		if (m_type == MOTION_ATTACK_1
-			&& m_type == MOTION_ATTACK_2)
+			&& m_type == MOTION_ATTACK_2
+			&& m_type == MOTION_ATTACK_SPIN)
 		{
 			return true;
 		}
@@ -1157,7 +1161,8 @@ bool CPlayer::GetOutAttack(bool and)
 		// 攻撃状態どれかなら
 		//----------------------------
 		if (m_type == MOTION_ATTACK_1
-			|| m_type == MOTION_ATTACK_2)
+			|| m_type == MOTION_ATTACK_2
+			|| m_type == MOTION_ATTACK_SPIN)
 		{
 			return true;
 		}
