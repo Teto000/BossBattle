@@ -161,6 +161,9 @@
     <ClCompile Include="utility.cpp">
       <Filter>Main</Filter>
     </ClCompile>
+    <ClCompile Include="motion.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -278,6 +281,9 @@
       <Filter>Main\Object\Object2D\Number</Filter>
     </ClInclude>
     <ClInclude Include="utility.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="motion.h">
       <Filter>Main</Filter>
     </ClInclude>
   </ItemGroup>
