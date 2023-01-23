@@ -289,3 +289,21 @@ bool CUtility::ColliaionWeapon(D3DXVECTOR3 offset,float fDiameter,
 
 	return false;
 }
+
+//=============================================================================
+// 角度の正規化
+// 引数：角度
+//==============================================================================
+float CUtility::GetNorRot(float rot)
+{
+	if (rot > D3DX_PI)
+	{//角度が180以上なら
+		rot -= D3DX_PI * 2;
+	}
+	else if (rot < -D3DX_PI)
+	{//角度が-180以下なら
+		rot += D3DX_PI * 2;
+	}
+
+	return rot;
+}

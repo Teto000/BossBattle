@@ -17,6 +17,7 @@
 #include "player.h"
 #include "enemy.h"
 #include "debug_proc.h"
+#include "utility.h"
 
 //===========================
 // コンストラクタ
@@ -175,18 +176,8 @@ void CCamera::Update(void)
 		m_rot.y = atan2f(m_worldPosR.x - m_worldPosV.x, m_worldPosR.z - m_worldPosV.z);
 	}
 
-	//----------------------------------------
-	// 角度の正規化
-	//----------------------------------------
-	//左右
-	if (m_rot.y > D3DX_PI)
-	{
-		m_rot.y -= D3DX_PI * 2;
-	}
-	else if (m_rot.y < -D3DX_PI)
-	{
-		m_rot.y += D3DX_PI * 2;
-	}
+	// 左右の角度の正規化
+	m_rot.y = CUtility::GetNorRot(m_rot.y);
 
 	//減衰
 	m_worldPosR += (m_posRDest - m_worldPosR) * 0.1f;

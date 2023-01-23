@@ -45,6 +45,9 @@ public:
 	static bool ColliaionWeapon(D3DXVECTOR3 offset, float fDiameter,
 						D3DXMATRIX mtxWorld, CObject::EObjType type);
 
+	//Šp“x‚Ì³‹K‰»
+	static float GetNorRot(float rot);
+
 private:
 	//-----------------------
 	// Ã“Iƒƒ“ƒo•Ï”

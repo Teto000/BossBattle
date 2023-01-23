@@ -20,6 +20,7 @@
 #include "fade.h"
 #include "hp.h"
 #include "message.h"
+#include "utility.h"
 
 //------------------------
 // 静的メンバ変数宣言
@@ -530,14 +531,7 @@ void CEnemy::Move()
 	//-------------------------------
 	// 目的の角度の正規化
 	//-------------------------------
-	if (m_rotDest.y - m_rot.y > D3DX_PI)
-	{//回転したい角度が180以上なら
-		m_rotDest.y -= D3DX_PI * 2;
-	}
-	else if (m_rotDest.y - m_rot.y < -D3DX_PI)
-	{//回転したい角度が-180以下なら
-		m_rotDest.y += D3DX_PI * 2;
-	}
+	m_rotDest.y = CUtility::GetNorRot(m_rotDest.y);
 
 	//-------------------------------
 	// 目的の角度まで回転する
@@ -547,14 +541,7 @@ void CEnemy::Move()
 	//-------------------------------
 	// 角度の正規化
 	//-------------------------------
-	if (m_rot.y > D3DX_PI)
-	{//角度が180以上なら
-		m_rot.y -= D3DX_PI * 2;
-	}
-	else if (m_rot.y < -D3DX_PI)
-	{//角度が-180以下なら
-		m_rot.y += D3DX_PI * 2;
-	}
+	m_rot.y = CUtility::GetNorRot(m_rot.y);
 
 	//------------------------------
 	// プレイヤーに向かって移動

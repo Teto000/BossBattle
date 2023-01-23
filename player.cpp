@@ -714,6 +714,13 @@ void CPlayer::SetMotion(MOTION_TYPE type, bool bLoop, int nNumKey)
 		float fDifRotZ = keyNext.rot.z - key.rot.z;
 
 		//-------------------------------------------------------
+		// 差分の角度の正規化
+		//-------------------------------------------------------
+		fDifRotX = CUtility::GetNorRot(fDifRotX);	//Xの値
+		fDifRotY = CUtility::GetNorRot(fDifRotY);	//Yの値
+		fDifRotZ = CUtility::GetNorRot(fDifRotZ);	//Zの値
+
+		//-------------------------------------------------------
 		// 相対値の計算
 		// (モーションカウンター / フレーム数)
 		//-------------------------------------------------------
@@ -1296,14 +1303,7 @@ void CPlayer::SetRot()
 	//--------------------------------------
 	// 目的の角度の正規化
 	//--------------------------------------
-	if (m_rotDest.y - m_rot.y > D3DX_PI)
-	{//回転したい角度が180以上なら
-		m_rotDest.y -= D3DX_PI * 2;
-	}
-	else if (m_rotDest.y - m_rot.y < -D3DX_PI)
-	{//回転したい角度が-180以下なら
-		m_rotDest.y += D3DX_PI * 2;
-	}
+	m_rotDest.y = CUtility::GetNorRot(m_rotDest.y);
 
 	//--------------------------------------
 	// 目的の角度まで回転する
@@ -1313,14 +1313,7 @@ void CPlayer::SetRot()
 	//--------------------------------------
 	// 角度の正規化
 	//--------------------------------------
-	if (m_rot.y > D3DX_PI)
-	{//角度が180以上なら
-		m_rot.y -= D3DX_PI * 2;
-	}
-	else if (m_rot.y < -D3DX_PI)
-	{//角度が-180以下なら
-		m_rot.y += D3DX_PI * 2;
-	}
+	m_rot.y = CUtility::GetNorRot(m_rot.y);
 }
 
 //=============================
