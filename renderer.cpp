@@ -166,12 +166,12 @@ void CRenderer::Update()
 	{//F4キーが押された
 		if (m_bWIRE == false)
 		{//ワイヤーフレームじゃないなら
-		 //ワイヤーフレームの設定
+			//ワイヤーフレームの設定
 			m_pD3DDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
 		}
 		else if (m_bWIRE == true)
 		{//ワイヤーフレームなら
-		 //ワイヤーフレームを元の状態にする
+			//ワイヤーフレームを元の状態にする
 			m_pD3DDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 		}
 		m_bWIRE = !m_bWIRE;		//ワイヤーの状態を切り替える

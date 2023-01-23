@@ -46,8 +46,8 @@ CSky::~CSky()
 //=======================
 HRESULT CSky::Init(D3DXVECTOR3 pos)
 {
-	m_vertical = 20;		//分割数
-	m_fWidth = 10000.0f;	//幅
+	m_vertical = 20;	//分割数
+	m_fWidth = 100.0f;	//幅
 
 	LPDIRECT3DDEVICE9 pDevice = CApplication::GetRenderer()->GetDevice();	//デバイスの取得
 
@@ -90,7 +90,7 @@ HRESULT CSky::Init(D3DXVECTOR3 pos)
 
 	for (int z = 0; z < m_vertical; z++)
 	{
-		float rotDiffX = (D3DX_PI * 2.0f / (m_vertical - 1));	//X方向の分割した一片
+		float rotDiffX = (D3DX_PI / (m_vertical - 1));	//X方向の分割した一片
 		float rotZ = rotDiffZ * z;		//Zの角度を設定
 
 		for (int x = 0; x < m_vertical; x++)
@@ -131,16 +131,16 @@ HRESULT CSky::Init(D3DXVECTOR3 pos)
 
 	for (int Z = 0; Z < (m_vertical - 1); Z++)
 	{
-		for (int X = 0; X < m_vertical; X++)
+		for (int X = 0; X <= m_vertical; X++)
 		{
 			//インデックスバッファの設定
-			pIdx[nCnt] = (WORD)(X + Z * (m_vertical)+(m_vertical));
-			pIdx[nCnt + 1] = (WORD)(X + Z * (m_vertical));
+			pIdx[nCnt] = (WORD)(X + Z * m_vertical+m_vertical);
+			pIdx[nCnt + 1] = (WORD)(X + Z * m_vertical);
 
 			nCnt += 2;
 
 			//縮退ポリゴンの追加
-			if (X == m_vertical)
+			if (X == (m_vertical - 1))
 			{
 				pIdx[nCnt] = (WORD)(X + Z * m_vertical);
 				pIdx[nCnt + 1] = (WORD)((Z + 2) * m_vertical);

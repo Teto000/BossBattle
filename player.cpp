@@ -1303,7 +1303,14 @@ void CPlayer::SetRot()
 	//--------------------------------------
 	// 目的の角度の正規化
 	//--------------------------------------
-	m_rotDest.y = CUtility::GetNorRot(m_rotDest.y);
+	if (m_rotDest.y - m_rot.y > D3DX_PI)
+	{//回転したい角度が180以上なら
+		m_rotDest.y -= D3DX_PI * 2;
+	}
+	else if (m_rotDest.y - m_rot.y < -D3DX_PI)
+	{//回転したい角度が-180以下なら
+		m_rotDest.y += D3DX_PI * 2;
+	}
 
 	//--------------------------------------
 	// 目的の角度まで回転する

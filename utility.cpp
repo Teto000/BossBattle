@@ -296,14 +296,16 @@ bool CUtility::ColliaionWeapon(D3DXVECTOR3 offset,float fDiameter,
 //==============================================================================
 float CUtility::GetNorRot(float rot)
 {
-	if (rot > D3DX_PI)
+	float rotData = rot;
+
+	if (rotData > D3DX_PI)
 	{//äpìxÇ™180à»è„Ç»ÇÁ
-		rot -= D3DX_PI * 2;
+		rotData -= D3DX_PI * 2;
 	}
-	else if (rot < -D3DX_PI)
+	else if (rotData < -D3DX_PI)
 	{//äpìxÇ™-180à»â∫Ç»ÇÁ
-		rot += D3DX_PI * 2;
+		rotData += D3DX_PI * 2;
 	}
 
-	return rot;
+	return rotData;
 }

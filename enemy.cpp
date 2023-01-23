@@ -259,36 +259,36 @@ void CEnemy::Update()
 //========================
 void CEnemy::Draw()
 {
-	LPDIRECT3DDEVICE9 pDevice = CApplication::GetRenderer()->GetDevice();	//デバイスの取得
+	//LPDIRECT3DDEVICE9 pDevice = CApplication::GetRenderer()->GetDevice();	//デバイスの取得
 
-	D3DXMATRIX mtxRot, mtxTrans;	//計算用マトリックス
+	//D3DXMATRIX mtxRot, mtxTrans;	//計算用マトリックス
 
-	//モデルのワールドマトリックスの初期化
-	D3DXMatrixIdentity(&m_mtxWorld);
+	////モデルのワールドマトリックスの初期化
+	//D3DXMatrixIdentity(&m_mtxWorld);
 
-	//モデルの向きを反映
-	D3DXMatrixRotationYawPitchRoll(&mtxRot, m_rot.y, m_rot.x, m_rot.z);
-	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxRot);
+	////モデルの向きを反映
+	//D3DXMatrixRotationYawPitchRoll(&mtxRot, m_rot.y, m_rot.x, m_rot.z);
+	//D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxRot);
 
-	//モデルの位置を反映
-	D3DXMatrixTranslation(&mtxTrans, m_pos.x, m_pos.y, m_pos.z);
-	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxTrans);
+	////モデルの位置を反映
+	//D3DXMatrixTranslation(&mtxTrans, m_pos.x, m_pos.y, m_pos.z);
+	//D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxTrans);
 
-	//ワールドマトリックスの設定
-	pDevice->SetTransform(D3DTS_WORLD, &m_mtxWorld);
+	////ワールドマトリックスの設定
+	//pDevice->SetTransform(D3DTS_WORLD, &m_mtxWorld);
 
-	//-------------------------
-	// モデルの描画
-	//-------------------------
-	for (int i = 0; i < MAX_ENEMY_PARTS; i++)
-	{//モデルパーツ数分回す
-		if (!m_pModel[i])
-		{//モデルがnullなら
-			return;
-		}
+	////-------------------------
+	//// モデルの描画
+	////-------------------------
+	//for (int i = 0; i < MAX_ENEMY_PARTS; i++)
+	//{//モデルパーツ数分回す
+	//	if (!m_pModel[i])
+	//	{//モデルがnullなら
+	//		return;
+	//	}
 
-		m_pModel[i]->Draw(&m_mtxWorld);
-	}
+	//	m_pModel[i]->Draw(&m_mtxWorld);
+	//}
 }
 
 //========================
