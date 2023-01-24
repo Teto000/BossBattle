@@ -42,8 +42,6 @@ HRESULT CMessage::Init(D3DXVECTOR3 pos)
 	//初期値の設定
 	m_pos = pos;
 	m_col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	m_fWidth = 800.0f;
-	m_fHeight = 400.0f;
 
 	CObject2D::Init(m_pos);
 
@@ -141,7 +139,7 @@ void CMessage::Draw()
 // 生成
 // 引数：位置、種類
 //=======================
-CMessage *CMessage::Create(D3DXVECTOR3 pos, MESSAGE message)
+CMessage *CMessage::Create(D3DXVECTOR3 pos, float fWidth, float fHeight, MESSAGE message)
 {
 	CMessage *pMessage = nullptr;
 
@@ -153,6 +151,8 @@ CMessage *CMessage::Create(D3DXVECTOR3 pos, MESSAGE message)
 	if (pMessage != nullptr)
 	{//NULLチェック
 		//引数の代入
+		pMessage->m_fWidth = fWidth;	//幅
+		pMessage->m_fHeight = fHeight;	//高さ
 		pMessage->m_message = message;	//列挙型
 
 		//初期化

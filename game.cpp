@@ -94,8 +94,8 @@ HRESULT CGame::Init()
 	//メッセージの生成
 	{
 		D3DXVECTOR3 pos(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f);
-		m_pMessage = CMessage::Create(pos, CMessage::MESSAGE_CLEAR);
-		m_pMessage = CMessage::Create(pos, CMessage::MESSAGE_BREAK);
+		m_pMessage = CMessage::Create(pos, 800.0f, 400.0f, CMessage::MESSAGE_CLEAR);
+		m_pMessage = CMessage::Create(pos, 600.0f, 200.0f, CMessage::MESSAGE_BREAK);
 	}
 
 	//BGMの再生

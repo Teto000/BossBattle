@@ -309,6 +309,7 @@ void CPlayer::Update()
 				Attack(MOTION_ATTACK_1, MOTION_ATTACK_2);
 				break;
 			}*/
+			//Attack(MOTION_ATTACK_1, MOTION_ATTACK_2);
 			Attack(MOTION_ATTACK_SPIN, MOTION_ATTACK_2);
 		}
 

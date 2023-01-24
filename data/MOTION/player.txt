@@ -257,7 +257,7 @@ MOTIONSET
 	NUM_KEY = 4		 # キー数
 	
 	COLLISION = 8	 # 当たり判定の開始時間
-	NEXT_ATTACK = 10 # 次の攻撃の入力開始時間
+	NEXT_ATTACK = 11 # 次の攻撃の入力開始時間
 	NUM_POINT = 0	 # 攻撃に必要なポイント数
 	CRITICAL = 10    # クリティカル率(%)
 	NUM_HIT = 1		 # ヒット数

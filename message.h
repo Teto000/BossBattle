@@ -40,7 +40,7 @@ public:
 	//------------------
 	// Ã“Iƒƒ“ƒo•Ï”
 	//------------------
-	static CMessage* Create(D3DXVECTOR3 pos, MESSAGE message);
+	static CMessage* Create(D3DXVECTOR3 pos, float fWidth, float fHeight, MESSAGE message);
 
 private:
 	//------------------
