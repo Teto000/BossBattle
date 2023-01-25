@@ -202,7 +202,6 @@ void CEnemy::Update()
 				m_pHP[GAUGE_BREAK]->SetLife(m_fBreak, m_fRemBreak);	//HP‚Ìİ’è
 			}
 
-			//“G‚Ì‚‚³‚Ì‰Šú‰»
 			m_pos.y = 0.0f;
 		}
 	}

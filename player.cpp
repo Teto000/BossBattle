@@ -54,8 +54,8 @@ CPlayer::CPlayer() : CObject(0)
 	m_nNumCombo = 0;							//コンボ数
 	m_nCntHit = 0;								//ヒット数を数える
 	m_nHitTime = 0;								//ヒットまでの時間を数える
-	m_status.nComboValue = 0;					//コンボの加算値
 	m_nCntModeTime = 0;							//モード終了までの時間を数える
+	nWheelRotValue = 0;							//タイヤの回転量
 	fSizeWidth = 0.0f;							//サイズ(幅)
 	fSizeDepth = 0.0f;							//サイズ(奥行き)
 	m_bFinishAttack = false;					//ダメージを与えたか
@@ -70,11 +70,11 @@ CPlayer::CPlayer() : CObject(0)
 	//ステータス
 	m_status.nAttack = 0;			//攻撃力
 	m_status.nAttackTime = 0;		//攻撃時間
+	m_status.nComboValue = 0;		//コンボの加算値
 	m_status.fSpeed = 0.0f;			//速度
 	m_status.fLife = 0.0f;			//体力
 	m_status.fRemLife = 0.0f;		//残り体力(%)
 	m_status.fMaxLife = 0.0f;		//最大体力
-	m_status.bNextAttack = false;	//次の攻撃に繋げるかどうか
 
 	//攻撃状態
 	m_Atk_on.bAtk_1 = false;
@@ -134,6 +134,7 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	m_pos = pos;						//位置
 	fSizeWidth = 30.0f;					//モデルの幅
 	fSizeDepth = 30.0f;					//モデルの奥行き
+	nWheelRotValue = 10;
 	m_status.fLife = 300.0f;			//体力
 	m_status.fRemLife = 100.0f;			//残り体力(%)
 	m_status.fMaxLife = m_status.fLife;	//最大体力
@@ -602,18 +603,18 @@ void CPlayer::AttackManager()
 	//-------------------------
 	if (m_Atk_on.bAtk_1)
 	{
-		Attack(MOTION_ATTACK_1, MOTION_ATTACK_2);
+		Attack(MOTION_ATTACK_1);
 	}
 	else if (m_Atk_on.bAtk_Spin)
 	{
-		Attack(MOTION_ATTACK_SPIN, MOTION_ATTACK_2);
+		Attack(MOTION_ATTACK_SPIN);
 	}
 }
 
 //================================
 // 攻撃処理
 //================================
-void CPlayer::Attack(MOTION_TYPE type, MOTION_TYPE next)
+void CPlayer::Attack(MOTION_TYPE type)
 {
 	//------------------------------------------
 	// 攻撃モーションへ移行
@@ -650,21 +651,35 @@ void CPlayer::Attack(MOTION_TYPE type, MOTION_TYPE next)
 		//------------------------------------------
 		// 攻撃の切り替え
 		//------------------------------------------
-		if (CInputKeyboard::Trigger(DIK_RETURN)
-			&& nOutRigor > m_status.nAttackTime
+		if (nOutRigor > m_status.nAttackTime
 			&& m_status.nAttackTime >= m_aMotionSet[m_type].nNextAtkTime)
-		{//攻撃ボタンを押された & 硬直前のフレーム & 入力開始時間の後なら
-			m_status.bNextAttack = true;	//次の攻撃フラグをオン
+		{//硬直前のフレーム & 入力開始時間の後なら
+			if (CInputKeyboard::Trigger(DIK_RETURN))
+			{
+				m_Atk_on.bAtk_2 = true;
+			}
+			else if (CInputKeyboard::Trigger(DIK_1))
+			{
+				m_Atk_on.bAtk_Spin = true;
+			}
 		}
 
-		if (m_status.bNextAttack && nOutRigor <= m_status.nAttackTime
+		if (nOutRigor <= m_status.nAttackTime
 			&& !bChangeAttack && m_bFinishAttack)
-		{//攻撃切り替えフラグがオン & 硬直以外のフレーム数を超えた
-			//& 攻撃が切り替わっていないなら & 攻撃が終わっているなら
-			ChangeMotion(next);
-			m_status.bNextAttack = false;
+		{//硬直以外のフレーム数を超えた& 攻撃が切り替わっていないなら & 攻撃が終わっているなら
+
+			if (m_Atk_on.bAtk_2)
+			{
+				ChangeMotion(MOTION_ATTACK_2);
+			}
+			else if (m_Atk_on.bAtk_Spin)
+			{
+				ChangeMotion(MOTION_ATTACK_SPIN);
+			}
+
 			bChangeAttack = true;
 		}
+
 		//------------------------------------------
 		// フレーム数の加算
 		//------------------------------------------
@@ -1214,5 +1229,6 @@ void CPlayer::ChangeMotion(MOTION_TYPE type)
 		m_nCntMotion = 0;
 		m_status.nAttackTime = 0;	//攻撃時間のリセット
 		m_bFinishAttack = false;	//ダメージを与えていない状態にする
+		m_Atk_on.bAtk = false;
 	}
 }

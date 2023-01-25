@@ -74,7 +74,6 @@ public:
 		float fLife;		//体力
 		float fRemLife;		//残り体力(%)
 		float fMaxLife;		//最大体力
-		bool bNextAttack;	//次の攻撃に繋げるかどうか
 	};
 
 	struct ATTACK_ON
@@ -156,10 +155,10 @@ private:
 	void MoveJoypad();				//ジョイパッドを使った移動
 	void SetRot();					//角度の設定
 
-	void AttackManager();								//攻撃の管理
-	void Attack(MOTION_TYPE type, MOTION_TYPE next);	//攻撃処理
-	void HitSword();									//剣が当たった処理
-	bool GetOutAttack(bool and);						//攻撃状態かどうかを返す
+	void AttackManager();			//攻撃の管理
+	void Attack(MOTION_TYPE type);	//攻撃処理
+	void HitSword();				//剣が当たった処理
+	bool GetOutAttack(bool and);	//攻撃状態かどうかを返す
 
 	void SetModel();											//モデルの設定
 	void GetFileMotion();										//ファイルを使ったモーションの取得
@@ -171,7 +170,6 @@ private:
 	// 定数
 	//----------------
 	static const int nMaxLine = 12;				//線の最大数
-	static const int nWheelRotValue = 10;		//タイヤの回転量
 	static const int nSwordNumber = 4;			//剣モデルの番号
 	static const int nResetModeTime = 600;		//モードチェンジ終了までの時間
 	static const float fDefaultAttack;			//基本の攻撃力
@@ -196,6 +194,7 @@ private:
 	int m_nCntHit;				//ヒット数を数える
 	int m_nHitTime;				//ヒットまでの時間を数える
 	int m_nCntModeTime;			//モード終了までの時間を数える
+	int nWheelRotValue;			//タイヤの回転量
 	float fSizeWidth;			//サイズ(幅)
 	float fSizeDepth;			//サイズ(奥行き)
 	float m_rotWheel;			//タイヤの回転量
