@@ -58,10 +58,9 @@ CPlayer::CPlayer() : CObject(0)
 	m_nCntModeTime = 0;							//モード終了までの時間を数える
 	fSizeWidth = 0.0f;							//サイズ(幅)
 	fSizeDepth = 0.0f;							//サイズ(奥行き)
-	m_bFinishAttack = false;						//ダメージを与えたか
-	m_bHit = false;							//1ヒットした状態
+	m_bFinishAttack = false;					//ダメージを与えたか
+	m_bHit = false;								//1ヒットした状態
 	bChangeAttack = false;						//攻撃が切り替わった状態
-	m_bStyle = false;							//スタイルを表示したか
 	m_type = MOTION_IDOL;						//現在のモーション
 	m_battleStyle = BATTLESTYLE_NONE;			//バトルモード
 	m_pHP = nullptr;							//HP
@@ -77,22 +76,15 @@ CPlayer::CPlayer() : CObject(0)
 	m_status.fMaxLife = 0.0f;		//最大体力
 	m_status.bNextAttack = false;	//次の攻撃に繋げるかどうか
 
+	//攻撃状態
+	m_Atk_on.bAtk_1 = false;
+	m_Atk_on.bAtk_2 = false;
+	m_Atk_on.bAtk_Spin = false;
+
 	//モデル
 	for (int i = 0; i < MAX_PARTS; i++)
 	{
 		m_pModel[i] = nullptr;
-	}
-
-	//線
-	for (int i = 0; i < nMaxLine; i++)
-	{
-		m_pLine[i] = nullptr;
-	}
-
-	//スタイル
-	for (int i = 0; i < BATTLESTYLE_MAX; i++)
-	{
-		m_pStyleShift[i] = nullptr;
 	}
 
 	/* ↓ モーション情報 ↓ */
@@ -184,11 +176,6 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	m_size.z = m_vtxMax.z - m_vtxMin.z;
 
 	//------------------------------
-	// 線の表示
-	//------------------------------
-	//SetLine();
-
-	//------------------------------
 	// モーションの読み込み
 	//------------------------------
 	GetFileMotion();
@@ -197,20 +184,6 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	// コンボ数表示
 	//------------------------------
 	m_pCombo = CCombo::Create(D3DXVECTOR3(1100.0f, 360.0f, 0.0f), m_nNumCombo);
-
-	//------------------------------
-	// スタイルの表示
-	//------------------------------
-	{
-		D3DXVECTOR3 firstPos(m_pos.x - 100.0f, m_pos.y + 180.0f, m_pos.z);
-		m_pStyleShift[0] = CStyleShift::Create(firstPos, CStyleShift::STYLE_TYPE_ATTACK);
-
-		D3DXVECTOR3 secondPos(m_pos.x, m_pos.y + 200.0f, m_pos.z);
-		m_pStyleShift[1] = CStyleShift::Create(secondPos, CStyleShift::STYLE_TYPE_SPEED);
-
-		D3DXVECTOR3 thirdPos(m_pos.x + 100.0f, m_pos.y + 180.0f, m_pos.z);
-		m_pStyleShift[2] = CStyleShift::Create(thirdPos, CStyleShift::STYLE_TYPE_COMBO);
-	}
 
 	return S_OK;
 }
@@ -268,55 +241,36 @@ void CPlayer::Update()
 
 	if (!CGame::GetFinish())
 	{//終了フラグが立っていないなら
-		if (!m_bStyle)
-		{//スタイル表示中じゃないなら
 			//--------------------------------
 			// 移動
 			//--------------------------------
 			// ジョイパッドでの操作
-			CInputJoypad* joypad = CApplication::GetJoypad();
+		CInputJoypad* joypad = CApplication::GetJoypad();
 
-			if (m_type != MOTION_ATTACK_1
-				&& m_type != MOTION_ATTACK_2
-				&& m_type != MOTION_ATTACK_SPIN)
-			{//攻撃中じゃないなら
-				if (!joypad->IsJoyPadUse(0))
-				{//ジョイパッドが使われていないなら
-					MoveKeyboard(DIK_W, DIK_S, DIK_A, DIK_D);	//キーボード
-				}
-				else
-				{
-					MoveJoypad();	//ジョイパッド
-				}
+		if (m_type != MOTION_ATTACK_1
+			&& m_type != MOTION_ATTACK_2
+			&& m_type != MOTION_ATTACK_SPIN)
+		{//攻撃中じゃないなら
+			if (!joypad->IsJoyPadUse(0))
+			{//ジョイパッドが使われていないなら
+				MoveKeyboard(DIK_W, DIK_S, DIK_A, DIK_D);	//キーボード
 			}
-
-			//タイヤの回転
-			m_pModel[0]->SetRotX(m_rotWheel);
-
-			//向きを目的の角度に合わせる
-			SetRot();
-
-			//--------------------------------
-			// 攻撃処理
-			//--------------------------------
-			/*switch (m_type)
+			else
 			{
-			case MOTION_ATTACK_2:
-				Attack(MOTION_ATTACK_2, MOTION_ATTACK_3);
-				break;
-
-			default:
-				Attack(MOTION_ATTACK_1, MOTION_ATTACK_2);
-				break;
-			}*/
-			//Attack(MOTION_ATTACK_1, MOTION_ATTACK_2);
-			Attack(MOTION_ATTACK_SPIN, MOTION_ATTACK_2);
+				MoveJoypad();	//ジョイパッド
+			}
 		}
 
+		//タイヤの回転
+		m_pModel[0]->SetRotX(m_rotWheel);
+
+		//向きを目的の角度に合わせる
+		SetRot();
+
 		//--------------------------------
-		// モードチェンジ
+		// 攻撃処理
 		//--------------------------------
-		//ChangeMode();
+		AttackManager();
 	}
 
 	//--------------------------------
@@ -325,15 +279,10 @@ void CPlayer::Update()
 	SetMotion(m_type, m_aMotionSet[m_type].bLoop, m_aMotionSet[m_type].nNumKey);
 
 	//--------------------------------
-	// 線の更新
-	//--------------------------------
-	//UpdateLine();
-
-	//--------------------------------
 	// 敵との当たり判定
 	//--------------------------------
 	m_pos = CUtility::GetCollisionPos(m_pos, m_posOld, m_size, m_mtxWorld
-										, CObject::OBJTYPE_ENEMY);
+		, CObject::OBJTYPE_ENEMY);
 }
 
 //=============================
@@ -387,12 +336,497 @@ CPlayer* CPlayer::Create()
 
 	if (pPlayer != nullptr)
 	{//NULLチェック
-		//初期化
+	 //初期化
 		pPlayer->Init(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 		pPlayer->SetObjType(OBJTYPE_PLAYER);
 	}
 
 	return pPlayer;
+}
+
+//==========================================
+// 移動
+// 引数：上キー,下キー,左キー,右キー
+//==========================================
+void CPlayer::MoveKeyboard(int nUpKey, int nDownKey, int nLeftKey, int nRightKey)
+{
+	//カメラの情報取得
+	D3DXVECTOR3 cameraRot = CGame::GetCamera()->GetRot();
+
+	//--------------------------------------
+	// プレイヤーの操作
+	//--------------------------------------
+	if (CInputKeyboard::Press(nLeftKey))
+	{//Aキーが押された
+		if (CInputKeyboard::Press(nUpKey))
+		{//Wキーが押された
+			m_pos.x += sinf(cameraRot.y - D3DX_PI * 0.25f) * m_status.fSpeed;	//左奥移動
+			m_pos.z += cosf(cameraRot.y - D3DX_PI * 0.25f) * m_status.fSpeed;
+			m_rotDest.y = cameraRot.y + D3DX_PI * 0.75f;	//向きの切り替え
+		}
+		else if (CInputKeyboard::Press(nDownKey))
+		{//Sキーが押された
+			m_pos.x += sinf(cameraRot.y - D3DX_PI * 0.75f) * m_status.fSpeed;	//左前移動
+			m_pos.z += cosf(cameraRot.y - D3DX_PI * 0.75f) * m_status.fSpeed;
+			m_rotDest.y = cameraRot.y + D3DX_PI * 0.25f;
+		}
+		else
+		{
+			m_pos.x -= sinf(cameraRot.y + D3DX_PI * 0.5f) * m_status.fSpeed;	//左移動
+			m_pos.z -= cosf(cameraRot.y + D3DX_PI * 0.5f) * m_status.fSpeed;
+			m_rotDest.y = cameraRot.y + D3DX_PI * 0.5f;
+		}
+	}
+	else if (CInputKeyboard::Press(nRightKey))
+	{//Dキーが押された
+		if (CInputKeyboard::Press(nUpKey))
+		{//Wキーが押された
+			m_pos.x += sinf(cameraRot.y + D3DX_PI * 0.25f) * m_status.fSpeed;	//右奥移動
+			m_pos.z += cosf(cameraRot.y + D3DX_PI * 0.25f) * m_status.fSpeed;
+			m_rotDest.y = cameraRot.y - D3DX_PI * 0.75f;
+		}
+		else if (CInputKeyboard::Press(nDownKey))
+		{//Sキーが押された
+			m_pos.x += sinf(cameraRot.y + D3DX_PI * 0.75f) * m_status.fSpeed;	//右前移動
+			m_pos.z += cosf(cameraRot.y + D3DX_PI * 0.75f) * m_status.fSpeed;
+			m_rotDest.y = cameraRot.y - D3DX_PI * 0.25f;
+		}
+		else
+		{
+			m_pos.x += sinf(cameraRot.y + D3DX_PI * 0.5f) * m_status.fSpeed;	//右移動
+			m_pos.z += cosf(cameraRot.y + D3DX_PI * 0.5f) * m_status.fSpeed;
+			m_rotDest.y = cameraRot.y - D3DX_PI * 0.5f;
+		}
+	}
+	else if (CInputKeyboard::Press(nUpKey))
+	{//Wキーが押された
+		m_pos.x -= sinf(cameraRot.y + D3DX_PI * 1.0f) * m_status.fSpeed;	//奥移動
+		m_pos.z -= cosf(cameraRot.y + D3DX_PI * 1.0f) * m_status.fSpeed;
+		m_rotDest.y = cameraRot.y + D3DX_PI * 1.0f;
+	}
+	else if (CInputKeyboard::Press(nDownKey))
+	{//Sキーが押された
+		m_pos.x -= sinf(cameraRot.y + D3DX_PI * 0.0f) * m_status.fSpeed;	//前移動
+		m_pos.z -= cosf(cameraRot.y + D3DX_PI * 0.0f) * m_status.fSpeed;
+		m_rotDest.y = cameraRot.y + D3DX_PI * 0.0f;
+	}
+
+	//タイヤの回転量の加算
+	m_rotWheel += D3DXToRadian(-nWheelRotValue);
+
+	if (!CInputKeyboard::Press(nUpKey) && !CInputKeyboard::Press(nDownKey)
+		&& !CInputKeyboard::Press(nRightKey) && !CInputKeyboard::Press(nLeftKey))
+	{//移動キーが押されていないなら
+		//タイヤの回転量を0にする
+		m_rotWheel = 0;
+	}
+	else
+	{//どれかが押されているなら
+		//移動モーションにする
+		ChangeMotion(MOTION_MOVE);
+	}
+}
+
+//================================
+// ジョイパッドを使った移動
+//================================
+void CPlayer::MoveJoypad()
+{
+	// ジョイパッドでの操作
+	CInputJoypad* joypad = CApplication::GetJoypad();
+	D3DXVECTOR3 stick = joypad->Stick(CInputJoypad::JOYKEY_LEFT_STICK, 0);
+
+	if (joypad->IsJoyPadUse(0) == false)
+	{//ジョイパッドが使われていないなら
+		return;
+	}
+
+	//スティックを動かす値の設定
+	float fMoveValue = 0.5f;
+
+	//カメラの情報取得
+	D3DXVECTOR3 cameraRot = CGame::GetCamera()->GetRot();
+
+	//------------------------------------------
+	// 右移動
+	//------------------------------------------
+	if (stick.x >= fMoveValue)
+	{
+		// スティックを倒した方向へ移動する
+		if (stick.y <= -fMoveValue)
+		{//右奥移動
+			m_pos.x += sinf(cameraRot.y + D3DX_PI * 0.25f) * m_status.fSpeed;
+			m_pos.z += cosf(cameraRot.y + D3DX_PI * 0.25f) * m_status.fSpeed;
+			m_rotDest.y = cameraRot.y - D3DX_PI * 0.75f;	//向きの切り替え
+		}
+		else if (stick.y >= fMoveValue)
+		{//右前移動
+			m_pos.x += sinf(cameraRot.y + D3DX_PI * 0.75f) * m_status.fSpeed;
+			m_pos.z += cosf(cameraRot.y + D3DX_PI * 0.75f) * m_status.fSpeed;
+			m_rotDest.y = cameraRot.y - D3DX_PI * 0.25f;
+		}
+		else
+		{
+			m_pos.x += sinf(cameraRot.y + D3DX_PI * fMoveValue) * m_status.fSpeed;
+			m_pos.z += cosf(cameraRot.y + D3DX_PI * fMoveValue) * m_status.fSpeed;
+			m_rotDest.y = cameraRot.y - D3DX_PI * fMoveValue;
+		}
+	}
+	//------------------------------------------
+	// 左移動
+	//------------------------------------------
+	else if (stick.x <= -fMoveValue)
+	{
+		if (stick.y <= -fMoveValue)
+		{//左奥移動
+			m_pos.x += sinf(cameraRot.y - D3DX_PI * 0.25f) * m_status.fSpeed;
+			m_pos.z += cosf(cameraRot.y - D3DX_PI * 0.25f) * m_status.fSpeed;
+			m_rotDest.y = cameraRot.y + D3DX_PI * 0.75f;
+		}
+		else if (stick.y >= fMoveValue)
+		{//左前移動
+			m_pos.x += sinf(cameraRot.y - D3DX_PI * 0.75f) * m_status.fSpeed;
+			m_pos.z += cosf(cameraRot.y - D3DX_PI * 0.75f) * m_status.fSpeed;
+			m_rotDest.y = cameraRot.y + D3DX_PI * 0.25f;
+		}
+		else
+		{
+			m_pos.x -= sinf(cameraRot.y + D3DX_PI * fMoveValue) * m_status.fSpeed;
+			m_pos.z -= cosf(cameraRot.y + D3DX_PI * fMoveValue) * m_status.fSpeed;
+			m_rotDest.y = cameraRot.y + D3DX_PI * fMoveValue;
+		}
+	}
+	//------------------------------------------
+	// 奥移動
+	//------------------------------------------
+	else if (stick.y <= -fMoveValue)
+	{
+		m_pos.x -= sinf(cameraRot.y + D3DX_PI * 1.0f) * m_status.fSpeed;
+		m_pos.z -= cosf(cameraRot.y + D3DX_PI * 1.0f) * m_status.fSpeed;
+		m_rotDest.y = cameraRot.y + D3DX_PI * 1.0f;
+	}
+	//------------------------------------------
+	// 前移動
+	//------------------------------------------
+	else if (stick.y >= fMoveValue)
+	{
+		m_pos.x -= sinf(cameraRot.y + D3DX_PI * 0.0f) * m_status.fSpeed;
+		m_pos.z -= cosf(cameraRot.y + D3DX_PI * 0.0f) * m_status.fSpeed;
+		m_rotDest.y = cameraRot.y + D3DX_PI * 0.0f;
+	}
+
+	//タイヤの回転量の加算
+	m_rotWheel += D3DXToRadian(-nWheelRotValue);
+
+	if (stick.x < fMoveValue && stick.x > -fMoveValue
+		&& stick.y < fMoveValue && stick.y > -fMoveValue)
+	{//スティックが動かされていないなら
+		//タイヤの回転量を0にする
+		m_rotWheel = 0;
+	}
+}
+
+//================================
+// 角度の設定
+//================================
+void CPlayer::SetRot()
+{
+	//--------------------------------------
+	// 常に敵の方向を見る
+	//--------------------------------------
+	if (CGame::GetCamera()->GetLockOn())
+	{//ロックオン状態なら
+		//プレイヤーの位置を取得
+		D3DXVECTOR3 playerPos(CGame::GetEnemy()->GetPosition());
+
+		//2点間の距離を求める
+		float X = m_pos.x - playerPos.x;
+		float Z = m_pos.z - playerPos.z;
+
+		//角度の設定
+		float angle = atan2f(X, Z);
+
+		//向きの設定
+		m_rotDest = D3DXVECTOR3(0.0f, angle, 0.0f);
+	}
+
+	//--------------------------------------
+	// 目的の角度の正規化
+	//--------------------------------------
+	if (m_rotDest.y - m_rot.y > D3DX_PI)
+	{//回転したい角度が180以上なら
+		m_rotDest.y -= D3DX_PI * 2;
+	}
+	else if (m_rotDest.y - m_rot.y < -D3DX_PI)
+	{//回転したい角度が-180以下なら
+		m_rotDest.y += D3DX_PI * 2;
+	}
+
+	//--------------------------------------
+	// 目的の角度まで回転する
+	//--------------------------------------
+	m_rot.y += (m_rotDest.y - m_rot.y) * 0.08f;	//減衰処理
+
+	//--------------------------------------
+	// 角度の正規化
+	//--------------------------------------
+	m_rot.y = CUtility::GetNorRot(m_rot.y);
+}
+
+//================================
+// 攻撃の管理
+//================================
+void CPlayer::AttackManager()
+{
+	//-------------------------
+	// 通常攻撃
+	//-------------------------
+	if (!m_Atk_on.bAtk)
+	{
+		if (CInputKeyboard::Trigger(DIK_RETURN))
+		{//ENTERキーが押された
+			m_Atk_on.bAtk_1 = true;
+		}
+
+		//-------------------------
+		// 回転切り
+		//-------------------------
+		if (CInputKeyboard::Trigger(DIK_1))
+		{//1キーが押された
+			m_Atk_on.bAtk_Spin = true;
+		}
+	}
+
+	//-------------------------
+	// 攻撃処理
+	//-------------------------
+	if (m_Atk_on.bAtk_1)
+	{
+		Attack(MOTION_ATTACK_1, MOTION_ATTACK_2);
+	}
+	else if (m_Atk_on.bAtk_Spin)
+	{
+		Attack(MOTION_ATTACK_SPIN, MOTION_ATTACK_2);
+	}
+}
+
+//================================
+// 攻撃処理
+//================================
+void CPlayer::Attack(MOTION_TYPE type, MOTION_TYPE next)
+{
+	//------------------------------------------
+	// 攻撃モーションへ移行
+	//------------------------------------------
+	if (m_type != MOTION_ATTACK_1
+		&& m_type != MOTION_ATTACK_2
+		&& m_type != MOTION_ATTACK_SPIN)
+	{//攻撃モーション中じゃないなら
+		m_Atk_on.bAtk = true;
+
+		//攻撃モーションにする
+		ChangeMotion(type);
+	}
+
+	if (GetOutAttack(false))
+	{//攻撃モーション中なら
+		//------------------------------------------
+		// モーションと攻撃時間を合わせる
+		//------------------------------------------
+		int nAttackFream = 0;
+		int nOutRigor = 0;
+		for (int i = 0; i < m_aMotionSet[m_type].nNumKey; i++)
+		{//キー数-1回分回す
+			//攻撃モーションのフレーム数を合計する
+			nAttackFream += m_aMotionSet[m_type].aKeySet[i].nFrame;
+
+			if (i != m_aMotionSet[m_type].nNumKey - 1)
+			{//硬直キーじゃないなら
+				//フレーム数を加算
+				nOutRigor += m_aMotionSet[m_type].aKeySet[i].nFrame;
+			}
+		}
+
+		//------------------------------------------
+		// 攻撃の切り替え
+		//------------------------------------------
+		if (CInputKeyboard::Trigger(DIK_RETURN)
+			&& nOutRigor > m_status.nAttackTime
+			&& m_status.nAttackTime >= m_aMotionSet[m_type].nNextAtkTime)
+		{//攻撃ボタンを押された & 硬直前のフレーム & 入力開始時間の後なら
+			m_status.bNextAttack = true;	//次の攻撃フラグをオン
+		}
+
+		if (m_status.bNextAttack && nOutRigor <= m_status.nAttackTime
+			&& !bChangeAttack && m_bFinishAttack)
+		{//攻撃切り替えフラグがオン & 硬直以外のフレーム数を超えた
+			//& 攻撃が切り替わっていないなら & 攻撃が終わっているなら
+			ChangeMotion(next);
+			m_status.bNextAttack = false;
+			bChangeAttack = true;
+		}
+		//------------------------------------------
+		// フレーム数の加算
+		//------------------------------------------
+		if (nAttackFream <= m_status.nAttackTime)
+		{//攻撃時間が攻撃モーションのフレーム数の合計を超えたら
+			//待機モーションにする
+			ChangeMotion(MOTION_IDOL);
+			m_Atk_on.bAtk = false;
+			m_Atk_on.bAtk_1 = false;
+			m_Atk_on.bAtk_2 = false;
+			m_Atk_on.bAtk_Spin = false;
+
+			bChangeAttack = false;
+		}
+		else
+		{
+			//攻撃時間を加算
+			m_status.nAttackTime++;
+		}
+
+		//------------------------------------------
+		// 剣との当たり判定
+		//------------------------------------------
+		HitSword();
+	}
+}
+
+//================================
+// 剣との当たり判定
+//================================
+void CPlayer::HitSword()
+{
+	D3DXVECTOR3 offsetPos(0.0f, 0.0f, -80.0f);	//剣先までのオフセット
+
+	if (CUtility::ColliaionWeapon(offsetPos, 250.0f, m_mtxWorld, CObject::OBJTYPE_ENEMY)
+		&& !m_bFinishAttack
+		&& m_status.nAttackTime >= m_aMotionSet[m_type].nStartCollision)
+	{//剣と当たっている & 攻撃が終わっていない & 当たり判定の有効時間なら
+		//---------------------------------
+		// 指定回数ヒットさせる処理
+		//---------------------------------
+		if (!m_bHit)
+		{//攻撃が当たっていないなら
+			//技ごとのダメージ量を計算
+			float fDamage = m_status.nAttack * m_aMotionSet[m_type].fDamageMag;
+
+			//-----------------------------
+			// クリティカルかどうか
+			//-----------------------------
+			int nRand = rand() % 101;	//0%～100%の値
+			bool bCritical = false;
+			if (nRand <= m_aMotionSet[m_type].nCritical)
+			{//ランダムな値がクリティカル率以内なら
+				fDamage *= 1.5f;	//ダメージ1.5倍
+				bCritical = true;	//クリティカル状態にする
+			}
+
+			//-----------------------------
+			// ブレイク状態かどうか
+			//-----------------------------
+			if (CGame::GetEnemy()->GetState() != CEnemy::ENEMYSTATE_BREAK)
+			{//敵がブレイク状態じゃないなら
+			 //攻撃力分敵の体力を減少
+				CGame::GetEnemy()->SubGauge(fDamage, CEnemy::GAUGE_HP);
+
+				//ブレイクゲージの減少
+				CGame::GetEnemy()->SubGauge(fDamage, CEnemy::GAUGE_BREAK);
+			}
+			else
+			{//ブレイク状態なら
+				if (!bCritical)
+				{//クリティカル状態じゃないなら
+					fDamage *= 1.5f;	//ダメージ1.5倍
+				}
+
+				//クリティカルダメージ分敵の体力を減少
+				CGame::GetEnemy()->SubGauge(fDamage, CEnemy::GAUGE_HP);
+			}
+
+			//コンボ数の加算
+			CGame::GetPlayer()->AddCombo(m_status.nComboValue);
+
+			m_nCntHit++;	//ヒット数を加算
+			m_bHit = true;	//攻撃が当たった状態
+
+			//------------------------------
+			// 攻撃の終了処理
+			//------------------------------
+			if (m_nCntHit >= m_aMotionSet[m_type].nNumHit)
+			{//現在のヒット数が攻撃のヒット数以上なら
+				m_bFinishAttack = true;	//攻撃が終わった状態にする
+				m_nCntHit = 0;			//ヒット数をリセット
+			}
+		}
+		else if (m_bHit && m_nHitTime >= m_aMotionSet[m_type].nHitInterval)
+		{//攻撃が当たった & ヒットまでの時間がヒット間隔より大きいなら
+			m_bHit = false;		//攻撃が当たっていない状態
+			m_nHitTime = 0;		//ヒットまでの時間をリセット
+		}
+		else
+		{
+			m_nHitTime++;	//ヒットまでの時間を数える
+		}
+	}
+}
+
+//================================
+// 攻撃状態かどうかを返す
+// 引数：trueでand,falseでor
+//================================
+bool CPlayer::GetOutAttack(bool and)
+{
+	switch (and)
+	{
+	case true:
+		//----------------------------
+		// 攻撃状態全部なら
+		//----------------------------
+		if (m_type == MOTION_ATTACK_1
+			&& m_type == MOTION_ATTACK_2
+			&& m_type == MOTION_ATTACK_SPIN)
+		{
+			return true;
+		}
+		break;
+
+	case false:
+		//----------------------------
+		// 攻撃状態どれかなら
+		//----------------------------
+		if (m_type == MOTION_ATTACK_1
+			|| m_type == MOTION_ATTACK_2
+			|| m_type == MOTION_ATTACK_SPIN)
+		{
+			return true;
+		}
+		break;
+	}
+
+	return false;
+}
+
+//================================
+// コンボ数の加算
+//================================
+void CPlayer::AddCombo(int nNumber)
+{
+	m_nNumCombo = m_pCombo->AddNumber(nNumber);
+}
+
+//=============================
+// HP減少時の処理
+//=============================
+void CPlayer::SubLife(float fDamage)
+{
+	m_status.fLife -= fDamage;	//体力の減少
+
+	//残り体力を計算
+	m_status.fRemLife = m_status.fLife * 100 / m_status.fMaxLife;
+
+	//HPの設定
+	m_pHP->SetLife(m_status.fLife, m_status.fRemLife);
 }
 
 //=============================
@@ -511,7 +945,7 @@ void CPlayer::GetFileMotion()
 				//-------------------------------
 				else if (strcmp(&cTextHead[0], "NUM_POINT") == 0)
 				{//頭文字がNUM_POINTなら
-				 //文字列からキーの最大数を読み取る
+					//文字列からキーの最大数を読み取る
 					sscanf(cText, "%s = %d", &cTextHead, &m_aMotionSet[nNumMotion].nNumPoint);
 				}
 				//-------------------------------
@@ -781,626 +1215,4 @@ void CPlayer::ChangeMotion(MOTION_TYPE type)
 		m_status.nAttackTime = 0;	//攻撃時間のリセット
 		m_bFinishAttack = false;	//ダメージを与えていない状態にする
 	}
-}
-
-//==========================================
-// 移動
-// 引数：上キー,下キー,左キー,右キー
-//==========================================
-void CPlayer::MoveKeyboard(int nUpKey, int nDownKey, int nLeftKey, int nRightKey)
-{
-	//カメラの情報取得
-	D3DXVECTOR3 cameraRot = CGame::GetCamera()->GetRot();
-
-	//--------------------------------------
-	// プレイヤーの操作
-	//--------------------------------------
-	if (CInputKeyboard::Press(nLeftKey))
-	{//Aキーが押された
-		if (CInputKeyboard::Press(nUpKey))
-		{//Wキーが押された
-			m_pos.x += sinf(cameraRot.y - D3DX_PI * 0.25f) * m_status.fSpeed;	//左奥移動
-			m_pos.z += cosf(cameraRot.y - D3DX_PI * 0.25f) * m_status.fSpeed;
-			m_rotDest.y = cameraRot.y + D3DX_PI * 0.75f;	//向きの切り替え
-		}
-		else if (CInputKeyboard::Press(nDownKey))
-		{//Sキーが押された
-			m_pos.x += sinf(cameraRot.y - D3DX_PI * 0.75f) * m_status.fSpeed;	//左前移動
-			m_pos.z += cosf(cameraRot.y - D3DX_PI * 0.75f) * m_status.fSpeed;
-			m_rotDest.y = cameraRot.y + D3DX_PI * 0.25f;
-		}
-		else
-		{
-			m_pos.x -= sinf(cameraRot.y + D3DX_PI * 0.5f) * m_status.fSpeed;	//左移動
-			m_pos.z -= cosf(cameraRot.y + D3DX_PI * 0.5f) * m_status.fSpeed;
-			m_rotDest.y = cameraRot.y + D3DX_PI * 0.5f;
-		}
-	}
-	else if (CInputKeyboard::Press(nRightKey))
-	{//Dキーが押された
-		if (CInputKeyboard::Press(nUpKey))
-		{//Wキーが押された
-			m_pos.x += sinf(cameraRot.y + D3DX_PI * 0.25f) * m_status.fSpeed;	//右奥移動
-			m_pos.z += cosf(cameraRot.y + D3DX_PI * 0.25f) * m_status.fSpeed;
-			m_rotDest.y = cameraRot.y - D3DX_PI * 0.75f;
-		}
-		else if (CInputKeyboard::Press(nDownKey))
-		{//Sキーが押された
-			m_pos.x += sinf(cameraRot.y + D3DX_PI * 0.75f) * m_status.fSpeed;	//右前移動
-			m_pos.z += cosf(cameraRot.y + D3DX_PI * 0.75f) * m_status.fSpeed;
-			m_rotDest.y = cameraRot.y - D3DX_PI * 0.25f;
-		}
-		else
-		{
-			m_pos.x += sinf(cameraRot.y + D3DX_PI * 0.5f) * m_status.fSpeed;	//右移動
-			m_pos.z += cosf(cameraRot.y + D3DX_PI * 0.5f) * m_status.fSpeed;
-			m_rotDest.y = cameraRot.y - D3DX_PI * 0.5f;
-		}
-	}
-	else if (CInputKeyboard::Press(nUpKey))
-	{//Wキーが押された
-		m_pos.x -= sinf(cameraRot.y + D3DX_PI * 1.0f) * m_status.fSpeed;	//奥移動
-		m_pos.z -= cosf(cameraRot.y + D3DX_PI * 1.0f) * m_status.fSpeed;
-		m_rotDest.y = cameraRot.y + D3DX_PI * 1.0f;
-	}
-	else if (CInputKeyboard::Press(nDownKey))
-	{//Sキーが押された
-		m_pos.x -= sinf(cameraRot.y + D3DX_PI * 0.0f) * m_status.fSpeed;	//前移動
-		m_pos.z -= cosf(cameraRot.y + D3DX_PI * 0.0f) * m_status.fSpeed;
-		m_rotDest.y = cameraRot.y + D3DX_PI * 0.0f;
-	}
-
-	//タイヤの回転量の加算
-	m_rotWheel += D3DXToRadian(-nWheelRotValue);
-
-	if (!CInputKeyboard::Press(nUpKey) && !CInputKeyboard::Press(nDownKey)
-		&& !CInputKeyboard::Press(nRightKey) && !CInputKeyboard::Press(nLeftKey))
-	{//移動キーが押されていないなら
-		//タイヤの回転量を0にする
-		m_rotWheel = 0;
-	}
-	else
-	{//どれかが押されているなら
-		//移動モーションにする
-		ChangeMotion(MOTION_MOVE);
-	}
-}
-
-//================================
-// ジョイパッドを使った移動
-//================================
-void CPlayer::MoveJoypad()
-{
-	// ジョイパッドでの操作
-	CInputJoypad* joypad = CApplication::GetJoypad();
-	D3DXVECTOR3 stick = joypad->Stick(CInputJoypad::JOYKEY_LEFT_STICK, 0);
-
-	if (joypad->IsJoyPadUse(0) == false)
-	{//ジョイパッドが使われていないなら
-		return;
-	}
-
-	//スティックを動かす値の設定
-	float fMoveValue = 0.5f;
-
-	//カメラの情報取得
-	D3DXVECTOR3 cameraRot = CGame::GetCamera()->GetRot();
-
-	//------------------------------------------
-	// 右移動
-	//------------------------------------------
-	if (stick.x >= fMoveValue)
-	{
-		// スティックを倒した方向へ移動する
-		if (stick.y <= -fMoveValue)
-		{//右奥移動
-			m_pos.x += sinf(cameraRot.y + D3DX_PI * 0.25f) * m_status.fSpeed;
-			m_pos.z += cosf(cameraRot.y + D3DX_PI * 0.25f) * m_status.fSpeed;
-			m_rotDest.y = cameraRot.y - D3DX_PI * 0.75f;	//向きの切り替え
-		}
-		else if (stick.y >= fMoveValue)
-		{//右前移動
-			m_pos.x += sinf(cameraRot.y + D3DX_PI * 0.75f) * m_status.fSpeed;
-			m_pos.z += cosf(cameraRot.y + D3DX_PI * 0.75f) * m_status.fSpeed;
-			m_rotDest.y = cameraRot.y - D3DX_PI * 0.25f;
-		}
-		else
-		{
-			m_pos.x += sinf(cameraRot.y + D3DX_PI * fMoveValue) * m_status.fSpeed;
-			m_pos.z += cosf(cameraRot.y + D3DX_PI * fMoveValue) * m_status.fSpeed;
-			m_rotDest.y = cameraRot.y - D3DX_PI * fMoveValue;
-		}
-	}
-	//------------------------------------------
-	// 左移動
-	//------------------------------------------
-	else if (stick.x <= -fMoveValue)
-	{
-		if (stick.y <= -fMoveValue)
-		{//左奥移動
-			m_pos.x += sinf(cameraRot.y - D3DX_PI * 0.25f) * m_status.fSpeed;
-			m_pos.z += cosf(cameraRot.y - D3DX_PI * 0.25f) * m_status.fSpeed;
-			m_rotDest.y = cameraRot.y + D3DX_PI * 0.75f;
-		}
-		else if (stick.y >= fMoveValue)
-		{//左前移動
-			m_pos.x += sinf(cameraRot.y - D3DX_PI * 0.75f) * m_status.fSpeed;
-			m_pos.z += cosf(cameraRot.y - D3DX_PI * 0.75f) * m_status.fSpeed;
-			m_rotDest.y = cameraRot.y + D3DX_PI * 0.25f;
-		}
-		else
-		{
-			m_pos.x -= sinf(cameraRot.y + D3DX_PI * fMoveValue) * m_status.fSpeed;
-			m_pos.z -= cosf(cameraRot.y + D3DX_PI * fMoveValue) * m_status.fSpeed;
-			m_rotDest.y = cameraRot.y + D3DX_PI * fMoveValue;
-		}
-	}
-	//------------------------------------------
-	// 奥移動
-	//------------------------------------------
-	else if (stick.y <= -fMoveValue)
-	{
-		m_pos.x -= sinf(cameraRot.y + D3DX_PI * 1.0f) * m_status.fSpeed;
-		m_pos.z -= cosf(cameraRot.y + D3DX_PI * 1.0f) * m_status.fSpeed;
-		m_rotDest.y = cameraRot.y + D3DX_PI * 1.0f;
-	}
-	//------------------------------------------
-	// 前移動
-	//------------------------------------------
-	else if (stick.y >= fMoveValue)
-	{
-		m_pos.x -= sinf(cameraRot.y + D3DX_PI * 0.0f) * m_status.fSpeed;
-		m_pos.z -= cosf(cameraRot.y + D3DX_PI * 0.0f) * m_status.fSpeed;
-		m_rotDest.y = cameraRot.y + D3DX_PI * 0.0f;
-	}
-
-	//タイヤの回転量の加算
-	m_rotWheel += D3DXToRadian(-nWheelRotValue);
-
-	if (stick.x < fMoveValue && stick.x > -fMoveValue 
-		&& stick.y < fMoveValue && stick.y > -fMoveValue)
-	{//スティックが動かされていないなら
-		//タイヤの回転量を0にする
-		m_rotWheel = 0;
-	}
-}
-
-//================================
-// 攻撃処理
-//================================
-void CPlayer::Attack(MOTION_TYPE type, MOTION_TYPE next)
-{
-	//------------------------------------------
-	// 攻撃モーションへ移行
-	//------------------------------------------
-	if (CInputKeyboard::Trigger(DIK_RETURN)
-		&& m_type != MOTION_ATTACK_1
-		&& m_type != MOTION_ATTACK_2
-		&& m_type != MOTION_ATTACK_SPIN)
-	{//ENTERキーが押された & 攻撃モーション中じゃないなら
-		//-----------------------------
-		// 敵のところまで移動する
-		//-----------------------------
-		D3DXVECTOR3 enemyPos = CGame::GetEnemy()->GetPosition();
-		MoveAccess(enemyPos);
-
-		//攻撃モーションにする
-		ChangeMotion(type);
-	}
-
-	if (GetOutAttack(false))
-	{//攻撃モーション中なら
-		//------------------------------------------
-		// モーションと攻撃時間を合わせる
-		//------------------------------------------
-		int nAttackFream = 0;
-		int nOutRigor = 0;
-		for (int i = 0; i < m_aMotionSet[m_type].nNumKey; i++)
-		{//キー数-1回分回す
-			//攻撃モーションのフレーム数を合計する
-			nAttackFream += m_aMotionSet[m_type].aKeySet[i].nFrame;
-
-			if (i != m_aMotionSet[m_type].nNumKey - 1)
-			{//硬直キーじゃないなら
-				//フレーム数を加算
-				nOutRigor += m_aMotionSet[m_type].aKeySet[i].nFrame;
-			}
-		}
-
-		//------------------------------------------
-		// 攻撃の切り替え
-		//------------------------------------------
-		if (CInputKeyboard::Trigger(DIK_RETURN)
-			&& nOutRigor > m_status.nAttackTime
-			&& m_status.nAttackTime >= m_aMotionSet[m_type].nNextAtkTime)
-		{//攻撃ボタンを押された & 硬直前のフレーム & 入力開始時間の後なら
-			m_status.bNextAttack = true;	//次の攻撃フラグをオン
-		}
-
-		if (m_status.bNextAttack && nOutRigor <= m_status.nAttackTime
-			&& !bChangeAttack && m_bFinishAttack)
-		{//攻撃切り替えフラグがオン & 硬直以外のフレーム数を超えた
-			//& 攻撃が切り替わっていないなら & 攻撃が終わっているなら
-			ChangeMotion(next);
-			m_status.bNextAttack = false;
-			bChangeAttack = true;
-		}
-		//------------------------------------------
-		// フレーム数の加算
-		//------------------------------------------
-		if (nAttackFream <= m_status.nAttackTime)
-		{//攻撃時間が攻撃モーションのフレーム数の合計を超えたら
-			//待機モーションにする
-			ChangeMotion(MOTION_IDOL);
-			bChangeAttack = false;
-		}
-		else
-		{
-			//攻撃時間を加算
-			m_status.nAttackTime++;
-		}
-
-		//------------------------------------------
-		// 剣との当たり判定
-		//------------------------------------------
-		HitSword();
-	}
-}
-
-//================================
-// 剣との当たり判定
-//================================
-void CPlayer::HitSword()
-{
-	D3DXVECTOR3 offsetPos(0.0f, 0.0f, -80.0f);	//剣先までのオフセット
-
-	if (CUtility::ColliaionWeapon(offsetPos, 250.0f, m_mtxWorld, CObject::OBJTYPE_ENEMY)
-		&& !m_bFinishAttack
-		&& m_status.nAttackTime >= m_aMotionSet[m_type].nStartCollision)
-	{//剣と当たっている & 攻撃が終わっていない & 当たり判定の有効時間なら
-		//---------------------------------
-		// 指定回数ヒットさせる処理
-		//---------------------------------
-		if (!m_bHit)
-		{//攻撃が当たっていないなら
-			//技ごとのダメージ量を計算
-			float fDamage = m_status.nAttack * m_aMotionSet[m_type].fDamageMag;
-
-			//-----------------------------
-			// クリティカルかどうか
-			//-----------------------------
-			int nRand = rand() % 101;	//0%～100%の値
-			bool bCritical = false;
-			if (nRand <= m_aMotionSet[m_type].nCritical)
-			{//ランダムな値がクリティカル率以内なら
-				fDamage *= 1.5f;	//ダメージ1.5倍
-				bCritical = true;	//クリティカル状態にする
-			}
-
-			//-----------------------------
-			// ブレイク状態かどうか
-			//-----------------------------
-			if (CGame::GetEnemy()->GetState() != CEnemy::ENEMYSTATE_BREAK)
-			{//敵がブレイク状態じゃないなら
-				//攻撃力分敵の体力を減少
-				CGame::GetEnemy()->SubGauge(fDamage, CEnemy::GAUGE_HP);
-
-				//ブレイクゲージの減少
-				CGame::GetEnemy()->SubGauge(fDamage, CEnemy::GAUGE_BREAK);
-			}
-			else
-			{//ブレイク状態なら
-				if (!bCritical)
-				{//クリティカル状態じゃないなら
-					fDamage *= 1.5f;	//ダメージ1.5倍
-				}
-
-				//クリティカルダメージ分敵の体力を減少
-				CGame::GetEnemy()->SubGauge(fDamage, CEnemy::GAUGE_HP);
-			}
-
-			//コンボ数の加算
-			CGame::GetPlayer()->AddCombo(m_status.nComboValue);
-
-			m_nCntHit++;	//ヒット数を加算
-			m_bHit = true;	//攻撃が当たった状態
-
-			//------------------------------
-			// 攻撃の終了処理
-			//------------------------------
-			if (m_nCntHit >= m_aMotionSet[m_type].nNumHit)
-			{//現在のヒット数が攻撃のヒット数以上なら
-				m_bFinishAttack = true;	//攻撃が終わった状態にする
-				m_nCntHit = 0;			//ヒット数をリセット
-			}
-		}
-		else if (m_bHit && m_nHitTime >= m_aMotionSet[m_type].nHitInterval)
-		{//攻撃が当たった & ヒットまでの時間がヒット間隔より大きいなら
-			m_bHit = false;		//攻撃が当たっていない状態
-			m_nHitTime = 0;		//ヒットまでの時間をリセット
-		}
-		else
-		{
-			m_nHitTime++;	//ヒットまでの時間を数える
-		}
-	}
-}
-
-//================================
-// 目的の位置まで近づく処理
-//================================
-bool CPlayer::MoveAccess(D3DXVECTOR3 targetPos)
-{
-	//自分の位置と目的の位置のベクトルを求める
-	D3DXVECTOR3 vec(m_pos - targetPos);
-
-	//ベクトルの正規化
-	D3DXVec3Normalize(&vec, &vec);
-
-	//プレイヤーに向かって移動
-	m_move = vec * 1.5f;
-	m_pos += m_move;
-
-	return false;
-}
-
-//================================
-// 攻撃状態かどうかを返す
-// 引数：trueでand,falseでor
-//================================
-bool CPlayer::GetOutAttack(bool and)
-{
-	switch (and)
-	{
-	case true:
-		//----------------------------
-		// 攻撃状態全部なら
-		//----------------------------
-		if (m_type == MOTION_ATTACK_1
-			&& m_type == MOTION_ATTACK_2
-			&& m_type == MOTION_ATTACK_SPIN)
-		{
-			return true;
-		}
-		break;
-
-	case false:
-		//----------------------------
-		// 攻撃状態どれかなら
-		//----------------------------
-		if (m_type == MOTION_ATTACK_1
-			|| m_type == MOTION_ATTACK_2
-			|| m_type == MOTION_ATTACK_SPIN)
-		{
-			return true;
-		}
-		break;
-	}
-
-	return false;
-}
-
-//================================
-// モードチェンジ
-//================================
-void CPlayer::ChangeMode()
-{
-	if (CInputKeyboard::Press(DIK_Z))
-	{//Zキーが押されたとき
-		if (!m_bStyle)
-		{//スタイルが表示されていないなら
-			//------------------
-			// スタイルを表示
-			//------------------
-			for (int i = 0; i < BATTLESTYLE_MAX; i++)
-			{
-				if (m_pStyleShift[i])
-				{//nullじゃないなら
-					m_pStyleShift[i]->SetStyle(true);
-				}
-			}
-			m_bStyle = true;	//スタイルを表示している状態
-		}
-
-		//--------------------------------------
-		// スタイルの切り替え
-		//--------------------------------------
-		if (CInputKeyboard::Trigger(DIK_1))
-		{
-			m_battleStyle = BATTLESTYLE_ATTACK;
-		}
-		else if (CInputKeyboard::Trigger(DIK_2))
-		{
-			m_battleStyle = BATTLESTYLE_SPEED;
-		}
-		else if (CInputKeyboard::Trigger(DIK_3))
-		{
-			m_battleStyle = BATTLESTYLE_COMBO;
-		}
-	}
-	else if (CInputKeyboard::Release(DIK_Z))
-	{
-		if (m_bStyle && m_pStyleShift)
-		{//スタイルが表示されている & nullじゃないなら
-			//------------------
-			// 表示を消す
-			//------------------
-			for (int i = 0; i < BATTLESTYLE_MAX; i++)
-			{
-				if (m_pStyleShift[i])
-				{//nullじゃないなら
-					m_pStyleShift[i]->SetStyle(false);
-				}
-			}
-			m_bStyle = false;	//スタイルを表示していない状態
-		}
-	}
-
-	//--------------------------------------
-	// モード別ステータスのリセット
-	//--------------------------------------
-	SetAttack(fDefaultAttack);		//攻撃力
-	SetSpeed(fDefaultSpeed);		//速度
-	SetComboValue(1);				//コンボの加算値
-
-	//--------------------------------------
-	// モードごとの処理
-	//--------------------------------------
-	switch (m_battleStyle)
-	{
-	case BATTLESTYLE_ATTACK:
-		SetAttack(fDefaultAttack * 5.0f);			//攻撃力の強化
-		break;
-	case BATTLESTYLE_SPEED:
-		SetSpeed(fDefaultSpeed * 2.0f);				//速度の強化
-		break;
-	case BATTLESTYLE_COMBO:
-		SetComboValue(m_status.nComboValue * 2);	//コンボ加算の強化
-		break;
-	default:
-		break;
-	}
-
-	//--------------------------------------
-	// モードのリセット処理
-	//--------------------------------------
-	if (m_battleStyle != BATTLESTYLE_NONE)
-	{//通常モード以外なら
-		m_nCntModeTime++;
-
-		if (m_nCntModeTime >= nResetModeTime)
-		{//一定時間が経過したら
-			//通常モードに戻す
-			m_battleStyle = BATTLESTYLE_NONE;
-			m_nCntModeTime = 0;
-		}
-	}
-}
-
-//================================
-// 角度の設定
-//================================
-void CPlayer::SetRot()
-{
-	//--------------------------------------
-	// 常に敵の方向を見る
-	//--------------------------------------
-	if (CGame::GetCamera()->GetLockOn())
-	{//ロックオン状態なら
-		//プレイヤーの位置を取得
-		D3DXVECTOR3 playerPos(CGame::GetEnemy()->GetPosition());
-
-		//2点間の距離を求める
-		float X = m_pos.x - playerPos.x;
-		float Z = m_pos.z - playerPos.z;
-
-		//角度の設定
-		float angle = atan2f(X, Z);
-
-		//向きの設定
-		m_rotDest = D3DXVECTOR3(0.0f, angle, 0.0f);
-	}
-
-	//--------------------------------------
-	// 目的の角度の正規化
-	//--------------------------------------
-	if (m_rotDest.y - m_rot.y > D3DX_PI)
-	{//回転したい角度が180以上なら
-		m_rotDest.y -= D3DX_PI * 2;
-	}
-	else if (m_rotDest.y - m_rot.y < -D3DX_PI)
-	{//回転したい角度が-180以下なら
-		m_rotDest.y += D3DX_PI * 2;
-	}
-
-	//--------------------------------------
-	// 目的の角度まで回転する
-	//--------------------------------------
-	m_rot.y += (m_rotDest.y - m_rot.y) * 0.08f;	//減衰処理
-
-	//--------------------------------------
-	// 角度の正規化
-	//--------------------------------------
-	m_rot.y = CUtility::GetNorRot(m_rot.y);
-}
-
-//=============================
-// 線の設置
-//=============================
-void CPlayer::SetLine()
-{
-	D3DXMATRIX mtxTrans;	//計算用マトリックス
-
-	//位置を反映
-	D3DXMatrixTranslation(&mtxTrans, m_pos.x, m_pos.y, m_pos.z);
-	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxTrans);
-
-	//ワールド変換行列を使ってMin,Maxを求める
-	D3DXVec3TransformCoord(&m_worldMin, &m_vtxMin, &m_mtxWorld);
-	D3DXVec3TransformCoord(&m_worldMax, &m_vtxMax, &m_mtxWorld);
-
-	//代入する値をまとめる
-	D3DXVECTOR3 min = m_worldMin;
-	D3DXVECTOR3 max = m_worldMax;
-
-	for (int i = 0; i < nMaxLine; i++)
-	{
-		m_pLine[i] = CLine::CreateAll(m_pLine[i], i, m_pos, min, max);
-	}
-}
-
-//=============================
-// 線の情報の更新
-//=============================
-void CPlayer::UpdateLine()
-{
-	//ワールド変換行列を使ってMin,Maxを求める
-	D3DXVec3TransformCoord(&m_worldMin, &m_vtxMin, &m_mtxWorld);
-	D3DXVec3TransformCoord(&m_worldMax, &m_vtxMax, &m_mtxWorld);
-
-	//代入する値をまとめる
-	D3DXVECTOR3 min = m_worldMin;
-	D3DXVECTOR3 max = m_worldMax;
-
-	for (int i = 0; i < nMaxLine; i++)
-	{
-		if (m_pLine[i])
-		{
-			m_pLine[i]->SetLinePos(i, min, max);
-		}
-	}
-}
-
-//================================
-// コンボ数の加算
-//================================
-void CPlayer::AddCombo(int nNumber)
-{
-	m_nNumCombo = m_pCombo->AddNumber(nNumber);
-}
-
-//=============================
-// HP減少時の処理
-//=============================
-void CPlayer::SubLife(float fDamage)
-{
-	m_status.fLife -= fDamage;	//体力の減少
-
-	//残り体力を計算
-	m_status.fRemLife = m_status.fLife * 100 / m_status.fMaxLife;
-
-	//HPの設定
-	m_pHP->SetLife(m_status.fLife, m_status.fRemLife);
-}
-
-//================================
-// ワールド座標の取得
-//================================
-D3DXVECTOR3 CPlayer::GetWorldPos()
-{
-	D3DXVECTOR3 worldPos(0.0f, 0.0f, 0.0f);
-
-	D3DXVec3TransformCoord(&worldPos, &m_pos, &m_mtxWorld);
-
-	return worldPos;
 }

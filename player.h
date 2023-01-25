@@ -77,6 +77,14 @@ public:
 		bool bNextAttack;	//次の攻撃に繋げるかどうか
 	};
 
+	struct ATTACK_ON
+	{
+		bool bAtk_1;		//通常攻撃(1段目)の状態
+		bool bAtk_2;		//通常攻撃(2段目)の状態
+		bool bAtk_Spin;		//回転切りの状態
+		bool bAtk;
+	};
+
 	//モーションの種類
 	enum MOTION_TYPE
 	{
@@ -123,15 +131,13 @@ public:
 	// ゲッター
 	//----------------
 	D3DXVECTOR3 GetPosition() override { return m_pos; }			//位置の取得
-	D3DXVECTOR3 GetWorldPos();										//ワールド座標を取得
 	D3DXVECTOR3 GetRot()			   { return m_rot; }			//向きの取得
 	D3DXVECTOR3 GetSize()			   { return m_size; }			//大きさの取得
 	D3DXMATRIX GetmtxWorld()		   { return m_mtxWorld; }		//ワールドマトリックスの取得
+	const int GetSwordNumber()		   { return nSwordNumber; }		//剣モデルの番号を取得
 	float GetWidth() override		   { return 0.0f; }				//幅の取得
 	float GetHeight() override		   { return 0.0f; }				//高さの取得
-	const int GetSwordNumber()		   { return nSwordNumber; }		//剣モデルの番号を取得
-	bool GetStyleState()			   { return m_bStyle; }			//スタイルの表示状態を取得
-	bool GetHitAttack()				   { return m_bFinishAttack; }		//攻撃を当てたかを取得
+	bool GetHitAttack()				   { return m_bFinishAttack; }	//攻撃を当てたかを取得
 	CModel* GetModel(int nNum)		   { return m_pModel[nNum]; }	//モデルの取得
 	PLAYER_STATUS GetStatus()		   { return m_status; }			//ステータスの取得
 	BATTLESTYLE GetStyle()			   { return m_battleStyle; }	//バトルモードの取得
@@ -146,20 +152,19 @@ private:
 	//---------------------
 	// プライベート関数
 	//---------------------
-	void SetModel();											//モデルの設定
-	void SetMotion(MOTION_TYPE type, bool bLoop, int nNumKey);	//モーションの設定
-	void ChangeMotion(MOTION_TYPE type);				//モーションの変更
-	void GetFileMotion();								//ファイルを使ったモーションの取得
 	void MoveKeyboard(int nUpKey, int nDownKey, int nLeftKey, int nRightKey);	//移動
-	void MoveJoypad();									//ジョイパッドを使った移動
-	void Attack(MOTION_TYPE type, MOTION_TYPE next);	//攻撃処理
-	void HitSword();							//剣が当たった処理
-	bool MoveAccess(D3DXVECTOR3 targetPos);		//目的の位置まで近づく
-	bool GetOutAttack(bool and);	//攻撃状態かどうかを返す
-	void ChangeMode();				//モードチェンジ
+	void MoveJoypad();				//ジョイパッドを使った移動
 	void SetRot();					//角度の設定
-	void SetLine();					//線の設置
-	void UpdateLine();				//線の更新
+
+	void AttackManager();								//攻撃の管理
+	void Attack(MOTION_TYPE type, MOTION_TYPE next);	//攻撃処理
+	void HitSword();									//剣が当たった処理
+	bool GetOutAttack(bool and);						//攻撃状態かどうかを返す
+
+	void SetModel();											//モデルの設定
+	void GetFileMotion();										//ファイルを使ったモーションの取得
+	void SetMotion(MOTION_TYPE type, bool bLoop, int nNumKey);	//モーションの設定
+	void ChangeMotion(MOTION_TYPE type);						//モーションの変更
 
 private:
 	//----------------
@@ -175,7 +180,8 @@ private:
 	//----------------
 	// メンバ変数
 	//----------------
-	D3DXMATRIX m_mtxWorld;		//ワールドマトリックス
+	D3DXMATRIX	m_mtxWorld;		//ワールドマトリックス
+	D3DXMATRIX	m_mtxRot;		//回転マトリックス(保存用)
 	D3DXVECTOR3 m_pos;			//位置
 	D3DXVECTOR3 m_posOld;		//前の位置
 	D3DXVECTOR3 m_move;			//移動量
@@ -196,7 +202,7 @@ private:
 	bool m_bFinishAttack;		//攻撃が終わった状態
 	bool m_bHit;				//1ヒットした状態
 	bool bChangeAttack;			//攻撃が切り替わった状態
-	bool m_bStyle;				//スタイルを表示したか
+	ATTACK_ON m_Atk_on;			//攻撃状態
 
 	//列挙型
 	PLAYER_STATUS m_status;		//ステータス
@@ -204,7 +210,6 @@ private:
 	CHP*  m_pHP;				//HP
 	CCombo* m_pCombo;			//コンボ
 	CDamage* m_pDamage;			//ダメージ
-	CStyleShift* m_pStyleShift[BATTLESTYLE_MAX];	//スタイルシフト
 
 	/* ↓ モデル情報 ↓ */
 	CModel*  m_pModel[MAX_PARTS];		//モデル
@@ -215,12 +220,6 @@ private:
 	int m_nCntMotion;						//モーションカウンター
 	MOTION_SET m_aMotionSet[MOTION_MAX];	//モーション情報
 	MOTION_TYPE m_type;						//現在のモーション
-
-	/* ↓ クォータニオン ↓ */
-	D3DXMATRIX		m_mtxRot;		//回転マトリックス(保存用)
-	D3DXQUATERNION	m_quat;			//クォータニオン
-	D3DXVECTOR3		m_vecAxis;		//回転軸
-	float			m_fValueRot;	//回転角(ラジアン)
 };
 
 #endif
