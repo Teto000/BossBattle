@@ -20,7 +20,6 @@ class CLine;		//ライン
 class CHP;			//HP
 class CCombo;		//コンボ
 class CDamage;		//ダメージ
-class CStyleShift;	//スタイルシフト
 
 //--------------------------------
 // マクロ定義
@@ -76,14 +75,6 @@ public:
 		float fMaxLife;		//最大体力
 	};
 
-	struct ATTACK_ON
-	{
-		bool bAtk_1;		//通常攻撃(1段目)の状態
-		bool bAtk_2;		//通常攻撃(2段目)の状態
-		bool bAtk_Spin;		//回転切りの状態
-		bool bAtk;
-	};
-
 	//モーションの種類
 	enum MOTION_TYPE
 	{
@@ -93,16 +84,6 @@ public:
 		MOTION_ATTACK_2,	//通常攻撃(2段目)
 		MOTION_ATTACK_SPIN,	//回転切り
 		MOTION_MAX
-	};
-
-	//戦闘スタイル
-	enum BATTLESTYLE
-	{
-		BATTLESTYLE_NONE = 0,	//通常
-		BATTLESTYLE_ATTACK,		//攻撃
-		BATTLESTYLE_SPEED,		//速度
-		BATTLESTYLE_COMBO,		//連撃
-		BATTLESTYLE_MAX
 	};
 
 	CPlayer();				//コンストラクタ
@@ -139,7 +120,6 @@ public:
 	bool GetHitAttack()				   { return m_bFinishAttack; }	//攻撃を当てたかを取得
 	CModel* GetModel(int nNum)		   { return m_pModel[nNum]; }	//モデルの取得
 	PLAYER_STATUS GetStatus()		   { return m_status; }			//ステータスの取得
-	BATTLESTYLE GetStyle()			   { return m_battleStyle; }	//バトルモードの取得
 	MOTION_TYPE GetMotion()			   { return m_type; }			//モーションの種類の取得
 
 	//---------------------
@@ -156,7 +136,7 @@ private:
 	void SetRot();					//角度の設定
 
 	void AttackManager();			//攻撃の管理
-	void Attack(MOTION_TYPE type);	//攻撃処理
+	void Attack();					//攻撃処理
 	void HitSword();				//剣が当たった処理
 	bool GetOutAttack(bool and);	//攻撃状態かどうかを返す
 
@@ -200,12 +180,9 @@ private:
 	float m_rotWheel;			//タイヤの回転量
 	bool m_bFinishAttack;		//攻撃が終わった状態
 	bool m_bHit;				//1ヒットした状態
-	bool bChangeAttack;			//攻撃が切り替わった状態
-	ATTACK_ON m_Atk_on;			//攻撃状態
 
 	//列挙型
 	PLAYER_STATUS m_status;		//ステータス
-	BATTLESTYLE m_battleStyle;	//バトルモード
 	CHP*  m_pHP;				//HP
 	CCombo* m_pCombo;			//コンボ
 	CDamage* m_pDamage;			//ダメージ

@@ -60,9 +60,7 @@ CPlayer::CPlayer() : CObject(0)
 	fSizeDepth = 0.0f;							//サイズ(奥行き)
 	m_bFinishAttack = false;					//ダメージを与えたか
 	m_bHit = false;								//1ヒットした状態
-	bChangeAttack = false;						//攻撃が切り替わった状態
 	m_type = MOTION_IDOL;						//現在のモーション
-	m_battleStyle = BATTLESTYLE_NONE;			//バトルモード
 	m_pHP = nullptr;							//HP
 	m_pCombo = nullptr;							//コンボ
 	m_pDamage = nullptr;						//ダメージ
@@ -75,11 +73,6 @@ CPlayer::CPlayer() : CObject(0)
 	m_status.fLife = 0.0f;			//体力
 	m_status.fRemLife = 0.0f;		//残り体力(%)
 	m_status.fMaxLife = 0.0f;		//最大体力
-
-	//攻撃状態
-	m_Atk_on.bAtk_1 = false;
-	m_Atk_on.bAtk_2 = false;
-	m_Atk_on.bAtk_Spin = false;
 
 	//モデル
 	for (int i = 0; i < MAX_PARTS; i++)
@@ -242,10 +235,10 @@ void CPlayer::Update()
 
 	if (!CGame::GetFinish())
 	{//終了フラグが立っていないなら
-			//--------------------------------
-			// 移動
-			//--------------------------------
-			// ジョイパッドでの操作
+		//--------------------------------
+		// 移動
+		//--------------------------------
+		// ジョイパッドでの操作
 		CInputJoypad* joypad = CApplication::GetJoypad();
 
 		if (m_type != MOTION_ATTACK_1
@@ -579,56 +572,53 @@ void CPlayer::SetRot()
 //================================
 void CPlayer::AttackManager()
 {
-	//-------------------------
-	// 通常攻撃
-	//-------------------------
-	if (!m_Atk_on.bAtk)
+	switch (m_type)
 	{
+	case MOTION_IDOL:
 		if (CInputKeyboard::Trigger(DIK_RETURN))
-		{//ENTERキーが押された
-			m_Atk_on.bAtk_1 = true;
+		{
+			ChangeMotion(MOTION_ATTACK_1);
 		}
+		else if (CInputKeyboard::Trigger(DIK_1))
+		{
+			ChangeMotion(MOTION_ATTACK_SPIN);
+		}
+		break;
 
-		//-------------------------
-		// 回転切り
-		//-------------------------
+	case MOTION_ATTACK_1:
+		if (CInputKeyboard::Trigger(DIK_RETURN))
+		{
+			ChangeMotion(MOTION_ATTACK_2);
+		}
+		else if (CInputKeyboard::Trigger(DIK_1))
+		{
+			ChangeMotion(MOTION_ATTACK_SPIN);
+		}
+		break;
+
+	case MOTION_ATTACK_2:
 		if (CInputKeyboard::Trigger(DIK_1))
-		{//1キーが押された
-			m_Atk_on.bAtk_Spin = true;
+		{
+			ChangeMotion(MOTION_ATTACK_SPIN);
 		}
+		break;
+
+	case MOTION_ATTACK_SPIN:
+		if (CInputKeyboard::Trigger(DIK_1))
+		{
+			ChangeMotion(MOTION_ATTACK_SPIN);
+		}
+		break;
 	}
 
-	//-------------------------
-	// 攻撃処理
-	//-------------------------
-	if (m_Atk_on.bAtk_1)
-	{
-		Attack(MOTION_ATTACK_1);
-	}
-	else if (m_Atk_on.bAtk_Spin)
-	{
-		Attack(MOTION_ATTACK_SPIN);
-	}
+	Attack();
 }
 
 //================================
 // 攻撃処理
 //================================
-void CPlayer::Attack(MOTION_TYPE type)
+void CPlayer::Attack()
 {
-	//------------------------------------------
-	// 攻撃モーションへ移行
-	//------------------------------------------
-	if (m_type != MOTION_ATTACK_1
-		&& m_type != MOTION_ATTACK_2
-		&& m_type != MOTION_ATTACK_SPIN)
-	{//攻撃モーション中じゃないなら
-		m_Atk_on.bAtk = true;
-
-		//攻撃モーションにする
-		ChangeMotion(type);
-	}
-
 	if (GetOutAttack(false))
 	{//攻撃モーション中なら
 		//------------------------------------------
@@ -649,50 +639,12 @@ void CPlayer::Attack(MOTION_TYPE type)
 		}
 
 		//------------------------------------------
-		// 攻撃の切り替え
-		//------------------------------------------
-		if (nOutRigor > m_status.nAttackTime
-			&& m_status.nAttackTime >= m_aMotionSet[m_type].nNextAtkTime)
-		{//硬直前のフレーム & 入力開始時間の後なら
-			if (CInputKeyboard::Trigger(DIK_RETURN))
-			{
-				m_Atk_on.bAtk_2 = true;
-			}
-			else if (CInputKeyboard::Trigger(DIK_1))
-			{
-				m_Atk_on.bAtk_Spin = true;
-			}
-		}
-
-		if (nOutRigor <= m_status.nAttackTime
-			&& !bChangeAttack && m_bFinishAttack)
-		{//硬直以外のフレーム数を超えた& 攻撃が切り替わっていないなら & 攻撃が終わっているなら
-
-			if (m_Atk_on.bAtk_2)
-			{
-				ChangeMotion(MOTION_ATTACK_2);
-			}
-			else if (m_Atk_on.bAtk_Spin)
-			{
-				ChangeMotion(MOTION_ATTACK_SPIN);
-			}
-
-			bChangeAttack = true;
-		}
-
-		//------------------------------------------
 		// フレーム数の加算
 		//------------------------------------------
 		if (nAttackFream <= m_status.nAttackTime)
 		{//攻撃時間が攻撃モーションのフレーム数の合計を超えたら
 			//待機モーションにする
 			ChangeMotion(MOTION_IDOL);
-			m_Atk_on.bAtk = false;
-			m_Atk_on.bAtk_1 = false;
-			m_Atk_on.bAtk_2 = false;
-			m_Atk_on.bAtk_Spin = false;
-
-			bChangeAttack = false;
 		}
 		else
 		{
@@ -742,7 +694,7 @@ void CPlayer::HitSword()
 			//-----------------------------
 			if (CGame::GetEnemy()->GetState() != CEnemy::ENEMYSTATE_BREAK)
 			{//敵がブレイク状態じゃないなら
-			 //攻撃力分敵の体力を減少
+				//攻撃力分敵の体力を減少
 				CGame::GetEnemy()->SubGauge(fDamage, CEnemy::GAUGE_HP);
 
 				//ブレイクゲージの減少
@@ -1229,6 +1181,5 @@ void CPlayer::ChangeMotion(MOTION_TYPE type)
 		m_nCntMotion = 0;
 		m_status.nAttackTime = 0;	//攻撃時間のリセット
 		m_bFinishAttack = false;	//ダメージを与えていない状態にする
-		m_Atk_on.bAtk = false;
 	}
 }
