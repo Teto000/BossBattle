@@ -435,7 +435,7 @@ void CEnemy::SubGauge(float fDamage, GAUGE type)
 void CEnemy::Attack()
 {
 	//•Ï”éŒ¾
-	int nMaxAttackTime = 120;				//UŒ‚ŠÔ
+	//int nMaxAttackTime = 120;				//UŒ‚ŠÔ
 	float fAttackArea = 250.0f;				//“G‚ÌUŒ‚”ÍˆÍ
 	float fMoveArea = fAttackArea - 30.0f;	//“G‚ÌˆÚ“®”ÍˆÍ
 
