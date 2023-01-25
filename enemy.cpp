@@ -464,10 +464,10 @@ void CEnemy::Attack()
 		//UŒ‚‚Ü‚Å‚ÌŽžŠÔ‚ð‰ÁŽZ
 		m_nAttackTime++;
 
-		if (m_nAttackTime >= nMaxAttackTime)
-		{//UŒ‚ŽžŠÔ‚ª’l‚É’B‚µ‚½‚ç
-			CGame::GetPlayer()->SubLife(1);
-		}
+		//if (m_nAttackTime >= nMaxAttackTime)
+		//{//UŒ‚ŽžŠÔ‚ª’l‚É’B‚µ‚½‚ç
+		//	CGame::GetPlayer()->SubLife(1);
+		//}
 	}
 }
 

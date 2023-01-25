@@ -574,6 +574,9 @@ void CPlayer::AttackManager()
 {
 	switch (m_type)
 	{
+	//---------------------------
+	// ë“ã@íÜÇ»ÇÁ
+	//---------------------------
 	case MOTION_IDOL:
 		if (CInputKeyboard::Trigger(DIK_RETURN))
 		{
@@ -585,6 +588,9 @@ void CPlayer::AttackManager()
 		}
 		break;
 
+	//---------------------------
+	// í èÌçUåÇ(1)Ç»ÇÁ
+	//---------------------------
 	case MOTION_ATTACK_1:
 		if (CInputKeyboard::Trigger(DIK_RETURN))
 		{
@@ -596,6 +602,9 @@ void CPlayer::AttackManager()
 		}
 		break;
 
+	//---------------------------
+	// í èÌçUåÇ(2)Ç»ÇÁ
+	//---------------------------
 	case MOTION_ATTACK_2:
 		if (CInputKeyboard::Trigger(DIK_1))
 		{
@@ -603,6 +612,9 @@ void CPlayer::AttackManager()
 		}
 		break;
 
+	//---------------------------
+	// âÒì]êÿÇËÇ»ÇÁ
+	//---------------------------
 	case MOTION_ATTACK_SPIN:
 		if (CInputKeyboard::Trigger(DIK_1))
 		{
@@ -611,6 +623,7 @@ void CPlayer::AttackManager()
 		break;
 	}
 
+	//çUåÇèàóù
 	Attack();
 }
 
