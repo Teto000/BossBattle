@@ -9,7 +9,6 @@
 // インクルード
 //------------------------
 #include <cmath>
-#include <assert.h>
 #include "enemy.h"
 #include "object.h"
 #include "application.h"
@@ -130,7 +129,7 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 		m_pHP[GAUGE_HP] = CHP::Create(hpPos, 800.0f, 20.0f, CHP::GAUGETYPE_HP_ENEMY);
 		m_pHP[GAUGE_HP]->SetLife(m_fLife, m_fRemLife);	//HPの設定
 
-		//ブレイクゲージ
+														//ブレイクゲージ
 		D3DXVECTOR3 breakpPos(SCREEN_WIDTH / 2, 100.0f, 0.0f);
 		m_pHP[GAUGE_BREAK] = CHP::Create(breakpPos, 800.0f, 15.0f, CHP::GAUGETYPE_BREAK);
 		m_pHP[GAUGE_BREAK]->SetLife(m_fBreak, m_fRemBreak);	//HPの設定
@@ -193,7 +192,7 @@ void CEnemy::Update()
 			m_state = ENEMYSTATE_NONE;	//ブレイク状態を回復
 			m_nBreakTime = 0;			//時間のリセット
 
-			//ブレイクゲージを最大にする
+										//ブレイクゲージを最大にする
 			m_fBreak = m_fMaxBreak;
 			m_fRemBreak = m_fBreak * 100 / m_fMaxBreak;
 
@@ -207,12 +206,12 @@ void CEnemy::Update()
 	}
 	else
 	{//敵がブレイクしていないなら
-		//------------------------
-		// 攻撃処理
-		//------------------------
+	 //------------------------
+	 // 攻撃処理
+	 //------------------------
 		Attack();
 	}
-	
+
 	//-------------------------
 	// 線の更新
 	//-------------------------
@@ -389,9 +388,9 @@ void CEnemy::SubGauge(float fDamage, GAUGE type)
 {
 	switch (type)
 	{
-	//-----------------------
-	// HPを減らす処理
-	//-----------------------
+		//-----------------------
+		// HPを減らす処理
+		//-----------------------
 	case GAUGE_HP:
 		m_fLife -= round(fDamage);	//体力の減少
 
@@ -408,9 +407,9 @@ void CEnemy::SubGauge(float fDamage, GAUGE type)
 		}
 		break;
 
-	//--------------------------------
-	// ブレイクゲージを減らす処理
-	//--------------------------------
+		//--------------------------------
+		// ブレイクゲージを減らす処理
+		//--------------------------------
 	case GAUGE_BREAK:
 		m_fBreak -= round(fDamage / 3);
 		m_fRemBreak = m_fBreak * 100 / m_fMaxBreak;
@@ -463,7 +462,7 @@ void CEnemy::Attack()
 	//-------------------------
 	if (fDistance <= fAttackArea)
 	{//プレイヤーが範囲内にいるなら
-		//攻撃までの時間を加算
+	 //攻撃までの時間を加算
 		m_nAttackTime++;
 
 		//if (m_nAttackTime >= nMaxAttackTime)
@@ -556,318 +555,4 @@ void CEnemy::Move()
 	//プレイヤーに向かって移動
 	m_move = vec * 1.5f;
 	m_pos += m_move;
-}
-
-//==========================================
-// ファイルからモーション情報を取得
-//==========================================
-void CEnemy::GetFileMotion()
-{
-	const int nMaxText = 256;	//文字の最大数
-
-	FILE *pFile;				//ファイルポインタを宣言する
-	char cText[nMaxText];		//1行分の文字読み取り用変数
-	char cTextHead[nMaxText];	//頭文字を取るようの変数
-	int nNumMotion = 0;			//読み込み中のモーション番号
-	int nNumKey = 0;			//読み込み中のキー番号
-	int nNumParts = 0;			//読み込み中のパーツ番号
-
-	//--------------------------------
-	// ファイルの読み込み
-	//--------------------------------
-	//ファイルを開く
-	pFile = fopen("data/MOTION/enemy.txt", "r");
-
-	if (pFile == nullptr)
-	{//開けなかったら
-		assert(false);
-	}
-
-	//文字の読み取り処理
-	while (fgets(cText, nMaxText, pFile) != nullptr)
-	{
-		//文字列の分析
-		sscanf(cText, "%s", &cTextHead);
-
-		//========================================
-		// モーション情報
-		//========================================
-		if (strcmp(&cTextHead[0], "MOTIONSET") == 0)
-		{//頭文字がMOTIONSETなら
-		 //文字の読み取り処理
-			while (fgets(cText, nMaxText, pFile) != nullptr)
-			{
-				//文字列の分析
-				sscanf(cText, "%s", &cTextHead);
-
-				//-------------------------------
-				// ループするかどうか
-				//-------------------------------
-				if (strcmp(&cTextHead[0], "LOOP") == 0)
-				{//頭文字がLOOPなら
-					int nLoop = 0;
-
-					//文字列からループの値を読み取る
-					sscanf(cText, "%s = %d", &cTextHead, &nLoop);
-
-					if (nLoop == 0)
-					{//読み取った値が0なら
-						m_aMotionSet[nNumMotion].bLoop = false;
-					}
-					else if (nLoop == 1)
-					{//読み取った値が1なら
-						m_aMotionSet[nNumMotion].bLoop = true;
-					}
-				}
-				//-------------------------------
-				// 当たり判定の開始時間
-				//-------------------------------
-				else if (strcmp(&cTextHead[0], "COLLISION") == 0)
-				{//頭文字がCOLLISIONなら
-				 //文字列からキーの最大数を読み取る
-					sscanf(cText, "%s = %d", &cTextHead, &m_aMotionSet[nNumMotion].nStartCollision);
-				}
-				//-------------------------------
-				// ダメージ倍率
-				//-------------------------------
-				else if (strcmp(&cTextHead[0], "DAMAGE_MAG") == 0)
-				{//頭文字がDAMAGE_MAGなら
-				 //文字列からキーの最大数を読み取る
-					sscanf(cText, "%s = %f", &cTextHead, &m_aMotionSet[nNumMotion].fDamageMag);
-				}
-				//-------------------------------
-				// キーの最大数
-				//-------------------------------
-				else if (strcmp(&cTextHead[0], "NUM_KEY") == 0)
-				{//頭文字がNUM_KEYなら
-				 //文字列からキーの最大数を読み取る
-					sscanf(cText, "%s = %d", &cTextHead, &m_aMotionSet[nNumMotion].nNumKey);
-				}
-				//========================================
-				// キーセット情報
-				//========================================
-				else if (strcmp(&cTextHead[0], "KEYSET") == 0)
-				{//頭文字がKEYSETなら
-				 //文字の読み取り処理
-					while (fgets(cText, nMaxText, pFile) != nullptr)
-					{
-						//文字列の分析
-						sscanf(cText, "%s", &cTextHead);
-
-						//-------------------------------
-						// フレーム数
-						//-------------------------------
-						if (strcmp(&cTextHead[0], "FRAME") == 0)
-						{//頭文字がFRAMEなら
-						 //文字列からキーの最大数を読み取る
-							sscanf(cText, "%s = %d", &cTextHead, &m_aMotionSet[nNumMotion].aKeySet[nNumKey].nFrame);
-						}
-						//========================================
-						// キー情報
-						//========================================
-						else if (strcmp(&cTextHead[0], "KEY") == 0)
-						{//頭文字がKEYなら
-						 //文字の読み取り処理
-							while (fgets(cText, nMaxText, pFile) != nullptr)
-							{
-								//文字列の分析
-								sscanf(cText, "%s", &cTextHead);
-
-								//-------------------------------
-								// 位置
-								//-------------------------------
-								if (strcmp(&cTextHead[0], "POS") == 0)
-								{//頭文字がPOSなら
-								 //文字列から位置を読み取る
-									sscanf(cText, "%s = %f %f %f", &cTextHead,
-										&m_aMotionSet[nNumMotion].aKeySet[nNumKey].aKey[nNumParts].pos.x,
-										&m_aMotionSet[nNumMotion].aKeySet[nNumKey].aKey[nNumParts].pos.y,
-										&m_aMotionSet[nNumMotion].aKeySet[nNumKey].aKey[nNumParts].pos.z);
-								}
-								//-------------------------------
-								// 向き
-								//-------------------------------
-								else if (strcmp(&cTextHead[0], "ROT") == 0)
-								{//頭文字がROTなら
-								 //文字列から向きを読み取る
-									sscanf(cText, "%s = %f %f %f", &cTextHead,
-										&m_aMotionSet[nNumMotion].aKeySet[nNumKey].aKey[nNumParts].rot.x,
-										&m_aMotionSet[nNumMotion].aKeySet[nNumKey].aKey[nNumParts].rot.y,
-										&m_aMotionSet[nNumMotion].aKeySet[nNumKey].aKey[nNumParts].rot.z);
-								}
-								else if (strcmp(&cTextHead[0], "END_KEY") == 0)
-								{//キーの読み取りが終了したら
-									if (nNumParts + 1 < MAX_PARTS)
-									{//パーツ数を超えないなら
-									 //パーツ番号の加算
-										nNumParts++;
-									}
-									else
-									{//パーツ数分読み込んだら
-									 //パーツ番号をリセット
-										nNumParts = 0;
-									}
-									break;
-								}
-							}
-						}
-						else if (strcmp(&cTextHead[0], "END_KEYSET") == 0)
-						{//キーセットの読み取りが終了したら
-							if (nNumKey < m_aMotionSet[nNumMotion].nNumKey)
-							{//キー数が最大じゃないなら
-							 //キー番号の加算
-								nNumKey++;
-							}
-							break;
-						}
-					}
-				}
-				else if (strcmp(&cTextHead[0], "END_MOTIONSET") == 0)
-				{//モーションの読み取りが終了したら
-				 //キー番号をリセット
-					nNumKey = 0;
-					//モーション番号の加算
-					nNumMotion++;
-					break;
-				}
-			}
-		}
-
-		//----------------------------------
-		// 保存中の文字列の初期化
-		//----------------------------------
-		ZeroMemory(&cText, sizeof(cText));
-		ZeroMemory(&cTextHead, sizeof(cTextHead));
-	}
-
-	//ファイルを閉じる
-	fclose(pFile);
-}
-
-//==========================================
-// モーションの設定
-// 引数：種類、ループ状態、キー数
-//==========================================
-void CEnemy::SetMotion(MOTION_TYPE type, bool bLoop, int nNumKey)
-{
-	if (m_nCurrentKey + 1 >= nNumKey)
-	{//キーが最大数に達したら
-		if (bLoop)
-		{//ループするなら
-			m_nCurrentKey = 0;	//キー番号の初期化
-		}
-		else
-		{
-			return;
-		}
-	}
-
-	for (int i = 1; i < MAX_PARTS; i++)
-	{//モデルパーツ数分回す
-	 //-------------------------------------------------------
-	 // NULLチェック
-	 //-------------------------------------------------------
-		if (!m_pModel[i])
-		{//モデルパーツがnullなら
-			return;
-		}
-
-		//キー情報を持った変数
-		KEY key = m_aMotionSet[type].aKeySet[m_nCurrentKey].aKey[i];
-		KEY keyNext = m_aMotionSet[type].aKeySet[m_nCurrentKey + 1].aKey[i];
-
-		//-------------------------------------------------------
-		// 現在値を取得
-		//-------------------------------------------------------
-		//位置を取得
-		float fPosX = m_pModel[i]->GetPos().x;
-		float fPosY = m_pModel[i]->GetPos().y;
-		float fPosZ = m_pModel[i]->GetPos().z;
-
-		//向きを取得
-		float fRotX = m_pModel[i]->GetRot().x;
-		float fRotY = m_pModel[i]->GetRot().y;
-		float fRotZ = m_pModel[i]->GetRot().z;
-
-		//-------------------------------------------------------
-		// 差分の計算
-		// (終了値 - 開始値)
-		//-------------------------------------------------------
-		//位置
-		float fDifPosX = keyNext.pos.x - key.pos.x;
-		float fDifPosY = keyNext.pos.y - key.pos.y;
-		float fDifPosZ = keyNext.pos.z - key.pos.z;
-
-		//向き
-		float fDifRotX = keyNext.rot.x - key.rot.x;
-		float fDifRotY = keyNext.rot.y - key.rot.y;
-		float fDifRotZ = keyNext.rot.z - key.rot.z;
-
-		//-------------------------------------------------------
-		// 差分の角度の正規化
-		//-------------------------------------------------------
-		fDifRotX = CUtility::GetNorRot(fDifRotX);	//Xの値
-		fDifRotY = CUtility::GetNorRot(fDifRotY);	//Yの値
-		fDifRotZ = CUtility::GetNorRot(fDifRotZ);	//Zの値
-
-		//-------------------------------------------------------
-		// 相対値の計算
-		// (モーションカウンター / フレーム数)
-		//-------------------------------------------------------
-		float fNumRelative = m_nCntMotion / (float)m_aMotionSet[type].aKeySet[m_nCurrentKey].nFrame;
-
-		//-------------------------------------------------------
-		// 現在値の計算
-		// (開始値 + (差分 * 相対値))
-		//-------------------------------------------------------
-		//位置
-		fPosX += key.pos.x + (fDifPosX * fNumRelative);
-		fPosY += key.pos.y + (fDifPosY * fNumRelative);
-		fPosZ += key.pos.z + (fDifPosZ * fNumRelative);
-
-		//向き
-		fRotX = key.rot.x + (fDifRotX * fNumRelative);
-		fRotY = key.rot.y + (fDifRotY * fNumRelative);
-		fRotZ = key.rot.z + (fDifRotZ * fNumRelative);
-
-		//-------------------------------------------------------
-		// モデル情報の設定
-		//-------------------------------------------------------
-		//位置の設定
-		m_pModel[i]->SetPos(D3DXVECTOR3(fPosX, fPosY, fPosZ));
-
-		//向きの設定
-		m_pModel[i]->SetRot(D3DXVECTOR3(fRotX, fRotY, fRotZ));
-	}
-
-	//モーションカウンターを進める
-	m_nCntMotion++;
-
-	//--------------------------------
-	// 初期化
-	//--------------------------------
-	if (m_nCntMotion >= m_aMotionSet[type].aKeySet[m_nCurrentKey].nFrame)
-	{//モーションカウンターが再生フレームに達したら
-		m_nCurrentKey++;	//キー番号を加算
-		m_nCntMotion = 0;	//モーションカウンターを初期化
-	}
-}
-
-//==========================================
-// モーションの変更
-// 引数：変更したいモーションの列挙
-//==========================================
-void CPlayer::ChangeMotion(MOTION_TYPE type)
-{
-	//モーションの変更
-	m_type = type;
-
-	//モーション情報の初期化
-	if (GetOutAttack(false))
-	{//どれか攻撃モーションなら
-		m_nCurrentKey = 0;
-		m_nCntMotion = 0;
-		m_status.nAttackTime = 0;	//攻撃時間のリセット
-		m_bFinishAttack = false;	//ダメージを与えていない状態にする
-	}
 }
