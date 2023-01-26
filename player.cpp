@@ -404,7 +404,7 @@ void CPlayer::MoveKeyboard(int nUpKey, int nDownKey, int nLeftKey, int nRightKey
 		m_pos.z -= cosf(cameraRot.y + D3DX_PI * 0.0f) * m_status.fSpeed;
 		m_rotDest.y = cameraRot.y + D3DX_PI * 0.0f;
 	}
-
+	
 	//タイヤの回転量の加算
 	m_rotWheel += D3DXToRadian(-nWheelRotValue);
 
@@ -593,6 +593,20 @@ void CPlayer::AttackManager()
 		break;
 
 	//---------------------------
+	// 移動中なら
+	//---------------------------
+	case MOTION_MOVE:
+		if (CInputKeyboard::Trigger(nNorAtkKey))
+		{
+			ChangeMotion(MOTION_ATTACK_1);
+		}
+		else if (CInputKeyboard::Trigger(nSpinAtkKey))
+		{
+			ChangeMotion(MOTION_ATTACK_SPIN);
+		}
+		break;
+
+	//---------------------------
 	// 通常攻撃(1)なら
 	//---------------------------
 	case MOTION_ATTACK_1:
@@ -639,47 +653,46 @@ void CPlayer::AttackManager()
 //================================
 void CPlayer::Attack()
 {
+	if (GetOutAttack(false))
+	{//攻撃モーション中なら
 	//------------------------------------------
 	// モーションと攻撃時間を合わせる
 	//------------------------------------------
-	int nAttackFream = 0;
-	int nOutRigor = 0;
-	for (int i = 0; i < m_aMotionSet[m_type].nNumKey; i++)
-	{//キー数-1回分回す
-		//攻撃モーションのフレーム数を合計する
-		nAttackFream += m_aMotionSet[m_type].aKeySet[i].nFrame;
+		int nAttackFream = 0;
+		int nOutRigor = 0;
+		for (int i = 0; i < m_aMotionSet[m_type].nNumKey; i++)
+		{//キー数-1回分回す
+			//攻撃モーションのフレーム数を合計する
+			nAttackFream += m_aMotionSet[m_type].aKeySet[i].nFrame;
 
-		if (i != m_aMotionSet[m_type].nNumKey - 1)
-		{//硬直キーじゃないなら
-			//フレーム数を加算
-			nOutRigor += m_aMotionSet[m_type].aKeySet[i].nFrame;
+			if (i != m_aMotionSet[m_type].nNumKey - 1)
+			{//硬直キーじゃないなら
+				//フレーム数を加算
+				nOutRigor += m_aMotionSet[m_type].aKeySet[i].nFrame;
+			}
 		}
-	}
 
-	//------------------------------------------
-	// 攻撃の切り替え
-	//------------------------------------------
-	if (nOutRigor <= m_status.nAttackTime && m_bFinishAttack)
-	{//硬直以外のフレーム数を超えた & 攻撃が終わっているなら
-		//int a = 0;
-	}
+		//------------------------------------------
+		// 攻撃の切り替え
+		//------------------------------------------
+		if (nOutRigor <= m_status.nAttackTime && m_bFinishAttack)
+		{//硬直以外のフレーム数を超えた & 攻撃が終わっているなら
+			//int a = 0;
+		}
 
-	//------------------------------------------
-	// フレーム数の加算
-	//------------------------------------------
-	if (nAttackFream <= m_status.nAttackTime)
-	{//攻撃時間が攻撃モーションのフレーム数の合計を超えたら
-		//待機モーションにする
-		ChangeMotion(MOTION_IDOL);
-	}
-	else
-	{
-		//攻撃時間を加算
-		m_status.nAttackTime++;
-	}
-
-	if (GetOutAttack(false))
-	{//攻撃モーション中なら
+		//------------------------------------------
+		// フレーム数の加算
+		//------------------------------------------
+		if (nAttackFream <= m_status.nAttackTime)
+		{//攻撃時間が攻撃モーションのフレーム数の合計を超えたら
+			//待機モーションにする
+			ChangeMotion(MOTION_IDOL);
+		}
+		else
+		{
+			//攻撃時間を加算
+			m_status.nAttackTime++;
+		}
 		//------------------------------------------
 		// 剣との当たり判定
 		//------------------------------------------
