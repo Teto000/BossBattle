@@ -31,6 +31,11 @@ public:
 	void SetCamera(LPDIRECT3DDEVICE9 pDevice);
 
 	//------------------
+	// セッター
+	//------------------
+	void ShakeCamera(int fream, float magnitude);	//カメラの振動情報の設定
+
+	//------------------
 	// ゲッター
 	//------------------
 	D3DXVECTOR3 GetPosV();
@@ -60,6 +65,10 @@ private:
 	D3DXMATRIX m_mtxProjection;	//プロジェクションマトリックス
 	D3DXMATRIX m_mtxView;		//ビューマトリックス
 	D3DVIEWPORT9 m_viewport;
+
+	//カメラの振動
+	int m_nQuakeFreamCount;		//揺らすフレーム数
+	float m_fQuakeMagnitude;	//揺れの量
 };
 
 #endif

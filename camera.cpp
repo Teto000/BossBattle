@@ -34,6 +34,10 @@ CCamera::CCamera()
 	m_vecU = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_TSPEED = 0.0f;
 	m_bLockOn = true;
+
+	//カメラの振動
+	m_nQuakeFreamCount = 0;
+	m_fQuakeMagnitude = 0.0f;
 }
 
 //===========================
@@ -91,31 +95,6 @@ void CCamera::Update(void)
 		//ロックオンを解除
 		m_bLockOn = false;
 	}
-
-	//----------------------------------------
-	// カメラ内のプレイヤーの位置設定
-	//----------------------------------------
-	/*if (CInputKeyboard::Press(DIK_LEFT))
-	{
-		m_posV.x += 5.0f;
-		m_posR.x += 5.0f;
-	}
-	else if (CInputKeyboard::Press(DIK_RIGHT))
-	{
-		m_posV.x -= 5.0f;
-		m_posR.x -= 5.0f;
-	}
-
-	if (CInputKeyboard::Press(DIK_UP))
-	{
-		m_posV.z -= 5.0f;
-		m_posR.z -= 5.0f;
-	}
-	else if (CInputKeyboard::Press(DIK_DOWN))
-	{
-		m_posV.z += 5.0f;
-		m_posR.z += 5.0f;
-	}*/
 
 	//----------------------------------------
 	// 行列を使ったカメラ制御
@@ -187,6 +166,12 @@ void CCamera::Update(void)
 	CDebugProc::Print("視点：%f,%f,%f", m_worldPosV.x, m_worldPosV.y, m_worldPosV.z);
 	CDebugProc::Print("注視点：%f,%f,%f", m_worldPosR.x, m_worldPosR.y, m_worldPosR.z);
 	CDebugProc::Print("回転：%f,%f,%f", m_rot.x, m_rot.y, m_rot.z);
+
+	//カメラの振動
+	if (CInputKeyboard::Trigger(DIK_0))
+	{
+		ShakeCamera(60, 0.05f);
+	}
 }
 
 //========================
@@ -195,6 +180,22 @@ void CCamera::Update(void)
 void CCamera::SetCamera(LPDIRECT3DDEVICE9 pDevice)
 {
 	//--------------------------------
+	// カメラ情報の振動
+	//--------------------------------
+	D3DXVECTOR3 adjustPos(0.0f, 0.0f, 0.0f);
+
+	if (m_nQuakeFreamCount > 0)
+	{//揺らすフレーム数が0より大きいなら
+		//フレーム数の減少
+		m_nQuakeFreamCount--;
+
+		//ランダムな値を設定
+		adjustPos.x = m_fQuakeMagnitude * (rand() % 100 - 50);
+		adjustPos.y = m_fQuakeMagnitude * (rand() % 100 - 50);
+		adjustPos.z = m_fQuakeMagnitude * (rand() % 100 - 50);
+	}
+
+	//--------------------------------
 	// カメラ情報の設定
 	//--------------------------------
 	//ビューマトリックスの初期化
@@ -202,9 +203,9 @@ void CCamera::SetCamera(LPDIRECT3DDEVICE9 pDevice)
 
 	//ビューマトリックスの作成
 	D3DXMatrixLookAtLH(&m_mtxView,
-					   &m_worldPosV,
-					   &m_worldPosR,
-					   &m_vecU);
+					   &(m_worldPosV + adjustPos),	//視点
+					   &(m_worldPosR + adjustPos),	//注視点
+					   &m_vecU);					//上の向き
 
 	//ビューマトリックスの設定
 	pDevice->SetTransform(D3DTS_VIEW, &m_mtxView);
@@ -303,11 +304,12 @@ void CCamera::Turn()
 }
 
 //========================
-// ロックオン処理
+// カメラの振動情報の設定
 //========================
-void CCamera::SetLockOn()
+void CCamera::ShakeCamera(int fream, float magnitude)
 {
-
+	m_nQuakeFreamCount = fream;			//揺らすフレーム数
+	m_fQuakeMagnitude = magnitude;		//揺れの量
 }
 
 //========================
