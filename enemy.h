@@ -31,6 +31,41 @@ class CHP;		//HP
 class CEnemy : public CObject
 {
 public:
+	//キー要素
+	struct KEY
+	{
+		D3DXVECTOR3 pos;	//位置
+		D3DXVECTOR3 rot;	//向き
+	};
+
+	//キー情報
+	struct KEY_SET
+	{
+		int nFrame;	//フレーム数
+		KEY aKey[MAX_PARTS];
+	};
+
+	//モーション情報
+	struct MOTION_SET
+	{
+		bool bLoop;					//ループするかどうか
+		int nNumKey;				//キーの最大数
+		KEY_SET aKeySet[MAX_KEY];	//キーセット情報
+
+		int nStartCollision;		//当たり判定の開始時間
+		float fDamageMag;			//ダメージ倍率(magnification)
+	};
+
+	//モーションの種類
+	enum MOTION_TYPE
+	{
+		MOTION_IDOL = 0,	//待機
+		MOTION_MOVE,		//移動
+		MOTION_ATTACK_1,	//通常攻撃
+		MOTION_MAX
+	};
+
+	//敵の状態
 	enum ENEMYSTATE
 	{
 		ENEMYSTATE_NONE = 0,
@@ -38,6 +73,7 @@ public:
 		ENEMYSTATE_MAX
 	};
 
+	//ゲージの種類
 	enum GAUGE
 	{
 		GAUGE_HP = 0,
@@ -80,6 +116,10 @@ public:
 
 private:
 	void SetModel();	//モデルの設定
+	void GetFileMotion();										//ファイルを使ったモーションの取得
+	void SetMotion(MOTION_TYPE type, bool bLoop, int nNumKey);	//モーションの設定
+	void ChangeMotion(MOTION_TYPE type);						//モーションの変更
+
 	void SetLine();		//線の設置
 	void UpdateLine();	//線の更新
 	void Attack();		//攻撃
@@ -126,6 +166,9 @@ private:
 	/* ↓ モーション情報 ↓ */
 	int m_nCurrentKey;			//現在のキー番号
 	int m_nCntMotion;			//モーションカウンター
+	MOTION_SET m_aMotionSet[MOTION_MAX];	//モーション情報
+	MOTION_TYPE m_type;						//現在のモーション
+
 };
 
 #endif

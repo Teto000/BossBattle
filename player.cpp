@@ -260,12 +260,12 @@ void CPlayer::Update()
 
 		//向きを目的の角度に合わせる
 		SetRot();
-
-		//--------------------------------
-		// 攻撃処理
-		//--------------------------------
-		AttackManager();
 	}
+
+	//--------------------------------
+	// 攻撃処理
+	//--------------------------------
+	AttackManager();
 
 	//--------------------------------
 	// モーションの設定
@@ -572,17 +572,21 @@ void CPlayer::SetRot()
 //================================
 void CPlayer::AttackManager()
 {
+	//攻撃キー用変数宣言
+	int nNorAtkKey = DIK_RETURN;
+	int nSpinAtkKey = DIK_1;
+
 	switch (m_type)
 	{
 	//---------------------------
 	// 待機中なら
 	//---------------------------
 	case MOTION_IDOL:
-		if (CInputKeyboard::Trigger(DIK_RETURN))
+		if (CInputKeyboard::Trigger(nNorAtkKey))
 		{
 			ChangeMotion(MOTION_ATTACK_1);
 		}
-		else if (CInputKeyboard::Trigger(DIK_1))
+		else if (CInputKeyboard::Trigger(nSpinAtkKey))
 		{
 			ChangeMotion(MOTION_ATTACK_SPIN);
 		}
@@ -592,11 +596,11 @@ void CPlayer::AttackManager()
 	// 通常攻撃(1)なら
 	//---------------------------
 	case MOTION_ATTACK_1:
-		if (CInputKeyboard::Trigger(DIK_RETURN))
+		if (CInputKeyboard::Trigger(nNorAtkKey))
 		{
 			ChangeMotion(MOTION_ATTACK_2);
 		}
-		else if (CInputKeyboard::Trigger(DIK_1))
+		else if (CInputKeyboard::Trigger(nSpinAtkKey))
 		{
 			ChangeMotion(MOTION_ATTACK_SPIN);
 		}
@@ -606,7 +610,7 @@ void CPlayer::AttackManager()
 	// 通常攻撃(2)なら
 	//---------------------------
 	case MOTION_ATTACK_2:
-		if (CInputKeyboard::Trigger(DIK_1))
+		if (CInputKeyboard::Trigger(nSpinAtkKey))
 		{
 			ChangeMotion(MOTION_ATTACK_SPIN);
 		}
@@ -616,10 +620,13 @@ void CPlayer::AttackManager()
 	// 回転切りなら
 	//---------------------------
 	case MOTION_ATTACK_SPIN:
-		if (CInputKeyboard::Trigger(DIK_1))
+		if (CInputKeyboard::Trigger(nSpinAtkKey))
 		{
 			ChangeMotion(MOTION_ATTACK_SPIN);
 		}
+		break;
+
+	default:
 		break;
 	}
 
@@ -632,39 +639,47 @@ void CPlayer::AttackManager()
 //================================
 void CPlayer::Attack()
 {
+	//------------------------------------------
+	// モーションと攻撃時間を合わせる
+	//------------------------------------------
+	int nAttackFream = 0;
+	int nOutRigor = 0;
+	for (int i = 0; i < m_aMotionSet[m_type].nNumKey; i++)
+	{//キー数-1回分回す
+		//攻撃モーションのフレーム数を合計する
+		nAttackFream += m_aMotionSet[m_type].aKeySet[i].nFrame;
+
+		if (i != m_aMotionSet[m_type].nNumKey - 1)
+		{//硬直キーじゃないなら
+			//フレーム数を加算
+			nOutRigor += m_aMotionSet[m_type].aKeySet[i].nFrame;
+		}
+	}
+
+	//------------------------------------------
+	// 攻撃の切り替え
+	//------------------------------------------
+	if (nOutRigor <= m_status.nAttackTime && m_bFinishAttack)
+	{//硬直以外のフレーム数を超えた & 攻撃が終わっているなら
+		//int a = 0;
+	}
+
+	//------------------------------------------
+	// フレーム数の加算
+	//------------------------------------------
+	if (nAttackFream <= m_status.nAttackTime)
+	{//攻撃時間が攻撃モーションのフレーム数の合計を超えたら
+		//待機モーションにする
+		ChangeMotion(MOTION_IDOL);
+	}
+	else
+	{
+		//攻撃時間を加算
+		m_status.nAttackTime++;
+	}
+
 	if (GetOutAttack(false))
 	{//攻撃モーション中なら
-		//------------------------------------------
-		// モーションと攻撃時間を合わせる
-		//------------------------------------------
-		int nAttackFream = 0;
-		int nOutRigor = 0;
-		for (int i = 0; i < m_aMotionSet[m_type].nNumKey; i++)
-		{//キー数-1回分回す
-			//攻撃モーションのフレーム数を合計する
-			nAttackFream += m_aMotionSet[m_type].aKeySet[i].nFrame;
-
-			if (i != m_aMotionSet[m_type].nNumKey - 1)
-			{//硬直キーじゃないなら
-				//フレーム数を加算
-				nOutRigor += m_aMotionSet[m_type].aKeySet[i].nFrame;
-			}
-		}
-
-		//------------------------------------------
-		// フレーム数の加算
-		//------------------------------------------
-		if (nAttackFream <= m_status.nAttackTime)
-		{//攻撃時間が攻撃モーションのフレーム数の合計を超えたら
-			//待機モーションにする
-			ChangeMotion(MOTION_IDOL);
-		}
-		else
-		{
-			//攻撃時間を加算
-			m_status.nAttackTime++;
-		}
-
 		//------------------------------------------
 		// 剣との当たり判定
 		//------------------------------------------
