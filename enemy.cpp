@@ -21,6 +21,7 @@
 #include "hp.h"
 #include "message.h"
 #include "utility.h"
+#include "debug_proc.h"
 
 //------------------------
 // 静的メンバ変数宣言
@@ -201,8 +202,6 @@ void CEnemy::Update()
 				m_pHP[GAUGE_BREAK] = CHP::Create(breakpPos, 800.0f, 15.0f, CHP::GAUGETYPE_BREAK);
 				m_pHP[GAUGE_BREAK]->SetLife(m_fBreak, m_fRemBreak);	//HPの設定
 			}
-
-			m_pos.y = 0.0f;
 		}
 	}
 	else
@@ -230,6 +229,8 @@ void CEnemy::Update()
 	{//地面に着いたら
 		//重力の値をリセット
 		m_fGravity = fDefGravity;
+
+		m_pos.y = 0.0f;		//高さを地面に合わせる
 	}
 
 	//----------------------------
