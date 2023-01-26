@@ -30,6 +30,7 @@
 #include "damage.h"
 #include "style_shift.h"
 #include "utility.h"
+#include "sound.h"
 
 //-------------------------------
 // 静的メンバ変数宣言
@@ -655,9 +656,9 @@ void CPlayer::Attack()
 {
 	if (GetOutAttack(false))
 	{//攻撃モーション中なら
-	//------------------------------------------
-	// モーションと攻撃時間を合わせる
-	//------------------------------------------
+		//------------------------------------------
+		// モーションと攻撃時間を合わせる
+		//------------------------------------------
 		int nAttackFream = 0;
 		int nOutRigor = 0;
 		for (int i = 0; i < m_aMotionSet[m_type].nNumKey; i++)
@@ -1218,6 +1219,9 @@ void CPlayer::ChangeMotion(MOTION_TYPE type)
 	//モーション情報の初期化
 	if (GetOutAttack(false))
 	{//どれか攻撃モーションなら
+		//SEの再生
+		CSound::PlaySound(CSound::SOUND_LABEL_SE_SLASH);
+
 		m_nCurrentKey = 0;
 		m_nCntMotion = 0;
 		m_status.nAttackTime = 0;	//攻撃時間のリセット
