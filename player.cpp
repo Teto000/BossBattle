@@ -221,9 +221,7 @@ void CPlayer::Update()
 	//--------------------------------
 	// モーションのリセット
 	//--------------------------------
-	if (m_type != MOTION_ATTACK_1
-		&& m_type != MOTION_ATTACK_2
-		&& m_type != MOTION_ATTACK_SPIN)
+	if (GetOutAttack(false, true))
 	{//攻撃モーションじゃないなら
 		//待機モーションにする
 		ChangeMotion(MOTION_IDOL);
@@ -248,9 +246,7 @@ void CPlayer::Update()
 		// ジョイパッドでの操作
 		CInputJoypad* joypad = CApplication::GetJoypad();
 
-		if (m_type != MOTION_ATTACK_1
-			&& m_type != MOTION_ATTACK_2
-			&& m_type != MOTION_ATTACK_SPIN)
+		if (GetOutAttack(false, true))
 		{//攻撃中じゃないなら
 			if (!joypad->IsJoyPadUse(0))
 			{//ジョイパッドが使われていないなら
@@ -660,7 +656,7 @@ void CPlayer::AttackManager()
 //================================
 void CPlayer::Attack()
 {
-	if (GetOutAttack(false))
+	if (GetOutAttack(true, false))
 	{//攻撃モーション中なら
 		//------------------------------------------
 		// モーションと攻撃時間を合わせる
@@ -789,35 +785,63 @@ void CPlayer::HitSword()
 
 //================================
 // 攻撃状態かどうかを返す
-// 引数：trueでand,falseでor
+// 引数：==か!=か、&&か||か
 //================================
-bool CPlayer::GetOutAttack(bool and)
+bool CPlayer::GetOutAttack(bool equal, bool and)
 {
-	switch (and)
-	{
-	case true:
-		//----------------------------
-		// 攻撃状態全部なら
-		//----------------------------
-		if (m_type == MOTION_ATTACK_1
-			&& m_type == MOTION_ATTACK_2
-			&& m_type == MOTION_ATTACK_SPIN)
+	if (equal)
+	{//攻撃状態なら
+		if (and)
 		{
-			return true;
+			//----------------------------
+			// 攻撃状態全部なら
+			//----------------------------
+			if (m_type == MOTION_ATTACK_1
+				&& m_type == MOTION_ATTACK_2
+				&& m_type == MOTION_ATTACK_SPIN)
+			{
+				return true;
+			}
 		}
-		break;
-
-	case false:
-		//----------------------------
-		// 攻撃状態どれかなら
-		//----------------------------
-		if (m_type == MOTION_ATTACK_1
-			|| m_type == MOTION_ATTACK_2
-			|| m_type == MOTION_ATTACK_SPIN)
+		else
 		{
-			return true;
+			//----------------------------
+			// 攻撃状態どれかなら
+			//----------------------------
+			if (m_type == MOTION_ATTACK_1
+				|| m_type == MOTION_ATTACK_2
+				|| m_type == MOTION_ATTACK_SPIN)
+			{
+				return true;
+			}
 		}
-		break;
+	}
+	else
+	{//攻撃状態じゃないなら
+		if (and)
+		{
+			//----------------------------
+			// 攻撃状態全部じゃないなら
+			//----------------------------
+			if (m_type != MOTION_ATTACK_1
+				&& m_type != MOTION_ATTACK_2
+				&& m_type != MOTION_ATTACK_SPIN)
+			{
+				return true;
+			}
+		}
+		else
+		{
+			//----------------------------
+			// 攻撃状態どれかじゃないなら
+			//----------------------------
+			if (m_type != MOTION_ATTACK_1
+				|| m_type != MOTION_ATTACK_2
+				|| m_type != MOTION_ATTACK_SPIN)
+			{
+				return true;
+			}
+		}
 	}
 
 	return false;
@@ -1232,7 +1256,7 @@ void CPlayer::ChangeMotion(MOTION_TYPE type)
 	m_type = type;
 
 	//モーション情報の初期化
-	if (GetOutAttack(false))
+	if (GetOutAttack(true, false))
 	{//どれか攻撃モーションなら
 		//SEの再生
 		CSound::PlaySound(CSound::SOUND_LABEL_SE_SLASH);

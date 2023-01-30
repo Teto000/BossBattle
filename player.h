@@ -139,7 +139,7 @@ private:
 	void AttackManager();			//攻撃の管理
 	void Attack();					//攻撃処理
 	void HitSword();				//剣が当たった処理
-	bool GetOutAttack(bool and);	//攻撃状態かどうかを返す
+	bool GetOutAttack(bool equal, bool and);	//攻撃状態かどうかを返す
 
 	void SetModel();											//モデルの設定
 	void GetFileMotion();										//ファイルを使ったモーションの取得
