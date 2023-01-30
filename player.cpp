@@ -785,7 +785,8 @@ void CPlayer::HitSword()
 
 //================================
 // 攻撃状態かどうかを返す
-// 引数：==か!=か、&&か||か
+// 第一引数：true:== , false:!=
+// 第二引数：true:&& , false:||
 //================================
 bool CPlayer::GetOutAttack(bool equal, bool and)
 {

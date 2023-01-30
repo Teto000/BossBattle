@@ -186,6 +186,9 @@ void CEnemy::Uninit()
 //========================
 void CEnemy::Update()
 {
+	//モーションのリセット
+	ChangeMotion(MOTION_IDOL);
+
 	//-------------------------
 	// モデルの更新
 	//-------------------------
@@ -228,9 +231,9 @@ void CEnemy::Update()
 	}
 	else
 	{//敵がブレイクしていないなら
-	 //------------------------
-	 // 攻撃処理
-	 //------------------------
+		//------------------------
+		// 攻撃処理
+		//------------------------
 		Attack();
 	}
 
@@ -558,7 +561,14 @@ void CEnemy::Move()
 	//-------------------------------
 	// 目的の角度の正規化
 	//-------------------------------
-	m_rotDest.y = CUtility::GetNorRot(m_rotDest.y);
+	if (m_rotDest.y - m_rot.y > D3DX_PI)
+	{//回転したい角度が180以上なら
+		m_rotDest.y -= D3DX_PI * 2;
+	}
+	else if (m_rotDest.y - m_rot.y < -D3DX_PI)
+	{//回転したい角度が-180以下なら
+		m_rotDest.y += D3DX_PI * 2;
+	}
 
 	//-------------------------------
 	// 目的の角度まで回転する
@@ -582,6 +592,9 @@ void CEnemy::Move()
 	//プレイヤーに向かって移動
 	m_move = vec * 1.5f;
 	m_pos += m_move;
+
+	//移動モーションにする
+	ChangeMotion(MOTION_MOVE);
 }
 
 //==========================================
@@ -871,8 +884,4 @@ void CEnemy::ChangeMotion(MOTION_TYPE type)
 {
 	//モーションの変更
 	m_type = type;
-
-	//モーション情報の初期化
-	m_nCurrentKey = 0;
-	m_nCntMotion = 0;
 }

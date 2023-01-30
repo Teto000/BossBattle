@@ -57,7 +57,7 @@ public:
 	enum MOTION_TYPE
 	{
 		MOTION_IDOL = 0,	//‘Ò‹@
-		//MOTION_MOVE,		//ˆÚ“®
+		MOTION_MOVE,		//ˆÚ“®
 		//MOTION_ATTACK,	//’ÊíUŒ‚
 		MOTION_MAX
 	};
