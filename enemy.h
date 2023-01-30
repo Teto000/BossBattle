@@ -23,7 +23,7 @@ class CHP;		//HP
 // マクロ定義
 //--------------------------------
 #define MAX_ENEMY_PARTS	(3)		//モデルパーツの最大数
-#define MAX_ENEMY_KEY	(4)		//キーの最大数
+#define MAX_ENEMY_KEY	(56)	//キーの最大数
 
 //================================
 // エネミークラスの定義
@@ -31,6 +31,37 @@ class CHP;		//HP
 class CEnemy : public CObject
 {
 public:
+	//キー要素
+	struct KEY
+	{
+		D3DXVECTOR3 pos;	//位置
+		D3DXVECTOR3 rot;	//向き
+	};
+
+	//キー情報
+	struct KEY_SET
+	{
+		int nFrame;	//フレーム数
+		KEY aKey[MAX_ENEMY_PARTS];
+	};
+
+	//モーション情報
+	struct MOTION_SET
+	{
+		bool bLoop;						//ループするかどうか
+		int nNumKey;					//キーの最大数
+		KEY_SET aKeySet[MAX_ENEMY_KEY];	//キーセット情報
+	};
+
+	//モーションの種類
+	enum MOTION_TYPE
+	{
+		MOTION_IDOL = 0,	//待機
+		//MOTION_MOVE,		//移動
+		//MOTION_ATTACK,	//通常攻撃
+		MOTION_MAX
+	};
+
 	enum ENEMYSTATE
 	{
 		ENEMYSTATE_NONE = 0,
@@ -86,6 +117,11 @@ private:
 	void NockBack();	//ノックバックする処理
 	void Move();		//移動
 
+	//モーション
+	void GetFileMotion();										//ファイルを使ったモーションの取得
+	void SetMotion(MOTION_TYPE type, bool bLoop, int nNumKey);	//モーションの設定
+	void ChangeMotion(MOTION_TYPE type);						//モーションの変更
+
 private:
 	//----------------
 	// 定数
@@ -122,10 +158,11 @@ private:
 	CHP*	 m_pHP[GAUGE_MAX];			//HP
 	ENEMYSTATE m_state;					//敵の状態
 
-
 	/* ↓ モーション情報 ↓ */
-	int m_nCurrentKey;			//現在のキー番号
-	int m_nCntMotion;			//モーションカウンター
+	int m_nCurrentKey;						//現在のキー番号
+	int m_nCntMotion;						//モーションカウンター
+	MOTION_SET m_aMotionSet[MOTION_MAX];	//モーション情報
+	MOTION_TYPE m_type;						//現在のモーション
 };
 
 #endif
