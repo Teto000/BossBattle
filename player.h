@@ -60,6 +60,7 @@ public:
 		int nCritical;				//クリティカル率
 		int nNumHit;				//ヒット数
 		int nHitInterval;			//ヒット間隔
+		int nBreakDamage;			//ブレイクゲージに与えるダメージ
 		float fDamageMag;			//ダメージ倍率(magnification)
 	};
 

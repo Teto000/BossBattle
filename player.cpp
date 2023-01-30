@@ -98,9 +98,15 @@ CPlayer::CPlayer() : CObject(0)
 				m_aMotionSet[nCnt].aKeySet[i].aKey[j].rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//向き
 			}
 
-			m_aMotionSet[nCnt].bLoop = false;			//ループするかどうか
 			m_aMotionSet[nCnt].nStartCollision = 0;		//当たり判定の開始時間
-			m_aMotionSet[nCnt].nNextAtkTime;			//次の攻撃の入力開始時間
+			m_aMotionSet[nCnt].nNextAtkTime = 0;		//次の攻撃の入力開始時間
+			m_aMotionSet[nCnt].nNumPoint = 0;			//消費ポイント数
+			m_aMotionSet[nCnt].nCritical = 0;			//クリティカル率
+			m_aMotionSet[nCnt].nNumHit = 0;				//ヒット数
+			m_aMotionSet[nCnt].nHitInterval = 0;		//ヒット間隔
+			m_aMotionSet[nCnt].nBreakDamage = 0;		//ブレイクゲージに与えるダメージ
+			m_aMotionSet[nCnt].fDamageMag = 0.0f;		//ダメージ倍率(magnification)
+
 			m_aMotionSet[nCnt].aKeySet[i].nFrame = 0;	//フレーム数
 		}
 
@@ -740,7 +746,8 @@ void CPlayer::HitSword()
 				CGame::GetEnemy()->SubGauge(fDamage, CEnemy::GAUGE_HP);
 
 				//ブレイクゲージの減少
-				CGame::GetEnemy()->SubGauge(fDamage, CEnemy::GAUGE_BREAK);
+				CGame::GetEnemy()->SubGauge((float)m_aMotionSet[m_type].nBreakDamage
+											, CEnemy::GAUGE_BREAK);
 			}
 			else
 			{//ブレイク状態なら
@@ -980,6 +987,14 @@ void CPlayer::GetFileMotion()
 				{//頭文字がHIT_INTERVALなら
 					//文字列からキーの最大数を読み取る
 					sscanf(cText, "%s = %d", &cTextHead, &m_aMotionSet[nNumMotion].nHitInterval);
+				}
+				//-------------------------------
+				// ブレイクゲージへのダメージ
+				//-------------------------------
+				else if (strcmp(&cTextHead[0], "BREAK_DAMAGE") == 0)
+				{//頭文字がBREAK_DAMAGEなら
+					//文字列からキーの最大数を読み取る
+					sscanf(cText, "%s = %d", &cTextHead, &m_aMotionSet[nNumMotion].nBreakDamage);
 				}
 				//-------------------------------
 				// ダメージ倍率
