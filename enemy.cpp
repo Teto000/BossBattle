@@ -22,6 +22,8 @@
 #include "message.h"
 #include "utility.h"
 #include "debug_proc.h"
+#include "utility.h"
+#include "camera.h"
 
 //------------------------
 // 静的メンバ変数宣言
@@ -87,6 +89,7 @@ CEnemy::CEnemy() : CObject(0)
 
 			m_aMotionSet[nCnt].bLoop = false;			//ループするかどうか
 			m_aMotionSet[nCnt].aKeySet[i].nFrame = 0;	//フレーム数
+			m_aMotionSet[nCnt].nStartCollision;			//当たり判定の開始時間
 		}
 
 		m_aMotionSet[nCnt].nNumKey = 0;
@@ -564,7 +567,27 @@ void CEnemy::Attack()
 //==========================================
 void CEnemy::HitHummer()
 {
+	//----------------------------------
+	// 変数宣言
+	//----------------------------------
+	D3DXVECTOR3 offset(0.0f, 280.0f, 0.0f);		//武器の先へのオフセット座標
+	float fSphereSize = 200.0f;	//球の直径
+	D3DXMATRIX mtxR = m_pModel[1]->GetmtxWorld();		//右ハンマーのマトリックス
+	D3DXMATRIX mtxL = m_pModel[2]->GetmtxWorld();		//左ハンマーのマトリックス
+	CObject::EObjType player = CObject::OBJTYPE_PLAYER;	//叩く相手がプレイヤー
 
+	//----------------------------------
+	// 当たり判定
+	//----------------------------------
+	if (CUtility::ColliaionWeapon(offset, fSphereSize, mtxR, player)
+		|| CUtility::ColliaionWeapon(offset, fSphereSize, mtxL, player))
+	{//ハンマーがプレイヤーに当たった
+		if (m_nAttackTime >= m_aMotionSet[m_type].nStartCollision && !m_bHitAtk)
+		{//攻撃時間が当たり判定の開始時間を超えた & 攻撃が当たっていない
+			CGame::GetPlayer()->SubLife(20);
+			m_bHitAtk = true;
+		}
+	}
 }
 
 //==========================================
@@ -730,6 +753,14 @@ void CEnemy::GetFileMotion()
 				{//頭文字がNUM_KEYなら
 					//文字列からキーの最大数を読み取る
 					sscanf(cText, "%s = %d", &cTextHead, &m_aMotionSet[nNumMotion].nNumKey);
+				}
+				//-------------------------------
+				// 当たり判定の開始時間
+				//-------------------------------
+				else if (strcmp(&cTextHead[0], "COLLISION") == 0)
+				{//頭文字がCOLLISIONなら
+				 //文字列からキーの最大数を読み取る
+					sscanf(cText, "%s = %d", &cTextHead, &m_aMotionSet[nNumMotion].nStartCollision);
 				}
 				//========================================
 				// キーセット情報
@@ -960,5 +991,6 @@ void CEnemy::ChangeMotion(MOTION_TYPE type)
 		m_nCurrentKey = 0;
 		m_nCntMotion = 0;
 		m_nAttackTime = 0;
+		m_bHitAtk = false;
 	}
 }

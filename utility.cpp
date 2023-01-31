@@ -11,6 +11,8 @@
 #include "utility.h"
 #include "player.h"
 #include "enemy.h"
+#include "game.h"
+#include "debug_proc.h"
 
 //------------------------
 // 静的メンバ変数宣言
@@ -233,6 +235,9 @@ bool CUtility::ColliaionWeapon(D3DXVECTOR3 offset,float fDiameter,
 
 	//剣先までのオフセットを加算した位置を取得
 	D3DXVec3TransformCoord(&worldPos, &offset, &mtxWorld);
+
+	//オフセット先にプレイヤーを移動
+	//CGame::GetPlayer()->SetPosition(worldPos);
 
 	//--------------------------------------
 	// モデル先を中心とした球の当たり判定

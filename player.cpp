@@ -712,10 +712,10 @@ void CPlayer::Attack()
 void CPlayer::HitSword()
 {
 	//変数宣言
-	D3DXVECTOR3 offsetPos(0.0f, 0.0f, -80.0f);	//剣先までのオフセット
+	D3DXVECTOR3 offsetPos(0.0f, 0.0f, -120.0f);	//剣先までのオフセット
 	float fSphereSize = 250.0f;					//球の直径
 
-	if (CUtility::ColliaionWeapon(offsetPos, fSphereSize, m_mtxWorld, CObject::OBJTYPE_ENEMY)
+	if (CUtility::ColliaionWeapon(offsetPos, fSphereSize, m_pModel[4]->GetmtxWorld(), CObject::OBJTYPE_ENEMY)
 		&& !m_bFinishAttack
 		&& m_status.nAttackTime >= m_aMotionSet[m_type].nStartCollision)
 	{//剣と当たっている & 攻撃が終わっていない & 当たり判定の有効時間なら

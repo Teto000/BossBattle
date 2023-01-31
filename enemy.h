@@ -51,6 +51,8 @@ public:
 		bool bLoop;						//ループするかどうか
 		int nNumKey;					//キーの最大数
 		KEY_SET aKeySet[MAX_ENEMY_KEY];	//キーセット情報
+
+		int nStartCollision;			//当たり判定の開始時間
 	};
 
 	//モーションの種類
@@ -155,6 +157,7 @@ private:
 	float m_fRemBreak;
 	float m_fMaxBreak;
 	bool m_bNockBack;			//ノックバックしたか
+	bool m_bHitAtk;				//攻撃が当たったか
 	CModel*  m_pModel[MAX_ENEMY_PARTS];	//モデル
 	CLine*	 m_pLine[nMaxLine];			//ライン
 	CHP*	 m_pHP[GAUGE_MAX];			//HP

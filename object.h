@@ -33,6 +33,7 @@ public:
 		OBJTYPE_PLAYER,		//プレイヤー
 		OBJTYPE_ENEMY,		//エネミー
 		OBJTYPE_MESSAGE,	//メッセージ
+		OBJTYPE_MESH,		//メッシュ
 		OBJTYPE_MESHORBIT,	//軌跡
 		OBJTYPE_GAUGE,		//ゲージ
 		OBJTYPE_NUMBER,		//数値

@@ -153,9 +153,10 @@ END_MOTIONSET
 MOTIONSET
 	LOOP = 0		# ループするかどうか[0:ループしない / 1:ループする]
 	NUM_KEY = 5		# キー数
+	COLLISION = 160 # 当たり判定の開始時間
 
 	KEYSET			# --- << KEY : 0 / 5 >> ---
-		FRAME = 120
+		FRAME = 120 # 振り上げ
 		KEY	# ----- [ 0 ] -----
 			POS = 0.00 0.00 0.00
 			ROT = 0.06 0.00 0.00
@@ -173,7 +174,7 @@ MOTIONSET
 	END_KEYSET
 
 	KEYSET			# --- << KEY : 1 / 5 >> ---
-		FRAME = 15
+		FRAME = 15  # 振り落ろし始め
 		KEY	# ----- [ 0 ] -----
 			POS = 0.00 0.00 0.00
 			ROT = 0.28 0.00 0.00
@@ -191,7 +192,7 @@ MOTIONSET
 	END_KEYSET
 
 	KEYSET			# --- << KEY : 2 / 5 >> ---
-		FRAME = 10
+		FRAME = 10  # 振る
 		KEY	# ----- [ 0 ] -----
 			POS = 0.00 0.00 0.00
 			ROT = 0.28 0.00 0.00
@@ -209,7 +210,7 @@ MOTIONSET
 	END_KEYSET
 
 	KEYSET			# --- << KEY : 3 / 5 >> ---
-		FRAME = 50
+		FRAME = 50  # 持ち上げる
 		KEY	# ----- [ 0 ] -----
 			POS = 0.00 0.00 0.00
 			ROT = -0.31 0.00 0.00

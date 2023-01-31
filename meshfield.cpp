@@ -85,7 +85,7 @@ CMeshField *CMeshField::Create()
 			D3DXVECTOR3 pos(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f);
 			pMeshField->Init(D3DXVECTOR3(pos));
 		}
-		//pMeshField->SetObjType(OBJTYPE_ENEMY);
+		pMeshField->SetObjType(OBJTYPE_MESH);
 	}
 
 	return pMeshField;
