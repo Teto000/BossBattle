@@ -1214,15 +1214,19 @@ void CPlayer::SetMotion(MOTION_TYPE type, bool bLoop, int nNumKey)
 		// 現在値の計算
 		// (開始値 + (差分 * 相対値))
 		//-------------------------------------------------------
+		//初期値の取得
+		D3DXVECTOR3 initPos = m_pModel[i]->GetInitPos();
+		D3DXVECTOR3 initRot = m_pModel[i]->GetInitRot();
+
 		//位置
-		fPosX += key.pos.x + (fDifPosX * fNumRelative);
-		fPosY += key.pos.y + (fDifPosY * fNumRelative);
-		fPosZ += key.pos.z + (fDifPosZ * fNumRelative);
+		fPosX = initPos.x + key.pos.x + (fDifPosX * fNumRelative);
+		fPosY = initPos.y + key.pos.y + (fDifPosY * fNumRelative);
+		fPosZ = initPos.z + key.pos.z + (fDifPosZ * fNumRelative);
 
 		//向き
-		fRotX = key.rot.x + (fDifRotX * fNumRelative);
-		fRotY = key.rot.y + (fDifRotY * fNumRelative);
-		fRotZ = key.rot.z + (fDifRotZ * fNumRelative);
+		fRotX = initRot.x + key.rot.x + (fDifRotX * fNumRelative);
+		fRotY = initRot.y + key.rot.y + (fDifRotY * fNumRelative);
+		fRotZ = initRot.z + key.rot.z + (fDifRotZ * fNumRelative);
 
 		//-------------------------------------------------------
 		// モデル情報の設定

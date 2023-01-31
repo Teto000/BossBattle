@@ -24,8 +24,10 @@
 //========================
 CModel::CModel()
 {
-	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//位置の設定
-	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//向きの設定
+	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//位置
+	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//向き
+	m_initPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//位置の初期値
+	m_initRot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//向きの初期値
 	m_pModel = nullptr;
 	
 	for (int i = 0; i < nMaxLine; i++)
@@ -170,27 +172,6 @@ void CModel::Draw(D3DMATRIX* mtxPlayer)
 
 	for (int nCntMat = 0; nCntMat < (int)m_nNumMat; nCntMat++)
 	{
-		//if (nCntMat == CGame::GetPlayer()->GetSwordNumber())
-		//{//剣のマテリアルなら
-		//	if (CGame::GetPlayer()->GetStyle() == CPlayer::BATTLESTYLE_ATTACK)
-		//	{//アタックモードのとき
-		//		//マテリアルの色の設定
-		//		pMat[nCntMat].MatD3D.Diffuse = D3DXCOLOR(1.0f, 0.0f, 0.0f, 0.7f);
-		//	}
-		//	else if (CGame::GetPlayer()->GetStyle() == CPlayer::BATTLESTYLE_SPEED)
-		//	{//スピードモードのとき
-		//		pMat[nCntMat].MatD3D.Diffuse = D3DXCOLOR(0.0f, 0.0f, 1.0f, 0.7f);
-		//	}
-		//	else if (CGame::GetPlayer()->GetStyle() == CPlayer::BATTLESTYLE_COMBO)
-		//	{//コンボモードのとき
-		//		pMat[nCntMat].MatD3D.Diffuse = D3DXCOLOR(0.0f, 1.0f, 0.0f, 0.7f);
-		//	}
-		//	else
-		//	{//それ以外なら
-		//		pMat[nCntMat].MatD3D.Diffuse = D3DXCOLOR(1.0f, 1.0f, 0.3f, 0.7f);
-		//	}
-		//}
-
 		//マテリアルの設定
 		pDevice->SetMaterial(&pMat[nCntMat].MatD3D);
 
@@ -220,6 +201,8 @@ CModel* CModel::Create(LPCTSTR text, CModel* model, D3DXVECTOR3 pos, D3DXVECTOR3
 		pModel->m_modelName = text;
 		pModel->m_pModel = model;
 		pModel->m_rot = rot;
+		pModel->m_initPos = pos;	//位置の初期値
+		pModel->m_initRot = rot;	//向きの初期値
 
 		//初期化
 		pModel->Init(pos);

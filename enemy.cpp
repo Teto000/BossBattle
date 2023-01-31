@@ -187,7 +187,7 @@ void CEnemy::Uninit()
 void CEnemy::Update()
 {
 	//モーションのリセット
-	ChangeMotion(MOTION_IDOL);
+	//ChangeMotion(MOTION_IDOL);
 
 	//-------------------------
 	// モデルの更新
@@ -357,11 +357,11 @@ void CEnemy::SetModel()
 
 	//右ハンマー
 	m_pModel[1] = CModel::Create("data\\MODEL\\Enemy\\armR.x", m_pModel[0],
-		D3DXVECTOR3(-200.0f, 80.0f, -80.0f), D3DXVECTOR3(0.0f, -1.38f, 0.5f));
+		D3DXVECTOR3(-200.0f, 80.0f, -80.0f), D3DXVECTOR3(0.0f, 0.0f, 0.5f));
 
 	//左ハンマー
 	m_pModel[2] = CModel::Create("data\\MODEL\\Enemy\\armL.x", m_pModel[0],
-		D3DXVECTOR3(200.0f, 80.0f, -80.0f), D3DXVECTOR3(0.0f, 1.38f, -0.5f));
+		D3DXVECTOR3(200.0f, 80.0f, -80.0f), D3DXVECTOR3(0.0f, 0.0f, -0.5f));
 }
 
 //========================
@@ -466,7 +466,7 @@ void CEnemy::SubGauge(float fDamage, GAUGE type)
 void CEnemy::Attack()
 {
 	//変数宣言
-	//int nMaxAttackTime = 120;				//攻撃時間
+	int nMaxAttackTime = 120;				//攻撃時間
 	float fAttackArea = 250.0f;				//敵の攻撃範囲
 	float fMoveArea = fAttackArea - 30.0f;	//敵の移動範囲
 
@@ -484,7 +484,7 @@ void CEnemy::Attack()
 	//-------------------------
 	if (fDistance >= fMoveArea)
 	{//プレイヤーが範囲内にいないなら
-		Move();
+		//Move();
 	}
 
 	//-------------------------
@@ -492,13 +492,14 @@ void CEnemy::Attack()
 	//-------------------------
 	if (fDistance <= fAttackArea)
 	{//プレイヤーが範囲内にいるなら
-	 //攻撃までの時間を加算
+		//攻撃までの時間を加算
 		m_nAttackTime++;
 
-		//if (m_nAttackTime >= nMaxAttackTime)
-		//{//攻撃時間が値に達したら
-		//	CGame::GetPlayer()->SubLife(1);
-		//}
+		if (m_nAttackTime >= nMaxAttackTime)
+		{//攻撃時間が値に達したら
+			//攻撃モーションにする
+			ChangeMotion(MOTION_ATTACK);
+		}
 	}
 }
 
@@ -843,15 +844,19 @@ void CEnemy::SetMotion(MOTION_TYPE type, bool bLoop, int nNumKey)
 		// 現在値の計算
 		// (開始値 + (差分 * 相対値))
 		//-------------------------------------------------------
+		//初期値の取得
+		D3DXVECTOR3 initPos = m_pModel[i]->GetInitPos();
+		D3DXVECTOR3 initRot = m_pModel[i]->GetInitRot();
+
 		//位置
-		fPosX += key.pos.x + (fDifPosX * fNumRelative);
-		fPosY += key.pos.y + (fDifPosY * fNumRelative);
-		fPosZ += key.pos.z + (fDifPosZ * fNumRelative);
+		fPosX = initPos.x + key.pos.x + (fDifPosX * fNumRelative);
+		fPosY = initPos.y + key.pos.y + (fDifPosY * fNumRelative);
+		fPosZ = initPos.z + key.pos.z + (fDifPosZ * fNumRelative);
 
 		//向き
-		fRotX = key.rot.x + (fDifRotX * fNumRelative);
-		fRotY = key.rot.y + (fDifRotY * fNumRelative);
-		fRotZ = key.rot.z + (fDifRotZ * fNumRelative);
+		fRotX = initRot.x + key.rot.x + (fDifRotX * fNumRelative);
+		fRotY = initRot.y + key.rot.y + (fDifRotY * fNumRelative);
+		fRotZ = initRot.z + key.rot.z + (fDifRotZ * fNumRelative);
 
 		//-------------------------------------------------------
 		// モデル情報の設定
@@ -884,4 +889,12 @@ void CEnemy::ChangeMotion(MOTION_TYPE type)
 {
 	//モーションの変更
 	m_type = type;
+
+	//モーション情報の初期化
+	/*if (m_type == MOTION_ATTACK)
+	{
+		m_nCurrentKey = 0;
+		m_nCntMotion = 0;
+		m_nAttackTime = 0;
+	}*/
 }

@@ -23,7 +23,7 @@ class CHP;		//HP
 // マクロ定義
 //--------------------------------
 #define MAX_ENEMY_PARTS	(3)		//モデルパーツの最大数
-#define MAX_ENEMY_KEY	(56)	//キーの最大数
+#define MAX_ENEMY_KEY	(24)	//キーの最大数
 
 //================================
 // エネミークラスの定義
@@ -58,7 +58,7 @@ public:
 	{
 		MOTION_IDOL = 0,	//待機
 		MOTION_MOVE,		//移動
-		//MOTION_ATTACK,	//通常攻撃
+		MOTION_ATTACK,		//叩きつけ攻撃
 		MOTION_MAX
 	};
 

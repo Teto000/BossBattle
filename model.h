@@ -55,6 +55,8 @@ public:
 	//----------------
 	D3DXVECTOR3 GetPos()		{ return m_pos; }		//位置の取得
 	D3DXVECTOR3 GetRot()		{ return m_rot; }		//向きの取得
+	D3DXVECTOR3 GetInitPos()	{ return m_initPos; }	//位置の初期値の取得
+	D3DXVECTOR3 GetInitRot()	{ return m_initRot; }	//向きの初期値の取得
 	D3DXMATRIX GetmtxWorld()	{ return m_mtxWorld; }	//ワールドマトリックスの取得
 	LPD3DXMESH GetMesh()		{ return m_pMesh; };	//メッシュ情報の取得
 
@@ -80,6 +82,8 @@ private:
 	D3DXMATRIX m_mtxParent;		//親のマトリックス
 	D3DXVECTOR3 m_pos;			//位置
 	D3DXVECTOR3 m_rot;			//向き
+	D3DXVECTOR3 m_initPos;		//位置の初期値
+	D3DXVECTOR3 m_initRot;		//向きの初期値
 	CModel* m_pModel;			//親モデルへのポインタ
 	LPCTSTR m_modelName;		//モデルのパス
 	MODELTYPE m_type;			//種類
