@@ -656,51 +656,54 @@ void CPlayer::AttackManager()
 //================================
 void CPlayer::Attack()
 {
-	if (GetOutAttack(true, false))
-	{//攻撃モーション中なら
-		//------------------------------------------
-		// モーションと攻撃時間を合わせる
-		//------------------------------------------
-		int nAttackFream = 0;
-		int nOutRigor = 0;
-		for (int i = 0; i < m_aMotionSet[m_type].nNumKey; i++)
-		{//キー数-1回分回す
-			//攻撃モーションのフレーム数を合計する
-			nAttackFream += m_aMotionSet[m_type].aKeySet[i].nFrame;
-
-			if (i != m_aMotionSet[m_type].nNumKey - 1)
-			{//硬直キーじゃないなら
-				//フレーム数を加算
-				nOutRigor += m_aMotionSet[m_type].aKeySet[i].nFrame;
-			}
-		}
-
-		//------------------------------------------
-		// 攻撃の切り替え
-		//------------------------------------------
-		if (nOutRigor <= m_status.nAttackTime && m_bFinishAttack)
-		{//硬直以外のフレーム数を超えた & 攻撃が終わっているなら
-			//int a = 0;
-		}
-
-		//------------------------------------------
-		// フレーム数の加算
-		//------------------------------------------
-		if (nAttackFream <= m_status.nAttackTime)
-		{//攻撃時間が攻撃モーションのフレーム数の合計を超えたら
-			//待機モーションにする
-			ChangeMotion(MOTION_IDOL);
-		}
-		else
-		{
-			//攻撃時間を加算
-			m_status.nAttackTime++;
-		}
-		//------------------------------------------
-		// 剣との当たり判定
-		//------------------------------------------
-		HitSword();
+	if (GetOutAttack(false, true))
+	{//攻撃モーション中じゃないなら
+		return;
 	}
+
+	//------------------------------------------
+	// モーションと攻撃時間を合わせる
+	//------------------------------------------
+	int nAttackFream = 0;
+	int nOutRigor = 0;
+	for (int i = 0; i < m_aMotionSet[m_type].nNumKey; i++)
+	{//キー数-1回分回す
+		//攻撃モーションのフレーム数を合計する
+		nAttackFream += m_aMotionSet[m_type].aKeySet[i].nFrame;
+
+		if (i != m_aMotionSet[m_type].nNumKey - 1)
+		{//硬直キーじゃないなら
+			//フレーム数を加算
+			nOutRigor += m_aMotionSet[m_type].aKeySet[i].nFrame;
+		}
+	}
+
+	//------------------------------------------
+	// 攻撃の切り替え
+	//------------------------------------------
+	if (nOutRigor <= m_status.nAttackTime && m_bFinishAttack)
+	{//硬直以外のフレーム数を超えた & 攻撃が終わっているなら
+		//int a = 0;
+	}
+
+	//------------------------------------------
+	// フレーム数の加算
+	//------------------------------------------
+	if (nAttackFream <= m_status.nAttackTime)
+	{//攻撃時間が攻撃モーションのフレーム数の合計を超えたら
+		//待機モーションにする
+		ChangeMotion(MOTION_IDOL);
+	}
+	else
+	{
+		//攻撃時間を加算
+		m_status.nAttackTime++;
+	}
+
+	//------------------------------------------
+	// 剣との当たり判定
+	//------------------------------------------
+	HitSword();
 }
 
 //================================
@@ -708,9 +711,11 @@ void CPlayer::Attack()
 //================================
 void CPlayer::HitSword()
 {
+	//変数宣言
 	D3DXVECTOR3 offsetPos(0.0f, 0.0f, -80.0f);	//剣先までのオフセット
+	float fSphereSize = 250.0f;					//球の直径
 
-	if (CUtility::ColliaionWeapon(offsetPos, 250.0f, m_mtxWorld, CObject::OBJTYPE_ENEMY)
+	if (CUtility::ColliaionWeapon(offsetPos, fSphereSize, m_mtxWorld, CObject::OBJTYPE_ENEMY)
 		&& !m_bFinishAttack
 		&& m_status.nAttackTime >= m_aMotionSet[m_type].nStartCollision)
 	{//剣と当たっている & 攻撃が終わっていない & 当たり判定の有効時間なら

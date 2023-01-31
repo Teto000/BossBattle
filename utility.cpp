@@ -262,7 +262,7 @@ bool CUtility::ColliaionWeapon(D3DXVECTOR3 offset,float fDiameter,
 		//-----------------------------
 		if (targetType == CObject::OBJTYPE_PLAYER)
 		{//相手がプレイヤーなら
-		 //ダウンキャスト
+			//ダウンキャスト
 			CPlayer* pPlayer = (CPlayer*)pObj;
 
 			//情報の取得
@@ -270,7 +270,7 @@ bool CUtility::ColliaionWeapon(D3DXVECTOR3 offset,float fDiameter,
 		}
 		else if (targetType == CObject::OBJTYPE_ENEMY)
 		{//相手が敵なら
-		 //ダウンキャスト
+			//ダウンキャスト
 			CEnemy* pEnemy = (CEnemy*)pObj;
 
 			//情報の取得

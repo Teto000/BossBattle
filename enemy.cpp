@@ -186,8 +186,14 @@ void CEnemy::Uninit()
 //========================
 void CEnemy::Update()
 {
-	//モーションのリセット
-	//ChangeMotion(MOTION_IDOL);
+	//--------------------------------
+	// モーションのリセット
+	//--------------------------------
+	if (m_type != MOTION_ATTACK)
+	{//攻撃モーションじゃないなら
+		//待機モーションにする
+		ChangeMotion(MOTION_IDOL);
+	}
 
 	//-------------------------
 	// モデルの更新
@@ -232,9 +238,9 @@ void CEnemy::Update()
 	else
 	{//敵がブレイクしていないなら
 		//------------------------
-		// 攻撃処理
+		// 敵の行動
 		//------------------------
-		Attack();
+		EnemyAI();
 	}
 
 	//-------------------------
@@ -463,7 +469,7 @@ void CEnemy::SubGauge(float fDamage, GAUGE type)
 //========================
 // 攻撃処理
 //========================
-void CEnemy::Attack()
+void CEnemy::EnemyAI()
 {
 	//変数宣言
 	int nMaxAttackTime = 120;				//攻撃時間
@@ -490,8 +496,8 @@ void CEnemy::Attack()
 	//-------------------------
 	// 攻撃処理
 	//-------------------------
-	if (fDistance <= fAttackArea)
-	{//プレイヤーが範囲内にいるなら
+	if (m_type != MOTION_ATTACK && fDistance <= fAttackArea)
+	{//攻撃モーション中じゃない & プレイヤーが範囲内にいるなら
 		//攻撃までの時間を加算
 		m_nAttackTime++;
 
@@ -501,11 +507,69 @@ void CEnemy::Attack()
 			ChangeMotion(MOTION_ATTACK);
 		}
 	}
+
+	//攻撃処理
+	Attack();
 }
 
-//========================
+//==========================================
+// 攻撃処理
+//==========================================
+void CEnemy::Attack()
+{
+	if (m_type != MOTION_ATTACK)
+	{//攻撃モーション中じゃないなら
+		return;
+	}
+
+	//------------------------------------------
+	// モーションと攻撃時間を合わせる
+	//------------------------------------------
+	int nAttackFream = 0;
+	int nOutRigor = 0;
+	for (int i = 0; i < m_aMotionSet[m_type].nNumKey; i++)
+	{//キー数-1回分回す
+		//攻撃モーションのフレーム数を合計する
+		nAttackFream += m_aMotionSet[m_type].aKeySet[i].nFrame;
+
+		if (i != m_aMotionSet[m_type].nNumKey - 1)
+		{//硬直キーじゃないなら
+		 //フレーム数を加算
+			nOutRigor += m_aMotionSet[m_type].aKeySet[i].nFrame;
+		}
+	}
+
+	//------------------------------------------
+	// フレーム数の加算
+	//------------------------------------------
+	if (nAttackFream <= m_nAttackTime)
+	{//攻撃時間が攻撃モーションのフレーム数の合計を超えたら
+		//待機モーションにする
+		ChangeMotion(MOTION_IDOL);
+	}
+	else
+	{
+		//攻撃時間を加算
+		m_nAttackTime++;
+	}
+
+	//------------------------------------------
+	// ハンマーの当たり判定
+	//------------------------------------------
+	HitHummer();
+}
+
+//==========================================
+// ハンマーの当たり判定
+//==========================================
+void CEnemy::HitHummer()
+{
+
+}
+
+//==========================================
 // ノックバックする処理
-//========================
+//==========================================
 void CEnemy::NockBack()
 {
 	if (CGame::GetPlayer()->GetHitAttack())
@@ -538,9 +602,9 @@ void CEnemy::NockBack()
 	}
 }
 
-//========================
+//==========================================
 // 移動処理
-//========================
+//==========================================
 void CEnemy::Move()
 {
 	//------------------------------
@@ -891,10 +955,10 @@ void CEnemy::ChangeMotion(MOTION_TYPE type)
 	m_type = type;
 
 	//モーション情報の初期化
-	/*if (m_type == MOTION_ATTACK)
+	if (m_type == MOTION_ATTACK)
 	{
 		m_nCurrentKey = 0;
 		m_nCntMotion = 0;
 		m_nAttackTime = 0;
-	}*/
+	}
 }

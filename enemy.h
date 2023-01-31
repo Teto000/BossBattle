@@ -113,7 +113,9 @@ private:
 	void SetModel();	//モデルの設定
 	void SetLine();		//線の設置
 	void UpdateLine();	//線の更新
-	void Attack();		//攻撃
+	void EnemyAI();		//敵の動きを管理
+	void Attack();		//攻撃処理
+	void HitHummer();	//ハンマーの当たり判定
 	void NockBack();	//ノックバックする処理
 	void Move();		//移動
 
