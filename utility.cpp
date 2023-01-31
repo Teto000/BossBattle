@@ -267,19 +267,12 @@ bool CUtility::ColliaionWeapon(D3DXVECTOR3 offset,float fDiameter,
 		//-----------------------------
 		if (targetType == CObject::OBJTYPE_PLAYER)
 		{//相手がプレイヤーなら
-			//ダウンキャスト
-			CPlayer* pPlayer = (CPlayer*)pObj;
-
 			//情報の取得
-			targetPos = pPlayer->GetPosition();
+			targetPos = CGame::GetPlayer()->GetPosition();
 		}
 		else if (targetType == CObject::OBJTYPE_ENEMY)
 		{//相手が敵なら
-			//ダウンキャスト
-			CEnemy* pEnemy = (CEnemy*)pObj;
-
-			//情報の取得
-			targetPos = pEnemy->GetPosition();
+			targetPos = CGame::GetEnemy()->GetPosition();
 		}
 
 		//2点間の距離を求める

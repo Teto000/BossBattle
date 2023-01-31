@@ -571,10 +571,10 @@ void CEnemy::HitHummer()
 	// 変数宣言
 	//----------------------------------
 	D3DXVECTOR3 offset(0.0f, 280.0f, 0.0f);		//武器の先へのオフセット座標
-	float fSphereSize = 200.0f;	//球の直径
 	D3DXMATRIX mtxR = m_pModel[1]->GetmtxWorld();		//右ハンマーのマトリックス
 	D3DXMATRIX mtxL = m_pModel[2]->GetmtxWorld();		//左ハンマーのマトリックス
 	CObject::EObjType player = CObject::OBJTYPE_PLAYER;	//叩く相手がプレイヤー
+	float fSphereSize = 250.0f;	//球の直径
 
 	//----------------------------------
 	// 当たり判定
@@ -582,11 +582,13 @@ void CEnemy::HitHummer()
 	if (CUtility::ColliaionWeapon(offset, fSphereSize, mtxR, player)
 		|| CUtility::ColliaionWeapon(offset, fSphereSize, mtxL, player))
 	{//ハンマーがプレイヤーに当たった
+
 		if (m_nAttackTime >= m_aMotionSet[m_type].nStartCollision && !m_bHitAtk)
 		{//攻撃時間が当たり判定の開始時間を超えた & 攻撃が当たっていない
 			CGame::GetPlayer()->SubLife(20);
 			m_bHitAtk = true;
 		}
+
 	}
 }
 
