@@ -53,6 +53,9 @@ public:
 		KEY_SET aKeySet[MAX_ENEMY_KEY];	//キーセット情報
 
 		int nStartCollision;			//当たり判定の開始時間
+		int nDamage;					//ダメージ量
+		int nNumHit;					//ヒット数
+		int nHitInterval;				//ヒット間隔
 	};
 
 	//モーションの種類
@@ -152,6 +155,8 @@ private:
 	int m_nAttackTime;			//攻撃までの時間
 	int m_nBreakTime;			//ブレイク状態の時間
 	int m_nCntFream;			//フレーム数のカウント
+	int m_nHitTime;				//ヒットするまでの時間
+	int m_nCntHit;				//ヒット数を数える
 	float m_fLife;				//体力
 	float m_fRemLife;			//残り体力(%)
 	float m_fMaxLife;			//最大体力

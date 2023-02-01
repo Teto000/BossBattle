@@ -90,7 +90,10 @@ CEnemy::CEnemy() : CObject(0)
 
 			m_aMotionSet[nCnt].bLoop = false;			//ループするかどうか
 			m_aMotionSet[nCnt].aKeySet[i].nFrame = 0;	//フレーム数
-			m_aMotionSet[nCnt].nStartCollision;			//当たり判定の開始時間
+			m_aMotionSet[nCnt].nStartCollision = 0;		//当たり判定の開始時間
+			m_aMotionSet[nCnt].nDamage = 0;				//ダメージ量
+			m_aMotionSet[nCnt].nNumHit = 0;				//ヒット数
+			m_aMotionSet[nCnt].nHitInterval = 0;		//ヒット間隔
 		}
 
 		m_aMotionSet[nCnt].nNumKey = 0;
@@ -517,7 +520,6 @@ void CEnemy::EnemyAI()
 		{//攻撃時間が値に達したら
 			//攻撃モーションにする
 			ChangeMotion(MOTION_SPIN);
-			m_nAttackTime = 0;
 		}
 	}
 
@@ -554,7 +556,6 @@ void CEnemy::Attack()
 	{//フレーム数が攻撃モーションのフレーム数の合計を超えたら
 		//待機モーションにする
 		ChangeMotion(MOTION_IDOL);
-		m_nCntFream = 0;
 	}
 	else
 	{
@@ -588,15 +589,33 @@ void CEnemy::HitHummer()
 	if (CUtility::ColliaionWeapon(offset, fSphereSize, mtxR, player)
 		|| CUtility::ColliaionWeapon(offset, fSphereSize, mtxL, player))
 	{//ハンマーがプレイヤーに当たった
-		if (m_nAttackTime >= m_aMotionSet[m_type].nStartCollision && !m_bHitAtk)
+		if (m_nAttackTime >= m_aMotionSet[m_type].nStartCollision && !m_bHitAtk
+			&& m_aMotionSet[m_type].nNumHit > m_nCntHit)
 		{//攻撃時間が当たり判定の開始時間を超えた & 攻撃が当たっていない
-			CGame::GetPlayer()->SubLife(20);			//プレイヤーにダメージ
-			m_bHitAtk = true;
+		 //ヒット数が上限じゃないなら
+
+			//プレイヤーにダメージ
+			CGame::GetPlayer()->SubLife(m_aMotionSet[m_type].nDamage);
+			m_bHitAtk = true;					//当たっている状態にする
+			m_nCntHit++;
 		}
 
 		if (m_type == MOTION_SPIN)
 		{
 			CGame::GetCamera()->ShakeCamera(10, 0.2f);	//カメラの振動
+		}
+	}
+
+	//----------------------------------
+	// 多段ヒットする処理
+	//----------------------------------
+	if (m_bHitAtk)
+	{//当たっている状態
+		m_nHitTime++;
+
+		if (m_nHitTime >= m_aMotionSet[m_type].nHitInterval)
+		{//ヒットまでの時間がヒット間隔を超えたら
+			m_bHitAtk = false;
 		}
 	}
 }
@@ -773,8 +792,32 @@ void CEnemy::GetFileMotion()
 				//-------------------------------
 				else if (strcmp(&cTextHead[0], "COLLISION") == 0)
 				{//頭文字がCOLLISIONなら
-				 //文字列からキーの最大数を読み取る
+					//文字列からキーの最大数を読み取る
 					sscanf(cText, "%s = %d", &cTextHead, &m_aMotionSet[nNumMotion].nStartCollision);
+				}
+				//-------------------------------
+				// ダメージ量
+				//-------------------------------
+				else if (strcmp(&cTextHead[0], "NUM_DAMAGE") == 0)
+				{//頭文字がDAMAGEなら
+					//文字列からキーの最大数を読み取る
+					sscanf(cText, "%s = %d", &cTextHead, &m_aMotionSet[nNumMotion].nDamage);
+				}
+				//-------------------------------
+				// ヒット数
+				//-------------------------------
+				else if (strcmp(&cTextHead[0], "NUM_HIT") == 0)
+				{//頭文字がNUM_HITなら
+					//文字列からキーの最大数を読み取る
+					sscanf(cText, "%s = %d", &cTextHead, &m_aMotionSet[nNumMotion].nNumHit);
+				}
+				//-------------------------------
+				// ヒット間隔
+				//-------------------------------
+				else if (strcmp(&cTextHead[0], "HIT_INTERVAL") == 0)
+				{//頭文字がHIT_INTERVALなら
+					//文字列からキーの最大数を読み取る
+					sscanf(cText, "%s = %d", &cTextHead, &m_aMotionSet[nNumMotion].nHitInterval);
 				}
 				//========================================
 				// キーセット情報
@@ -999,11 +1042,19 @@ void CEnemy::ChangeMotion(MOTION_TYPE type)
 	//モーションの変更
 	m_type = type;
 
-	//モーション情報の初期化
+	//--------------------------
+	// 情報の初期化
+	//--------------------------
 	if (m_type == MOTION_SPIN)
-	{
+	{//攻撃処理なら
+		//モーションの初期化
 		m_nCurrentKey = 0;
 		m_nCntMotion = 0;
-		m_bHitAtk = false;
+
+		//攻撃関連の初期化
+		m_bHitAtk = false;	//攻撃を当ててない状態
+		m_nCntFream = 0;	//攻撃フレームを初期化
+		m_nCntHit = 0;		//ヒットカウントを初期化
+		m_nHitTime = 0;		//ヒット時間を初期化
 	}
 }
