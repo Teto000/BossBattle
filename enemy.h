@@ -61,6 +61,7 @@ public:
 		MOTION_IDOL = 0,	//‘Ò‹@
 		MOTION_MOVE,		//ˆÚ“®
 		MOTION_ATTACK,		//’@‚«‚Â‚¯UŒ‚
+		MOTION_SPIN,		//‰ñ“]UŒ‚
 		MOTION_MAX
 	};
 

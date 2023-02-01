@@ -193,7 +193,7 @@ void CEnemy::Update()
 	//--------------------------------
 	// モーションのリセット
 	//--------------------------------
-	if (m_type != MOTION_ATTACK)
+	if (m_type != MOTION_SPIN)
 	{//攻撃モーションじゃないなら
 		//待機モーションにする
 		ChangeMotion(MOTION_IDOL);
@@ -491,7 +491,7 @@ void CEnemy::EnemyAI()
 	//-------------------------
 	// プレイヤーまで移動
 	//-------------------------
-	/*if (m_type != MOTION_ATTACK && fDistance >= fMoveArea)
+	/*if (m_type != MOTION_SPIN && fDistance >= fMoveArea)
 	{//攻撃中じゃない & プレイヤーが範囲内にいないなら
 		Rotation(playerPos);	//回転
 		Move(playerPos);		//移動
@@ -500,7 +500,7 @@ void CEnemy::EnemyAI()
 	//-------------------------
 	// プレイヤーの方を向く
 	//-------------------------
-	if (m_type == MOTION_ATTACK && m_nCntFream <= m_aMotionSet[m_type].aKeySet[0].nFrame)
+	if (m_type == MOTION_SPIN && m_nCntFream <= m_aMotionSet[m_type].aKeySet[0].nFrame)
 	{//攻撃モーション中 & ハンマーを振り上げている間なら
 		Rotation(playerPos);	//回転
 	}
@@ -508,7 +508,7 @@ void CEnemy::EnemyAI()
 	//-------------------------
 	// 攻撃処理
 	//-------------------------
-	if (m_type != MOTION_ATTACK && fDistance <= fAttackArea)
+	if (m_type != MOTION_SPIN && fDistance <= fAttackArea)
 	{//攻撃モーション中じゃない & プレイヤーが範囲内にいるなら
 		//攻撃までの時間を加算
 		m_nAttackTime++;
@@ -516,7 +516,7 @@ void CEnemy::EnemyAI()
 		if (m_nAttackTime >= nMaxAttackTime)
 		{//攻撃時間が値に達したら
 			//攻撃モーションにする
-			ChangeMotion(MOTION_ATTACK);
+			ChangeMotion(MOTION_SPIN);
 			m_nAttackTime = 0;
 		}
 	}
@@ -593,9 +593,10 @@ void CEnemy::HitHummer()
 			CGame::GetPlayer()->SubLife(20);			//プレイヤーにダメージ
 			m_bHitAtk = true;
 		}
-		else if (m_type == MOTION_ATTACK)
+
+		if (m_type == MOTION_SPIN)
 		{
-			CGame::GetCamera()->ShakeCamera(10, 0.1f);	//カメラの振動
+			CGame::GetCamera()->ShakeCamera(10, 0.2f);	//カメラの振動
 		}
 	}
 }
@@ -999,7 +1000,7 @@ void CEnemy::ChangeMotion(MOTION_TYPE type)
 	m_type = type;
 
 	//モーション情報の初期化
-	if (m_type == MOTION_ATTACK)
+	if (m_type == MOTION_SPIN)
 	{
 		m_nCurrentKey = 0;
 		m_nCntMotion = 0;
