@@ -119,7 +119,8 @@ private:
 	void Attack();		//攻撃処理
 	void HitHummer();	//ハンマーの当たり判定
 	void NockBack();	//ノックバックする処理
-	void Move();		//移動
+	void Move(D3DXVECTOR3 targetPos);		//移動
+	void Rotation(D3DXVECTOR3 targetPos);	//回転
 
 	//モーション
 	void GetFileMotion();										//ファイルを使ったモーションの取得

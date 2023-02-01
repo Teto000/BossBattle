@@ -477,8 +477,7 @@ void CEnemy::EnemyAI()
 {
 	//変数宣言
 	int nMaxAttackTime = 300;				//攻撃時間
-	float fAttackArea = 250.0f;				//敵の攻撃範囲
-	float fMoveArea = fAttackArea - 30.0f;	//敵の移動範囲
+	float fAttackArea = 1000.0f;			//敵の攻撃範囲
 
 	//プレイヤーの位置を取得
 	D3DXVECTOR3 playerPos = CGame::GetPlayer()->GetPosition();
@@ -492,11 +491,20 @@ void CEnemy::EnemyAI()
 	//-------------------------
 	// プレイヤーまで移動
 	//-------------------------
-	if (fDistance >= fMoveArea)
-	{//プレイヤーが範囲内にいないなら
-		//Move();
-	}
+	/*if (m_type != MOTION_ATTACK && fDistance >= fMoveArea)
+	{//攻撃中じゃない & プレイヤーが範囲内にいないなら
+		Rotation(playerPos);	//回転
+		Move(playerPos);		//移動
+	}*/
 
+	//-------------------------
+	// プレイヤーの方を向く
+	//-------------------------
+	if (m_type == MOTION_ATTACK && m_nCntFream <= m_aMotionSet[m_type].aKeySet[0].nFrame)
+	{//攻撃モーション中 & ハンマーを振り上げている間なら
+		Rotation(playerPos);	//回転
+	}
+	
 	//-------------------------
 	// 攻撃処理
 	//-------------------------
@@ -534,7 +542,7 @@ void CEnemy::Attack()
 
 		if (i != m_aMotionSet[m_type].nNumKey - 1)
 		{//硬直キーじゃないなら
-		 //フレーム数を加算
+			//モーションのフレーム数を加算
 			nOutRigor += m_aMotionSet[m_type].aKeySet[i].nFrame;
 		}
 	}
@@ -543,13 +551,14 @@ void CEnemy::Attack()
 	// 攻撃の終了
 	//------------------------------------------
 	if (m_nCntFream >= nAttackFream)
-	{//攻撃時間が攻撃モーションのフレーム数の合計を超えたら
+	{//フレーム数が攻撃モーションのフレーム数の合計を超えたら
 		//待機モーションにする
 		ChangeMotion(MOTION_IDOL);
 		m_nCntFream = 0;
 	}
 	else
 	{
+		//フレーム数のカウント
 		m_nCntFream++;
 	}
 
@@ -579,13 +588,15 @@ void CEnemy::HitHummer()
 	if (CUtility::ColliaionWeapon(offset, fSphereSize, mtxR, player)
 		|| CUtility::ColliaionWeapon(offset, fSphereSize, mtxL, player))
 	{//ハンマーがプレイヤーに当たった
-
 		if (m_nAttackTime >= m_aMotionSet[m_type].nStartCollision && !m_bHitAtk)
 		{//攻撃時間が当たり判定の開始時間を超えた & 攻撃が当たっていない
-			CGame::GetPlayer()->SubLife(20);
+			CGame::GetPlayer()->SubLife(20);			//プレイヤーにダメージ
 			m_bHitAtk = true;
 		}
-
+		else if (m_type == MOTION_ATTACK)
+		{
+			CGame::GetCamera()->ShakeCamera(10, 0.1f);	//カメラの振動
+		}
 	}
 }
 
@@ -627,17 +638,36 @@ void CEnemy::NockBack()
 //==========================================
 // 移動処理
 //==========================================
-void CEnemy::Move()
+void CEnemy::Move(D3DXVECTOR3 targetPos)
 {
 	//------------------------------
-	// プレイヤーの方を向く
+	// プレイヤーに向かって移動
 	//------------------------------
-	//プレイヤーの位置を取得
-	D3DXVECTOR3 playerPos(CGame::GetPlayer()->GetPosition());
+	//プレイヤーと敵のベクトルを求める
+	D3DXVECTOR3 vec(targetPos - m_pos);
 
+	//ベクトルの正規化
+	D3DXVec3Normalize(&vec, &vec);
+
+	//プレイヤーに向かって移動
+	m_move = vec * 1.5f;
+	m_pos += m_move;
+
+	//移動モーションにする
+	ChangeMotion(MOTION_MOVE);
+}
+
+//==========================================
+// 回転処理
+//==========================================
+void CEnemy::Rotation(D3DXVECTOR3 targetPos)
+{
+	//------------------------------
+	// 目的の方向を向く
+	//------------------------------
 	//2点間の距離を求める
-	float X = m_pos.x - playerPos.x;
-	float Z = m_pos.z - playerPos.z;
+	float X = m_pos.x - targetPos.x;
+	float Z = m_pos.z - targetPos.z;
 
 	//角度の設定
 	float angle = atan2f(X, Z);
@@ -660,28 +690,12 @@ void CEnemy::Move()
 	//-------------------------------
 	// 目的の角度まで回転する
 	//-------------------------------
-	m_rot.y += (m_rotDest.y - m_rot.y) * 0.03f;	//減衰処理
+	m_rot.y += (m_rotDest.y - m_rot.y) * 0.1f;	//減衰処理
 
 	//-------------------------------
 	// 角度の正規化
 	//-------------------------------
 	m_rot.y = CUtility::GetNorRot(m_rot.y);
-
-	//------------------------------
-	// プレイヤーに向かって移動
-	//------------------------------
-	//プレイヤーと敵のベクトルを求める
-	D3DXVECTOR3 vec(playerPos - m_pos);
-
-	//ベクトルの正規化
-	D3DXVec3Normalize(&vec, &vec);
-
-	//プレイヤーに向かって移動
-	m_move = vec * 1.5f;
-	m_pos += m_move;
-
-	//移動モーションにする
-	ChangeMotion(MOTION_MOVE);
 }
 
 //==========================================
