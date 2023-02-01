@@ -520,6 +520,7 @@ void CEnemy::EnemyAI()
 		{//攻撃時間が値に達したら
 			//攻撃モーションにする
 			ChangeMotion(MOTION_SPIN);
+			m_nAttackTime = 0;
 		}
 	}
 
@@ -589,7 +590,8 @@ void CEnemy::HitHummer()
 	if (CUtility::ColliaionWeapon(offset, fSphereSize, mtxR, player)
 		|| CUtility::ColliaionWeapon(offset, fSphereSize, mtxL, player))
 	{//ハンマーがプレイヤーに当たった
-		if (m_nAttackTime >= m_aMotionSet[m_type].nStartCollision && !m_bHitAtk
+		if (m_nCntFream >= m_aMotionSet[m_type].nStartCollision
+			&& !m_bHitAtk
 			&& m_aMotionSet[m_type].nNumHit > m_nCntHit)
 		{//攻撃時間が当たり判定の開始時間を超えた & 攻撃が当たっていない
 		 //ヒット数が上限じゃないなら
