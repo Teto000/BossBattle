@@ -44,6 +44,7 @@ CEnemy::CEnemy() : CObject(0)
 	m_worldMax = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//ワールド上の最小値
 	m_nMoveTime = 0;		//移動までの時間
 	m_nBreakTime = 0;		//ブレイク状態の時間
+	m_nCntFream = 0;		//フレーム数のカウント
 	m_fLife = 0.0f;			//体力
 	m_fRemLife = 0.0f;		//残り体力(%)
 	m_fMaxLife = 0.0f;		//最大体力
@@ -475,7 +476,7 @@ void CEnemy::SubGauge(float fDamage, GAUGE type)
 void CEnemy::EnemyAI()
 {
 	//変数宣言
-	int nMaxAttackTime = 120;				//攻撃時間
+	int nMaxAttackTime = 300;				//攻撃時間
 	float fAttackArea = 250.0f;				//敵の攻撃範囲
 	float fMoveArea = fAttackArea - 30.0f;	//敵の移動範囲
 
@@ -508,6 +509,7 @@ void CEnemy::EnemyAI()
 		{//攻撃時間が値に達したら
 			//攻撃モーションにする
 			ChangeMotion(MOTION_ATTACK);
+			m_nAttackTime = 0;
 		}
 	}
 
@@ -520,11 +522,6 @@ void CEnemy::EnemyAI()
 //==========================================
 void CEnemy::Attack()
 {
-	if (m_type != MOTION_ATTACK)
-	{//攻撃モーション中じゃないなら
-		return;
-	}
-
 	//------------------------------------------
 	// モーションと攻撃時間を合わせる
 	//------------------------------------------
@@ -543,17 +540,17 @@ void CEnemy::Attack()
 	}
 
 	//------------------------------------------
-	// フレーム数の加算
+	// 攻撃の終了
 	//------------------------------------------
-	if (nAttackFream <= m_nAttackTime)
+	if (m_nCntFream >= nAttackFream)
 	{//攻撃時間が攻撃モーションのフレーム数の合計を超えたら
 		//待機モーションにする
 		ChangeMotion(MOTION_IDOL);
+		m_nCntFream = 0;
 	}
 	else
 	{
-		//攻撃時間を加算
-		m_nAttackTime++;
+		m_nCntFream++;
 	}
 
 	//------------------------------------------
@@ -570,7 +567,7 @@ void CEnemy::HitHummer()
 	//----------------------------------
 	// 変数宣言
 	//----------------------------------
-	D3DXVECTOR3 offset(0.0f, 280.0f, 0.0f);		//武器の先へのオフセット座標
+	D3DXVECTOR3 offset(0.0f, 280.0f, 0.0f);				//武器の先へのオフセット座標
 	D3DXMATRIX mtxR = m_pModel[1]->GetmtxWorld();		//右ハンマーのマトリックス
 	D3DXMATRIX mtxL = m_pModel[2]->GetmtxWorld();		//左ハンマーのマトリックス
 	CObject::EObjType player = CObject::OBJTYPE_PLAYER;	//叩く相手がプレイヤー
@@ -992,7 +989,6 @@ void CEnemy::ChangeMotion(MOTION_TYPE type)
 	{
 		m_nCurrentKey = 0;
 		m_nCntMotion = 0;
-		m_nAttackTime = 0;
 		m_bHitAtk = false;
 	}
 }

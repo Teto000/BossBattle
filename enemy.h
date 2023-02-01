@@ -149,6 +149,7 @@ private:
 	int m_nMoveTime;			//移動までの時間
 	int m_nAttackTime;			//攻撃までの時間
 	int m_nBreakTime;			//ブレイク状態の時間
+	int m_nCntFream;			//フレーム数のカウント
 	float m_fLife;				//体力
 	float m_fRemLife;			//残り体力(%)
 	float m_fMaxLife;			//最大体力
