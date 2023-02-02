@@ -120,5 +120,5 @@ CNumber *CNumber::Create(D3DXVECTOR3 pos, int nValue)
 //=======================
 void CNumber::Set(int nDigit)
 {
-	CObject2D::SetAnimation(nDigit, 10);
+	CObject2D::SetAnimation((float)nDigit, 10);
 }

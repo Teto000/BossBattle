@@ -630,7 +630,7 @@ void CEnemy::HitHummer()
 		 //ヒット数が上限じゃないなら
 
 			//プレイヤーにダメージ
-			CGame::GetPlayer()->SubLife(m_aMotionSet[m_type].nDamage);
+			CGame::GetPlayer()->SubLife((float)m_aMotionSet[m_type].nDamage);
 			m_bHitAtk = true;					//当たっている状態にする
 			m_nCntHit++;
 
