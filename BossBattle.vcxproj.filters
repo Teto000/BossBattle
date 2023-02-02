@@ -164,6 +164,9 @@
     <ClCompile Include="motion.cpp">
       <Filter>Main</Filter>
     </ClCompile>
+    <ClCompile Include="stage.cpp">
+      <Filter>Main\Object\ObjectX</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -285,6 +288,9 @@
     </ClInclude>
     <ClInclude Include="motion.h">
       <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="stage.h">
+      <Filter>Main\Object\ObjectX</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

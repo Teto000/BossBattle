@@ -482,7 +482,7 @@ void CEnemy::EnemyAI()
 	//変数宣言
 	int nMaxAttackTime = 300;		//攻撃時間
 	float fAttackArea = 1000.0f;	//敵の攻撃範囲
-	float fMoveArea = 200.0f;
+	float fMoveArea = 500.0f;
 
 	//プレイヤーの位置を取得
 	D3DXVECTOR3 playerPos = CGame::GetPlayer()->GetPosition();
@@ -506,7 +506,7 @@ void CEnemy::EnemyAI()
 	//-------------------------
 	// プレイヤーの方を向く
 	//-------------------------
-	if (m_type == MOTION_ATTACK || m_type == MOTION_SPIN
+	if (m_type == MOTION_ATTACK
 		&& m_nCntFream <= m_aMotionSet[m_type].aKeySet[0].nFrame)
 	{//攻撃モーション中 & ハンマーを振り上げている間なら
 		Rotation(playerPos);	//回転

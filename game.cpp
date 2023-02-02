@@ -20,12 +20,14 @@
 #include "camera.h"
 #include "player.h"
 #include "enemy.h"
+#include "model.h"
 #include "meshfield.h"
 #include "fade.h"
 #include "polygon.h"
 #include "message.h"
 #include "sky.h"
 #include "hp.h"
+#include "stage.h"
 
 //------------------------
 // 静的メンバ変数宣言
@@ -40,6 +42,7 @@ CMeshField*	CGame::m_pMeshField = nullptr;	//メッシュフィールド
 CPolygon*	CGame::m_pPolygon = nullptr;	//2Dポリゴン
 CMessage*	CGame::m_pMessage = nullptr;	//メッセージ
 CSky*		CGame::m_pSky = nullptr;		//スカイ
+CStage*		CGame::m_pStage = nullptr;		//ステージ
 
 //===========================
 // コンストラクタ
@@ -84,6 +87,9 @@ HRESULT CGame::Init()
 
 	//メッシュフィールドの生成
 	m_pMeshField = CMeshField::Create();
+
+	//ステージの生成
+	m_pStage = CStage::Create("data\\MODEL\\Stage.x", D3DXVECTOR3(0.0f, -100.0f, 0.0f));
 
 	//空の生成
 	m_pSky = CSky::Create(CTexture::TEXTURE_SKY);

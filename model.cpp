@@ -131,7 +131,7 @@ void CModel::Draw(D3DMATRIX* mtxPlayer)
 
 	//---------------------------------
 	// ƒ‚ƒfƒ‹‚ÌˆÊ’u‚ð”½‰f
-	//-------------------------------- -
+	//---------------------------------
 	D3DXMatrixTranslation(&mtxTrans, m_pos.x, m_pos.y, m_pos.z);
 	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxTrans);
 

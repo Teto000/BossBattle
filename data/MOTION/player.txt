@@ -524,7 +524,7 @@ MOTIONSET
 	CRITICAL = 10    # クリティカル率(%)
 	NUM_HIT = 3		 # ヒット数
 	HIT_INTERVAL = 6 # ヒット間隔
-	BREAK_DAMAGE = 10# ブレイクダメージ
+	BREAK_DAMAGE = 50# ブレイクダメージ
 	DAMAGE_MAG = 0.8 # ダメージ倍率
 
 	KEYSET			# --- << KEY : 0 / 10 >> ---
