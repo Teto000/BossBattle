@@ -24,6 +24,7 @@
 #include "debug_proc.h"
 #include "utility.h"
 #include "camera.h"
+#include "sound.h"
 
 //------------------------
 // 静的メンバ変数宣言
@@ -466,6 +467,10 @@ void CEnemy::SubGauge(float fDamage, GAUGE type)
 
 			//ブレイク状態にする
 			m_state = ENEMYSTATE_BREAK;
+
+			ChangeMotion(MOTION_IDOL);
+
+			CSound::PlaySound(CSound::SOUND_LABEL_SE_BREAK);
 		}
 		break;
 

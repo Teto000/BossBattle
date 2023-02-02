@@ -23,6 +23,9 @@ CSound::SOUNDPARAM g_aParam[CSound::SOUND_LABEL_MAX] =
 	/*↓ SE ↓*/
 	{ "data/SE/刀がぶつかる音_2.wav", 0 },			// 決定
 	{ "data/SE/風切り音（軽）-_1_.wav", 0 },		// 斬撃
+	{ "data/SE/ロボットを殴る1.wav", 0 },			// 攻撃命中
+	{ "data/SE/ロボットを強く殴る1.wav", 0 },		// クリティカル
+	{ "data/SE/決定ボタンを押す16.wav", 0 },		// ブレイク
 };
 
 //------------------------

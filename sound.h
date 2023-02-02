@@ -41,6 +41,9 @@ public:
 		/*↓ SE ↓*/
 		SOUND_LABEL_SE_BUTTOM,	//決定
 		SOUND_LABEL_SE_SLASH,	//斬撃
+		SOUND_LABEL_SE_HIT,		//攻撃命中
+		SOUND_LABEL_SE_CRITICAL,//クリティカル
+		SOUND_LABEL_SE_BREAK,	//ブレイク
 
 		SOUND_LABEL_MAX,
 	} SOUND_LABEL;

@@ -333,7 +333,7 @@ CPlayer* CPlayer::Create()
 
 	if (pPlayer != nullptr)
 	{//NULLチェック
-	 //初期化
+		//初期化
 		pPlayer->Init(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 		pPlayer->SetObjType(OBJTYPE_PLAYER);
 	}
@@ -746,6 +746,15 @@ void CPlayer::HitSword()
 				//攻撃力分敵の体力を減少
 				CGame::GetEnemy()->SubGauge(fDamage, CEnemy::GAUGE_HP);
 
+				if (bCritical)
+				{//クリティカルなら
+					CSound::PlaySound(CSound::SOUND_LABEL_SE_CRITICAL);
+				}
+				else
+				{
+					CSound::PlaySound(CSound::SOUND_LABEL_SE_HIT);
+				}
+
 				//ブレイクゲージの減少
 				CGame::GetEnemy()->SubGauge((float)m_aMotionSet[m_type].nBreakDamage
 											, CEnemy::GAUGE_BREAK);
@@ -759,6 +768,8 @@ void CPlayer::HitSword()
 
 				//クリティカルダメージ分敵の体力を減少
 				CGame::GetEnemy()->SubGauge(fDamage, CEnemy::GAUGE_HP);
+
+				CSound::PlaySound(CSound::SOUND_LABEL_SE_CRITICAL);
 			}
 
 			//コンボ数の加算
