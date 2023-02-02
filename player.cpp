@@ -36,7 +36,7 @@
 // 静的メンバ変数宣言
 //-------------------------------
 const float CPlayer::fDefaultAttack = 20.0f;	//基本の攻撃力
-const float CPlayer::fDefaultSpeed = 7.0f;		//基本の速度
+const float CPlayer::fDefaultSpeed = 9.0f;		//基本の速度
 
 //=============================
 // コンストラクタ

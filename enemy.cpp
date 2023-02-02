@@ -448,6 +448,11 @@ void CEnemy::SubGauge(float fDamage, GAUGE type)
 			&& m_pHP[GAUGE_HP])
 		{//HPゲージが尽きたら
 			m_pHP[GAUGE_HP] = nullptr;
+
+			//ブレイクゲージを消す
+			m_fBreak = 0;
+			m_fRemBreak = m_fBreak * 100 / m_fMaxBreak;
+			m_pHP[GAUGE_BREAK]->SetLife(m_fBreak, m_fRemBreak);
 			return;
 		}
 		break;
@@ -460,14 +465,14 @@ void CEnemy::SubGauge(float fDamage, GAUGE type)
 		m_fRemBreak = m_fBreak * 100 / m_fMaxBreak;
 		m_pHP[GAUGE_BREAK]->SetLife(m_fBreak, m_fRemBreak);
 
-		if (m_fBreak < 0 && m_fRemBreak < 0
-			&& m_pHP[GAUGE_BREAK])
+		if (m_fBreak < 0 && m_fRemBreak < 0 && m_pHP[GAUGE_BREAK])
 		{//ブレイクゲージが尽きたら
 			m_pHP[GAUGE_BREAK] = nullptr;
 
 			//ブレイク状態にする
 			m_state = ENEMYSTATE_BREAK;
 
+			//待機モーションにする
 			ChangeMotion(MOTION_IDOL);
 
 			CSound::PlaySound(CSound::SOUND_LABEL_SE_BREAK);

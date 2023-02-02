@@ -17,7 +17,8 @@
 CCombo::CCombo() : CObject(0)
 {
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//位置
-	m_nNumCombo = 0;				//コンボ数
+	m_nNumCombo = 0;						//コンボ数
+	m_col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);	//色
 
 	for (int i = 0; i < nMaxDigits; i++)
 	{
@@ -76,6 +77,8 @@ void CCombo::Update()
 	for (int i = 0; i < nMaxDigits; i++)
 	{
 		m_pNumber[i]->Update();
+
+		m_pNumber[i]->SetColor(m_col);
 	}
 }
 

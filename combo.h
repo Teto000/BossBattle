@@ -61,6 +61,7 @@ private:
 	// メンバ変数
 	//------------------
 	D3DXVECTOR3 m_pos;				//位置
+	D3DXCOLOR m_col;				//色
 	int m_nNumCombo;				//コンボ数
 	int m_aPosTexU[nMaxDigits];		//今の桁の数値
 	CNumber* m_pNumber[nMaxDigits];	//数値
