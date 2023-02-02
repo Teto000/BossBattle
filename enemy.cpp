@@ -205,7 +205,7 @@ void CEnemy::Update()
 
 	//-------------------------
 	// モデルの更新
-	//-------------------------
+	//-------------------------s
 	for (int i = 0; i < MAX_ENEMY_PARTS; i++)
 	{//モデルパーツ数分回す
 		if (m_pModel[i])
@@ -515,7 +515,7 @@ void CEnemy::EnemyAI()
 	//-------------------------
 	// 攻撃処理
 	//-------------------------
-	if (m_type != MOTION_ATTACK && m_type != MOTION_SPIN
+	if (m_type != MOTION_MOVE && m_type != MOTION_ATTACK && m_type != MOTION_SPIN
 		&& fDistance <= fAttackArea)
 	{//攻撃モーション中じゃない & プレイヤーが範囲内にいるなら
 		//攻撃までの時間を加算
@@ -535,6 +535,8 @@ void CEnemy::EnemyAI()
 			{
 				ChangeMotion(MOTION_SPIN);
 			}
+
+			//攻撃時間のリセット
 			m_nAttackTime = 0;
 		}
 	}
@@ -548,6 +550,11 @@ void CEnemy::EnemyAI()
 //==========================================
 void CEnemy::Attack()
 {
+	if (m_type != MOTION_ATTACK && m_type != MOTION_SPIN)
+	{
+		return;
+	}
+
 	//------------------------------------------
 	// モーションと攻撃時間を合わせる
 	//------------------------------------------
