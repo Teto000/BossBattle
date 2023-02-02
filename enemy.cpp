@@ -25,6 +25,7 @@
 #include "utility.h"
 #include "camera.h"
 #include "sound.h"
+#include "combo.h"
 
 //------------------------
 // 静的メンバ変数宣言
@@ -632,6 +633,10 @@ void CEnemy::HitHummer()
 			CGame::GetPlayer()->SubLife(m_aMotionSet[m_type].nDamage);
 			m_bHitAtk = true;					//当たっている状態にする
 			m_nCntHit++;
+
+			//プレイヤーのコンボ数を0にする
+			//CGame::GetPlayer()->SetComboValue(0);
+			CGame::GetPlayer()->GetCombo()->ResetCombo();
 
 			CSound::PlaySound(CSound::SOUND_LABEL_SE_EXPLOSION);
 		}
