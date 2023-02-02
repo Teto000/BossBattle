@@ -33,7 +33,7 @@ public:
 	//------------------
 	// セッター
 	//------------------
-	void ShakeCamera(int fream, float magnitude);	//カメラの振動情報の設定
+	void ShakeCamera(int fream, float magnitude, D3DXVECTOR3 max);	//カメラの振動情報の設定
 
 	//------------------
 	// ゲッター
@@ -44,7 +44,6 @@ public:
 
 private:
 	void Turn();		//旋回
-	void SetLockOn();	//ロックオン処理
 
 private:
 	//------------------
@@ -59,6 +58,7 @@ private:
 	D3DXVECTOR3 m_posRDest;		//目的の注視点
 	D3DXVECTOR3 m_rotDest;		//目的の角度
 	D3DXVECTOR3 m_vecU;			//上方向ベクトル
+	D3DXVECTOR3 m_maxShake;		//揺れの最大値
 	D3DXMATRIX  m_mtxWorld;		//ワールドマトリックス
 	float m_TSPEED;
 	bool m_bLockOn;

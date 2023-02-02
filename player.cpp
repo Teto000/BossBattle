@@ -135,7 +135,7 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	fSizeWidth = 30.0f;					//モデルの幅
 	fSizeDepth = 30.0f;					//モデルの奥行き
 	nWheelRotValue = 10;
-	m_status.fLife = 1000.0f;			//体力
+	m_status.fLife = 800.0f;			//体力
 	m_status.fRemLife = 100.0f;			//残り体力(%)
 	m_status.fMaxLife = m_status.fLife;	//最大体力
 	m_status.nAttack = 20;				//攻撃力

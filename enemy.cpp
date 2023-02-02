@@ -641,9 +641,15 @@ void CEnemy::HitHummer()
 			CSound::PlaySound(CSound::SOUND_LABEL_SE_EXPLOSION);
 		}
 
-		if (m_type == MOTION_ATTACK || m_type == MOTION_SPIN)
+		if (m_type == MOTION_ATTACK)
 		{
-			CGame::GetCamera()->ShakeCamera(10, 0.2f);	//ƒJƒƒ‰‚ÌU“®
+			//ƒJƒƒ‰‚ÌU“®(c—h‚ê)
+			CGame::GetCamera()->ShakeCamera(10, 0.2f, D3DXVECTOR3(40.0f, 180.0f, 40.0f));
+		}
+		else
+		{
+			//ƒJƒƒ‰‚ÌU“®(•½‹Ï)
+			CGame::GetCamera()->ShakeCamera(10, 0.2f, D3DXVECTOR3(100.0f, 100.0f, 100.0f));
 		}
 	}
 

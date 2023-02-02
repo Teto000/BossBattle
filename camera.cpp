@@ -166,12 +166,6 @@ void CCamera::Update(void)
 	CDebugProc::Print("視点：%f,%f,%f", m_worldPosV.x, m_worldPosV.y, m_worldPosV.z);
 	CDebugProc::Print("注視点：%f,%f,%f", m_worldPosR.x, m_worldPosR.y, m_worldPosR.z);
 	CDebugProc::Print("回転：%f,%f,%f", m_rot.x, m_rot.y, m_rot.z);
-
-	//カメラの振動
-	if (CInputKeyboard::Trigger(DIK_0))
-	{
-		ShakeCamera(60, 0.05f);
-	}
 }
 
 //========================
@@ -190,9 +184,9 @@ void CCamera::SetCamera(LPDIRECT3DDEVICE9 pDevice)
 		m_nQuakeFreamCount--;
 
 		//ランダムな値を設定
-		adjustPos.x = m_fQuakeMagnitude * (rand() % 100 - 50);
-		adjustPos.y = m_fQuakeMagnitude * (rand() % 100 - 50);
-		adjustPos.z = m_fQuakeMagnitude * (rand() % 100 - 50);
+		adjustPos.x = m_fQuakeMagnitude * (rand() % (int)m_maxShake.x - ((int)m_maxShake.x / 2.0f));
+		adjustPos.y = m_fQuakeMagnitude * (rand() % (int)m_maxShake.y - ((int)m_maxShake.y / 2.0f));
+		adjustPos.z = m_fQuakeMagnitude * (rand() % (int)m_maxShake.z - ((int)m_maxShake.z / 2.0f));
 	}
 
 	//--------------------------------
@@ -306,10 +300,11 @@ void CCamera::Turn()
 //========================
 // カメラの振動情報の設定
 //========================
-void CCamera::ShakeCamera(int fream, float magnitude)
+void CCamera::ShakeCamera(int fream, float magnitude, D3DXVECTOR3 max)
 {
 	m_nQuakeFreamCount = fream;			//揺らすフレーム数
 	m_fQuakeMagnitude = magnitude;		//揺れの量
+	m_maxShake = max;					//揺れの大きさの最大値
 }
 
 //========================
