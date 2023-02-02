@@ -34,16 +34,17 @@ public:
 	typedef enum
 	{
 		/* ↓ BGM ↓ */
-		SOUND_LABEL_TITLE = 0,	//タイトル
-		SOUND_LABEL_GAME,		//ゲーム
-		SOUND_LABEL_RESULT,		//リザルト
+		SOUND_LABEL_TITLE = 0,		//タイトル
+		SOUND_LABEL_GAME,			//ゲーム
+		SOUND_LABEL_RESULT,			//リザルト
 
 		/*↓ SE ↓*/
-		SOUND_LABEL_SE_BUTTOM,	//決定
-		SOUND_LABEL_SE_SLASH,	//斬撃
-		SOUND_LABEL_SE_HIT,		//攻撃命中
-		SOUND_LABEL_SE_CRITICAL,//クリティカル
-		SOUND_LABEL_SE_BREAK,	//ブレイク
+		SOUND_LABEL_SE_BUTTOM,		//決定
+		SOUND_LABEL_SE_SLASH,		//斬撃
+		SOUND_LABEL_SE_HIT,			//攻撃命中
+		SOUND_LABEL_SE_CRITICAL,	//クリティカル
+		SOUND_LABEL_SE_BREAK,		//ブレイク
+		SOUND_LABEL_SE_EXPLOSION,	//爆発
 
 		SOUND_LABEL_MAX,
 	} SOUND_LABEL;

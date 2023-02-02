@@ -26,6 +26,7 @@ CSound::SOUNDPARAM g_aParam[CSound::SOUND_LABEL_MAX] =
 	{ "data/SE/ロボットを殴る1.wav", 0 },			// 攻撃命中
 	{ "data/SE/ロボットを強く殴る1.wav", 0 },		// クリティカル
 	{ "data/SE/決定ボタンを押す16.wav", 0 },		// ブレイク
+	{ "data/SE/爆発2.wav", 0 },						// 爆発
 };
 
 //------------------------

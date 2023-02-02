@@ -627,6 +627,8 @@ void CEnemy::HitHummer()
 			CGame::GetPlayer()->SubLife(m_aMotionSet[m_type].nDamage);
 			m_bHitAtk = true;					//ìñÇΩÇ¡ÇƒÇ¢ÇÈèÛë‘Ç…Ç∑ÇÈ
 			m_nCntHit++;
+
+			CSound::PlaySound(CSound::SOUND_LABEL_SE_EXPLOSION);
 		}
 
 		if (m_type == MOTION_ATTACK || m_type == MOTION_SPIN)
