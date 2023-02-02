@@ -196,7 +196,8 @@ void CEnemy::Update()
 	//--------------------------------
 	// モーションのリセット
 	//--------------------------------
-	if (m_type != MOTION_SPIN)
+	if (m_type != MOTION_ATTACK
+		&& m_type != MOTION_SPIN)
 	{//攻撃モーションじゃないなら
 		//待機モーションにする
 		ChangeMotion(MOTION_IDOL);
@@ -479,8 +480,9 @@ void CEnemy::SubGauge(float fDamage, GAUGE type)
 void CEnemy::EnemyAI()
 {
 	//変数宣言
-	int nMaxAttackTime = 300;				//攻撃時間
-	float fAttackArea = 1000.0f;			//敵の攻撃範囲
+	int nMaxAttackTime = 300;		//攻撃時間
+	float fAttackArea = 1000.0f;	//敵の攻撃範囲
+	float fMoveArea = 200.0f;
 
 	//プレイヤーの位置を取得
 	D3DXVECTOR3 playerPos = CGame::GetPlayer()->GetPosition();
@@ -494,16 +496,18 @@ void CEnemy::EnemyAI()
 	//-------------------------
 	// プレイヤーまで移動
 	//-------------------------
-	/*if (m_type != MOTION_SPIN && fDistance >= fMoveArea)
+	if (m_type != MOTION_ATTACK && m_type != MOTION_SPIN
+		&& fDistance >= fMoveArea)
 	{//攻撃中じゃない & プレイヤーが範囲内にいないなら
 		Rotation(playerPos);	//回転
 		Move(playerPos);		//移動
-	}*/
+	}
 
 	//-------------------------
 	// プレイヤーの方を向く
 	//-------------------------
-	if (m_type == MOTION_SPIN && m_nCntFream <= m_aMotionSet[m_type].aKeySet[0].nFrame)
+	if (m_type == MOTION_ATTACK || m_type == MOTION_SPIN
+		&& m_nCntFream <= m_aMotionSet[m_type].aKeySet[0].nFrame)
 	{//攻撃モーション中 & ハンマーを振り上げている間なら
 		Rotation(playerPos);	//回転
 	}
@@ -511,15 +515,26 @@ void CEnemy::EnemyAI()
 	//-------------------------
 	// 攻撃処理
 	//-------------------------
-	if (m_type != MOTION_SPIN && fDistance <= fAttackArea)
+	if (m_type != MOTION_ATTACK && m_type != MOTION_SPIN
+		&& fDistance <= fAttackArea)
 	{//攻撃モーション中じゃない & プレイヤーが範囲内にいるなら
 		//攻撃までの時間を加算
 		m_nAttackTime++;
 
 		if (m_nAttackTime >= nMaxAttackTime)
 		{//攻撃時間が値に達したら
-			//攻撃モーションにする
-			ChangeMotion(MOTION_SPIN);
+			//--------------------------
+			// 攻撃モーションにする
+			//--------------------------
+			int nRand = rand() % 2;
+			if (nRand == 0)
+			{
+				ChangeMotion(MOTION_ATTACK);
+			}
+			else if (nRand == 1)
+			{
+				ChangeMotion(MOTION_SPIN);
+			}
 			m_nAttackTime = 0;
 		}
 	}
@@ -602,7 +617,7 @@ void CEnemy::HitHummer()
 			m_nCntHit++;
 		}
 
-		if (m_type == MOTION_SPIN)
+		if (m_type == MOTION_ATTACK || m_type == MOTION_SPIN)
 		{
 			CGame::GetCamera()->ShakeCamera(10, 0.2f);	//カメラの振動
 		}
@@ -1047,7 +1062,8 @@ void CEnemy::ChangeMotion(MOTION_TYPE type)
 	//--------------------------
 	// 情報の初期化
 	//--------------------------
-	if (m_type == MOTION_SPIN)
+	if (m_type == MOTION_ATTACK
+		|| m_type == MOTION_SPIN)
 	{//攻撃処理なら
 		//モーションの初期化
 		m_nCurrentKey = 0;
