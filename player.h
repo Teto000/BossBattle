@@ -178,6 +178,8 @@ private:
 	int m_nCntHit;				//ヒット数を数える
 	int m_nHitTime;				//ヒットまでの時間を数える
 	int m_nCntModeTime;			//モード終了までの時間を数える
+	int m_nAvoidTime;			//回避時間
+	int m_nAvoidStan;			//回避硬直
 	int nWheelRotValue;			//タイヤの回転量
 	float fSizeWidth;			//サイズ(幅)
 	float fSizeDepth;			//サイズ(奥行き)

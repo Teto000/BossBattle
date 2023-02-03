@@ -56,6 +56,8 @@ CPlayer::CPlayer() : CObject(0)
 	m_nCntHit = 0;								//ヒット数を数える
 	m_nHitTime = 0;								//ヒットまでの時間を数える
 	m_nCntModeTime = 0;							//モード終了までの時間を数える
+	m_nAvoidTime = 0;							//回避時間
+	m_nAvoidStan = 0;							//回避硬直
 	nWheelRotValue = 0;							//タイヤの回転量
 	fSizeWidth = 0.0f;							//サイズ(幅)
 	fSizeDepth = 0.0f;							//サイズ(奥行き)
@@ -266,6 +268,26 @@ void CPlayer::Update()
 		SetRot();
 	}
 
+	//--------------------------------------
+	// 回避状態の解除
+	//--------------------------------------
+	if (m_status.bAvoidance)
+	{//回避状態なら
+		m_nAvoidTime++;	//回避時間の加算
+
+		if (m_nAvoidTime >= 10)
+		{//一定時間経過したら
+			m_status.fSpeed = fDefaultSpeed;	//減速
+			m_status.bAvoidance = false;		//回避していない状態
+			m_nAvoidTime = 0;					//回避時間のリセット
+			m_nAvoidStan = 15;					//回避硬直の設定
+		}
+	}
+	else if (m_nAvoidStan > 0)
+	{//回避硬直が0より上なら
+		m_nAvoidStan--;		//硬直時間の減少
+	}
+
 	//--------------------------------
 	// 攻撃処理
 	//--------------------------------
@@ -354,10 +376,10 @@ void CPlayer::MoveKeyboard(int nUpKey, int nDownKey, int nLeftKey, int nRightKey
 	//--------------------------------------
 	// 回避する処理
 	//--------------------------------------
-	if (CInputKeyboard::Trigger(DIK_LSHIFT) || CInputKeyboard::Trigger(DIK_RSHIFT)
-		&& !m_status.bAvoidance)
-	{//キーが押された & 回避状態じゃないなら
-		m_status.fSpeed *= 20.0f;		//加速
+	if (CInputKeyboard::Trigger(DIK_SLASH)
+		&& !m_status.bAvoidance && m_nAvoidStan <= 0)
+	{//キーが押された & 回避状態じゃない & 回避硬直が0以下なら
+		m_status.fSpeed *= 5.0f;		//加速
 		m_status.bAvoidance = true;		//回避状態
 	}
 
@@ -418,18 +440,15 @@ void CPlayer::MoveKeyboard(int nUpKey, int nDownKey, int nLeftKey, int nRightKey
 		m_pos.z -= cosf(cameraRot.y + D3DX_PI * 0.0f) * m_status.fSpeed;
 		m_rotDest.y = cameraRot.y + D3DX_PI * 0.0f;
 	}
+	else if (m_status.bAvoidance)
+	{//何も押されていない & 回避状態なら
+		m_pos.x -= sinf(cameraRot.y + D3DX_PI * 1.0f) * m_status.fSpeed;
+		m_pos.z -= cosf(cameraRot.y + D3DX_PI * 1.0f) * m_status.fSpeed;
+		m_rotDest.y = cameraRot.y + D3DX_PI * 1.0f;
+	}
 	
 	//タイヤの回転量の加算
 	m_rotWheel += D3DXToRadian(-nWheelRotValue);
-
-	//--------------------------------------
-	// 回避状態の解除
-	//--------------------------------------
-	if (m_status.bAvoidance)
-	{//回避状態なら
-		m_status.fSpeed /= 20.0f;		//減速
-		m_status.bAvoidance = false;	//回避していない状態
-	}
 
 	//--------------------------------------
 	// キー押下状態の処理
