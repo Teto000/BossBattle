@@ -74,6 +74,7 @@ CPlayer::CPlayer() : CObject(0)
 	m_status.fLife = 0.0f;			//体力
 	m_status.fRemLife = 0.0f;		//残り体力(%)
 	m_status.fMaxLife = 0.0f;		//最大体力
+	m_status.bAvoidance = false;	//回避状態
 
 	//モデル
 	for (int i = 0; i < MAX_PARTS; i++)
@@ -351,6 +352,16 @@ void CPlayer::MoveKeyboard(int nUpKey, int nDownKey, int nLeftKey, int nRightKey
 	D3DXVECTOR3 cameraRot = CGame::GetCamera()->GetRot();
 
 	//--------------------------------------
+	// 回避する処理
+	//--------------------------------------
+	if (CInputKeyboard::Trigger(DIK_LSHIFT) || CInputKeyboard::Trigger(DIK_RSHIFT)
+		&& !m_status.bAvoidance)
+	{//キーが押された & 回避状態じゃないなら
+		m_status.fSpeed *= 20.0f;		//加速
+		m_status.bAvoidance = true;		//回避状態
+	}
+
+	//--------------------------------------
 	// プレイヤーの操作
 	//--------------------------------------
 	if (CInputKeyboard::Press(nLeftKey))
@@ -411,6 +422,18 @@ void CPlayer::MoveKeyboard(int nUpKey, int nDownKey, int nLeftKey, int nRightKey
 	//タイヤの回転量の加算
 	m_rotWheel += D3DXToRadian(-nWheelRotValue);
 
+	//--------------------------------------
+	// 回避状態の解除
+	//--------------------------------------
+	if (m_status.bAvoidance)
+	{//回避状態なら
+		m_status.fSpeed /= 20.0f;		//減速
+		m_status.bAvoidance = false;	//回避していない状態
+	}
+
+	//--------------------------------------
+	// キー押下状態の処理
+	//--------------------------------------
 	if (!CInputKeyboard::Press(nUpKey) && !CInputKeyboard::Press(nDownKey)
 		&& !CInputKeyboard::Press(nRightKey) && !CInputKeyboard::Press(nLeftKey))
 	{//移動キーが押されていないなら

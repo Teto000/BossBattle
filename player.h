@@ -74,6 +74,7 @@ public:
 		float fLife;		//体力
 		float fRemLife;		//残り体力(%)
 		float fMaxLife;		//最大体力
+		bool bAvoidance;	//回避状態
 	};
 
 	//モーションの種類
@@ -119,6 +120,7 @@ public:
 	float GetWidth() override		   { return 0.0f; }				//幅の取得
 	float GetHeight() override		   { return 0.0f; }				//高さの取得
 	bool GetHitAttack()				   { return m_bFinishAttack; }	//攻撃を当てたかを取得
+	bool GetAvoidance()				   { return m_status.bAvoidance; }	//回避状態の取得
 	CModel* GetModel(int nNum)		   { return m_pModel[nNum]; }	//モデルの取得
 	CCombo* GetCombo()				   { return m_pCombo; }			//コンボの取得
 	PLAYER_STATUS GetStatus()		   { return m_status; }			//ステータスの取得

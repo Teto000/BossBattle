@@ -600,7 +600,14 @@ void CEnemy::Attack()
 	//------------------------------------------
 	// ハンマーの当たり判定
 	//------------------------------------------
-	HitHummer();
+	if (!CGame::GetPlayer()->GetAvoidance())
+	{//プレイヤーの回避状態じゃないなら
+		HitHummer();
+	}
+	else
+	{
+		int a = 0;
+	}
 }
 
 //==========================================
@@ -635,7 +642,6 @@ void CEnemy::HitHummer()
 			m_nCntHit++;
 
 			//プレイヤーのコンボ数を0にする
-			//CGame::GetPlayer()->SetComboValue(0);
 			CGame::GetPlayer()->GetCombo()->ResetCombo();
 
 			CSound::PlaySound(CSound::SOUND_LABEL_SE_EXPLOSION);
