@@ -651,7 +651,8 @@ void CEnemy::HitHummer()
 		else
 		{
 			//ƒJƒƒ‰‚ÌU“®(•½‹Ï)
-			CGame::GetCamera()->ShakeCamera(10, 0.2f, D3DXVECTOR3(100.0f, 100.0f, 100.0f));
+			//CGame::GetCamera()->ShakeCamera(10, 0.2f, D3DXVECTOR3(100.0f, 100.0f, 100.0f));
+			CGame::GetCamera()->ShakeCamera(10, 0.2f, D3DXVECTOR3(180.0f, 40.0f, 40.0f));
 		}
 	}
 

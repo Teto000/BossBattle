@@ -137,7 +137,7 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	m_pos = pos;						//位置
 	fSizeWidth = 30.0f;					//モデルの幅
 	fSizeDepth = 30.0f;					//モデルの奥行き
-	nWheelRotValue = 10;
+	nWheelRotValue = 10;				//タイヤの回転量
 	m_status.fLife = 800.0f;			//体力
 	m_status.fRemLife = 100.0f;			//残り体力(%)
 	m_status.fMaxLife = m_status.fLife;	//最大体力
@@ -273,7 +273,8 @@ void CPlayer::Update()
 	//--------------------------------------
 	if (m_status.bAvoidance)
 	{//回避状態なら
-		m_nAvoidTime++;	//回避時間の加算
+		m_nAvoidTime++;				//回避時間の加算
+		ChangeMotion(MOTION_MOVE);	//移動モーション
 
 		if (m_nAvoidTime >= 10)
 		{//一定時間経過したら
@@ -379,7 +380,7 @@ void CPlayer::MoveKeyboard(int nUpKey, int nDownKey, int nLeftKey, int nRightKey
 	if (CInputKeyboard::Trigger(DIK_SLASH)
 		&& !m_status.bAvoidance && m_nAvoidStan <= 0)
 	{//キーが押された & 回避状態じゃない & 回避硬直が0以下なら
-		m_status.fSpeed *= 5.0f;		//加速
+		m_status.fSpeed *= 4.0f;		//加速
 		m_status.bAvoidance = true;		//回避状態
 	}
 
