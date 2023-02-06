@@ -62,8 +62,13 @@ private:
 	// メンバ変数
 	//------------------
 	D3DXVECTOR3 m_pos;				//位置
+	D3DXVECTOR3 m_initPos;			//最初の位置
+	D3DXVECTOR3 m_numberPos;		//数字の位置
 	int m_nNumCombo;				//コンボ数
 	int m_aPosTexU[nMaxDigits];		//今の桁の数値
+	float m_newWidth;				//新しい幅
+	float m_newHeight;				//新しい高さ
+	float fInterval;				//数値の間隔
 	CNumber* m_pNumber[nMaxDigits];	//数値
 };
 

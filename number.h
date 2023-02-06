@@ -33,6 +33,7 @@ public:
 	// セッター
 	//------------------
 	void Set(int nDigit);	//数値の設定
+	void SetScaling(float fWidth, float fHeight);	//拡縮
 
 	//------------------
 	// 静的メンバ変数

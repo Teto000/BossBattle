@@ -445,7 +445,7 @@ void CEnemy::SubGauge(float fDamage, GAUGE type)
 		//HPの設定
 		m_pHP[GAUGE_HP]->SetLife(m_fLife, m_fRemLife);
 
-		if (m_fLife < 0 && m_fRemLife < 0
+		if (m_fLife < 0 || m_fRemLife < 0
 			&& m_pHP[GAUGE_HP])
 		{//HPゲージが尽きたら
 			m_pHP[GAUGE_HP] = nullptr;
@@ -453,7 +453,6 @@ void CEnemy::SubGauge(float fDamage, GAUGE type)
 			//ブレイクゲージを消す
 			m_fBreak = 0;
 			m_fRemBreak = m_fBreak * 100 / m_fMaxBreak;
-			m_pHP[GAUGE_BREAK]->SetLife(m_fBreak, m_fRemBreak);
 			return;
 		}
 		break;

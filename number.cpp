@@ -122,3 +122,15 @@ void CNumber::Set(int nDigit)
 {
 	CObject2D::SetAnimation((float)nDigit, 10);
 }
+
+//=======================
+// ägèk
+//=======================
+void CNumber::SetScaling(float fWidth, float fHeight)
+{
+	//ïùÇ∆çÇÇ≥ÇÃê›íË
+	m_fWidth = fWidth;
+	m_fHeight = fHeight;
+
+	CObject2D::SetSize(m_fWidth, m_fHeight);
+}
