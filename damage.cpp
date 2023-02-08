@@ -9,7 +9,7 @@
 // インクルード
 //----------------------
 #include "damage.h"
-#include "number.h"
+#include "num_board.h"
 #include "application.h"
 #include "renderer.h"
 
@@ -24,7 +24,8 @@ CDamage::CDamage() : CBillBoard(0)
 
 	for (int i = 0; i < nMaxDigits; i++)
 	{
-		m_aPosTexU[i] = 0;		//今の桁の数値
+		m_aPosTexU[i] = 0;			//今の桁の数値
+		m_pNumBoard[i] = nullptr;	//数字
 	}
 }
 
@@ -44,22 +45,22 @@ HRESULT CDamage::Init(D3DXVECTOR3 pos)
 	//初期値の設定
 	m_pos = pos;		//位置
 	m_col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);	//色
-	m_fWidth = 60.0f;	//幅
-	m_fHeight = 80.0f;	//高さ
+	m_fWidth = 30.0f;	//幅
+	m_fHeight = 40.0f;	//高さ
 
 	//------------------------------
 	// 数値の設定
 	//------------------------------
-	//オブジェクトの初期化
-	CBillBoard::Init(pos);
+	for (int i = 0; i < nMaxDigits; i++)
+	{
+		D3DXVECTOR3 numberPos = D3DXVECTOR3((m_pos.x - m_fWidth) + (m_fWidth * i),
+											m_pos.y, m_pos.z);
 
-	//大きさの設定
-	CBillBoard::SetSize(m_fWidth, m_fHeight);
+		m_pNumBoard[i] = CNumBoard::Create(numberPos, m_nAtkValue);
+		m_pNumBoard[i]->Set(i);
+		m_pNumBoard[i]->SetSize(m_fWidth, m_fHeight);
+	}
 
-	//テクスチャの設定
-	CBillBoard::SetTexture(CTexture::TEXTURE_NUMBER);
-
-	//数値の設定
 	SetNumber();
 
 	return S_OK;
@@ -70,7 +71,13 @@ HRESULT CDamage::Init(D3DXVECTOR3 pos)
 //=======================
 void CDamage::Uninit()
 {
-	CBillBoard::Uninit();
+	for (int i = 0; i < nMaxDigits; i++)
+	{
+		if (m_pNumBoard[i] != nullptr)
+		{//nullじゃないなら
+			m_pNumBoard[i]->Uninit();
+		}
+	}
 }
 
 //=======================
@@ -78,21 +85,33 @@ void CDamage::Uninit()
 //=======================
 void CDamage::Update()
 {
-	CBillBoard::Update();
+	for (int i = 0; i < nMaxDigits; i++)
+	{
+		if (m_pNumBoard[i] == nullptr)
+		{//nullなら
+			continue;
+		}
+
+		m_pNumBoard[i]->Update();
+
+		//色の設定
+		m_pNumBoard[i]->SetColor(m_col);
+	}
 
 	//消えるまでの時間を数える
 	m_nDeleteTime++;
 
-	if (m_nDeleteTime >= 60)
+	if (m_nDeleteTime >= 10)
 	{//一定時間が経過したら
 		//透明度の減少
 		m_col.a -= 0.1f;
 	}
 
-	if (m_col.a <= 0.0f)
-	{//完全に透明になったら
-		Uninit();
-	}
+	//if (m_col.a <= 0.0f)
+	//{//完全に透明になったら
+	//	Uninit();
+	//	return;
+	//}
 }
 
 //=======================
@@ -100,25 +119,13 @@ void CDamage::Update()
 //=======================
 void CDamage::Draw()
 {
-	//デバイスの取得
-	LPDIRECT3DDEVICE9 pDevice = CApplication::GetRenderer()->GetDevice();
-
-	//アルファテストの有効化
-	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
-	pDevice->SetRenderState(D3DRS_ALPHAREF, 80);
-	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
-
-	//Zバッファのクリア
-	pDevice->SetRenderState(D3DRS_ZENABLE, false);
-
-	//オブジェクトの描画
-	CBillBoard::Draw();
-
-	// Zバッファの有効化設定
-	pDevice->SetRenderState(D3DRS_ZENABLE, true);
-
-	//アルファテストの無効化
-	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+	for (int i = 0; i < nMaxDigits; i++)
+	{
+		if (m_pNumBoard[i] != nullptr)
+		{//nullじゃないなら
+			m_pNumBoard[i]->Draw();
+		}
+	}
 }
 
 //=======================
@@ -160,7 +167,6 @@ void CDamage::SetNumber()
 
 		//桁ごとの値を求める
 		m_aPosTexU[i] = (m_nAtkValue % nNum0) / nNum1;
-
-		CBillBoard::SetAnimation((float)m_aPosTexU[i], 10);
+		m_pNumBoard[i]->Set(m_aPosTexU[i]);
 	}
 }

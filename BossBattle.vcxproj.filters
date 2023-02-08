@@ -164,6 +164,9 @@
     <ClCompile Include="damage.cpp">
       <Filter>Main\Object\Billboard</Filter>
     </ClCompile>
+    <ClCompile Include="num_board.cpp">
+      <Filter>Main\Object\Billboard</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -284,6 +287,9 @@
       <Filter>Main\Object\ObjectX</Filter>
     </ClInclude>
     <ClInclude Include="damage.h">
+      <Filter>Main\Object\Billboard</Filter>
+    </ClInclude>
+    <ClInclude Include="num_board.h">
       <Filter>Main\Object\Billboard</Filter>
     </ClInclude>
   </ItemGroup>

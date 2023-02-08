@@ -12,6 +12,11 @@
 //-------------------------------
 #include "billboard.h"
 
+//-------------------------------
+// 前方宣言
+//-------------------------------
+class CNumBoard;	//数字
+
 //================================
 // ダメージクラス
 //================================
@@ -53,10 +58,11 @@ private:
 	//------------------
 	// メンバ変数
 	//------------------
-	D3DXVECTOR3 m_pos;				//位置
-	int m_nAtkValue;				//攻撃力の値
-	int m_aPosTexU[nMaxDigits];		//今の桁の数値
-	int m_nDeleteTime;				//消えるまでの時間
+	D3DXVECTOR3 m_pos;					//位置
+	int m_nAtkValue;					//攻撃力の値
+	int m_aPosTexU[nMaxDigits];			//今の桁の数値
+	int m_nDeleteTime;					//消えるまでの時間
+	CNumBoard* m_pNumBoard[nMaxDigits];	//数字
 };
 
 #endif
