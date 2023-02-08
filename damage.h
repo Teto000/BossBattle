@@ -10,17 +10,12 @@
 //-------------------------------
 // インクルード
 //-------------------------------
-#include "object.h"
-
-//-------------------------------
-// 前方宣言
-//-------------------------------
-class CNumber;	//数値
+#include "billboard.h"
 
 //================================
 // ダメージクラス
 //================================
-class CDamage : CObject
+class CDamage : CBillBoard
 {
 public:
 	CDamage();	//コンストラクタ
@@ -61,7 +56,7 @@ private:
 	D3DXVECTOR3 m_pos;				//位置
 	int m_nAtkValue;				//攻撃力の値
 	int m_aPosTexU[nMaxDigits];		//今の桁の数値
-	CNumber* m_pNumber[nMaxDigits];	//数値
+	int m_nDeleteTime;				//消えるまでの時間
 };
 
 #endif

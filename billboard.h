@@ -44,8 +44,9 @@ public:
 		, float fWidth2, float fHeight1, float fHeight2);	//頂点座標の設定
 
 	/* ↓テクスチャ↓ */
-	void SetTexCIE(float left, float fRight);	//テクスチャ座標の設定
-	void SetTexture(CTexture::TEXTURE texture);	//テクスチャの設定
+	void SetTexCIE(float left, float fRight);			//テクスチャ座標の設定
+	void SetTexture(CTexture::TEXTURE texture);			//テクスチャの設定
+	void SetAnimation(float fNumber, int nPattern);		//アニメーションの設定
 
 	//----------------
 	// ゲッター

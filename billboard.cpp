@@ -269,6 +269,29 @@ void CBillBoard::SetTexCIE(float left, float fRight)
 	m_pVtxBuff->Unlock();
 }
 
+//=========================================
+// アニメーションの設定
+// 引数：数値、テクスチャの分割数
+//=========================================
+void CBillBoard::SetAnimation(float fNumber, int nPattern)
+{
+	VERTEX_3D *pVtx;	// 頂点情報へのポインタ
+
+	float PatternSize = 1.0f / nPattern;
+
+	// 頂点バッファをロックし、頂点情報へのポインタを取得
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	//texの設定
+	pVtx[0].tex = D3DXVECTOR2(fNumber * PatternSize, 0.0f);
+	pVtx[1].tex = D3DXVECTOR2(fNumber * PatternSize + PatternSize, 0.0f);
+	pVtx[2].tex = D3DXVECTOR2(fNumber * PatternSize, 1.0f);
+	pVtx[3].tex = D3DXVECTOR2(fNumber * PatternSize + PatternSize, 1.0f);
+
+	// 頂点をアンロックする
+	m_pVtxBuff->Unlock();
+}
+
 //===========================
 // 頂点座標の設定(ゲージ)
 // 引数：左、右、上、下

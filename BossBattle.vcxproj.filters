@@ -146,14 +146,8 @@
     <ClCompile Include="fream.cpp">
       <Filter>Main\Object\Object2D\Gauge</Filter>
     </ClCompile>
-    <ClCompile Include="style_shift.cpp">
-      <Filter>Main\Object\Billboard</Filter>
-    </ClCompile>
     <ClCompile Include="sky.cpp">
       <Filter>Main\Object\Mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="damage.cpp">
-      <Filter>Main\Object\Object2D\Number</Filter>
     </ClCompile>
     <ClCompile Include="hp.cpp">
       <Filter>Main\Object\Object2D\Gauge</Filter>
@@ -166,6 +160,9 @@
     </ClCompile>
     <ClCompile Include="stage.cpp">
       <Filter>Main\Object\ObjectX</Filter>
+    </ClCompile>
+    <ClCompile Include="damage.cpp">
+      <Filter>Main\Object\Billboard</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -274,14 +271,8 @@
     <ClInclude Include="fream.h">
       <Filter>Main\Object\Object2D\Gauge</Filter>
     </ClInclude>
-    <ClInclude Include="style_shift.h">
-      <Filter>Main\Object\Billboard</Filter>
-    </ClInclude>
     <ClInclude Include="sky.h">
       <Filter>Main\Object\Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="damage.h">
-      <Filter>Main\Object\Object2D\Number</Filter>
     </ClInclude>
     <ClInclude Include="utility.h">
       <Filter>Main</Filter>
@@ -291,6 +282,9 @@
     </ClInclude>
     <ClInclude Include="stage.h">
       <Filter>Main\Object\ObjectX</Filter>
+    </ClInclude>
+    <ClInclude Include="damage.h">
+      <Filter>Main\Object\Billboard</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

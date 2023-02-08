@@ -823,6 +823,9 @@ void CPlayer::HitSword()
 			//コンボ数の加算
 			CGame::GetPlayer()->AddCombo(m_status.nComboValue);
 
+			//ダメージ数の表示
+			m_pDamage = CDamage::Create(m_pos, (int)fDamage);
+
 			m_nCntHit++;	//ヒット数を加算
 			m_bHit = true;	//攻撃が当たった状態
 
