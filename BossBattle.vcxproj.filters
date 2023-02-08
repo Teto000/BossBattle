@@ -42,6 +42,12 @@
     <Filter Include="Main\Application\Input">
       <UniqueIdentifier>{5f159fc1-a5b8-445a-b6a1-60c705f3ac63}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Main\Object\Billboard\Number">
+      <UniqueIdentifier>{c72546be-07fd-4193-8965-395ac95857b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Object\Billboard\Bullet">
+      <UniqueIdentifier>{cdfea326-34a0-43fc-8b26-8c2afe5188e2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -162,10 +168,10 @@
       <Filter>Main\Object\ObjectX</Filter>
     </ClCompile>
     <ClCompile Include="damage.cpp">
-      <Filter>Main\Object\Billboard</Filter>
+      <Filter>Main\Object\Billboard\Number</Filter>
     </ClCompile>
     <ClCompile Include="num_board.cpp">
-      <Filter>Main\Object\Billboard</Filter>
+      <Filter>Main\Object\Billboard\Number</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -287,10 +293,10 @@
       <Filter>Main\Object\ObjectX</Filter>
     </ClInclude>
     <ClInclude Include="damage.h">
-      <Filter>Main\Object\Billboard</Filter>
+      <Filter>Main\Object\Billboard\Number</Filter>
     </ClInclude>
     <ClInclude Include="num_board.h">
-      <Filter>Main\Object\Billboard</Filter>
+      <Filter>Main\Object\Billboard\Number</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

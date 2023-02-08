@@ -755,8 +755,9 @@ void CPlayer::Attack()
 void CPlayer::HitSword()
 {
 	//変数宣言
-	D3DXVECTOR3 offsetPos(0.0f, 0.0f, -120.0f);	//剣先までのオフセット
-	float fSphereSize = 250.0f;					//球の直径
+	D3DXVECTOR3 offsetPos(0.0f, 0.0f, -120.0f);					//剣先までのオフセット
+	D3DXVECTOR3 damagePos(m_pos.x, m_pos.y + 150.0f, m_pos.z);	//ダメージの表示位置
+	float fSphereSize = 250.0f;									//球の直径
 
 	if (CUtility::ColliaionWeapon(offsetPos, fSphereSize, m_pModel[4]->GetmtxWorld(), CObject::OBJTYPE_ENEMY)
 		&& !m_bFinishAttack
@@ -772,6 +773,7 @@ void CPlayer::HitSword()
 			//-----------------------------------
 			float fDamage = m_status.nAttack * m_aMotionSet[m_type].fDamageMag;
 			float fComboDamage = (float)m_nNumCombo / 50;
+
 			//コンボ数に応じてダメージアップ
 			fDamage += fDamage * fComboDamage;
 
@@ -782,59 +784,68 @@ void CPlayer::HitSword()
 			bool bCritical = false;
 			if (nRand <= m_aMotionSet[m_type].nCritical)
 			{//ランダムな値がクリティカル率以内なら
-				fDamage *= 1.5f;	//ダメージ1.5倍
 				bCritical = true;	//クリティカル状態にする
 			}
 
 			//-----------------------------
 			// ブレイク状態かどうか
 			//-----------------------------
+			if (CGame::GetEnemy()->GetState() == CEnemy::ENEMYSTATE_BREAK)
+			{//敵がブレイク状態なら
+				bCritical = true;	//クリティカル状態にする
+			}
+
+			//-----------------------------
+			// ダメージアップ処理
+			//-----------------------------
+			if (bCritical)
+			{//クリティカルなら
+				fDamage *= 1.5f;	//ダメージ1.5倍
+
+				//ダメージ数の表示
+				m_pDamage = CDamage::Create(damagePos, (int)fDamage, CDamage::DAMAGE_TYPE_CRITICAL);
+
+				//SEの再生
+				CSound::PlaySound(CSound::SOUND_LABEL_SE_CRITICAL);
+			}
+			else
+			{
+				//ダメージ数の表示
+				m_pDamage = CDamage::Create(damagePos, (int)fDamage, CDamage::DAMAGE_TYPE_NONE);
+
+				//SEの再生
+				CSound::PlaySound(CSound::SOUND_LABEL_SE_HIT);
+			}
+
+			//-----------------------------
+			// ダメージを与える処理
+			//-----------------------------
 			if (CGame::GetEnemy()->GetState() != CEnemy::ENEMYSTATE_BREAK)
 			{//敵がブレイク状態じゃないなら
-				//攻撃力分敵の体力を減少
+				//体力を減少
 				CGame::GetEnemy()->SubGauge(fDamage, CEnemy::GAUGE_HP);
-
-				if (bCritical)
-				{//クリティカルなら
-					CSound::PlaySound(CSound::SOUND_LABEL_SE_CRITICAL);
-				}
-				else
-				{
-					CSound::PlaySound(CSound::SOUND_LABEL_SE_HIT);
-				}
 
 				//ブレイクゲージの減少
 				CGame::GetEnemy()->SubGauge((float)m_aMotionSet[m_type].nBreakDamage
-											, CEnemy::GAUGE_BREAK);
+					, CEnemy::GAUGE_BREAK);
 			}
 			else
 			{//ブレイク状態なら
-				if (!bCritical)
-				{//クリティカル状態じゃないなら
-					fDamage *= 1.5f;	//ダメージ1.5倍
-				}
-
-				//クリティカルダメージ分敵の体力を減少
+				//敵の体力を減少
 				CGame::GetEnemy()->SubGauge(fDamage, CEnemy::GAUGE_HP);
-
-				CSound::PlaySound(CSound::SOUND_LABEL_SE_CRITICAL);
 			}
 
-			//コンボ数の加算
+			//-----------------------------
+			// コンボ数の加算
+			//-----------------------------
 			CGame::GetPlayer()->AddCombo(m_status.nComboValue);
-
-			//ダメージ数の表示
-			{
-				D3DXVECTOR3 damagePos(m_pos.x, m_pos.y + 150.0f, m_pos.z);
-				m_pDamage = CDamage::Create(damagePos, (int)fDamage);
-			}
-
-			m_nCntHit++;	//ヒット数を加算
-			m_bHit = true;	//攻撃が当たった状態
 
 			//------------------------------
 			// 攻撃の終了処理
 			//------------------------------
+			m_nCntHit++;	//ヒット数を加算
+			m_bHit = true;	//攻撃が当たった状態
+
 			if (m_nCntHit >= m_aMotionSet[m_type].nNumHit)
 			{//現在のヒット数が攻撃のヒット数以上なら
 				m_bFinishAttack = true;	//攻撃が終わった状態にする

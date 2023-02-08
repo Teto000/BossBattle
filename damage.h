@@ -23,6 +23,14 @@ class CNumBoard;	//数字
 class CDamage : CBillBoard
 {
 public:
+	//ダメージの種類
+	enum DAMAGE_TYPE
+	{
+		DAMAGE_TYPE_NONE = 0,
+		DAMAGE_TYPE_CRITICAL,
+		DAMAGE_TYPE_MAX
+	};
+
 	CDamage();	//コンストラクタ
 	~CDamage();	//デストラクタ
 
@@ -44,7 +52,7 @@ public:
 	//------------------
 	// 静的メンバ変数
 	//------------------
-	static CDamage* Create(D3DXVECTOR3 pos, int nNum);
+	static CDamage* Create(D3DXVECTOR3 pos, int nNum, DAMAGE_TYPE type);
 
 private:
 	void SetNumber();			//数値の設定
@@ -62,6 +70,7 @@ private:
 	int m_nAtkValue;					//攻撃力の値
 	int m_aPosTexU[nMaxDigits];			//今の桁の数値
 	int m_nDeleteTime;					//消えるまでの時間
+	DAMAGE_TYPE type;					//種類
 	CNumBoard* m_pNumBoard[nMaxDigits];	//数字
 };
 

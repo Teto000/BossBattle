@@ -44,9 +44,17 @@ HRESULT CDamage::Init(D3DXVECTOR3 pos)
 {
 	//初期値の設定
 	m_pos = pos;		//位置
-	m_col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);	//色
 	m_fWidth = 30.0f;	//幅
 	m_fHeight = 40.0f;	//高さ
+
+	if (type == DAMAGE_TYPE_CRITICAL)
+	{
+		m_col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);	//色
+	}
+	else
+	{
+		m_col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);	//色
+	}
 
 	//------------------------------
 	// 数値の設定
@@ -59,6 +67,7 @@ HRESULT CDamage::Init(D3DXVECTOR3 pos)
 		m_pNumBoard[i] = CNumBoard::Create(numberPos, m_nAtkValue);
 		m_pNumBoard[i]->Set(i);
 		m_pNumBoard[i]->SetSize(m_fWidth, m_fHeight);
+		m_pNumBoard[i]->SetColor(m_col);
 	}
 
 	SetNumber();
@@ -132,7 +141,7 @@ void CDamage::Draw()
 // 生成
 // 引数：位置、コンボ数
 //=======================
-CDamage *CDamage::Create(D3DXVECTOR3 pos, int nNum)
+CDamage *CDamage::Create(D3DXVECTOR3 pos, int nNum, DAMAGE_TYPE type)
 {
 	CDamage *pDamage = nullptr;
 
@@ -145,6 +154,7 @@ CDamage *CDamage::Create(D3DXVECTOR3 pos, int nNum)
 	{//NULLチェック
 		//メンバ変数に代入
 		pDamage->m_nAtkValue = nNum;
+		pDamage->type = type;
 
 		//初期化
 		pDamage->Init(D3DXVECTOR3(pos));
