@@ -157,7 +157,7 @@ void CBillBoard::Draw()
 	//------------------------------------
 	// マトリックス
 	//------------------------------------
-	D3DXMATRIX mtxRot, mtxTrans;	//計算用マトリックス
+	D3DXMATRIX mtxTrans;	//計算用マトリックス
 
 	D3DXMatrixIdentity(&m_mtxWorld);
 
@@ -246,6 +246,41 @@ void CBillBoard::SetSize(float fWidth, float fHeight)
 {
 	m_fWidth = fWidth;		//幅の設定
 	m_fHeight = fHeight;	//高さの設定
+}
+
+void CBillBoard::ResetMatrix(D3DXVECTOR3 pos)
+{
+	//デバイスの取得
+	LPDIRECT3DDEVICE9 pDevice = CApplication::GetRenderer()->GetDevice();
+
+	//------------------------------------
+	// マトリックス
+	//------------------------------------
+	D3DXMATRIX mtxTrans;	//計算用マトリックス
+
+	D3DXMatrixIdentity(&m_mtxWorld);
+
+	//ビューマトリックスの取得
+	D3DXMATRIX mtxView;
+	pDevice->GetTransform(D3DTS_VIEW, &mtxView);
+
+	//カメラの逆行列を設定
+	m_mtxWorld._11 = mtxView._11;
+	m_mtxWorld._12 = mtxView._21;
+	m_mtxWorld._13 = mtxView._31;
+	m_mtxWorld._21 = mtxView._12;
+	m_mtxWorld._22 = mtxView._22;
+	m_mtxWorld._23 = mtxView._32;
+	m_mtxWorld._31 = mtxView._13;
+	m_mtxWorld._32 = mtxView._23;
+	m_mtxWorld._33 = mtxView._33;
+
+	//位置を反映
+	D3DXMatrixTranslation(&mtxTrans, pos.x, pos.y, pos.z);
+	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxTrans);
+
+	//ワールドマトリックスの設定
+	pDevice->SetTransform(D3DTS_WORLD, &m_mtxWorld);
 }
 
 //===========================

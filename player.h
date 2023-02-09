@@ -15,11 +15,12 @@
 //--------------------------------
 // 前方宣言
 //--------------------------------
-class CModel;		//モデル
-class CLine;		//ライン
-class CHP;			//HP
-class CCombo;		//コンボ
-class CDamage;		//ダメージ
+class CModel;			//モデル
+class CLine;			//ライン
+class CHP;				//HP
+class CCombo;			//コンボ
+class CDamage;			//ダメージ
+class CBulletPlayer;	//プレイヤーの弾
 
 //--------------------------------
 // マクロ定義
@@ -186,12 +187,13 @@ private:
 	float m_rotWheel;			//タイヤの回転量
 	bool m_bFinishAttack;		//攻撃が終わった状態
 	bool m_bHit;				//1ヒットした状態
-
-	//列挙型
-	PLAYER_STATUS m_status;		//ステータス
 	CHP*  m_pHP;				//HP
 	CCombo* m_pCombo;			//コンボ
 	CDamage* m_pDamage;			//ダメージ
+	CBulletPlayer* m_pBullet;	//弾
+
+	//列挙型
+	PLAYER_STATUS m_status;		//ステータス
 
 	/* ↓ モデル情報 ↓ */
 	CModel*  m_pModel[MAX_PARTS];		//モデル

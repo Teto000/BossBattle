@@ -155,6 +155,8 @@
     <ClCompile Include="application.cpp" />
     <ClCompile Include="bg.cpp" />
     <ClCompile Include="billboard.cpp" />
+    <ClCompile Include="bullet.cpp" />
+    <ClCompile Include="bullet_player.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="combo.cpp" />
     <ClCompile Include="damage.cpp" />
@@ -198,6 +200,8 @@
     <ClInclude Include="application.h" />
     <ClInclude Include="bg.h" />
     <ClInclude Include="billboard.h" />
+    <ClInclude Include="bullet.h" />
+    <ClInclude Include="bullet_player.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="combo.h" />
     <ClInclude Include="damage.h" />

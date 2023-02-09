@@ -31,6 +31,7 @@
 #include "style_shift.h"
 #include "utility.h"
 #include "sound.h"
+#include "bullet_player.h"
 
 //-------------------------------
 // 静的メンバ変数宣言
@@ -67,6 +68,7 @@ CPlayer::CPlayer() : CObject(0)
 	m_pHP = nullptr;							//HP
 	m_pCombo = nullptr;							//コンボ
 	m_pDamage = nullptr;						//ダメージ
+	m_pBullet = nullptr;						//弾
 
 	//ステータス
 	m_status.nAttack = 0;			//攻撃力
@@ -293,6 +295,15 @@ void CPlayer::Update()
 	// 攻撃処理
 	//--------------------------------
 	AttackManager();
+
+	//--------------------------------
+	// 弾の発射処理
+	//--------------------------------
+	/*if (CInputKeyboard::Press(DIK_M))
+	{
+		D3DXVECTOR3 pos(m_pos.x, m_pos.y + 200.0f, m_pos.z);
+		m_pBullet = CBulletPlayer::Create(pos, m_rot);
+	}*/
 
 	//--------------------------------
 	// モーションの設定
@@ -754,10 +765,8 @@ void CPlayer::Attack()
 //================================
 void CPlayer::HitSword()
 {
-	//変数宣言
-	D3DXVECTOR3 offsetPos(0.0f, 0.0f, -120.0f);					//剣先までのオフセット
-	D3DXVECTOR3 damagePos(m_pos.x, m_pos.y + 150.0f, m_pos.z);	//ダメージの表示位置
-	float fSphereSize = 250.0f;									//球の直径
+	D3DXVECTOR3 offsetPos(0.0f, 0.0f, -120.0f);		//剣先までのオフセット
+	float fSphereSize = 250.0f;						//球の直径
 
 	if (CUtility::ColliaionWeapon(offsetPos, fSphereSize, m_pModel[4]->GetmtxWorld(), CObject::OBJTYPE_ENEMY)
 		&& !m_bFinishAttack
@@ -798,6 +807,8 @@ void CPlayer::HitSword()
 			//-----------------------------
 			// ダメージアップ処理
 			//-----------------------------
+			D3DXVECTOR3 damagePos(m_pos.x, m_pos.y + 150.0f, m_pos.z);	//ダメージの表示位置
+
 			if (bCritical)
 			{//クリティカルなら
 				fDamage *= 1.5f;	//ダメージ1.5倍

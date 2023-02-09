@@ -47,8 +47,10 @@ HRESULT CDamage::Init(D3DXVECTOR3 pos)
 	m_fWidth = 30.0f;	//幅
 	m_fHeight = 40.0f;	//高さ
 
+	CBillBoard::ResetMatrix(pos);
+
 	if (type == DAMAGE_TYPE_CRITICAL)
-	{
+	{//クリティカルなら
 		m_col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);	//色
 	}
 	else
@@ -65,9 +67,9 @@ HRESULT CDamage::Init(D3DXVECTOR3 pos)
 											m_pos.y, m_pos.z);
 
 		m_pNumBoard[i] = CNumBoard::Create(numberPos, m_nAtkValue);
-		m_pNumBoard[i]->Set(i);
-		m_pNumBoard[i]->SetSize(m_fWidth, m_fHeight);
-		m_pNumBoard[i]->SetColor(m_col);
+		m_pNumBoard[i]->Set(i);							//値の設定
+		m_pNumBoard[i]->SetSize(m_fWidth, m_fHeight);	//大きさの設定
+		m_pNumBoard[i]->SetColor(m_col);				//色の設定
 	}
 
 	SetNumber();
