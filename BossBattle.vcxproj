@@ -185,6 +185,7 @@
     <ClCompile Include="object2D.cpp" />
     <ClCompile Include="object3d.cpp" />
     <ClCompile Include="objectX.cpp" />
+    <ClCompile Include="orbit.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="polygon.cpp" />
     <ClCompile Include="renderer.cpp" />
@@ -230,6 +231,7 @@
     <ClInclude Include="object2D.h" />
     <ClInclude Include="object3d.h" />
     <ClInclude Include="objectX.h" />
+    <ClInclude Include="orbit.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="polygon.h" />
     <ClInclude Include="renderer.h" />

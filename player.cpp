@@ -31,6 +31,7 @@
 #include "style_shift.h"
 #include "utility.h"
 #include "sound.h"
+#include "orbit.h"
 #include "bullet_player.h"
 
 //-------------------------------
@@ -68,6 +69,7 @@ CPlayer::CPlayer() : CObject(0)
 	m_pHP = nullptr;							//HP
 	m_pCombo = nullptr;							//コンボ
 	m_pDamage = nullptr;						//ダメージ
+	m_pOrbit = nullptr;							//軌跡
 	m_pBullet = nullptr;						//弾
 
 	//ステータス
@@ -302,6 +304,10 @@ void CPlayer::Update()
 		D3DXVECTOR3 pos(m_pos.x, m_pos.y + 200.0f, m_pos.z);
 		m_pBullet = CBulletPlayer::Create(pos, m_rot);
 	}*/
+
+	//剣の軌跡の表示
+	D3DXVECTOR3 offsetPos(0.0f, 0.0f, -120.0f);		//剣先までのオフセット
+	m_pOrbit = COrbit::Create(offsetPos, m_pModel[4]->GetmtxWorld());
 
 	//--------------------------------
 	// モーションの設定

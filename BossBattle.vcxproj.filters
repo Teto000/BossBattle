@@ -179,6 +179,9 @@
     <ClCompile Include="bullet_player.cpp">
       <Filter>Main\Object\Billboard\Bullet</Filter>
     </ClCompile>
+    <ClCompile Include="orbit.cpp">
+      <Filter>Main\Object\Mesh</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -309,6 +312,9 @@
     </ClInclude>
     <ClInclude Include="bullet_player.h">
       <Filter>Main\Object\Billboard\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="orbit.h">
+      <Filter>Main\Object\Mesh</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
