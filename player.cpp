@@ -296,9 +296,7 @@ void CPlayer::Update()
 	//--------------------------------
 	AttackManager();
 
-	//--------------------------------
-	// ’e‚Ì”­Ëˆ—
-	//--------------------------------
+	//’e‚Ì”­Ëˆ—
 	/*if (CInputKeyboard::Press(DIK_M))
 	{
 		D3DXVECTOR3 pos(m_pos.x, m_pos.y + 200.0f, m_pos.z);

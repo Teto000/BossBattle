@@ -12,6 +12,8 @@
 #include "num_board.h"
 #include "application.h"
 #include "renderer.h"
+#include "game.h"
+#include "camera.h"
 
 //=======================
 // コンストラクタ
@@ -61,10 +63,16 @@ HRESULT CDamage::Init(D3DXVECTOR3 pos)
 	//------------------------------
 	// 数値の設定
 	//------------------------------
+	float cameraRotY = CGame::GetCamera()->GetRot().y;	//カメラの向きを取得
+	cameraRotY += D3DX_PI / 2;	//90°回転
+	D3DXVECTOR3 vec = D3DXVECTOR3(sinf(cameraRotY), cosf(cameraRotY), 0.0f);	//ベクトルの計算
+
 	for (int i = 0; i < nMaxDigits; i++)
 	{
-		D3DXVECTOR3 numberPos = D3DXVECTOR3((m_pos.x - m_fWidth) + (m_fWidth * i),
-											m_pos.y, m_pos.z);
+		//カメラ側に向いて並ぶ位置を計算
+		D3DXVECTOR3 numberPos = D3DXVECTOR3((m_pos.x - m_fWidth) + ((m_fWidth * vec.x) * i),
+											m_pos.y,
+											m_pos.z + ((m_fWidth * vec.y) * i));
 
 		m_pNumBoard[i] = CNumBoard::Create(numberPos, m_nAtkValue);
 		m_pNumBoard[i]->Set(i);							//値の設定
@@ -87,6 +95,7 @@ void CDamage::Uninit()
 		if (m_pNumBoard[i] != nullptr)
 		{//nullじゃないなら
 			m_pNumBoard[i]->Uninit();
+			m_pNumBoard[i] = nullptr;
 		}
 	}
 }
@@ -118,11 +127,11 @@ void CDamage::Update()
 		m_col.a -= 0.1f;
 	}
 
-	//if (m_col.a <= 0.0f)
-	//{//完全に透明になったら
-	//	Uninit();
-	//	return;
-	//}
+	if (m_col.a <= 0.0f)
+	{//完全に透明になったら
+		Uninit();
+		return;
+	}
 }
 
 //=======================
