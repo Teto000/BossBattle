@@ -89,14 +89,11 @@ void CCamera::Update(void)
 	// ジョイパッドでの操作
 	CInputJoypad* joypad = CApplication::GetInput()->GetJoypad();
 
-	if (joypad->Press(CInputJoypad::JOYKEY_RIGHT_THUMB))
+	if (CInputKeyboard::Trigger(DIK_SPACE)
+		|| joypad->Trigger(CInputJoypad::JOYKEY_RIGHT_THUMB))
 	{
-		if (CInputKeyboard::Trigger(DIK_SPACE)
-			|| joypad->Trigger(CInputJoypad::JOYKEY_RIGHT_THUMB))
-		{
-			//ロックオン状態を切り替え
-			m_bLockOn = !m_bLockOn;
-		}
+		//ロックオン状態を切り替え
+		m_bLockOn = !m_bLockOn;
 	}
 
 	if (CGame::GetFinish())

@@ -66,12 +66,12 @@ void CResult::Uninit()
 void CResult::Update()
 {
 	// ジョイパッドでの操作
-	CInputJoypad* joypad = CApplication::GetJoypad();
+	CInputJoypad* joypad = CApplication::GetInput()->GetJoypad();
 
 	//画面遷移
-	if (CInputKeyboard::Trigger(DIK_RETURN) || joypad->Press(CInputJoypad::JOYKEY_A))
+	if (CInputKeyboard::AllTrigger() || joypad->AllTrigger())
 	{
-		//タイトル画面に移行
+		//ゲーム画面に移行
 		CApplication::GetFade()->SetFade(CApplication::MODE_TITLE);
 
 		//SEの再生

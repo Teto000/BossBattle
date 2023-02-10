@@ -39,7 +39,6 @@ CTexture*		CApplication::m_pTexture = nullptr;		//テクスチャ
 CSound*			CApplication::m_pSound = nullptr;		//サウンド
 CLight*			CApplication::m_pLight = nullptr;		//ライト
 CDebugProc*		CApplication::m_pDebugproc = nullptr;	//デバッグ用文字
-CInputJoypad*	CApplication::m_pJoypad = nullptr;		//ジョイパッド
 
 //===========================
 // コンストラクタ
@@ -93,12 +92,6 @@ HRESULT CApplication::Init(HINSTANCE hInstance, HWND hWnd)
 	//----------------------------
 	m_pLight = new CLight;
 	m_pLight->Init(GetRenderer()->GetDevice());
-
-	//----------------------------
-	// ジョイパッドの生成と初期化
-	//----------------------------
-	/*m_pJoypad = new CInputJoypad;
-	m_pJoypad->Init();*/
 
 	//----------------------------
 	// モードの設定
@@ -225,16 +218,6 @@ void CApplication::Uninit()
 		delete m_pDebugproc;
 		m_pDebugproc = nullptr;
 	}
-
-	//----------------------------
-	// ジョイパッドの終了処理
-	//----------------------------
-	/*if (m_pJoypad != nullptr)
-	{
-		m_pJoypad->Uninit();
-		delete m_pJoypad;
-		m_pJoypad = nullptr;
-	}*/
 }
 
 //===========================
@@ -244,9 +227,6 @@ void CApplication::Update()
 {
 	//インプットの更新
 	m_pInput->Update();	//最初にやる
-
-	//ジョイパッドの更新
-	//m_pJoypad->Update();
 
 	//レンダリングの更新
 	m_pRenderer->Update();

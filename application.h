@@ -22,7 +22,6 @@ class CFade;		//フェード
 
 class CRenderer;	//レンダラー
 class CInput;		//インプット
-class CInputJoypad;	//ジョイパッド
 class CTexture;		//テクスチャ
 class CSound;		//サウンド
 class CLight;		//ライト
@@ -73,7 +72,6 @@ public:
 	static CFade*			GetFade()		{ return m_pFade; };		//フェードの取得
 	static CRenderer*		GetRenderer()	{ return m_pRenderer; };	//レンダラーの取得
 	static CInput*			GetInput()		{ return m_pInput; };		//インプットの取得
-	static CInputJoypad*	GetJoypad()		{ return m_pJoypad; };		//ジョイパッドの取得
 	static CTexture*		GetTexture()	{ return m_pTexture; };		//テクスチャの取得
 	static CSound*			GetSound()		{ return m_pSound; };		//サウンドの取得
 	static CLight*			GetLight()		{ return m_pLight; };		//ライトの取得
@@ -91,7 +89,6 @@ private:
 
 	static CRenderer*	m_pRenderer;	//レンダラークラス
 	static CInput*		m_pInput;		//インプットクラス
-	static CInputJoypad*m_pJoypad;		//ジョイパッド
 	static CTexture*	m_pTexture;		//テクスチャクラス
 	static CSound*		m_pSound;		//サウンドクラス
 	static CLight*		m_pLight;		//ライトクラス
