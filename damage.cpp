@@ -70,7 +70,7 @@ HRESULT CDamage::Init(D3DXVECTOR3 pos)
 	for (int i = 0; i < nMaxDigits; i++)
 	{
 		//カメラ側に向いて並ぶ位置を計算
-		D3DXVECTOR3 numberPos = D3DXVECTOR3((m_pos.x - m_fWidth) + ((m_fWidth * vec.x) * i),
+		D3DXVECTOR3 numberPos = D3DXVECTOR3((m_pos.x - (m_fWidth / 2)) + ((m_fWidth * vec.x) * i),
 											m_pos.y,
 											m_pos.z + ((m_fWidth * vec.y) * i));
 
@@ -121,7 +121,7 @@ void CDamage::Update()
 	//消えるまでの時間を数える
 	m_nDeleteTime++;
 
-	if (m_nDeleteTime >= 10)
+	if (m_nDeleteTime >= 20)
 	{//一定時間が経過したら
 		//透明度の減少
 		m_col.a -= 0.1f;
@@ -168,7 +168,7 @@ CDamage *CDamage::Create(D3DXVECTOR3 pos, int nNum, DAMAGE_TYPE type)
 		pDamage->type = type;
 
 		//初期化
-		pDamage->Init(D3DXVECTOR3(pos));
+		pDamage->Init(pos);
 	}
 
 	return pDamage;

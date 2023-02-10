@@ -186,7 +186,10 @@ void CCombo::SetNumber()
 //=======================
 int CCombo::AddNumber(int nNum)
 {
-	m_nNumCombo += nNum;
+	if (m_nNumCombo + nNum < 100)
+	{//100‚É‚È‚ç‚È‚¢‚È‚ç
+		m_nNumCombo += nNum;
+	}
 
 	//”’l‚ÌÝ’è
 	SetNumber();

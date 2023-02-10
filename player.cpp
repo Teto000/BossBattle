@@ -37,7 +37,7 @@
 //-------------------------------
 // 静的メンバ変数宣言
 //-------------------------------
-const float CPlayer::fDefaultAttack = 20.0f;	//基本の攻撃力
+const float CPlayer::fDefaultAttack = 10.0f;	//基本の攻撃力
 const float CPlayer::fDefaultSpeed = 9.0f;		//基本の速度
 
 //=============================
@@ -270,6 +270,16 @@ void CPlayer::Update()
 
 		//向きを目的の角度に合わせる
 		SetRot();
+
+		//--------------------------------
+		// 攻撃処理
+		//--------------------------------
+		AttackManager();
+	}
+	else
+	{//終了フラグが立ったら
+		//待機モーションにする
+		ChangeMotion(MOTION_IDOL);
 	}
 
 	//--------------------------------------
@@ -292,11 +302,6 @@ void CPlayer::Update()
 	{//回避硬直が0より上なら
 		m_nAvoidStan--;		//硬直時間の減少
 	}
-
-	//--------------------------------
-	// 攻撃処理
-	//--------------------------------
-	AttackManager();
 
 	//--------------------------------
 	// 弾の発射処理
@@ -813,7 +818,7 @@ void CPlayer::HitSword()
 			// 技ごとのダメージ量を計算
 			//-----------------------------------
 			float fDamage = m_status.nAttack * m_aMotionSet[m_type].fDamageMag;
-			float fComboDamage = (float)m_nNumCombo / 50;
+			float fComboDamage = (float)m_nNumCombo / 20;
 
 			//コンボ数に応じてダメージアップ
 			fDamage += fDamage * fComboDamage;
@@ -839,7 +844,13 @@ void CPlayer::HitSword()
 			//-----------------------------
 			// ダメージアップ処理
 			//-----------------------------
-			D3DXVECTOR3 damagePos(m_pos.x, m_pos.y + 150.0f, m_pos.z);	//ダメージの表示位置
+			//ダメージの表示位置をランダムに設定
+			int nWidth = 50;
+			int nRandX = rand() % nWidth - (nWidth / 2);
+			int nRandY = rand() % nWidth - (nWidth / 2);
+			D3DXVECTOR3 damagePos(m_pos.x + (float)nRandX
+								  , m_pos.y + 150.0f + (float)nRandY
+								  , m_pos.z);
 
 			if (bCritical)
 			{//クリティカルなら
