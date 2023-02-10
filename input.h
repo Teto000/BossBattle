@@ -40,6 +40,8 @@ public:
 	void Uninit(void);								//入力処理全部の終了処理
 	void Update(void);								//入力処理全部の更新処理
 
+	static CInputJoypad* GetJoypad() { return m_pInputJoypad; }
+
 private:
 	//------------------
 	// 静的メンバ変数

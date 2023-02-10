@@ -97,8 +97,8 @@ HRESULT CApplication::Init(HINSTANCE hInstance, HWND hWnd)
 	//----------------------------
 	// ジョイパッドの生成と初期化
 	//----------------------------
-	m_pJoypad = new CInputJoypad;
-	m_pJoypad->Init();
+	/*m_pJoypad = new CInputJoypad;
+	m_pJoypad->Init();*/
 
 	//----------------------------
 	// モードの設定
@@ -229,12 +229,12 @@ void CApplication::Uninit()
 	//----------------------------
 	// ジョイパッドの終了処理
 	//----------------------------
-	if (m_pJoypad != nullptr)
+	/*if (m_pJoypad != nullptr)
 	{
 		m_pJoypad->Uninit();
 		delete m_pJoypad;
 		m_pJoypad = nullptr;
-	}
+	}*/
 }
 
 //===========================
@@ -246,7 +246,7 @@ void CApplication::Update()
 	m_pInput->Update();	//最初にやる
 
 	//ジョイパッドの更新
-	m_pJoypad->Update();
+	//m_pJoypad->Update();
 
 	//レンダリングの更新
 	m_pRenderer->Update();

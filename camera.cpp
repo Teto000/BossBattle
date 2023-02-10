@@ -83,11 +83,20 @@ void CCamera::Update(void)
 	//回転
 	Turn();
 
-	//ロックオン状態の切り替え
-	if (CInputKeyboard::Trigger(DIK_SPACE))
+	//----------------------------------------
+	// ロックオン状態の切り替え
+	//----------------------------------------
+	// ジョイパッドでの操作
+	CInputJoypad* joypad = CApplication::GetInput()->GetJoypad();
+
+	if (joypad->Press(CInputJoypad::JOYKEY_RIGHT_THUMB))
 	{
-		//ロックオン状態を切り替え
-		m_bLockOn = !m_bLockOn;
+		if (CInputKeyboard::Trigger(DIK_SPACE)
+			|| joypad->Trigger(CInputJoypad::JOYKEY_RIGHT_THUMB))
+		{
+			//ロックオン状態を切り替え
+			m_bLockOn = !m_bLockOn;
+		}
 	}
 
 	if (CGame::GetFinish())
@@ -252,7 +261,7 @@ void CCamera::SetCamera(LPDIRECT3DDEVICE9 pDevice)
 void CCamera::Turn()
 {
 	// ジョイパッドでの操作
-	CInputJoypad* joypad = CApplication::GetJoypad();
+	CInputJoypad* joypad = CApplication::GetInput()->GetJoypad();
 	D3DXVECTOR3 stick = joypad->Stick(CInputJoypad::JOYKEY_RIGHT_STICK, 0);
 
 	//スティックを動かす値の設定
@@ -273,11 +282,11 @@ void CCamera::Turn()
 		}
 		if (CInputKeyboard::Press(DIK_Y) || stick.y >= fMoveValue)	//上回転
 		{//Yキーが押された
-			m_rot.x += m_TSPEED;
+			m_rot.x -= m_TSPEED;
 		}
 		else if (CInputKeyboard::Press(DIK_B) || stick.y <= -fMoveValue)	//下回転
 		{//Bキーが押された
-			m_rot.x -= m_TSPEED;
+			m_rot.x += m_TSPEED;
 		}
 	}
 

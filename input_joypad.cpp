@@ -75,18 +75,18 @@ void CInputJoypad::Uninit(void)
 //===========================================
 void CInputJoypad::Update(void)
 {
-	XINPUT_STATE JoyKeyState[PLAYER_MAX];		// ジョイパッド入力情報
+	XINPUT_STATE JoyKeyState;		// ジョイパッド入力情報
 
 	for (int nCnt = 0; nCnt < PLAYER_MAX; nCnt++)
 	{
 		// ジョイパッドの状態を取得
-		if (XInputGetState(nCnt, &JoyKeyState[nCnt]) == ERROR_SUCCESS)
+		if (XInputGetState(nCnt, &JoyKeyState) == ERROR_SUCCESS)
 		{
 			// トリガー情報を保存
-			m_Joypad.JoyKeyStateTrigger[nCnt].Gamepad.wButtons = ~m_Joypad.JoyKeyState[nCnt].Gamepad.wButtons & JoyKeyState[nCnt].Gamepad.wButtons;
+			m_Joypad.JoyKeyStateTrigger[nCnt].Gamepad.wButtons = ~m_Joypad.JoyKeyState[nCnt].Gamepad.wButtons & JoyKeyState.Gamepad.wButtons;
 
 			// プレス情報を保存
-			m_Joypad.JoyKeyState[nCnt] = JoyKeyState[nCnt];
+			m_Joypad.JoyKeyState[nCnt] = JoyKeyState;
 
 			// スティックのトリガーの更新
 			UpdateStickTrigger(JOYKEY_LEFT_STICK, JOYKEY_UP, nCnt);
@@ -223,7 +223,7 @@ void CInputJoypad::UpdateStickTrigger(CInputJoypad::JOYKEY Stick, CInputJoypad::
 //--------------------------------------------------
 bool CInputJoypad::IdxPress(CInputJoypad::JOYKEY Key, int nPlayer)
 {
-	return (m_Joypad.JoyKeyState[nPlayer].Gamepad.wButtons & (0x01 << Key)) != 0;
+	return (m_Joypad.JoyKeyState[nPlayer].Gamepad.wButtons & (0x01 << Key)) ? true : false;
 }
 
 //--------------------------------------------------
@@ -231,7 +231,8 @@ bool CInputJoypad::IdxPress(CInputJoypad::JOYKEY Key, int nPlayer)
 //--------------------------------------------------
 bool CInputJoypad::IdxTrigger(CInputJoypad::JOYKEY Key, int nPlayer)
 {
-	return (m_Joypad.JoyKeyStateTrigger[nPlayer].Gamepad.wButtons & (0x01 << Key)) != 0;
+	bool a = (m_Joypad.JoyKeyStateTrigger[nPlayer].Gamepad.wButtons & (0x01 << Key)) ? true : false;
+	return a;
 }
 
 //--------------------------------------------------

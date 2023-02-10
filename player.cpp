@@ -251,7 +251,7 @@ void CPlayer::Update()
 		// 移動
 		//--------------------------------
 		// ジョイパッドでの操作
-		CInputJoypad* joypad = CApplication::GetJoypad();
+		CInputJoypad* joypad = CApplication::GetInput()->GetJoypad();
 
 		if (GetOutAttack(false, true))
 		{//攻撃中じゃないなら
@@ -298,16 +298,20 @@ void CPlayer::Update()
 	//--------------------------------
 	AttackManager();
 
-	//弾の発射処理
+	//--------------------------------
+	// 弾の発射処理
+	//--------------------------------
 	/*if (CInputKeyboard::Press(DIK_M))
 	{
 		D3DXVECTOR3 pos(m_pos.x, m_pos.y + 200.0f, m_pos.z);
 		m_pBullet = CBulletPlayer::Create(pos, m_rot);
 	}*/
 
-	//剣の軌跡の表示
-	D3DXVECTOR3 offsetPos(0.0f, 0.0f, -120.0f);		//剣先までのオフセット
-	m_pOrbit = COrbit::Create(offsetPos, m_pModel[4]->GetmtxWorld());
+	//--------------------------------
+	// 剣の軌跡の表示
+	//--------------------------------
+	//D3DXVECTOR3 offsetPos(0.0f, 0.0f, -120.0f);		//剣先までのオフセット
+	//m_pOrbit = COrbit::Create(offsetPos, m_pModel[4]->GetmtxWorld());
 
 	//--------------------------------
 	// モーションの設定
@@ -488,7 +492,7 @@ void CPlayer::MoveKeyboard(int nUpKey, int nDownKey, int nLeftKey, int nRightKey
 void CPlayer::MoveJoypad()
 {
 	// ジョイパッドでの操作
-	CInputJoypad* joypad = CApplication::GetJoypad();
+	CInputJoypad* joypad = CApplication::GetInput()->GetJoypad();
 	D3DXVECTOR3 stick = joypad->Stick(CInputJoypad::JOYKEY_LEFT_STICK, 0);
 
 	if (joypad->IsJoyPadUse(0) == false)
@@ -501,6 +505,16 @@ void CPlayer::MoveJoypad()
 
 	//カメラの情報取得
 	D3DXVECTOR3 cameraRot = CGame::GetCamera()->GetRot();
+
+	//--------------------------------------
+	// 回避する処理
+	//--------------------------------------
+	if (joypad->Trigger(CInputJoypad::JOYKEY_A)
+		&& !m_status.bAvoidance && m_nAvoidStan <= 0)
+	{//キーが押された & 回避状態じゃない & 回避硬直が0以下なら
+		m_status.fSpeed *= 4.0f;		//加速
+		m_status.bAvoidance = true;		//回避状態
+	}
 
 	//------------------------------------------
 	// 右移動
@@ -569,6 +583,12 @@ void CPlayer::MoveJoypad()
 		m_pos.z -= cosf(cameraRot.y + D3DX_PI * 0.0f) * m_status.fSpeed;
 		m_rotDest.y = cameraRot.y + D3DX_PI * 0.0f;
 	}
+	else if (m_status.bAvoidance)
+	{//何も押されていない & 回避状態なら
+		m_pos.x -= sinf(cameraRot.y + D3DX_PI * 1.0f) * m_status.fSpeed;
+		m_pos.z -= cosf(cameraRot.y + D3DX_PI * 1.0f) * m_status.fSpeed;
+		m_rotDest.y = cameraRot.y + D3DX_PI * 1.0f;
+	}
 
 	//タイヤの回転量の加算
 	m_rotWheel += D3DXToRadian(-nWheelRotValue);
@@ -578,6 +598,11 @@ void CPlayer::MoveJoypad()
 	{//スティックが動かされていないなら
 		//タイヤの回転量を0にする
 		m_rotWheel = 0;
+	}
+	else
+	{//どれかが押されているなら
+	 //移動モーションにする
+		ChangeMotion(MOTION_MOVE);
 	}
 }
 
@@ -633,6 +658,9 @@ void CPlayer::SetRot()
 //================================
 void CPlayer::AttackManager()
 {
+	// ジョイパッドでの操作
+	CInputJoypad* joypad = CApplication::GetInput()->GetJoypad();
+
 	//攻撃キー用変数宣言
 	int nNorAtkKey = DIK_RETURN;
 	int nSpinAtkKey = DIK_1;
@@ -643,11 +671,11 @@ void CPlayer::AttackManager()
 	// 待機中なら
 	//---------------------------
 	case MOTION_IDOL:
-		if (CInputKeyboard::Trigger(nNorAtkKey))
+		if (CInputKeyboard::Trigger(nNorAtkKey) || joypad->Trigger(CInputJoypad::JOYKEY_B))
 		{
 			ChangeMotion(MOTION_ATTACK_1);
 		}
-		else if (CInputKeyboard::Trigger(nSpinAtkKey))
+		else if (CInputKeyboard::Trigger(nSpinAtkKey) || joypad->Trigger(CInputJoypad::JOYKEY_Y))
 		{
 			ChangeMotion(MOTION_ATTACK_SPIN);
 		}
@@ -657,11 +685,11 @@ void CPlayer::AttackManager()
 	// 移動中なら
 	//---------------------------
 	case MOTION_MOVE:
-		if (CInputKeyboard::Trigger(nNorAtkKey))
+		if (CInputKeyboard::Trigger(nNorAtkKey) || joypad->Trigger(CInputJoypad::JOYKEY_B))
 		{
 			ChangeMotion(MOTION_ATTACK_1);
 		}
-		else if (CInputKeyboard::Trigger(nSpinAtkKey))
+		else if (CInputKeyboard::Trigger(nSpinAtkKey) || joypad->Trigger(CInputJoypad::JOYKEY_Y))
 		{
 			ChangeMotion(MOTION_ATTACK_SPIN);
 		}
@@ -671,11 +699,11 @@ void CPlayer::AttackManager()
 	// 通常攻撃(1)なら
 	//---------------------------
 	case MOTION_ATTACK_1:
-		if (CInputKeyboard::Trigger(nNorAtkKey))
+		if (CInputKeyboard::Trigger(nNorAtkKey) || joypad->Trigger(CInputJoypad::JOYKEY_B))
 		{
 			ChangeMotion(MOTION_ATTACK_2);
 		}
-		else if (CInputKeyboard::Trigger(nSpinAtkKey))
+		else if (CInputKeyboard::Trigger(nSpinAtkKey) || joypad->Trigger(CInputJoypad::JOYKEY_Y))
 		{
 			ChangeMotion(MOTION_ATTACK_SPIN);
 		}
@@ -685,7 +713,7 @@ void CPlayer::AttackManager()
 	// 通常攻撃(2)なら
 	//---------------------------
 	case MOTION_ATTACK_2:
-		if (CInputKeyboard::Trigger(nSpinAtkKey))
+		if (CInputKeyboard::Trigger(nSpinAtkKey) || joypad->Trigger(CInputJoypad::JOYKEY_Y))
 		{
 			ChangeMotion(MOTION_ATTACK_SPIN);
 		}
@@ -695,7 +723,7 @@ void CPlayer::AttackManager()
 	// 回転切りなら
 	//---------------------------
 	case MOTION_ATTACK_SPIN:
-		if (CInputKeyboard::Trigger(nSpinAtkKey))
+		if (CInputKeyboard::Trigger(nSpinAtkKey) || joypad->Trigger(CInputJoypad::JOYKEY_Y))
 		{
 			ChangeMotion(MOTION_ATTACK_SPIN);
 		}
