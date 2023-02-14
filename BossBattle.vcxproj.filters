@@ -182,6 +182,9 @@
     <ClCompile Include="orbit.cpp">
       <Filter>Main\Object\Mesh</Filter>
     </ClCompile>
+    <ClCompile Include="item.cpp">
+      <Filter>Main\Object\Billboard</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -315,6 +318,9 @@
     </ClInclude>
     <ClInclude Include="orbit.h">
       <Filter>Main\Object\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="item.h">
+      <Filter>Main\Object\Billboard</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

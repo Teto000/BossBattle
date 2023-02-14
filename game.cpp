@@ -28,6 +28,7 @@
 #include "sky.h"
 #include "hp.h"
 #include "stage.h"
+#include "item.h"
 
 //------------------------
 // 静的メンバ変数宣言
@@ -43,6 +44,7 @@ CPolygon*	CGame::m_pPolygon = nullptr;	//2Dポリゴン
 CMessage*	CGame::m_pMessage = nullptr;	//メッセージ
 CSky*		CGame::m_pSky = nullptr;		//スカイ
 CStage*		CGame::m_pStage = nullptr;		//ステージ
+CItem*		CGame::m_pItem = nullptr;		//アイテム
 
 //===========================
 // コンストラクタ
@@ -102,6 +104,11 @@ HRESULT CGame::Init()
 		D3DXVECTOR3 pos(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f);
 		m_pMessage = CMessage::Create(pos, 800.0f, 400.0f, CMessage::MESSAGE_CLEAR);
 		m_pMessage = CMessage::Create(pos, 600.0f, 200.0f, CMessage::MESSAGE_BREAK);
+	}
+
+	{
+		D3DXVECTOR3 pos(400.0f, 100.0f, 0.0f);
+		m_pItem = CItem::Create(pos, CItem::ITEMTYPE_HEAL);
 	}
 
 	//BGMの再生
