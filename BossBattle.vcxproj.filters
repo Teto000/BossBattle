@@ -176,9 +176,6 @@
     <ClCompile Include="bullet.cpp">
       <Filter>Main\Object\Billboard\Bullet</Filter>
     </ClCompile>
-    <ClCompile Include="bullet_player.cpp">
-      <Filter>Main\Object\Billboard\Bullet</Filter>
-    </ClCompile>
     <ClCompile Include="orbit.cpp">
       <Filter>Main\Object\Mesh</Filter>
     </ClCompile>
@@ -314,9 +311,6 @@
       <Filter>Main\Object\Billboard\Number</Filter>
     </ClInclude>
     <ClInclude Include="bullet.h">
-      <Filter>Main\Object\Billboard\Bullet</Filter>
-    </ClInclude>
-    <ClInclude Include="bullet_player.h">
       <Filter>Main\Object\Billboard\Bullet</Filter>
     </ClInclude>
     <ClInclude Include="orbit.h">

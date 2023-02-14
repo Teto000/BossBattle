@@ -32,7 +32,6 @@
 #include "utility.h"
 #include "sound.h"
 #include "orbit.h"
-#include "bullet_player.h"
 
 //-------------------------------
 // 静的メンバ変数宣言
@@ -70,7 +69,6 @@ CPlayer::CPlayer() : CObject(0)
 	m_pCombo = nullptr;							//コンボ
 	m_pDamage = nullptr;						//ダメージ
 	m_pOrbit = nullptr;							//軌跡
-	m_pBullet = nullptr;						//弾
 
 	//ステータス
 	m_status.nAttack = 0;			//攻撃力
@@ -302,15 +300,6 @@ void CPlayer::Update()
 	{//回避硬直が0より上なら
 		m_nAvoidStan--;		//硬直時間の減少
 	}
-
-	//--------------------------------
-	// 弾の発射処理
-	//--------------------------------
-	/*if (CInputKeyboard::Press(DIK_M))
-	{
-		D3DXVECTOR3 pos(m_pos.x, m_pos.y + 200.0f, m_pos.z);
-		m_pBullet = CBulletPlayer::Create(pos, m_rot);
-	}*/
 
 	//--------------------------------
 	// 剣の軌跡の表示

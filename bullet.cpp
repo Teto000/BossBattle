@@ -34,7 +34,16 @@ CBullet::~CBullet()
 //====================================
 HRESULT CBullet::Init(D3DXVECTOR3 pos)
 {
+	//初期値の設定
+	m_fWidth = 50.0f;
+	m_fHeight = 50.0f;
+
 	CBillBoard::Init(pos);
+
+	CBillBoard::SetPos(pos);
+	CBillBoard::SetMove(m_move);
+	CBillBoard::SetSize(m_fWidth, m_fHeight);
+	CBillBoard::SetTexture(CTexture::TEXTURE_AIM);
 
 	return S_OK;
 }
@@ -55,7 +64,7 @@ void CBullet::Update()
 	CBillBoard::Update();
 
 	//位置に移動量を加算
-	m_pos += m_move;
+	m_pos = CBillBoard::AddMove(m_move);
 	CBillBoard::SetPos(m_pos);
 }
 
@@ -65,4 +74,32 @@ void CBullet::Update()
 void CBullet::Draw()
 {
 	CBillBoard::Draw();
+}
+
+//====================================
+// 生成
+//====================================
+CBullet* CBullet::Create(D3DXVECTOR3 pos, D3DXVECTOR3 playerRot)
+{
+	CBullet *pBullet = nullptr;
+
+	//----------------------------------
+	// 生成と初期化
+	//----------------------------------
+	pBullet = new CBullet;	//生成
+
+	if (pBullet != nullptr)
+	{//NULLチェック
+		//移動量
+		pBullet->m_move = D3DXVECTOR3(sinf(playerRot.x) * sinf(playerRot.y) * 5,
+									  cosf(playerRot.x) * 5,
+									  sinf(playerRot.x) * cosf(playerRot.y) * 5);
+
+		pBullet->m_move = D3DXVECTOR3(0.0f, 5.0f, 0.0f);
+
+		//初期化
+		pBullet->Init(D3DXVECTOR3(pos));
+	}
+
+	return pBullet;
 }

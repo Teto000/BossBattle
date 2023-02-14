@@ -21,7 +21,6 @@ class CHP;				//HP
 class CCombo;			//コンボ
 class CDamage;			//ダメージ
 class COrbit;			//軌跡
-class CBulletPlayer;	//プレイヤーの弾
 
 //--------------------------------
 // マクロ定義
@@ -202,7 +201,6 @@ private:
 	CCombo* m_pCombo;			//コンボ
 	CDamage* m_pDamage;			//ダメージ
 	COrbit* m_pOrbit;			//軌跡
-	CBulletPlayer* m_pBullet;	//弾
 
 	//列挙型
 	PLAYER_STATUS m_status;		//ステータス

@@ -29,6 +29,11 @@ public:
 	virtual void Uninit() override;
 	virtual void Update() override;
 	virtual void Draw() override;
+
+	//---------------------
+	// Ã“Iƒƒ“ƒoŠÖ”
+	//---------------------
+	static CBullet* CBullet::Create(D3DXVECTOR3 pos, D3DXVECTOR3 playerRot);
 };
 
 #endif // !_BULLET_H_
