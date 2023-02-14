@@ -25,6 +25,7 @@ class CMessage;		//メッセージ
 class CSky;			//スカイ
 class CStage;		//ステージ
 class CItem;		//アイテム
+class CTime;		//タイム
 
 //================================
 // ゲームクラスの定義
@@ -77,6 +78,7 @@ private:
 	static CSky*		m_pSky;			//スカイ
 	static CStage*		m_pStage;		//ステージ
 	static CItem*		m_pItem;		//アイテム
+	static CTime*		m_pTime;		//タイマー
 };
 
 #endif

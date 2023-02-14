@@ -185,6 +185,9 @@
     <ClCompile Include="item.cpp">
       <Filter>Main\Object\Billboard</Filter>
     </ClCompile>
+    <ClCompile Include="time.cpp">
+      <Filter>Main\Object\Object2D\Number</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -321,6 +324,9 @@
     </ClInclude>
     <ClInclude Include="item.h">
       <Filter>Main\Object\Billboard</Filter>
+    </ClInclude>
+    <ClInclude Include="time.h">
+      <Filter>Main\Object\Object2D\Number</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

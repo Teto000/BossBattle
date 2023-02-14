@@ -29,6 +29,7 @@
 #include "hp.h"
 #include "stage.h"
 #include "item.h"
+#include "time.h"
 
 //------------------------
 // 静的メンバ変数宣言
@@ -45,6 +46,7 @@ CMessage*	CGame::m_pMessage = nullptr;	//メッセージ
 CSky*		CGame::m_pSky = nullptr;		//スカイ
 CStage*		CGame::m_pStage = nullptr;		//ステージ
 CItem*		CGame::m_pItem = nullptr;		//アイテム
+CTime*		CGame::m_pTime = nullptr;		//タイマー
 
 //===========================
 // コンストラクタ
@@ -111,6 +113,9 @@ HRESULT CGame::Init()
 		D3DXVECTOR3 pos(400.0f, 100.0f, 0.0f);
 		m_pItem = CItem::Create(pos, CItem::ITEMTYPE_HEAL);
 	}
+
+	//タイマーの生成
+	m_pTime = CTime::Create(D3DXVECTOR3(1100.0f, 650.0f, 0.0f));
 
 	//BGMの再生
 	CSound::PlaySound(CSound::SOUND_LABEL_GAME);
