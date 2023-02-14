@@ -18,11 +18,16 @@
 class CItem : public CBillBoard
 {
 public:
-	//アイテムの種類
+	//-------------------
+	// アイテムの種類
+	//-------------------
 	enum ITEMTYPE
 	{
 		ITEMTYPE_NONE = 0,
 		ITEMTYPE_HEAL,
+		ITEMTYPE_ATTACK,
+		ITEMTYPE_SPEED,
+		ITEMTYPE_COMBO,
 		ITEMTYPE_MAX
 	};
 

@@ -35,21 +35,27 @@ class CBulletPlayer;	//プレイヤーの弾
 class CPlayer : public CObject
 {
 public:
-	//キー要素
+	//-------------------------
+	// キー要素
+	//-------------------------
 	struct KEY
 	{
 		D3DXVECTOR3 pos;	//位置
 		D3DXVECTOR3 rot;	//向き
 	};
 
-	//キー情報
+	//-------------------------
+	// キー情報
+	//-------------------------
 	struct KEY_SET
 	{
 		int nFrame;	//フレーム数
 		KEY aKey[MAX_PARTS];
 	};
 
-	//モーション情報
+	//-------------------------
+	// モーション情報
+	//-------------------------
 	struct MOTION_SET
 	{
 		bool bLoop;					//ループするかどうか
@@ -66,7 +72,9 @@ public:
 		float fDamageMag;			//ダメージ倍率(magnification)
 	};
 
-	//プレイヤーのステータス
+	//-------------------------
+	// プレイヤーのステータス
+	//-------------------------
 	struct PLAYER_STATUS
 	{
 		int nAttackTime;	//攻撃時間
@@ -79,7 +87,9 @@ public:
 		bool bAvoidance;	//回避状態
 	};
 
-	//モーションの種類
+	//-------------------------
+	// モーションの種類
+	//-------------------------
 	enum MOTION_TYPE
 	{
 		MOTION_IDOL = 0,	//待機
@@ -93,17 +103,17 @@ public:
 	CPlayer();				//コンストラクタ
 	~CPlayer() override;	//デストラクタ
 
-	//----------------
+	//-------------------------
 	// メンバ関数
-	//----------------
+	//-------------------------
 	HRESULT Init(D3DXVECTOR3 pos) override;
 	void Uninit() override;
 	void Update() override;
 	void Draw() override;
 
-	//----------------
+	//-------------------------
 	// セッター
-	//----------------
+	//-------------------------
 	void SetPosition(D3DXVECTOR3 pos) { m_pos = pos; }						//位置の設定
 	void SetAttack(float nAttack)	  { m_status.nAttack = nAttack; }		//攻撃力の設定
 	void SetSpeed(float fSpeed)		  { m_status.fSpeed = fSpeed; }			//速度の設定
@@ -111,9 +121,9 @@ public:
 	void AddCombo(int nNumber);		//コンボ数の加算
 	void AddLife(float fDamage);	//HP減少時の処理
 
-	//----------------
+	//-------------------------
 	// ゲッター
-	//----------------
+	//-------------------------
 	D3DXVECTOR3 GetPosition() override { return m_pos; }			//位置の取得
 	D3DXVECTOR3 GetRot()			   { return m_rot; }			//向きの取得
 	D3DXVECTOR3 GetSize()			   { return m_size; }			//大きさの取得
@@ -128,15 +138,15 @@ public:
 	PLAYER_STATUS GetStatus()		   { return m_status; }			//ステータスの取得
 	MOTION_TYPE GetMotion()			   { return m_type; }			//モーションの種類の取得
 
-	//---------------------
+	//-------------------------
 	// 静的メンバ関数
-	//---------------------
+	//-------------------------
 	static CPlayer* Create();
 
 private:
-	//---------------------
+	//-------------------------
 	// プライベート関数
-	//---------------------
+	//-------------------------
 	void MoveKeyboard(int nUpKey, int nDownKey, int nLeftKey, int nRightKey);	//移動
 	void MoveJoypad();			//ジョイパッドを使った移動
 	void SetRot();				//角度の設定
@@ -152,18 +162,18 @@ private:
 	void ChangeMotion(MOTION_TYPE type);						//モーションの変更
 
 private:
-	//----------------
+	//-------------------------
 	// 定数
-	//----------------
+	//-------------------------
 	static const int nMaxLine = 12;				//線の最大数
 	static const int nSwordNumber = 4;			//剣モデルの番号
 	static const int nResetModeTime = 600;		//モードチェンジ終了までの時間
 	static const float fDefaultAttack;			//基本の攻撃力
 	static const float fDefaultSpeed;			//基本の速度
 
-	//----------------
+	//-------------------------
 	// メンバ変数
-	//----------------
+	//-------------------------
 	D3DXMATRIX	m_mtxWorld;		//ワールドマトリックス
 	D3DXMATRIX	m_mtxRot;		//回転マトリックス(保存用)
 	D3DXVECTOR3 m_pos;			//位置

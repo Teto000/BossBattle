@@ -106,6 +106,7 @@ HRESULT CGame::Init()
 		m_pMessage = CMessage::Create(pos, 600.0f, 200.0f, CMessage::MESSAGE_BREAK);
 	}
 
+	//ÉAÉCÉeÉÄÇÃê∂ê¨
 	{
 		D3DXVECTOR3 pos(400.0f, 100.0f, 0.0f);
 		m_pItem = CItem::Create(pos, CItem::ITEMTYPE_HEAL);

@@ -178,9 +178,6 @@ void COrbit::Uninit()
 //==========================
 void COrbit::Update()
 {
-	//デバイスの取得
-	LPDIRECT3DDEVICE9 pDevice = CApplication::GetRenderer()->GetDevice();
-
 	VERTEX_3D*pVtx;		//頂点情報へのポインタ
 
 	//頂点バッファをロックし、頂点情報へのポインタを取得

@@ -78,6 +78,15 @@ void CItem::Update()
 			CGame::GetPlayer()->AddLife(100);
 			break;
 
+		case ITEMTYPE_ATTACK:
+			break;
+
+		case ITEMTYPE_SPEED:
+			break;
+
+		case ITEMTYPE_COMBO:
+			break;
+
 		default:
 			break;
 		}
