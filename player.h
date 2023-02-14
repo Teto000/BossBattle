@@ -109,7 +109,7 @@ public:
 	void SetSpeed(float fSpeed)		  { m_status.fSpeed = fSpeed; }			//速度の設定
 	void SetComboValue(int nValue)    { m_status.nComboValue = nValue; }	//コンボの加算値の設定
 	void AddCombo(int nNumber);		//コンボ数の加算
-	void SubLife(float fDamage);	//HP減少時の処理
+	void AddLife(float fDamage);	//HP減少時の処理
 
 	//----------------
 	// ゲッター
@@ -138,12 +138,12 @@ private:
 	// プライベート関数
 	//---------------------
 	void MoveKeyboard(int nUpKey, int nDownKey, int nLeftKey, int nRightKey);	//移動
-	void MoveJoypad();				//ジョイパッドを使った移動
-	void SetRot();					//角度の設定
+	void MoveJoypad();			//ジョイパッドを使った移動
+	void SetRot();				//角度の設定
 
-	void AttackManager();			//攻撃の管理
-	void Attack();					//攻撃処理
-	void HitSword();				//剣が当たった処理
+	void AttackManager();		//攻撃の管理
+	void Attack();				//攻撃処理
+	void HitSword();			//剣が当たった処理
 	bool GetOutAttack(bool equal, bool and);	//攻撃状態かどうかを返す
 
 	void SetModel();											//モデルの設定

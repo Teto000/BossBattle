@@ -994,9 +994,9 @@ void CPlayer::AddCombo(int nNumber)
 //=============================
 // HPŒ¸­‚Ìˆ—
 //=============================
-void CPlayer::SubLife(float fDamage)
+void CPlayer::AddLife(float fDamage)
 {
-	m_status.fLife -= fDamage;	//‘Ì—Í‚ÌŒ¸­
+	m_status.fLife += fDamage;	//‘Ì—Í‚ÌŒ¸­
 
 	//c‚è‘Ì—Í‚ğŒvZ
 	m_status.fRemLife = m_status.fLife * 100 / m_status.fMaxLife;

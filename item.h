@@ -37,6 +37,8 @@ public:
 	void Update() override;
 	void Draw() override;
 
+	bool Collision(D3DXVECTOR3 targetPos, D3DXVECTOR3 targetSize);
+
 	//-------------------
 	// Ã“Iƒƒ“ƒoŠÖ”
 	//-------------------
