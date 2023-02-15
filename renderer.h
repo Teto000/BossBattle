@@ -17,6 +17,7 @@
 // 前方宣言
 //--------------------
 class CCamera;
+class CTitleCamera;
 
 //*****************************************************************************
 // 定数定義
@@ -91,7 +92,8 @@ private:
 	//-------------------
 	// 静的メンバ変数
 	//-------------------
-	static CCamera*	m_pCamera;	//カメラクラス
+	static CCamera*			m_pCamera;			//カメラクラス
+	static CTitleCamera*	m_pTitleCamera;		//タイトルカメラ
 };
 
 #endif // !_RENDERER_H_

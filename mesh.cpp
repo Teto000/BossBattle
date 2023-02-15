@@ -265,7 +265,7 @@ void CMesh::Draw()
 //==================================
 void CMesh::CollisionMesh()
 {
-	//インデックスバッファのロック
+	/*//インデックスバッファのロック
 	WORD* pIdx;
 	m_pIdxBuff->Lock(0, 0, (void**)&pIdx, 0);
 
@@ -331,7 +331,7 @@ void CMesh::CollisionMesh()
 			//赤色にする
 			/*pVtx[pIdx[nNumIdx + 0]].col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
 			pVtx[pIdx[nNumIdx + 1]].col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
-			pVtx[pIdx[nNumIdx + 2]].col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);*/
+			pVtx[pIdx[nNumIdx + 2]].col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
 
 			//-------------------------
 			// 面法線ベクトルを計算
@@ -361,7 +361,7 @@ void CMesh::CollisionMesh()
 	m_pIdxBuff->Unlock();
 
 	//頂点バッファをアンロックする
-	m_pVtxBuff->Unlock();
+	m_pVtxBuff->Unlock();*/
 }
 
 //===========================

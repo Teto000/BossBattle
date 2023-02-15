@@ -48,6 +48,9 @@
     <Filter Include="Main\Object\Billboard\Bullet">
       <UniqueIdentifier>{cdfea326-34a0-43fc-8b26-8c2afe5188e2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Main\Application\Camera">
+      <UniqueIdentifier>{3dd10990-2c06-45bf-8f9c-63b31dce8f8e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -72,9 +75,6 @@
       <Filter>Main\Application\Input</Filter>
     </ClCompile>
     <ClCompile Include="application.cpp">
-      <Filter>Main\Application</Filter>
-    </ClCompile>
-    <ClCompile Include="camera.cpp">
       <Filter>Main\Application</Filter>
     </ClCompile>
     <ClCompile Include="debug_proc.cpp">
@@ -185,6 +185,12 @@
     <ClCompile Include="time.cpp">
       <Filter>Main\Object\Object2D\Number</Filter>
     </ClCompile>
+    <ClCompile Include="camera.cpp">
+      <Filter>Main\Application\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="title_camera.cpp">
+      <Filter>Main\Application\Camera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -209,9 +215,6 @@
       <Filter>Main\Application\Input</Filter>
     </ClInclude>
     <ClInclude Include="application.h">
-      <Filter>Main\Application</Filter>
-    </ClInclude>
-    <ClInclude Include="camera.h">
       <Filter>Main\Application</Filter>
     </ClInclude>
     <ClInclude Include="debug_proc.h">
@@ -321,6 +324,12 @@
     </ClInclude>
     <ClInclude Include="time.h">
       <Filter>Main\Object\Object2D\Number</Filter>
+    </ClInclude>
+    <ClInclude Include="camera.h">
+      <Filter>Main\Application\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="title_camera.h">
+      <Filter>Main\Application\Camera</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

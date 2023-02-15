@@ -123,6 +123,9 @@ HRESULT CGame::Init()
 //===========================
 void CGame::Uninit()
 {
+	//BGM‚Ì’â~
+	CSound::StopSound();
+
 	//ƒJƒƒ‰‚ÌI—¹
 	if (m_pCamera != nullptr)
 	{
@@ -130,9 +133,6 @@ void CGame::Uninit()
 		delete m_pCamera;
 		m_pCamera = nullptr;
 	}
-
-	//BGM‚Ì’â~
-	CSound::StopSound();
 }
 
 //===========================

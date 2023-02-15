@@ -68,13 +68,14 @@ public:
 	//------------------
 	static void SetMode(MODE mode);				//モードの設定
 	static MODE GetMode() { return m_mode; };	//モードの取得
-	static CGame*			GetGame()		{ return m_pGame; };		//ゲームの取得
-	static CFade*			GetFade()		{ return m_pFade; };		//フェードの取得
-	static CRenderer*		GetRenderer()	{ return m_pRenderer; };	//レンダラーの取得
-	static CInput*			GetInput()		{ return m_pInput; };		//インプットの取得
-	static CTexture*		GetTexture()	{ return m_pTexture; };		//テクスチャの取得
-	static CSound*			GetSound()		{ return m_pSound; };		//サウンドの取得
-	static CLight*			GetLight()		{ return m_pLight; };		//ライトの取得
+	static CGame*			GetGame()		{ return m_pGame; }			//ゲームの取得
+	static CTitle*			GetTitle()		{ return m_pTitle; }		//タイトルの取得
+	static CFade*			GetFade()		{ return m_pFade; }			//フェードの取得
+	static CRenderer*		GetRenderer()	{ return m_pRenderer; }		//レンダラーの取得
+	static CInput*			GetInput()		{ return m_pInput; }		//インプットの取得
+	static CTexture*		GetTexture()	{ return m_pTexture; }		//テクスチャの取得
+	static CSound*			GetSound()		{ return m_pSound; }		//サウンドの取得
+	static CLight*			GetLight()		{ return m_pLight; }		//ライトの取得
 
 private:
 	//------------------

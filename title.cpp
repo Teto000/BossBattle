@@ -18,6 +18,16 @@
 #include "sound.h"
 #include "game.h"
 #include "bg.h"
+#include "title_camera.h"
+#include "stage.h"
+#include "meshfield.h"
+#include "sky.h"
+
+//------------------------
+// 静的メンバ変数宣言
+//------------------------
+CTitleCamera* CTitle::m_pCamera = nullptr;
+CMeshField*	CTitle::m_pMeshField = nullptr;
 
 //===========================
 // コンストラクタ
@@ -25,6 +35,8 @@
 CTitle::CTitle()
 {
 	m_pBg = nullptr;	//背景
+	m_pStage = nullptr;	//ステージ
+	m_pSky = nullptr;	//空
 }
 
 //===========================
@@ -40,11 +52,20 @@ CTitle::~CTitle()
 //===========================
 HRESULT CTitle::Init()
 {
-	{
-		//背景の生成
-		D3DXVECTOR3 pos(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f);
-		m_pBg = CBg::Create(pos, CBg::BGTYPE_TITLE);
-	}
+	//{
+	//	//背景の生成
+	//	D3DXVECTOR3 pos(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f);
+	//	m_pBg = CBg::Create(pos, CBg::BGTYPE_TITLE);
+	//}
+
+	m_pCamera = new CTitleCamera;
+	m_pCamera->Init();
+
+	m_pStage = CStage::Create("data\\MODEL\\Stage.x", D3DXVECTOR3(0.0f, -100.0f, 0.0f));
+
+	m_pMeshField = CMeshField::Create();
+
+	m_pSky = CSky::Create(CTexture::TEXTURE_SKY);
 
 	//BGMの再生
 	CSound::PlaySound(CSound::SOUND_LABEL_TITLE);
@@ -59,6 +80,14 @@ void CTitle::Uninit()
 {
 	//BGMの停止
 	CSound::StopSound();
+
+	//カメラの終了
+	if (m_pCamera != nullptr)
+	{
+		m_pCamera->Uninit();
+		delete m_pCamera;
+		m_pCamera = nullptr;
+	}
 }
 
 //===========================
@@ -66,6 +95,14 @@ void CTitle::Uninit()
 //===========================
 void CTitle::Update()
 {
+	//----------------------------
+	// カメラの更新
+	//----------------------------
+	if (m_pCamera != nullptr)
+	{
+		m_pCamera->Update();
+	}
+
 	// ジョイパッドでの操作
 	CInputJoypad* joypad = CApplication::GetInput()->GetJoypad();
 

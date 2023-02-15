@@ -21,11 +21,14 @@
 #include "input.h"
 #include "input_keyboard.h"
 #include "game.h"
+#include "title.h"
+#include "title_camera.h"
 
 //-----------------------
 // 静的メンバ変数宣言
 //-----------------------
-CCamera* CRenderer::m_pCamera = nullptr;	//カメラ
+CCamera*		CRenderer::m_pCamera = nullptr;			//カメラ
+CTitleCamera*	CRenderer::m_pTitleCamera = nullptr;	//タイトルカメラ
 
 //=========================
 // コンストラクタ
@@ -116,12 +119,6 @@ HRESULT CRenderer::Init(HWND hWnd, bool bWindow)
 	m_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
 	m_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_CURRENT);
 
-#ifdef _DEBUG
-	// デバッグ情報表示用フォントの生成
-	//D3DXCreateFont(m_pD3DDevice, 18, 0, 0, 0, FALSE, SHIFTJIS_CHARSET,
-	//	OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH, _T("Terminal"), &m_pFont);
-#endif
-
 	return S_OK;
 }
 
@@ -194,13 +191,37 @@ void CRenderer::Draw()
 	// Direct3Dによる描画の開始
 	if (SUCCEEDED(m_pD3DDevice->BeginScene()))
 	{
-		if (CApplication::GetGame() != nullptr)
-		{
-			//カメラの取得
-			m_pCamera = CGame::GetCamera();
+		//現在の画面を取得
+		CApplication::MODE mode = CApplication::GetMode();
 
-			//カメラの設定
-			m_pCamera->SetCamera(m_pD3DDevice);
+		switch (mode)
+		{
+		//タイトル画面なら
+		case CApplication::MODE_TITLE:
+			if (CApplication::GetTitle())
+			{
+				//カメラの取得
+				m_pTitleCamera = CTitle::GetCamera();
+
+				//カメラの設定
+				m_pTitleCamera->SetCamera(m_pD3DDevice);
+			}
+			break;
+
+		//ゲーム画面なら
+		case CApplication::MODE_GAME:
+			if (CApplication::GetGame())
+			{
+				//カメラの取得
+				m_pCamera = CGame::GetCamera();
+
+				//カメラの設定
+				m_pCamera->SetCamera(m_pD3DDevice);
+			}
+			break;
+
+		default:
+			break;
 		}
 
 		//オブジェクトの描画

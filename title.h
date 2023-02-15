@@ -15,7 +15,11 @@
 //--------------------------------
 // 前方宣言
 //--------------------------------
-class CBg;	//背景
+class CBg;			//背景
+class CTitleCamera;	//カメラ
+class CStage;		//ステージ
+class CMeshField;	//メッシュフィールド
+class CSky;			//空
 
 //================================
 // タイトルクラスの定義
@@ -33,11 +37,24 @@ public:
 	void Uninit();
 	void Update();
 
+	//------------------
+	// ゲッター
+	//------------------
+	static CTitleCamera* GetCamera() { return m_pCamera; }		//カメラの取得
+
 private:
 	//------------------
 	// メンバ変数
 	//------------------
 	CBg* m_pBg;	//背景
+	CStage* m_pStage;	//ステージ
+	CSky*	m_pSky;		//空
+
+	//------------------
+	// 静的メンバ変数
+	//------------------
+	static CTitleCamera* m_pCamera;
+	static CMeshField*	m_pMeshField;	//メッシュフィールド
 };
 
 #endif
