@@ -283,7 +283,7 @@ void CPlayer::Update()
 		if (CInputKeyboard::Press(DIK_M))
 		{
 			D3DXVECTOR3 bulletPos(m_pos.x, m_pos.y + 100.0f, m_pos.z);
-			m_pBullet = CBullet::Create(bulletPos, m_rot);
+			//m_pBullet = CBullet::Create(bulletPos, m_rot);
 		}
 	}
 	else

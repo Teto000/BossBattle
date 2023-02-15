@@ -15,7 +15,7 @@
 //=======================
 // コンストラクタ
 //=======================
-CNumber::CNumber() : CObject2D(0)
+CNumber::CNumber() : CObject2D(1)
 {
 	m_nValue = 0;	//数値
 	m_nDigit = 0;	//桁数

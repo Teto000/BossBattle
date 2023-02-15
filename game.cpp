@@ -183,7 +183,7 @@ void CGame::Update()
 
 	if(nCntItem >= 60)
 	{
-		int nWidth = 300;
+		int nWidth = 1500;
 
 		int X = rand() % nWidth - (nWidth / 2);
 		int Z = rand() % nWidth - (nWidth / 2);
