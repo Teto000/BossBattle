@@ -106,6 +106,7 @@ public:
 	D3DXVECTOR3 GetRot()				{ return m_rot; }		//向きの取得
 	float GetWidth() override			{ return 0.0f; }		//幅の取得
 	float GetHeight() override			{ return 0.0f; }		//高さの取得
+	bool GetHitAtk()				    { return m_bHitAtk; }	//攻撃が当たったかを取得
 	D3DXVECTOR3 GetSize()				{ return m_size; }		//大きさの取得
 	D3DXMATRIX GetmtxWorld()			{ return m_mtxWorld; }	//ワールドマトリックスの取得
 	ENEMYSTATE GetState()				{ return m_state; }		//敵の状態の取得

@@ -10,6 +10,8 @@
 //----------------------
 #include "time.h"
 #include "number.h"
+#include "game.h"
+#include "renderer.h"
 
 //=======================
 // コンストラクタ
@@ -19,7 +21,7 @@ CTime::CTime() : CObject(0)
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//位置
 	m_numberPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);//数字の位置
 	m_nTime = 0;								//時間
-	m_nCnt = 0;									//カウント
+	m_nCntFream = 0;							//フレーム数のカウント
 	fInterval = 0.0f;							//数値の間隔
 
 	for (int i = 0; i < nMaxDigits; i++)
@@ -77,13 +79,36 @@ void CTime::Uninit()
 //=======================
 void CTime::Update()
 {
-	m_nCnt++;
-
-	if (m_nCnt >= 60)
+	//----------------------
+	// ゲーム終了時に拡大
+	//----------------------
+	if (CGame::GetFinish())
 	{
-		m_nTime++;
-		SetNumber();
-		m_nCnt = 0;
+		//--------------------------------------
+		// 目的の位置まで移動する
+		//--------------------------------------
+		m_pos.x += ((SCREEN_WIDTH / 2 - 50.0f) - m_pos.x) * 0.08f;	//減衰処理
+		m_pos.y += ((SCREEN_HEIGHT / 2) - m_pos.y) * 0.08f;
+
+		for (int i = 0; i < nMaxDigits; i++)
+		{
+			m_pNumber[i]->SetPosition(D3DXVECTOR3(m_pos.x + i * 50.0f, m_pos.y, m_pos.z));
+		}
+	}
+	else
+	{
+		//フレーム数を数える
+		m_nCntFream++;
+
+		//----------------------
+		// 時間の加算
+		//----------------------
+		if (m_nCntFream >= 60)
+		{
+			m_nTime++;
+			SetNumber();
+			m_nCntFream = 0;
+		}
 	}
 }
 

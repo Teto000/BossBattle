@@ -61,7 +61,7 @@ private:
 	D3DXVECTOR3 m_pos;				//位置
 	D3DXVECTOR3 m_numberPos;		//数字の位置
 	int m_nTime;					//時間
-	int m_nCnt;						//カウント
+	int m_nCntFream;				//フレーム数のカウント
 	int m_aPosTexU[nMaxDigits];		//今の桁の数値
 	float fInterval;				//数値の間隔
 	CNumber* m_pNumber[nMaxDigits];	//数値

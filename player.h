@@ -119,23 +119,24 @@ public:
 	void SetComboValue(int nValue)    { m_status.nComboValue = nValue; }	//コンボの加算値の設定
 	void AddCombo(int nNumber);		//コンボ数の加算
 	void AddLife(float fDamage);	//HP減少時の処理
+	void NockBack();				//ノックバック
 
 	//-------------------------
 	// ゲッター
 	//-------------------------
-	D3DXVECTOR3 GetPosition() override { return m_pos; }			//位置の取得
-	D3DXVECTOR3 GetRot()			   { return m_rot; }			//向きの取得
-	D3DXVECTOR3 GetSize()			   { return m_size; }			//大きさの取得
-	D3DXMATRIX GetmtxWorld()		   { return m_mtxWorld; }		//ワールドマトリックスの取得
-	const int GetSwordNumber()		   { return nSwordNumber; }		//剣モデルの番号を取得
-	float GetWidth() override		   { return 0.0f; }				//幅の取得
-	float GetHeight() override		   { return 0.0f; }				//高さの取得
-	bool GetHitAttack()				   { return m_bFinishAttack; }	//攻撃を当てたかを取得
+	D3DXVECTOR3 GetPosition() override { return m_pos; }				//位置の取得
+	D3DXVECTOR3 GetRot()			   { return m_rot; }				//向きの取得
+	D3DXVECTOR3 GetSize()			   { return m_size; }				//大きさの取得
+	D3DXMATRIX GetmtxWorld()		   { return m_mtxWorld; }			//ワールドマトリックスの取得
+	const int GetSwordNumber()		   { return nSwordNumber; }			//剣モデルの番号を取得
+	float GetWidth() override		   { return 0.0f; }					//幅の取得
+	float GetHeight() override		   { return 0.0f; }					//高さの取得
+	bool GetHitAttack()				   { return m_bFinishAttack; }		//攻撃を当てたかを取得
 	bool GetAvoidance()				   { return m_status.bAvoidance; }	//回避状態の取得
-	CModel* GetModel(int nNum)		   { return m_pModel[nNum]; }	//モデルの取得
-	CCombo* GetCombo()				   { return m_pCombo; }			//コンボの取得
-	PLAYER_STATUS GetStatus()		   { return m_status; }			//ステータスの取得
-	MOTION_TYPE GetMotion()			   { return m_type; }			//モーションの種類の取得
+	CModel* GetModel(int nNum)		   { return m_pModel[nNum]; }		//モデルの取得
+	CCombo* GetCombo()				   { return m_pCombo; }				//コンボの取得
+	PLAYER_STATUS GetStatus()		   { return m_status; }				//ステータスの取得
+	MOTION_TYPE GetMotion()			   { return m_type; }				//モーションの種類の取得
 
 	//-------------------------
 	// 静的メンバ関数
@@ -197,6 +198,7 @@ private:
 	float m_rotWheel;			//タイヤの回転量
 	bool m_bFinishAttack;		//攻撃が終わった状態
 	bool m_bHit;				//1ヒットした状態
+	bool m_bNockBack;			//ノックバックしている状態
 	CHP*  m_pHP;				//HP
 	CCombo* m_pCombo;			//コンボ
 	CDamage* m_pDamage;			//ダメージ

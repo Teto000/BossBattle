@@ -639,6 +639,7 @@ void CEnemy::HitHummer()
 			//プレイヤーのコンボ数を0にする
 			CGame::GetPlayer()->GetCombo()->ResetCombo();
 
+			//SEの再生
 			CSound::PlaySound(CSound::SOUND_LABEL_SE_EXPLOSION);
 		}
 

@@ -128,6 +128,7 @@ void CCombo::Update()
 //=======================
 void CCombo::Draw()
 {
+	
 	for (int i = 0; i < nMaxDigits; i++)
 	{
 		m_pNumber[i]->Draw();

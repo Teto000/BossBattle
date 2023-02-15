@@ -64,6 +64,7 @@ CPlayer::CPlayer() : CObject(0)
 	fSizeDepth = 0.0f;							//サイズ(奥行き)
 	m_bFinishAttack = false;					//ダメージを与えたか
 	m_bHit = false;								//1ヒットした状態
+	m_bNockBack = false;						//ノックバックしている状態
 	m_type = MOTION_IDOL;						//現在のモーション
 	m_pHP = nullptr;							//HP
 	m_pCombo = nullptr;							//コンボ
@@ -243,8 +244,8 @@ void CPlayer::Update()
 		}
 	}
 
-	if (!CGame::GetFinish())
-	{//終了フラグが立っていないなら
+	if (!CGame::GetFinish() && !m_bNockBack)
+	{//終了フラグが立っていない or ノックバック状態じゃないなら
 		//--------------------------------
 		// 移動
 		//--------------------------------
@@ -280,6 +281,11 @@ void CPlayer::Update()
 		ChangeMotion(MOTION_IDOL);
 	}
 
+	//--------------------------------
+	// ノックバック処理
+	//--------------------------------
+	//NockBack();
+
 	//--------------------------------------
 	// 回避状態の解除
 	//--------------------------------------
@@ -299,6 +305,19 @@ void CPlayer::Update()
 	else if (m_nAvoidStan > 0)
 	{//回避硬直が0より上なら
 		m_nAvoidStan--;		//硬直時間の減少
+	}
+
+	//--------------------------------
+	// 重力の加算
+	//--------------------------------
+	if (m_pos.y > 0.0f)
+	{//飛んでいるなら
+		m_pos.y -= 3.0f;
+	}
+	else
+	{//地面に着いたら
+		m_pos.y = 0.0f;		//高さを地面に合わせる
+		m_bNockBack = false;
 	}
 
 	//--------------------------------
@@ -1000,6 +1019,34 @@ void CPlayer::AddLife(float fDamage)
 
 	//HPの設定
 	m_pHP->SetLife(m_status.fLife, m_status.fRemLife);
+}
+
+//==========================================
+// ノックバックする処理
+//==========================================
+void CPlayer::NockBack()
+{
+	if (CGame::GetEnemy()->GetHitAtk())
+	{
+		//敵の座標を取得
+		D3DXVECTOR3 enemyPos = CGame::GetEnemy()->GetPosition();
+
+		//敵とプレイヤー間のベクトルを計算
+		D3DXVECTOR3 vec = enemyPos - m_pos;
+
+		D3DXVec3Normalize(&vec, &vec);	//ベクトルの正規化
+
+		m_pos += -vec * 20.0f;	//逆ベクトル方向に移動
+		m_pos.y += 200.0f;		//上昇
+
+		m_bNockBack = true;
+
+		ChangeMotion(MOTION_IDOL);
+	}
+	else
+	{
+		m_bNockBack = false;
+	}
 }
 
 //=============================
