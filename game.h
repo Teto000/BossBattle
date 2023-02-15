@@ -63,6 +63,7 @@ private:
 	//-------------------
 	int nCntFinish;	//終了時間カウント
 	int nCntItem;	//アイテム生成時間カウント
+	CItem*	m_pItem;	//アイテム
 
 	//-------------------
 	// 静的メンバ変数
@@ -78,7 +79,6 @@ private:
 	static CMessage*	m_pMessage;		//メッセージ
 	static CSky*		m_pSky;			//スカイ
 	static CStage*		m_pStage;		//ステージ
-	static CItem*		m_pItem;		//アイテム
 	static CTime*		m_pTime;		//タイマー
 };
 

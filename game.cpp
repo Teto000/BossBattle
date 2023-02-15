@@ -45,7 +45,6 @@ CPolygon*	CGame::m_pPolygon = nullptr;	//2Dポリゴン
 CMessage*	CGame::m_pMessage = nullptr;	//メッセージ
 CSky*		CGame::m_pSky = nullptr;		//スカイ
 CStage*		CGame::m_pStage = nullptr;		//ステージ
-CItem*		CGame::m_pItem = nullptr;		//アイテム
 CTime*		CGame::m_pTime = nullptr;		//タイマー
 
 //===========================
@@ -55,6 +54,7 @@ CGame::CGame()
 {
 	nCntFinish = 0;
 	nCntItem = 0;
+	m_pItem = nullptr;
 }
 
 //===========================

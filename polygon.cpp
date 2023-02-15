@@ -17,7 +17,7 @@
 //========================
 // コンストラクタ
 //========================
-CPolygon::CPolygon() : CObject2D(0)
+CPolygon::CPolygon() : CObject2D(1)
 {
 	m_fRadius = 0.0f;
 	m_type = POLYGONTYPE_NONE;

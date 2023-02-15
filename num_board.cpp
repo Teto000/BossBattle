@@ -75,13 +75,13 @@ void CNumBoard::Draw()
 	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 
 	//Zバッファのクリア
-	pDevice->SetRenderState(D3DRS_ZENABLE, false);
+	pDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
 
 	//オブジェクトの描画
 	CBillBoard::Draw();
 
 	// Zバッファの有効化設定
-	pDevice->SetRenderState(D3DRS_ZENABLE, true);
+	pDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
 
 	//アルファテストの無効化
 	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);

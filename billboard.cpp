@@ -155,6 +155,15 @@ void CBillBoard::Draw()
 	LPDIRECT3DDEVICE9 pDevice = CApplication::GetRenderer()->GetDevice();	//デバイスの取得
 
 	//------------------------------------
+	// テクスチャ
+	//------------------------------------
+	//テクスチャの取得
+	CTexture *pTexture = CApplication::GetTexture();
+
+	//テクスチャの設定
+	pDevice->SetTexture(0, pTexture->GetTexture(m_texture));
+
+	//------------------------------------
 	// マトリックス
 	//------------------------------------
 	D3DXMATRIX mtxTrans;	//計算用マトリックス
@@ -200,22 +209,10 @@ void CBillBoard::Draw()
 	//頂点フォーマットの設定
 	pDevice->SetFVF(FVF_VERTEX_3D);
 
-	//------------------------------------
-	// テクスチャ
-	//------------------------------------
-	//テクスチャの取得
-	CTexture *pTexture = CApplication::GetTexture();
-
-	//テクスチャの設定
-	pDevice->SetTexture(0, pTexture->GetTexture(m_texture));
-
 	//ポリゴンの描画
 	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP,	//プリミティブの種類
 						   0,					//描画する最初の頂点インデックス
 						   2);					//描画するプリミティブ数
-
-	//テクスチャのリセット
-	pDevice->SetTexture(0, NULL);
 
 	//ライトをの有効化
 	pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);

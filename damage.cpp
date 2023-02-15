@@ -49,8 +49,6 @@ HRESULT CDamage::Init(D3DXVECTOR3 pos)
 	m_fWidth = 30.0f;	//幅
 	m_fHeight = 40.0f;	//高さ
 
-	CBillBoard::ResetMatrix(pos);
-
 	if (type == DAMAGE_TYPE_CRITICAL)
 	{//クリティカルなら
 		m_col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);	//色

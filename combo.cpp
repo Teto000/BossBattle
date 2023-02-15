@@ -14,7 +14,7 @@
 //=======================
 // コンストラクタ
 //=======================
-CCombo::CCombo() : CObject(0)
+CCombo::CCombo() : CObject(1)
 {
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//位置
 	m_initPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//最初の位置

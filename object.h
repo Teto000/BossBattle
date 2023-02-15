@@ -79,7 +79,7 @@ private:
 	//----------------
 	// ’è”
 	//----------------
-	static const int nMaxPriority = 2;
+	static const int nMaxPriority = 3;
 
 	//----------------
 	// ƒƒ“ƒo•Ï”

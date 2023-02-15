@@ -29,7 +29,7 @@ const char* CTexture::s_FileName[] =
 	"data/TEXTURE/Sky.jpg",			//‹ó
 
 	/* « ƒAƒCƒeƒ€ « */
-	"data/TEXTURE/Item\\Heal.png",	//‰ñ•œ
+	"data/TEXTURE/Item/Heal.png",	//‰ñ•œ
 };
 
 static_assert(sizeof(CTexture::s_FileName) / sizeof(CTexture::s_FileName[0]) == CTexture::TEXTURE_MAX, "aho");

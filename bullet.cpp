@@ -9,6 +9,8 @@
 // インクルード
 //----------------------------
 #include "bullet.h"
+#include "application.h"
+#include "renderer.h"
 
 //====================================
 // コンストラクタ
@@ -37,12 +39,14 @@ HRESULT CBullet::Init(D3DXVECTOR3 pos)
 	//初期値の設定
 	m_fWidth = 50.0f;
 	m_fHeight = 50.0f;
+	m_col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 
 	CBillBoard::Init(pos);
 
 	CBillBoard::SetPos(pos);
 	CBillBoard::SetMove(m_move);
 	CBillBoard::SetSize(m_fWidth, m_fHeight);
+	CBillBoard::SetColor(m_col);
 	CBillBoard::SetTexture(CTexture::TEXTURE_AIM);
 
 	return S_OK;
@@ -73,6 +77,7 @@ void CBullet::Update()
 //====================================
 void CBullet::Draw()
 {
+	//オブジェクトの描画
 	CBillBoard::Draw();
 }
 
@@ -94,8 +99,6 @@ CBullet* CBullet::Create(D3DXVECTOR3 pos, D3DXVECTOR3 playerRot)
 		pBullet->m_move = D3DXVECTOR3(sinf(playerRot.x) * sinf(playerRot.y) * 5,
 									  cosf(playerRot.x) * 5,
 									  sinf(playerRot.x) * cosf(playerRot.y) * 5);
-
-		pBullet->m_move = D3DXVECTOR3(0.0f, 5.0f, 0.0f);
 
 		//初期化
 		pBullet->Init(D3DXVECTOR3(pos));

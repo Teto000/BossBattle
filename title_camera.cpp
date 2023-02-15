@@ -56,8 +56,8 @@ void CTitleCamera::Init(void)
 	//---------------------------------
 	// 視点・注視点・上方向を設定する
 	//---------------------------------
-	m_posV = D3DXVECTOR3(0.0f, 1000.0f, -1000.0f);
-	m_posR = D3DXVECTOR3(0.0f, 800.0f, 200.0f);
+	m_posV = D3DXVECTOR3(0.0f, 200.0f, -400.0f);
+	m_posR = D3DXVECTOR3(0.0f, 250.0f, 0.0f);
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_worldPosV = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_worldPosR = D3DXVECTOR3(0.0f, 0.0f, 0.0f);

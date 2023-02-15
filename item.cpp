@@ -13,11 +13,13 @@
 #include "game.h"
 #include "player.h"
 #include "debug_proc.h"
+#include "application.h"
+#include "renderer.h"
 
 //===============================================
 // コンストラクタ
 //===============================================
-CItem::CItem() : CBillBoard(1)
+CItem::CItem() : CBillBoard(0)
 {
 	m_type = ITEMTYPE_NONE;		//種類
 }
@@ -43,6 +45,7 @@ HRESULT CItem::Init(D3DXVECTOR3 pos)
 	CBillBoard::Init(pos);
 	CBillBoard::SetSize(m_fWidth, m_fHeight);
 	CBillBoard::SetTexture(CTexture::TEXTURE_ITEM_HEAL);
+	CBillBoard::SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 
 	return S_OK;
 }
@@ -104,7 +107,17 @@ void CItem::Update()
 //===============================================
 void CItem::Draw()
 {
+	//デバイスの取得
+	LPDIRECT3DDEVICE9 pDevice = CApplication::GetRenderer()->GetDevice();
+
+	//Zバッファのクリア
+	//pDevice->SetRenderState(D3DRS_ZENABLE, false);
+
+	//オブジェクトの描画
 	CBillBoard::Draw();
+
+	// Zバッファの有効化設定
+	//pDevice->SetRenderState(D3DRS_ZENABLE, true);
 }
 
 //===============================================

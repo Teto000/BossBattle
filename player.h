@@ -15,12 +15,13 @@
 //--------------------------------
 // 前方宣言
 //--------------------------------
-class CModel;			//モデル
-class CLine;			//ライン
-class CHP;				//HP
-class CCombo;			//コンボ
-class CDamage;			//ダメージ
-class COrbit;			//軌跡
+class CModel;		//モデル
+class CLine;		//ライン
+class CHP;			//HP
+class CCombo;		//コンボ
+class CDamage;		//ダメージ
+class COrbit;		//軌跡
+class CBullet;		//弾
 
 //--------------------------------
 // マクロ定義
@@ -203,6 +204,7 @@ private:
 	CCombo* m_pCombo;			//コンボ
 	CDamage* m_pDamage;			//ダメージ
 	COrbit* m_pOrbit;			//軌跡
+	CBullet* m_pBullet;			//弾
 
 	//列挙型
 	PLAYER_STATUS m_status;		//ステータス

@@ -32,6 +32,7 @@
 #include "utility.h"
 #include "sound.h"
 #include "orbit.h"
+#include "bullet.h"
 
 //-------------------------------
 // 静的メンバ変数宣言
@@ -53,23 +54,24 @@ CPlayer::CPlayer() : CObject(0)
 	m_worldMin = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//ワールド上の最大値
 	m_worldMax = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//ワールド上の最小値
 	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//大きさ
-	m_nNumCombo = 0;							//コンボ数
-	m_nCntHit = 0;								//ヒット数を数える
-	m_nHitTime = 0;								//ヒットまでの時間を数える
-	m_nCntModeTime = 0;							//モード終了までの時間を数える
-	m_nAvoidTime = 0;							//回避時間
-	m_nAvoidStan = 0;							//回避硬直
-	nWheelRotValue = 0;							//タイヤの回転量
-	fSizeWidth = 0.0f;							//サイズ(幅)
-	fSizeDepth = 0.0f;							//サイズ(奥行き)
-	m_bFinishAttack = false;					//ダメージを与えたか
-	m_bHit = false;								//1ヒットした状態
-	m_bNockBack = false;						//ノックバックしている状態
-	m_type = MOTION_IDOL;						//現在のモーション
-	m_pHP = nullptr;							//HP
-	m_pCombo = nullptr;							//コンボ
-	m_pDamage = nullptr;						//ダメージ
-	m_pOrbit = nullptr;							//軌跡
+	m_nNumCombo = 0;			//コンボ数
+	m_nCntHit = 0;				//ヒット数を数える
+	m_nHitTime = 0;				//ヒットまでの時間を数える
+	m_nCntModeTime = 0;			//モード終了までの時間を数える
+	m_nAvoidTime = 0;			//回避時間
+	m_nAvoidStan = 0;			//回避硬直
+	nWheelRotValue = 0;			//タイヤの回転量
+	fSizeWidth = 0.0f;			//サイズ(幅)
+	fSizeDepth = 0.0f;			//サイズ(奥行き)
+	m_bFinishAttack = false;	//ダメージを与えたか
+	m_bHit = false;				//1ヒットした状態
+	m_bNockBack = false;		//ノックバックしている状態
+	m_type = MOTION_IDOL;		//現在のモーション
+	m_pHP = nullptr;			//HP
+	m_pCombo = nullptr;			//コンボ
+	m_pDamage = nullptr;		//ダメージ
+	m_pOrbit = nullptr;			//軌跡
+	m_pBullet = nullptr;		//弾
 
 	//ステータス
 	m_status.nAttack = 0;			//攻撃力
@@ -274,6 +276,15 @@ void CPlayer::Update()
 		// 攻撃処理
 		//--------------------------------
 		AttackManager();
+
+		//--------------------------------
+		// 弾の発射
+		//--------------------------------
+		if (CInputKeyboard::Press(DIK_M))
+		{
+			D3DXVECTOR3 bulletPos(m_pos.x, m_pos.y + 100.0f, m_pos.z);
+			m_pBullet = CBullet::Create(bulletPos, m_rot);
+		}
 	}
 	else
 	{//終了フラグが立ったら
