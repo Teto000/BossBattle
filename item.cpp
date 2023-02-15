@@ -12,11 +12,12 @@
 #include "utility.h"
 #include "game.h"
 #include "player.h"
+#include "debug_proc.h"
 
 //===============================================
 // コンストラクタ
 //===============================================
-CItem::CItem()
+CItem::CItem() : CBillBoard(1)
 {
 	m_type = ITEMTYPE_NONE;		//種類
 }
@@ -36,12 +37,12 @@ CItem::~CItem()
 HRESULT CItem::Init(D3DXVECTOR3 pos)
 {
 	//初期値の設定
-	m_fWidth = 70.0f;
-	m_fHeight = 70.0f;
+	m_fWidth = 100.0f;
+	m_fHeight = 100.0f;
 
 	CBillBoard::Init(pos);
 	CBillBoard::SetSize(m_fWidth, m_fHeight);
-	CBillBoard::SetTexture(CTexture::TEXTURE_CLEAR);
+	CBillBoard::SetTexture(CTexture::TEXTURE_ITEM_HEAL);
 
 	return S_OK;
 }
@@ -60,6 +61,8 @@ void CItem::Uninit()
 void CItem::Update()
 {
 	CBillBoard::Update();
+
+	//CDebugProc::Print("アイテムの位置 %f %f %f", m_pos.x, m_pos.y, m_pos.z);
 
 	//--------------------------------
 	// プレイヤーの情報を取得

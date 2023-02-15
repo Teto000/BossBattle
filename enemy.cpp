@@ -491,8 +491,8 @@ void CEnemy::EnemyAI()
 {
 	//変数宣言
 	int nMaxAttackTime = 300;		//攻撃時間
-	float fAttackArea = 1000.0f;	//敵の攻撃範囲
-	float fMoveArea = 500.0f;
+	float fAttackArea = 300.0f;	//敵の攻撃範囲
+	float fMoveArea = 200.0f;
 
 	//プレイヤーの位置を取得
 	D3DXVECTOR3 playerPos = CGame::GetPlayer()->GetPosition();
@@ -720,7 +720,7 @@ void CEnemy::Move(D3DXVECTOR3 targetPos)
 	D3DXVec3Normalize(&vec, &vec);
 
 	//プレイヤーに向かって移動
-	m_move = vec * 1.5f;
+	m_move = vec * 4.5f;
 	m_pos += m_move;
 
 	//移動モーションにする

@@ -27,6 +27,9 @@ const char* CTexture::s_FileName[] =
 	"data/TEXTURE/Break.png",		//ブレイク
 	"data/TEXTURE/Number.png",		//数値
 	"data/TEXTURE/Sky.jpg",			//空
+
+	/* ↓ アイテム ↓ */
+	"data/TEXTURE/Item\\Heal.png",	//回復
 };
 
 static_assert(sizeof(CTexture::s_FileName) / sizeof(CTexture::s_FileName[0]) == CTexture::TEXTURE_MAX, "aho");

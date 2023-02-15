@@ -112,7 +112,7 @@ void CDebugProc::Print(const char* pFormat, ...)
 void CDebugProc::Draw()
 {
 	RECT rect = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
-	TCHAR str[256];
+	TCHAR str[1024];
 
 	wsprintf(str, &m_Str[0]);
 

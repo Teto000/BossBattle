@@ -54,6 +54,7 @@ CTime*		CGame::m_pTime = nullptr;		//タイマー
 CGame::CGame()
 {
 	nCntFinish = 0;
+	nCntItem = 0;
 }
 
 //===========================
@@ -106,12 +107,6 @@ HRESULT CGame::Init()
 		D3DXVECTOR3 pos(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f);
 		m_pMessage = CMessage::Create(pos, 800.0f, 400.0f, CMessage::MESSAGE_CLEAR);
 		m_pMessage = CMessage::Create(pos, 600.0f, 200.0f, CMessage::MESSAGE_BREAK);
-	}
-
-	//アイテムの生成
-	{
-		D3DXVECTOR3 pos(400.0f, 100.0f, 0.0f);
-		m_pItem = CItem::Create(pos, CItem::ITEMTYPE_HEAL);
 	}
 
 	//タイマーの生成
@@ -179,5 +174,22 @@ void CGame::Update()
 	if (m_pCamera != nullptr)
 	{
 		m_pCamera->Update();
+	}
+
+	//----------------------------
+	// アイテムの生成
+	//----------------------------
+	nCntItem++;	//カウントの加算
+
+	if(nCntItem >= 60)
+	{
+		int nWidth = 300;
+
+		int X = rand() % nWidth - (nWidth / 2);
+		int Z = rand() % nWidth - (nWidth / 2);
+
+		D3DXVECTOR3 pos((float)X, 100.0f, (float)Z);
+		m_pItem = CItem::Create(pos, CItem::ITEMTYPE_HEAL);
+		nCntItem = 0;	//リセット
 	}
 }

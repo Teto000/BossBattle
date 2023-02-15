@@ -294,7 +294,7 @@ void CPlayer::Update()
 		m_nAvoidTime++;				//回避時間の加算
 		ChangeMotion(MOTION_MOVE);	//移動モーション
 
-		if (m_nAvoidTime >= 10)
+		if (m_nAvoidTime >= 12)
 		{//一定時間経過したら
 			m_status.fSpeed = fDefaultSpeed;	//減速
 			m_status.bAvoidance = false;		//回避していない状態
@@ -336,6 +336,8 @@ void CPlayer::Update()
 	//--------------------------------
 	m_pos = CUtility::GetCollisionPos(m_pos, m_posOld, m_size, m_mtxWorld
 		, CObject::OBJTYPE_ENEMY);
+
+	CDebugProc::Print("プレイヤーの位置 %f %f %f", m_pos.x, m_pos.y, m_pos.z);
 }
 
 //=============================

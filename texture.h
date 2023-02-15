@@ -28,6 +28,10 @@ public: /* 定義 */
 		TEXTURE_BREAK,			//ブレイク
 		TEXTURE_NUMBER,			//数値
 		TEXTURE_SKY,			//空
+
+		/* ↓ アイテム ↓ */
+		TEXTURE_ITEM_HEAL,		//回復
+
 		TEXTURE_MAX,
 		TEXTURE_NONE,			//使用しない
 	};
