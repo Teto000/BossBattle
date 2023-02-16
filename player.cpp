@@ -60,7 +60,8 @@ CPlayer::CPlayer() : CObject(0)
 	m_nCntModeTime = 0;			//モード終了までの時間を数える
 	m_nAvoidTime = 0;			//回避時間
 	m_nAvoidStan = 0;			//回避硬直
-	nWheelRotValue = 0;			//タイヤの回転量
+	m_nWheelRotValue = 0;		//タイヤの回転量
+	m_nBulletTime = 0;			//弾の発射時間
 	fSizeWidth = 0.0f;			//サイズ(幅)
 	fSizeDepth = 0.0f;			//サイズ(奥行き)
 	m_bFinishAttack = false;	//ダメージを与えたか
@@ -142,7 +143,7 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	m_pos = pos;						//位置
 	fSizeWidth = 30.0f;					//モデルの幅
 	fSizeDepth = 30.0f;					//モデルの奥行き
-	nWheelRotValue = 10;				//タイヤの回転量
+	m_nWheelRotValue = 10;				//タイヤの回転量
 	m_status.fLife = 800.0f;			//体力
 	m_status.fRemLife = 100.0f;			//残り体力(%)
 	m_status.fMaxLife = m_status.fLife;	//最大体力
@@ -280,10 +281,15 @@ void CPlayer::Update()
 		//--------------------------------
 		// 弾の発射
 		//--------------------------------
-		if (CInputKeyboard::Press(DIK_M))
-		{
-			D3DXVECTOR3 bulletPos(m_pos.x, m_pos.y + 100.0f, m_pos.z);
-			//m_pBullet = CBullet::Create(bulletPos, m_rot);
+		m_nBulletTime++;
+
+		if (m_type == MOTION_IDOL || m_type == MOTION_MOVE)
+		{//攻撃以外の時なら
+			if (CInputKeyboard::Press(DIK_M) && m_nBulletTime >= 6)
+			{
+				m_pBullet = CBullet::Create(D3DXVECTOR3(m_pos.x, m_pos.y + 100.0f, m_pos.z));
+				m_nBulletTime = 0;
+			}
 		}
 	}
 	else
@@ -494,7 +500,7 @@ void CPlayer::MoveKeyboard(int nUpKey, int nDownKey, int nLeftKey, int nRightKey
 	}
 	
 	//タイヤの回転量の加算
-	m_rotWheel += D3DXToRadian(-nWheelRotValue);
+	m_rotWheel += D3DXToRadian(-m_nWheelRotValue);
 
 	//--------------------------------------
 	// キー押下状態の処理
@@ -617,7 +623,7 @@ void CPlayer::MoveJoypad()
 	}
 
 	//タイヤの回転量の加算
-	m_rotWheel += D3DXToRadian(-nWheelRotValue);
+	m_rotWheel += D3DXToRadian(-m_nWheelRotValue);
 
 	if (stick.x < fMoveValue && stick.x > -fMoveValue
 		&& stick.y < fMoveValue && stick.y > -fMoveValue)

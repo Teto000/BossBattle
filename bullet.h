@@ -12,6 +12,11 @@
 //-------------------------
 #include "billboard.h"
 
+//-------------------------
+// 前方宣言
+//-------------------------
+class CDamage;	//ダメージ
+
 //====================================
 // バレットクラス
 //====================================
@@ -33,7 +38,14 @@ public:
 	//---------------------
 	// 静的メンバ関数
 	//---------------------
-	static CBullet* CBullet::Create(D3DXVECTOR3 pos, D3DXVECTOR3 playerRot);
+	static CBullet* CBullet::Create(D3DXVECTOR3 pos);
+
+private:
+	//---------------------
+	// メンバ変数
+	//---------------------
+	int		 nLife;		//寿命
+	CDamage* m_pDamage;	//ダメージ
 };
 
 #endif // !_BULLET_H_

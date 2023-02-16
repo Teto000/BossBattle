@@ -81,7 +81,7 @@ void CTitleCamera::Update(void)
 	LPDIRECT3DDEVICE9 pDevice = CApplication::GetRenderer()->GetDevice();	//デバイスの取得
 
 	//回転
-	m_rot.y -= m_TSPEED / 3.0f;
+	m_rot.y -= m_TSPEED / 5.0f;
 
 	// 左右の角度の正規化
 	m_rot.y = CUtility::GetNorRot(m_rot.y);

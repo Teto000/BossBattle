@@ -438,22 +438,25 @@ void CEnemy::SubGauge(float fDamage, GAUGE type)
 		// HPを減らす処理
 		//-----------------------
 	case GAUGE_HP:
-		m_fLife -= round(fDamage);	//体力の減少
+		if (m_pHP[GAUGE_HP] != nullptr)
+		{
+			m_fLife -= round(fDamage);	//体力の減少
 
-		//残り体力を計算
-		m_fRemLife = m_fLife * 100 / m_fMaxLife;
-		//HPの設定
-		m_pHP[GAUGE_HP]->SetLife(m_fLife, m_fRemLife);
+			//残り体力を計算
+			m_fRemLife = m_fLife * 100 / m_fMaxLife;
+			//HPの設定
+			m_pHP[GAUGE_HP]->SetLife(m_fLife, m_fRemLife);
 
-		if (m_fLife < 0 || m_fRemLife < 0
-			&& m_pHP[GAUGE_HP])
-		{//HPゲージが尽きたら
-			m_pHP[GAUGE_HP] = nullptr;
+			if (m_fLife < 0 || m_fRemLife < 0
+				&& m_pHP[GAUGE_HP])
+			{//HPゲージが尽きたら
+				m_pHP[GAUGE_HP] = nullptr;
 
-			//ブレイクゲージを消す
-			m_fBreak = 0;
-			m_fRemBreak = m_fBreak * 100 / m_fMaxBreak;
-			return;
+				//ブレイクゲージを消す
+				m_fBreak = 0;
+				m_fRemBreak = m_fBreak * 100 / m_fMaxBreak;
+				return;
+			}
 		}
 		break;
 

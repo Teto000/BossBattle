@@ -193,7 +193,8 @@ private:
 	int m_nCntModeTime;			//モード終了までの時間を数える
 	int m_nAvoidTime;			//回避時間
 	int m_nAvoidStan;			//回避硬直
-	int nWheelRotValue;			//タイヤの回転量
+	int m_nWheelRotValue;		//タイヤの回転量
+	int m_nBulletTime;			//弾の発射時間
 	float fSizeWidth;			//サイズ(幅)
 	float fSizeDepth;			//サイズ(奥行き)
 	float m_rotWheel;			//タイヤの回転量
