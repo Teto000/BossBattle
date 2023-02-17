@@ -44,7 +44,6 @@ HRESULT CBg::Init(D3DXVECTOR3 pos)
 	if (m_pObject2D != nullptr)
 	{
 		m_pObject2D->Init(m_pos);
-		m_pObject2D->SetSize(m_fWidth, m_fHeight);
 
 		//-------------------------
 		// Ží—Þ‚²‚Æ‚Ìˆ—
@@ -53,6 +52,8 @@ HRESULT CBg::Init(D3DXVECTOR3 pos)
 		{
 		case BGTYPE_TITLE:
 			m_pObject2D->SetTexture(CTexture::TEXTURE_TITLE);
+			m_fWidth = 1000.0f;
+			m_fHeight = 300.f;
 			break;
 
 		case BGTYPE_RESULT:
@@ -62,6 +63,8 @@ HRESULT CBg::Init(D3DXVECTOR3 pos)
 		default:
 			break;
 		}
+
+		m_pObject2D->SetSize(m_fWidth, m_fHeight);
 	}
 
 	return S_OK;

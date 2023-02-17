@@ -107,7 +107,7 @@ void CBullet::Update()
 	// プレイヤーとの当たり判定
 	//--------------------------------
 	float fRange = 30.0f;	//当たり判定の範囲
-	int nDamage = rand() % 2 + 1;		//ダメージ数
+	int nDamage = rand() % 3 + 1;		//ダメージ数
 	
 	//ダメージの表示位置をランダムに設定
 	int nWidth = 50;

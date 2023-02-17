@@ -21,6 +21,7 @@ CTime::CTime() : CObject(1)
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//位置
 	m_numberPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);//数字の位置
 	m_nTime = 0;								//時間
+	m_nCntMove = 0;								//移動までの時間
 	m_nCntFream = 0;							//フレーム数のカウント
 	fInterval = 0.0f;							//数値の間隔
 
@@ -89,15 +90,20 @@ void CTime::Update()
 	//----------------------
 	if (CGame::GetFinish())
 	{
-		//--------------------------------------
-		// 目的の位置まで移動する
-		//--------------------------------------
-		m_pos.x += ((SCREEN_WIDTH / 2 - 50.0f) - m_pos.x) * 0.08f;	//減衰処理
-		m_pos.y += ((SCREEN_HEIGHT / 2) - m_pos.y) * 0.08f;
+		m_nCntMove++;
 
-		for (int i = 0; i < nMaxDigits; i++)
-		{
-			m_pNumber[i]->SetPosition(D3DXVECTOR3(m_pos.x + i * 50.0f, m_pos.y, m_pos.z));
+		if (m_nCntMove >= 80)
+		{//一定時間が経過したら
+			//--------------------------------------
+			// 目的の位置まで移動する
+			//--------------------------------------
+			m_pos.x += ((SCREEN_WIDTH / 2 - 50.0f) - m_pos.x) * 0.08f;	//減衰処理
+			m_pos.y += ((SCREEN_HEIGHT / 2) - m_pos.y) * 0.08f;
+
+			for (int i = 0; i < nMaxDigits; i++)
+			{
+				m_pNumber[i]->SetPosition(D3DXVECTOR3(m_pos.x + i * 50.0f, m_pos.y, m_pos.z));
+			}
 		}
 	}
 	else

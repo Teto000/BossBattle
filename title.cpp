@@ -52,12 +52,6 @@ CTitle::~CTitle()
 //===========================
 HRESULT CTitle::Init()
 {
-	//{
-	//	//îwåiÇÃê∂ê¨
-	//	D3DXVECTOR3 pos(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f);
-	//	m_pBg = CBg::Create(pos, CBg::BGTYPE_TITLE);
-	//}
-
 	m_pCamera = new CTitleCamera;
 	m_pCamera->Init();
 
@@ -66,6 +60,12 @@ HRESULT CTitle::Init()
 	m_pMeshField = CMeshField::Create();
 
 	m_pSky = CSky::Create(CTexture::TEXTURE_SKY);
+
+	//îwåiÇÃê∂ê¨
+	{
+		D3DXVECTOR3 pos(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 100.0f, 0.0f);
+		m_pBg = CBg::Create(pos, CBg::BGTYPE_TITLE);
+	}
 
 	//BGMÇÃçƒê∂
 	CSound::PlaySound(CSound::SOUND_LABEL_TITLE);
