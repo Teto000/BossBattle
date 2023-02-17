@@ -290,7 +290,7 @@ void CPlayer::Update()
 				m_pBullet = CBullet::Create(D3DXVECTOR3(m_pos.x, m_pos.y + 100.0f, m_pos.z));
 				m_nBulletTime = 0;
 			}
-			else if (joypad->Trigger(CInputJoypad::JOYKEY_X) && m_nBulletTime >= 6)
+			else if (joypad->Press(CInputJoypad::JOYKEY_X) && m_nBulletTime >= 6)
 			{
 				m_pBullet = CBullet::Create(D3DXVECTOR3(m_pos.x, m_pos.y + 100.0f, m_pos.z));
 				m_nBulletTime = 0;
