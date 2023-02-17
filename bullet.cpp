@@ -15,6 +15,7 @@
 #include "enemy.h"
 #include "player.h"
 #include "damage.h"
+#include "sound.h"
 
 //====================================
 // コンストラクタ
@@ -129,6 +130,9 @@ void CBullet::Update()
 
 		//ダメージ数
 		m_pDamage = CDamage::Create(damagePos, nDamage, CDamage::DAMAGE_TYPE_NONE);
+
+		//SEの再生
+		CSound::PlaySound(CSound::SOUND_LABEL_SE_HIT);
 
 		Uninit();
 		return;

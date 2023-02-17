@@ -285,7 +285,12 @@ void CPlayer::Update()
 
 		if (m_type == MOTION_IDOL || m_type == MOTION_MOVE)
 		{//攻撃以外の時なら
-			if (CInputKeyboard::Press(DIK_M) && m_nBulletTime >= 6)
+			if (CInputKeyboard::Press(DIK_O) && m_nBulletTime >= 6)
+			{
+				m_pBullet = CBullet::Create(D3DXVECTOR3(m_pos.x, m_pos.y + 100.0f, m_pos.z));
+				m_nBulletTime = 0;
+			}
+			else if (joypad->Trigger(CInputJoypad::JOYKEY_X) && m_nBulletTime >= 6)
 			{
 				m_pBullet = CBullet::Create(D3DXVECTOR3(m_pos.x, m_pos.y + 100.0f, m_pos.z));
 				m_nBulletTime = 0;
@@ -428,7 +433,7 @@ void CPlayer::MoveKeyboard(int nUpKey, int nDownKey, int nLeftKey, int nRightKey
 	//--------------------------------------
 	// 回避する処理
 	//--------------------------------------
-	if (CInputKeyboard::Trigger(DIK_SLASH)
+	if (CInputKeyboard::Trigger(DIK_P)
 		&& !m_status.bAvoidance && m_nAvoidStan <= 0)
 	{//キーが押された & 回避状態じゃない & 回避硬直が0以下なら
 		m_status.fSpeed *= 4.0f;		//加速
@@ -694,8 +699,8 @@ void CPlayer::AttackManager()
 	CInputJoypad* joypad = CApplication::GetInput()->GetJoypad();
 
 	//攻撃キー用変数宣言
-	int nNorAtkKey = DIK_RETURN;
-	int nSpinAtkKey = DIK_1;
+	int nNorAtkKey = DIK_U;
+	int nSpinAtkKey = DIK_I;
 
 	switch (m_type)
 	{
