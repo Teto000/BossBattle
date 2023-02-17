@@ -55,6 +55,7 @@ CEnemy::CEnemy() : CObject(0)
 	m_fRemBreak = 0.0f;
 	m_fMaxBreak = 0.0f;
 	m_bNockBack = false;	//ノックバックしたか
+	m_pMessage = nullptr;	//メッセージ
 
 	for (int i = 0; i < GAUGE_MAX; i++)
 	{
@@ -452,6 +453,12 @@ void CEnemy::SubGauge(float fDamage, GAUGE type)
 			{//HPゲージが尽きたら
 				m_pHP[GAUGE_HP] = nullptr;
 
+				//メッセージの表示
+				{
+					D3DXVECTOR3 pos(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f);
+					m_pMessage = CMessage::Create(pos, 600.0f, 200.0f, CMessage::MESSAGE_CLEAR);
+				}
+
 				//ブレイクゲージを消す
 				m_fBreak = 0;
 				m_fRemBreak = m_fBreak * 100 / m_fMaxBreak;
@@ -474,6 +481,12 @@ void CEnemy::SubGauge(float fDamage, GAUGE type)
 
 			//ブレイク状態にする
 			m_state = ENEMYSTATE_BREAK;
+
+			//文字の表示
+			{
+				D3DXVECTOR3 pos(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f);
+				m_pMessage = CMessage::Create(pos, 600.0f, 200.0f, CMessage::MESSAGE_BREAK);
+			}
 
 			//待機モーションにする
 			ChangeMotion(MOTION_IDOL);

@@ -21,7 +21,6 @@ class CPlayer;		//プレイヤー
 class CEnemy;		//エネミー
 class CMeshField;	//メッシュフィールド
 class CPolygon;		//2Dポリゴン
-class CMessage;		//メッセージ
 class CSky;			//スカイ
 class CStage;		//ステージ
 class CItem;		//アイテム
@@ -76,7 +75,6 @@ private:
 	static CEnemy*		m_pEnemy;		//エネミー
 	static CMeshField*	m_pMeshField;	//メッシュフィールド
 	static CPolygon*	m_pPolygon;		//2Dポリゴン
-	static CMessage*	m_pMessage;		//メッセージ
 	static CSky*		m_pSky;			//スカイ
 	static CStage*		m_pStage;		//ステージ
 	static CTime*		m_pTime;		//タイマー

@@ -102,13 +102,6 @@ HRESULT CGame::Init()
 	//2Dポリゴンの生成
 	m_pPolygon = CPolygon::Create(CPolygon::POLYGONTYPE_AIM);
 
-	//メッセージの生成
-	{
-		D3DXVECTOR3 pos(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f);
-		m_pMessage = CMessage::Create(pos, 800.0f, 400.0f, CMessage::MESSAGE_CLEAR);
-		m_pMessage = CMessage::Create(pos, 600.0f, 200.0f, CMessage::MESSAGE_BREAK);
-	}
-
 	//タイマーの生成
 	m_pTime = CTime::Create(D3DXVECTOR3(1100.0f, 650.0f, 0.0f));
 
@@ -181,7 +174,7 @@ void CGame::Update()
 	//----------------------------
 	nCntItem++;	//カウントの加算
 
-	if(nCntItem >= 60)
+	if(nCntItem >= 180)
 	{
 		int nWidth = 1500;
 

@@ -18,6 +18,7 @@
 class CModel;	//モデル
 class CLine;	//ライン
 class CHP;		//HP
+class CMessage;	//メッセージ
 
 //--------------------------------
 // マクロ定義
@@ -167,9 +168,10 @@ private:
 	float m_fMaxBreak;
 	bool m_bNockBack;			//ノックバックしたか
 	bool m_bHitAtk;				//攻撃が当たったか
-	CModel*  m_pModel[MAX_ENEMY_PARTS];	//モデル
-	CLine*	 m_pLine[nMaxLine];			//ライン
-	CHP*	 m_pHP[GAUGE_MAX];			//HP
+	CModel*		m_pModel[MAX_ENEMY_PARTS];	//モデル
+	CLine*		m_pLine[nMaxLine];			//ライン
+	CHP*		m_pHP[GAUGE_MAX];			//HP
+	CMessage*	m_pMessage;					//メッセージ
 	ENEMYSTATE m_state;					//敵の状態
 
 	/* ↓ モーション情報 ↓ */
