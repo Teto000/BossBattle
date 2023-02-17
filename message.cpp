@@ -16,7 +16,7 @@
 //=======================
 // コンストラクタ
 //=======================
-CMessage::CMessage() : CObject2D(0)
+CMessage::CMessage() : CObject2D(1)
 {
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//位置
 	m_col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);	//色
@@ -57,6 +57,22 @@ HRESULT CMessage::Init(D3DXVECTOR3 pos)
 		CObject2D::SetTexture(CTexture::TEXTURE_BREAK);
 		break;
 
+	case MESSAGE_START:
+		CObject2D::SetTexture(CTexture::TEXTURE_START);
+		break;
+
+	case MESSAGE_1:
+		CObject2D::SetTexture(CTexture::TEXTURE_1);
+		break;
+
+	case MESSAGE_2:
+		CObject2D::SetTexture(CTexture::TEXTURE_2);
+		break;
+
+	case MESSAGE_3:
+		CObject2D::SetTexture(CTexture::TEXTURE_3);
+		break;
+
 	default:
 		break;
 	}
@@ -80,16 +96,12 @@ void CMessage::Update()
 	CObject2D::Update();
 
 	//時間カウント
-	if (CGame::GetFinish()
-		|| CGame::GetEnemy()->GetState() == CEnemy::ENEMYSTATE_BREAK)
-	{//終了フラグが立っている || 敵がブレイク状態なら
-		m_nCntTime++;
-	}
+	m_nCntTime++;
 
 	//-------------------------
 	// 透明にする
 	//-------------------------
-	if (m_nCntTime >= 100)
+	if (m_nCntTime >= 60)
 	{//カウントが60以上なら
 		m_col.a -= 0.02f;	//透明度の減少
 	}
@@ -128,6 +140,13 @@ void CMessage::Draw()
 			m_col.a = 1.0f;	//透明度を最大にする
 			CObject2D::SetColor(m_col);	//色の設定
 		}
+		break;
+
+	case MESSAGE_START:
+	case MESSAGE_1:
+	case MESSAGE_2:
+	case MESSAGE_3:
+		CObject2D::Draw();
 		break;
 
 	default:

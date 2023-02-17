@@ -23,6 +23,10 @@ public:
 		MESSAGE_NONE = 0,
 		MESSAGE_CLEAR,		//クリア
 		MESSAGE_BREAK,		//ブレイク
+		MESSAGE_START,		//スタート
+		MESSAGE_1,			//1
+		MESSAGE_2,			//2
+		MESSAGE_3,			//3
 		MESSAGE_MAX
 	};
 

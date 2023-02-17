@@ -25,6 +25,7 @@ class CSky;			//スカイ
 class CStage;		//ステージ
 class CItem;		//アイテム
 class CTime;		//タイム
+class CMessage;		//メッセージ
 
 //================================
 // ゲームクラスの定義
@@ -51,6 +52,7 @@ public:
 	// ゲッター
 	//------------------
 	static bool GetFinish()			   { return m_bFinish; }		//終了フラグを取得
+	static bool GetStart()			   { return m_bStart; }			//開始フラグを取得
 	static CCamera*	GetCamera()		   { return m_pCamera; }		//カメラの取得
 	static CPlayer*	GetPlayer()		   { return m_pPlayer; }		//プレイヤーの取得
 	static CEnemy*	GetEnemy()		   { return m_pEnemy; }			//エネミーの取得
@@ -60,15 +62,19 @@ private:
 	//-------------------
 	// メンバ変数
 	//-------------------
-	int nCntFinish;	//終了時間カウント
-	int nCntItem;	//アイテム生成時間カウント
-	CItem*	m_pItem;	//アイテム
+	int m_nCntFinish;		//終了時間カウント
+	int m_nCntItem;			//アイテム生成時間カウント
+	int m_nCntMessage;		//メッセージを表示するまでの時間
+	int m_nNumMessage;		//表示するメッセージ番号
+	CItem*		m_pItem;	//アイテム
+	CMessage*	m_pMessage;	//メッセージ
 
 	//-------------------
 	// 静的メンバ変数
 	//-------------------
 	static bool m_bDeathEnemny;	//敵が死んでいるか
 	static bool m_bFinish;		//終了フラグ
+	static bool m_bStart;		//開始フラグ
 
 	static CCamera*		m_pCamera;		//カメラ
 	static CPlayer*		m_pPlayer;		//プレイヤー

@@ -24,10 +24,16 @@ public: /* 定義 */
 		TEXTURE_RESULT,			//リザルト
 		TEXTURE_GROUND,			//地面
 		TEXTURE_AIM,			//照準
-		TEXTURE_CLEAR,			//クリア
-		TEXTURE_BREAK,			//ブレイク
 		TEXTURE_NUMBER,			//数値
 		TEXTURE_SKY,			//空
+
+		/* ↓ メッセージ ↓ */
+		TEXTURE_CLEAR,			//クリア
+		TEXTURE_BREAK,			//ブレイク
+		TEXTURE_START,			//スタート
+		TEXTURE_1,				//1
+		TEXTURE_2,				//2
+		TEXTURE_3,				//3
 
 		/* ↓ アイテム ↓ */
 		TEXTURE_ITEM_HEAL,		//回復

@@ -36,13 +36,13 @@
 //------------------------
 bool CGame::m_bDeathEnemny = false;			//敵が死んでいるか
 bool CGame::m_bFinish = false;				//終了フラグ
+bool CGame::m_bStart = false;				//開始フラグ
 
 CCamera*	CGame::m_pCamera = nullptr;		//カメラ
 CPlayer*	CGame::m_pPlayer = nullptr;		//プレイヤー
 CEnemy*		CGame::m_pEnemy = nullptr;		//エネミー
 CMeshField*	CGame::m_pMeshField = nullptr;	//メッシュフィールド
 CPolygon*	CGame::m_pPolygon = nullptr;	//2Dポリゴン
-CMessage*	CGame::m_pMessage = nullptr;	//メッセージ
 CSky*		CGame::m_pSky = nullptr;		//スカイ
 CStage*		CGame::m_pStage = nullptr;		//ステージ
 CTime*		CGame::m_pTime = nullptr;		//タイマー
@@ -52,9 +52,12 @@ CTime*		CGame::m_pTime = nullptr;		//タイマー
 //===========================
 CGame::CGame()
 {
-	nCntFinish = 0;
-	nCntItem = 0;
-	m_pItem = nullptr;
+	m_nCntFinish = 0;
+	m_nCntItem = 0;
+	m_nCntMessage = 0;		//メッセージを表示するまでの時間
+	m_nNumMessage = 0;		//表示するメッセージ番号
+	m_pItem = nullptr;		//アイテム
+	m_pMessage = nullptr;	//メッセージ
 }
 
 //===========================
@@ -73,6 +76,8 @@ HRESULT CGame::Init()
 	//初期値の設定
 	m_bDeathEnemny = false;
 	m_bFinish = false;
+	m_nNumMessage = 3;
+	m_nCntMessage = 60;
 
 	//カメラの生成
 	m_pCamera = new CCamera;
@@ -144,14 +149,14 @@ void CGame::Update()
 	//----------------------------
 	if (m_bFinish)
 	{//終了フラグが立っているなら
-		nCntFinish++;	//カウントを加算
+		m_nCntFinish++;	//カウントを加算
 
-		if (nCntFinish >= 300)
+		if (m_nCntFinish >= 300)
 		{//カウントが5秒以上なら
 			//リザルト画面に移行
 			CApplication::GetFade()->SetFade(CApplication::MODE_RESULT);
 		}
-		else if (nCntFinish >= 120)
+		else if (m_nCntFinish >= 120)
 		{//カウントが2秒以上(クリアの文字が消えたら)
 			if (CInputKeyboard::Trigger(DIK_RETURN))
 			{//ENTERキーが押されたら
@@ -170,19 +175,65 @@ void CGame::Update()
 	}
 
 	//----------------------------
-	// アイテムの生成
+	// 開始しているかどうか
 	//----------------------------
-	nCntItem++;	//カウントの加算
+	if (m_bStart == false)
+	{//開始フラグが立っていないなら
+		//----------------------------
+		// メッセージの表示
+		//----------------------------
+		D3DXVECTOR3 pos(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f);
 
-	if(nCntItem >= 180)
-	{
-		int nWidth = 1500;
+		//時間を数える
+		m_nCntMessage++;
 
-		int X = rand() % nWidth - (nWidth / 2);
-		int Z = rand() % nWidth - (nWidth / 2);
+		if (m_nCntMessage >= 60)
+		{
+			if (m_nNumMessage == 3)
+			{//カウント3
+				m_pMessage = CMessage::Create(pos, 600.0f, 300.0f, CMessage::MESSAGE_3);
+			}
+			else if (m_nNumMessage == 2)
+			{//カウント2
+				m_pMessage = CMessage::Create(pos, 600.0f, 300.0f, CMessage::MESSAGE_2);
+			}
+			else if (m_nNumMessage == 1)
+			{//カウント1
+				m_pMessage = CMessage::Create(pos, 600.0f, 300.0f, CMessage::MESSAGE_1);
+			}
+			else if (m_nNumMessage == 0)
+			{//スタート
+				m_pMessage = CMessage::Create(pos, 800.0f, 400.0f, CMessage::MESSAGE_START);
+			}
+			else
+			{
+				//開始フラグを立てる
+				m_bStart = true;
+			}
 
-		D3DXVECTOR3 pos((float)X, 100.0f, (float)Z);
-		m_pItem = CItem::Create(pos, CItem::ITEMTYPE_HEAL);
-		nCntItem = 0;	//リセット
+			//表示する文字を変更
+			m_nNumMessage--;
+
+			m_nCntMessage = 0;
+		}
+	}
+	else
+	{//開始しているなら
+		//----------------------------
+		// アイテムの生成
+		//----------------------------
+		m_nCntItem++;	//カウントの加算
+
+		if (m_nCntItem >= 180)
+		{
+			int nWidth = 1500;
+
+			int X = rand() % nWidth - (nWidth / 2);
+			int Z = rand() % nWidth - (nWidth / 2);
+
+			D3DXVECTOR3 pos((float)X, 100.0f, (float)Z);
+			m_pItem = CItem::Create(pos, CItem::ITEMTYPE_HEAL);
+			m_nCntItem = 0;	//リセット
+		}
 	}
 }

@@ -247,8 +247,8 @@ void CPlayer::Update()
 		}
 	}
 
-	if (!CGame::GetFinish() && !m_bNockBack)
-	{//終了フラグが立っていない or ノックバック状態じゃないなら
+	if (!CGame::GetFinish() && CGame::GetStart() && !m_bNockBack)
+	{//終了フラグが立っていない or 開始フラグが立っている or ノックバック状態じゃないなら
 		//--------------------------------
 		// 移動
 		//--------------------------------

@@ -19,17 +19,23 @@
 //==================================================
 const char* CTexture::s_FileName[] =
 {// テクスチャのパス
-	"data/TEXTURE/Title.png",		//タイトル
-	"data/TEXTURE/Result.png",		//リザルト
-	"data/TEXTURE/Ground.jpg",		//地面
-	"data/TEXTURE/Aim.png",			//照準
-	"data/TEXTURE/Clear.png",		//クリア
-	"data/TEXTURE/Break.png",		//ブレイク
-	"data/TEXTURE/Number.png",		//数値
-	"data/TEXTURE/Sky.jpg",			//空
+	"data/TEXTURE/Title.png",			//タイトル
+	"data/TEXTURE/Result.png",			//リザルト
+	"data/TEXTURE/Ground.jpg",			//地面
+	"data/TEXTURE/Aim.png",				//照準
+	"data/TEXTURE/Number.png",			//数値
+	"data/TEXTURE/Sky.jpg",				//空
+
+	/* ↓ メッセージ ↓ */
+	"data/TEXTURE/Message/Clear.png",	//クリア
+	"data/TEXTURE/Message/Break.png",	//ブレイク
+	"data/TEXTURE/Message/Start.png",	//スタート
+	"data/TEXTURE/Message/One.png",		//1
+	"data/TEXTURE/Message/Two.png",		//2
+	"data/TEXTURE/Message/Three.png",	//3
 
 	/* ↓ アイテム ↓ */
-	"data/TEXTURE/Item/Heal.png",	//回復
+	"data/TEXTURE/Item/Heal.png",		//回復
 };
 
 static_assert(sizeof(CTexture::s_FileName) / sizeof(CTexture::s_FileName[0]) == CTexture::TEXTURE_MAX, "aho");

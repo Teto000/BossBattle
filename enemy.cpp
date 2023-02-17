@@ -217,62 +217,65 @@ void CEnemy::Update()
 		}
 	}
 
-	if (m_state == ENEMYSTATE_BREAK)
-	{//ブレイク状態なら
-		//----------------------------
-		// ノックバックする処理
-		//----------------------------
-		NockBack();
+	if (CGame::GetStart())
+	{//開始フラグが立っているなら
+		if (m_state == ENEMYSTATE_BREAK)
+		{//ブレイク状態なら
+			//----------------------------
+			// ノックバックする処理
+			//----------------------------
+			NockBack();
 
-		//------------------------
-		// ブレイク状態から復帰
-		//------------------------
-		m_nBreakTime++;	//時間を数える
+			//------------------------
+			// ブレイク状態から復帰
+			//------------------------
+			m_nBreakTime++;	//時間を数える
 
-		if (m_nBreakTime >= 600)
-		{//一定時間経過
-			m_state = ENEMYSTATE_NONE;	//ブレイク状態を回復
-			m_nBreakTime = 0;			//時間のリセット
+			if (m_nBreakTime >= 600)
+			{//一定時間経過
+				m_state = ENEMYSTATE_NONE;	//ブレイク状態を回復
+				m_nBreakTime = 0;			//時間のリセット
 
-										//ブレイクゲージを最大にする
-			m_fBreak = m_fMaxBreak;
-			m_fRemBreak = m_fBreak * 100 / m_fMaxBreak;
+											//ブレイクゲージを最大にする
+				m_fBreak = m_fMaxBreak;
+				m_fRemBreak = m_fBreak * 100 / m_fMaxBreak;
 
-			//ブレイクゲージの再生成
-			{
-				D3DXVECTOR3 breakpPos(SCREEN_WIDTH / 2, 100.0f, 0.0f);
-				m_pHP[GAUGE_BREAK] = CHP::Create(breakpPos, 800.0f, 15.0f, CHP::GAUGETYPE_BREAK);
-				m_pHP[GAUGE_BREAK]->SetLife(m_fBreak, m_fRemBreak);	//HPの設定
+				//ブレイクゲージの再生成
+				{
+					D3DXVECTOR3 breakpPos(SCREEN_WIDTH / 2, 100.0f, 0.0f);
+					m_pHP[GAUGE_BREAK] = CHP::Create(breakpPos, 800.0f, 15.0f, CHP::GAUGETYPE_BREAK);
+					m_pHP[GAUGE_BREAK]->SetLife(m_fBreak, m_fRemBreak);	//HPの設定
+				}
 			}
 		}
-	}
-	else
-	{//敵がブレイクしていないなら
-		//------------------------
-		// 敵の行動
-		//------------------------
-		EnemyAI();
-	}
+		else
+		{//敵がブレイクしていないなら
+			//------------------------
+			// 敵の行動
+			//------------------------
+			EnemyAI();
+		}
 
-	//-------------------------
-	// 線の更新
-	//-------------------------
-	//UpdateLine();
+		//-------------------------
+		// 線の更新
+		//-------------------------
+		//UpdateLine();
 
-	//---------------------
-	// 重力の加算
-	//---------------------
-	if (m_pos.y >= 0.0f)
-	{//飛んでいるなら
-		m_pos.y -= m_fGravity;
-		m_fGravity += 3.0f;
-	}
-	else
-	{//地面に着いたら
-		//重力の値をリセット
-		m_fGravity = fDefGravity;
+		//---------------------
+		// 重力の加算
+		//---------------------
+		if (m_pos.y >= 0.0f)
+		{//飛んでいるなら
+			m_pos.y -= m_fGravity;
+			m_fGravity += 3.0f;
+		}
+		else
+		{//地面に着いたら
+			//重力の値をリセット
+			m_fGravity = fDefGravity;
 
-		m_pos.y = 0.0f;		//高さを地面に合わせる
+			m_pos.y = 0.0f;		//高さを地面に合わせる
+		}
 	}
 
 	//--------------------------------
