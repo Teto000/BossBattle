@@ -17,8 +17,9 @@
 //=======================
 CNumBoard::CNumBoard() : CBillBoard(0)
 {
-	m_nValue = 0;	//数値
-	m_nDigit = 0;	//桁数
+	m_nValue = 0;		//数値
+	m_nDigit = 0;		//桁数
+	m_bDraw = false;	//描画フラグ
 }
 
 //=======================
@@ -66,6 +67,11 @@ void CNumBoard::Update()
 //=======================
 void CNumBoard::Draw()
 {
+	if (!m_bDraw)
+	{//描画しない状態なら
+		return;
+	}
+
 	//デバイスの取得
 	LPDIRECT3DDEVICE9 pDevice = CApplication::GetRenderer()->GetDevice();
 

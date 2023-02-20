@@ -170,6 +170,12 @@ void CCombo::SetNumber()
 	{//桁数分回す
 		if (m_pNumber[i] != nullptr)
 		{//nullじゃないなら
+			//桁数を計算
+			int nDigit = log10(m_nNumCombo) + 1;
+
+			//ナンバーの描画を有効・無効にする
+			m_pNumber[i]->SetEnable(nMaxDigits - i <= nDigit);
+
 			//powで桁数を出す。
 			int nCntNumber = nMaxDigits - i - 1;
 			int nNum0 = (int)pow(10, nCntNumber + 1);

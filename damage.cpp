@@ -179,6 +179,12 @@ void CDamage::SetNumber()
 {
 	for (int i = 0; i < nMaxDigits; i++)
 	{//桁数分回す
+		//桁数を計算
+		int nDigit = log10(m_nAtkValue) + 1;
+
+		//ナンバーの描画を有効・無効にする
+		m_pNumBoard[i]->SetEnable(nMaxDigits - i <= nDigit);
+
 		//powで桁数を出す。
 		int nCntNumber = nMaxDigits - i - 1;
 		int nNum0 = (int)pow(10, nCntNumber + 1);

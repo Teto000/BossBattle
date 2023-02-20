@@ -38,6 +38,7 @@ const float CEnemy::fDefGravity = 1.0f;	//基本の重力
 CEnemy::CEnemy() : CObject(0)
 {
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//位置
+	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//前の位置
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//移動量
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//向き
 	m_vtxMax = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//大きさの最大値
@@ -196,6 +197,9 @@ void CEnemy::Uninit()
 //========================
 void CEnemy::Update()
 {
+	//前の位置の保存
+	m_posOld = m_pos;
+
 	//--------------------------------
 	// モーションのリセット
 	//--------------------------------
@@ -280,6 +284,12 @@ void CEnemy::Update()
 			m_pos.y = 0.0f;		//高さを地面に合わせる
 		}
 	}
+
+	//--------------------------------
+	// プレイヤーとの当たり判定
+	//--------------------------------
+	m_pos = CUtility::GetCollisionPos(m_pos, m_posOld, m_size, m_mtxWorld
+			, CObject::OBJTYPE_PLAYER);
 
 	//--------------------------------
 	// モーションの設定

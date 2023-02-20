@@ -33,6 +33,7 @@ public:
 	// セッター
 	//------------------
 	void Set(int nDigit);	//数値の設定
+	void SetEnable(bool bEnable) { m_bDraw = bEnable; }	//描画するかどうか
 
 	//------------------
 	// 静的メンバ変数
@@ -45,6 +46,7 @@ private:
 	//------------------
 	int m_nValue;	//数値
 	int m_nDigit;	//桁数
+	bool m_bDraw;	//描画フラグ
 };
 
 #endif
