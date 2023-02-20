@@ -48,6 +48,9 @@ public:
 	//Šp“x‚Ì³‹K‰»
 	static float GetNorRot(float rot);
 
+	//ˆÚ“®ŒÀŠE‚Ìİ’è
+	static D3DXVECTOR3 LimitMove(D3DXVECTOR3 pos);
+
 private:
 	//-----------------------
 	// Ã“Iƒƒ“ƒo•Ï”

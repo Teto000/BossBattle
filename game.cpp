@@ -224,7 +224,7 @@ void CGame::Update()
 		//----------------------------
 		m_nCntItem++;	//ƒJƒEƒ“ƒg‚Ì‰ÁŽZ
 
-		if (m_nCntItem >= 180)
+		if (m_nCntItem >= 480)
 		{
 			int nWidth = 1500;
 

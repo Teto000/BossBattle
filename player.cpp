@@ -141,6 +141,7 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	// 初期値の設定
 	//---------------------------
 	m_pos = pos;						//位置
+	m_rot.y = D3DX_PI;					//向き
 	fSizeWidth = 30.0f;					//モデルの幅
 	fSizeDepth = 30.0f;					//モデルの奥行き
 	m_nWheelRotValue = 10;				//タイヤの回転量
@@ -266,6 +267,9 @@ void CPlayer::Update()
 				MoveJoypad();	//ジョイパッド
 			}
 		}
+
+		//移動限界の確認
+		m_pos = CUtility::LimitMove(m_pos);
 
 		//タイヤの回転
 		m_pModel[0]->SetRotX(m_rotWheel);
@@ -414,7 +418,7 @@ CPlayer* CPlayer::Create()
 	if (pPlayer != nullptr)
 	{//NULLチェック
 		//初期化
-		pPlayer->Init(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+		pPlayer->Init(D3DXVECTOR3(0.0f, 0.0f, -300.0f));
 		pPlayer->SetObjType(OBJTYPE_PLAYER);
 	}
 
@@ -760,10 +764,10 @@ void CPlayer::AttackManager()
 	// 回転切りなら
 	//---------------------------
 	case MOTION_ATTACK_SPIN:
-		if (CInputKeyboard::Trigger(nSpinAtkKey) || joypad->Trigger(CInputJoypad::JOYKEY_Y))
+		/*if (CInputKeyboard::Trigger(nSpinAtkKey) || joypad->Trigger(CInputJoypad::JOYKEY_Y))
 		{
 			ChangeMotion(MOTION_ATTACK_SPIN);
-		}
+		}*/
 		break;
 
 	default:

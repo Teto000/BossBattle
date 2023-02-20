@@ -254,6 +254,9 @@ void CEnemy::Update()
 			// “G‚Ìs“®
 			//------------------------
 			EnemyAI();
+
+			//ˆÚ“®ŒÀŠE‚ÌŠm”F
+			m_pos = CUtility::LimitMove(m_pos);
 		}
 
 		//-------------------------

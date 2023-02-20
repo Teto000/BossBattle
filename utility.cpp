@@ -307,3 +307,44 @@ float CUtility::GetNorRot(float rot)
 
 	return rotData;
 }
+
+//=============================================================================
+// ˆÚ“®ŒÀŠE‚Ìİ’è
+// ˆø”FˆÊ’u
+//==============================================================================
+D3DXVECTOR3 CUtility::LimitMove(D3DXVECTOR3 pos)
+{
+	//---------------------
+	// ˆÚ“®‚ÌŒÀŠE’l
+	//---------------------
+	float fLeft = -1000.0f;
+	float fRight = 1000.0f;
+	float fFlont = -1000.0f;
+	float fBack = 1000.0f;
+
+	//---------------------
+	// X²‚ÌŒÀŠE
+	//---------------------
+	if (pos.x <= fLeft)
+	{
+		pos.x = fLeft;
+	}
+	else if (pos.x >= fRight)
+	{
+		pos.x = fRight;
+	}
+
+	//---------------------
+	// Z²‚ÌŒÀŠE
+	//---------------------
+	if (pos.z <= fFlont)
+	{
+		pos.z = fFlont;
+	}
+	else if (pos.z >= fBack)
+	{
+		pos.z = fBack;
+	}
+
+	return pos;
+}
