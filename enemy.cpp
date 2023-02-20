@@ -121,7 +121,7 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 	//初期値の設定
 	m_pos = pos;
 	m_nCntMotion = 1;
-	m_fLife = 5000.0f;			//体力
+	m_fLife = 5000.0f / 10;			//体力
 	m_fRemLife = 100.0f;		//残り体力(%)
 	m_fMaxLife = m_fLife;		//最大体力
 	m_fGravity = fDefGravity;	//重力の値
@@ -455,31 +455,42 @@ void CEnemy::SubGauge(float fDamage, GAUGE type)
 		// HPを減らす処理
 		//-----------------------
 	case GAUGE_HP:
-		if (m_pHP[GAUGE_HP] != nullptr)
-		{
-			m_fLife -= round(fDamage);	//体力の減少
+		if (!m_pHP[GAUGE_HP])
+		{//nullなら
+			return;
+		}
 
-			//残り体力を計算
-			m_fRemLife = m_fLife * 100 / m_fMaxLife;
-			//HPの設定
-			m_pHP[GAUGE_HP]->SetLife(m_fLife, m_fRemLife);
+		m_fLife -= round(fDamage);	//体力の減少
 
-			if (m_fLife < 0 || m_fRemLife < 0
-				&& m_pHP[GAUGE_HP])
-			{//HPゲージが尽きたら
+		//残り体力を計算
+		m_fRemLife = m_fLife * 100 / m_fMaxLife;
+
+		if (m_fRemLife < 1 && m_fRemLife > 0)
+		{//残り体力が1%未満 かつ 0より上なら
+			m_fRemLife = 1;
+		}
+
+		//HPの設定
+		m_pHP[GAUGE_HP]->SetLife(m_fLife, m_fRemLife);
+
+		if (m_fLife < 0 && m_fRemLife < 0
+			&& m_pHP[GAUGE_HP])
+		{//HPゲージが尽きたら
+			if (m_pHP[GAUGE_HP])
+			{//nullチェック
 				m_pHP[GAUGE_HP] = nullptr;
-
-				//メッセージの表示
-				{
-					D3DXVECTOR3 pos(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f);
-					m_pMessage = CMessage::Create(pos, 600.0f, 200.0f, CMessage::MESSAGE_CLEAR);
-				}
-
-				//ブレイクゲージを消す
-				m_fBreak = 0;
-				m_fRemBreak = m_fBreak * 100 / m_fMaxBreak;
-				return;
 			}
+
+			//メッセージの表示
+			{
+				D3DXVECTOR3 pos(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f);
+				m_pMessage = CMessage::Create(pos, 600.0f, 200.0f, CMessage::MESSAGE_CLEAR);
+			}
+
+			//ブレイクゲージを消す
+			m_fBreak = 0;
+			m_fRemBreak = m_fBreak * 100 / m_fMaxBreak;
+			return;
 		}
 		break;
 
@@ -487,6 +498,11 @@ void CEnemy::SubGauge(float fDamage, GAUGE type)
 		// ブレイクゲージを減らす処理
 		//--------------------------------
 	case GAUGE_BREAK:
+		if (!m_pHP[GAUGE_BREAK])
+		{//nullなら
+			return;
+		}
+
 		m_fBreak -= round(fDamage / 3);
 		m_fRemBreak = m_fBreak * 100 / m_fMaxBreak;
 		m_pHP[GAUGE_BREAK]->SetLife(m_fBreak, m_fRemBreak);
