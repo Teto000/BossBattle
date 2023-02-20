@@ -172,7 +172,7 @@ MOTIONSET
 	LOOP = 0			# ループするかどうか[0:ループしない / 1:ループする]
 	NUM_KEY = 5		 	# キー数
 	COLLISION = 160 	# 当たり判定の開始時間
-	NUM_DAMAGE = 200 	# ダメージ量
+	NUM_DAMAGE = 180 	# ダメージ量
 	NUM_HIT = 1     	# ヒット数
 	HIT_INTERVAL = 0	# ヒット間隔
 
@@ -274,7 +274,7 @@ MOTIONSET
 	LOOP = 0			# ループするかどうか[0:ループしない / 1:ループする]
 	NUM_KEY = 12		# キー数
 	COLLISION = 120 	# 当たり判定の開始時間
-	NUM_DAMAGE = 60 	# ダメージ量
+	NUM_DAMAGE = 50 	# ダメージ量
 	NUM_HIT = 3     	# ヒット数
 	HIT_INTERVAL = 20	# ヒット間隔
 

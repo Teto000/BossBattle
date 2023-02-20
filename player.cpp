@@ -28,7 +28,6 @@
 #include "hp.h"
 #include "combo.h"
 #include "damage.h"
-#include "style_shift.h"
 #include "utility.h"
 #include "sound.h"
 #include "orbit.h"
@@ -196,6 +195,12 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	//------------------------------
 	m_pCombo = CCombo::Create(D3DXVECTOR3(1100.0f, 360.0f, 0.0f), m_nNumCombo);
 
+	//--------------------------------
+	// 剣の軌跡の表示
+	//--------------------------------
+	D3DXVECTOR3 offsetPos(0.0f, -20.0f, -120.0f);		//剣先までのオフセット
+	m_pOrbit = COrbit::Create(offsetPos, m_pModel[4]->GetmtxWorld());
+
 	return S_OK;
 }
 
@@ -336,21 +341,20 @@ void CPlayer::Update()
 	//--------------------------------
 	// 重力の加算
 	//--------------------------------
-	if (m_pos.y > 0.0f)
-	{//飛んでいるなら
-		m_pos.y -= 3.0f;
-	}
-	else
-	{//地面に着いたら
-		m_pos.y = 0.0f;		//高さを地面に合わせる
-		m_bNockBack = false;
-	}
+	//if (m_pos.y > 0.0f)
+	//{//飛んでいるなら
+	//	m_pos.y -= 3.0f;
+	//}
+	//else
+	//{//地面に着いたら
+	//	m_pos.y = 0.0f;		//高さを地面に合わせる
+	//	m_bNockBack = false;
+	//}
 
 	//--------------------------------
-	// 剣の軌跡の表示
+	// 剣の軌跡の更新
 	//--------------------------------
-	//D3DXVECTOR3 offsetPos(0.0f, 0.0f, -120.0f);		//剣先までのオフセット
-	//m_pOrbit = COrbit::Create(offsetPos, m_pModel[4]->GetmtxWorld());
+	m_pOrbit->SetMtxParent(m_pModel[4]->GetmtxWorld());
 
 	//--------------------------------
 	// モーションの設定

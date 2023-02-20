@@ -37,7 +37,7 @@ public:
 	//------------------
 	// ゲッター
 	//------------------
-	D3DXVECTOR3 GetPosition() override { return m_localpos; }	//位置の取得
+	D3DXVECTOR3 GetPosition() override { return m_offsetPos; }	//位置の取得
 	float GetWidth() override { return 0.0f; }				//幅の取得
 	float GetHeight() override { return 0.0f; }				//高さの取得
 
@@ -50,28 +50,19 @@ private:
 	//------------------
 	// 定数
 	//------------------
-	static const int nMaxVtx = 32;		//頂点の最大数
+	static const int nMaxVtx = 2048;	//頂点の最大数
 
 	//------------------
 	// メンバ変数
 	//------------------
-	D3DXVECTOR3 m_localpos;				//ローカル座標
+	D3DXVECTOR3 m_offsetPos;			//オフセット座標
 	D3DXVECTOR3 m_worldPos;				//ワールド座標
 	D3DXMATRIX	m_mtxWorld;				//ワールドマトリックス
 	D3DXMATRIX m_pMtxParent;			//軌跡の親モデルのマトリックス
-
-	/* ↓ メッシュを構成する情報 */
-	int m_nNumDivision;	//ポリゴンの分割数
-	int m_nCntVtx;			//頂点の分割数
-	int m_nNumVtx;			//頂点数
-	int m_nNumPolygon;		//ポリゴン数
-	int m_nNumIndex;		//インデックス数
-	float m_fMaxWidth;		//メッシュフィールドの最大幅
-	float m_fMeshWidth;		//メッシュフィールドの幅
-	float m_fTexSize;		//テクスチャの分割サイズ
+	D3DXCOLOR m_initCol;				//色の初期値
+	int m_nNumVtx;						//頂点数
 
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;	//頂点バッファへのポインタ
-	LPDIRECT3DINDEXBUFFER9 m_pIdxBuff;	//インデックスバッファへのポインタ
 };
 
 #endif

@@ -121,7 +121,7 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 	//初期値の設定
 	m_pos = pos;
 	m_nCntMotion = 1;
-	m_fLife = 5000.0f / 10;			//体力
+	m_fLife = 5000.0f;			//体力
 	m_fRemLife = 100.0f;		//残り体力(%)
 	m_fMaxLife = m_fLife;		//最大体力
 	m_fGravity = fDefGravity;	//重力の値
