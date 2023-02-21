@@ -73,9 +73,15 @@ HRESULT CBg::Init(D3DXVECTOR3 pos)
 			break;
 
 		case BGTYPE_PLAYER_HP:
-			m_fWidth = 350.0f;
+			m_fWidth = 330.0f;
 			m_fHeight = 50.0f;
-			m_pObject2D->SetTexture(CTexture::TEXTURE_BG_PLAYERHP);
+			m_pObject2D->SetTexture(CTexture::TEXTURE_BG_PLAYER_HP);
+			break;
+
+		case BGTYPE_ENEMY_HP:
+			m_fWidth = 330.0f;
+			m_fHeight = 50.0f;
+			m_pObject2D->SetTexture(CTexture::TEXTURE_BG_ENEMY_HP);
 			break;
 
 		default:

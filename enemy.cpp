@@ -126,7 +126,7 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 	m_fMaxLife = m_fLife;		//最大体力
 	m_fGravity = fDefGravity;	//重力の値
 
-	m_fBreak = 100.0f;
+	m_fBreak = 150.0f;
 	m_fRemBreak = 100.0f;
 	m_fMaxBreak = m_fBreak;
 
@@ -158,12 +158,12 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 	//-----------------------
 	{
 		//HP
-		D3DXVECTOR3 hpPos(SCREEN_WIDTH / 2, 60.0f, 0.0f);
+		D3DXVECTOR3 hpPos(SCREEN_WIDTH / 2, 70.0f, 0.0f);
 		m_pHP[GAUGE_HP] = CHP::Create(hpPos, 800.0f, 20.0f, CHP::GAUGETYPE_HP_ENEMY);
 		m_pHP[GAUGE_HP]->SetLife(m_fLife, m_fRemLife);	//HPの設定
 
 														//ブレイクゲージ
-		D3DXVECTOR3 breakpPos(SCREEN_WIDTH / 2, 100.0f, 0.0f);
+		D3DXVECTOR3 breakpPos(SCREEN_WIDTH / 2, 110.0f, 0.0f);
 		m_pHP[GAUGE_BREAK] = CHP::Create(breakpPos, 800.0f, 15.0f, CHP::GAUGETYPE_BREAK);
 		m_pHP[GAUGE_BREAK]->SetLife(m_fBreak, m_fRemBreak);	//HPの設定
 	}

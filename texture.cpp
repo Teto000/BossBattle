@@ -41,6 +41,7 @@ const char* CTexture::s_FileName[] =
 	"data/TEXTURE/BG/Combo.png",		//コンボ背景
 	"data/TEXTURE/BG/Timer.png",		//タイマー背景
 	"data/TEXTURE/BG/PlayerHP.png",		//プレイヤーHP背景
+	"data/TEXTURE/BG/EnemyHP.png",		//エネミーHP背景
 };
 
 static_assert(sizeof(CTexture::s_FileName) / sizeof(CTexture::s_FileName[0]) == CTexture::TEXTURE_MAX, "aho");

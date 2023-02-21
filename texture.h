@@ -41,7 +41,8 @@ public: /* 定義 */
 		/* ↓ 背景 ↓ */
 		TEXTURE_BG_COMBO,		//コンボ背景
 		TEXTURE_BG_TIMER,		//タイマー背景
-		TEXTURE_BG_PLAYERHP,	//プレイヤーHP背景
+		TEXTURE_BG_PLAYER_HP,	//プレイヤー背景
+		TEXTURE_BG_ENEMY_HP,		//エネミーHP背景
 
 		TEXTURE_MAX,
 		TEXTURE_NONE,			//使用しない

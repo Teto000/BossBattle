@@ -114,7 +114,8 @@ HRESULT CGame::Init()
 	//背景の生成
 	m_pBg = CBg::Create(D3DXVECTOR3(1140.0f, 350.0f, 0.0f), CBg::BGTYPE_COMBO);		//コンボ背景
 	m_pBg = CBg::Create(D3DXVECTOR3(1140.0f, 580.0f, 0.0f), CBg::BGTYPE_TIMER);		//タイマー背景
-	m_pBg = CBg::Create(D3DXVECTOR3(220.0f, 590.0f, 0.0f), CBg::BGTYPE_PLAYER_HP);	//プレイヤーHP背景
+	m_pBg = CBg::Create(D3DXVECTOR3(210.0f, 590.0f, 0.0f), CBg::BGTYPE_PLAYER_HP);	//プレイヤーHP背景
+	m_pBg = CBg::Create(D3DXVECTOR3(400.0f, 35.0f, 0.0f), CBg::BGTYPE_ENEMY_HP);	//エネミーHP背景
 
 	//BGMの再生
 	CSound::PlaySound(CSound::SOUND_LABEL_GAME);

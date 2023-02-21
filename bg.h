@@ -25,6 +25,7 @@ public:
 		BGTYPE_COMBO,		//コンボ
 		BGTYPE_TIMER,		//タイマー
 		BGTYPE_PLAYER_HP,	//プレイヤーHP
+		BGTYPE_ENEMY_HP,	//エネミーHP
 		BGTYPE_MAX
 	};
 
