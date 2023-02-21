@@ -121,7 +121,7 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 	//初期値の設定
 	m_pos = pos;
 	m_nCntMotion = 1;
-	m_fLife = 5000.0f;			//体力
+	m_fLife = 10000.0f;			//体力
 	m_fRemLife = 100.0f;		//残り体力(%)
 	m_fMaxLife = m_fLife;		//最大体力
 	m_fGravity = fDefGravity;	//重力の値
@@ -473,8 +473,7 @@ void CEnemy::SubGauge(float fDamage, GAUGE type)
 		//HPの設定
 		m_pHP[GAUGE_HP]->SetLife(m_fLife, m_fRemLife);
 
-		if (m_fLife < 0 && m_fRemLife < 0
-			&& m_pHP[GAUGE_HP])
+		if (m_fLife < 0 && m_fRemLife < 0)
 		{//HPゲージが尽きたら
 			if (m_pHP[GAUGE_HP])
 			{//nullチェック
@@ -503,13 +502,22 @@ void CEnemy::SubGauge(float fDamage, GAUGE type)
 			return;
 		}
 
-		m_fBreak -= round(fDamage / 3);
+		m_fBreak -= round(fDamage);
 		m_fRemBreak = m_fBreak * 100 / m_fMaxBreak;
+
+		if (m_fRemBreak < 1 && m_fRemBreak > 0)
+		{//残りブレイクゲージが1%未満 かつ 0より上なら
+			m_fRemBreak = 1;
+		}
+
 		m_pHP[GAUGE_BREAK]->SetLife(m_fBreak, m_fRemBreak);
 
-		if (m_fBreak < 0 && m_fRemBreak < 0 && m_pHP[GAUGE_BREAK])
+		if (m_fBreak < 0 || m_fRemBreak < 0)
 		{//ブレイクゲージが尽きたら
-			m_pHP[GAUGE_BREAK] = nullptr;
+			if (m_pHP[GAUGE_BREAK])
+			{
+				m_pHP[GAUGE_BREAK] = nullptr;
+			}
 
 			//ブレイク状態にする
 			m_state = ENEMYSTATE_BREAK;

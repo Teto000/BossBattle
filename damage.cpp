@@ -110,6 +110,16 @@ void CDamage::Update()
 			continue;
 		}
 
+		//----------------------
+		// ã¸‚³‚¹‚é
+		//----------------------
+		if (m_nDeleteTime >= 20)
+		{
+			D3DXVECTOR3 pos = m_pNumBoard[i]->GetPosition();
+			pos.y += 1.0f;
+			m_pNumBoard[i]->SetPos(pos);
+		}
+
 		m_pNumBoard[i]->Update();
 
 		//F‚Ìİ’è
@@ -122,7 +132,7 @@ void CDamage::Update()
 	if (m_nDeleteTime >= 20)
 	{//ˆê’èŠÔ‚ªŒo‰ß‚µ‚½‚ç
 		//“§–¾“x‚ÌŒ¸­
-		m_col.a -= 0.1f;
+		m_col.a -= 0.05f;
 	}
 
 	if (m_col.a <= 0.0f)

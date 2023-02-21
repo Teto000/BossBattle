@@ -26,6 +26,7 @@ public: /* 定義 */
 		TEXTURE_AIM,			//照準
 		TEXTURE_NUMBER,			//数値
 		TEXTURE_SKY,			//空
+		TEXTURE_BULLET,			//弾
 
 		/* ↓ メッセージ ↓ */
 		TEXTURE_CLEAR,			//クリア
@@ -42,7 +43,7 @@ public: /* 定義 */
 		TEXTURE_BG_COMBO,		//コンボ背景
 		TEXTURE_BG_TIMER,		//タイマー背景
 		TEXTURE_BG_PLAYER_HP,	//プレイヤー背景
-		TEXTURE_BG_ENEMY_HP,		//エネミーHP背景
+		TEXTURE_BG_ENEMY_HP,	//エネミーHP背景
 
 		TEXTURE_MAX,
 		TEXTURE_NONE,			//使用しない

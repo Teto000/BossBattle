@@ -75,11 +75,6 @@ void CNumBoard::Draw()
 	//デバイスの取得
 	LPDIRECT3DDEVICE9 pDevice = CApplication::GetRenderer()->GetDevice();
 
-	//アルファテストの有効化
-	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
-	pDevice->SetRenderState(D3DRS_ALPHAREF, 80);
-	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
-
 	//Zバッファのクリア
 	pDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
 
@@ -88,9 +83,6 @@ void CNumBoard::Draw()
 
 	// Zバッファの有効化設定
 	pDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
-
-	//アルファテストの無効化
-	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 }
 
 //=======================

@@ -25,6 +25,7 @@ const char* CTexture::s_FileName[] =
 	"data/TEXTURE/Aim.png",				//照準
 	"data/TEXTURE/Number.png",			//数値
 	"data/TEXTURE/Sky.jpg",				//空
+	"data/TEXTURE/Bullet.png",			//弾
 
 	/* ↓ メッセージ ↓ */
 	"data/TEXTURE/Message/Clear.png",	//クリア

@@ -923,16 +923,22 @@ void CPlayer::HitSword()
 			// 技ごとのダメージ量を計算
 			//-----------------------------------
 			float fDamage = m_status.nAttack * m_aMotionSet[m_type].fDamageMag;
+			float fBreakDamage = m_aMotionSet[m_type].nBreakDamage;
 			float fComboDamage = (float)m_nNumCombo / 30;
 
 			//コンボ数に応じてダメージアップ
 			fDamage += fDamage * fComboDamage;
 
-			//コンボを消費して強攻撃
+			//-----------------------------------
+			// コンボを消費して強攻撃
+			//-----------------------------------
 			if (m_bEnhance)
 			{//強攻撃なら
 				//ダメージアップ
 				fDamage *= 3.0f;
+
+				//ブレイクダメージアップ
+				fBreakDamage *= 3.0f;
 			}
 
 			//-----------------------------
@@ -992,8 +998,7 @@ void CPlayer::HitSword()
 				CGame::GetEnemy()->SubGauge(fDamage, CEnemy::GAUGE_HP);
 
 				//ブレイクゲージの減少
-				CGame::GetEnemy()->SubGauge((float)m_aMotionSet[m_type].nBreakDamage
-					, CEnemy::GAUGE_BREAK);
+				CGame::GetEnemy()->SubGauge(fBreakDamage, CEnemy::GAUGE_BREAK);
 			}
 			else
 			{//ブレイク状態なら

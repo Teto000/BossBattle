@@ -53,7 +53,7 @@ HRESULT CBullet::Init(D3DXVECTOR3 pos)
 	CBillBoard::SetPos(pos);
 	CBillBoard::SetSize(m_fWidth, m_fHeight);
 	CBillBoard::SetColor(m_col);
-	CBillBoard::SetTexture(CTexture::TEXTURE_AIM);
+	CBillBoard::SetTexture(CTexture::TEXTURE_BULLET);
 
 	return S_OK;
 }
