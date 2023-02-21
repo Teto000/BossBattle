@@ -196,7 +196,7 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	//------------------------------
 	// コンボ数表示
 	//------------------------------
-	m_pCombo = CCombo::Create(D3DXVECTOR3(1115.0f, 360.0f, 0.0f), m_nNumCombo);
+	m_pCombo = CCombo::Create(D3DXVECTOR3(1110.0f, 365.0f, 0.0f), m_nNumCombo);
 
 	//--------------------------------
 	// 剣の軌跡の表示
@@ -288,17 +288,6 @@ void CPlayer::Update()
 		// 攻撃処理
 		//--------------------------------
 		AttackManager();
-
-		//--------------------------------
-		// 攻撃強化状態の解除
-		//--------------------------------
-		if (CInputKeyboard::Release(DIK_LSHIFT)						//キーが離された
-			|| joypad->Release(CInputJoypad::JOYKEY_RIGHT_SHOULDER)	//ボタンが押された
-			|| m_nNumCombo < nNeedEnhanceCombo)						//コンボ数が足りていない
-		{
-			//非強化状態
-			m_bEnhance = false;
-		}
 
 		//--------------------------------
 		// 弾の発射
@@ -719,6 +708,17 @@ void CPlayer::AttackManager()
 	int nNorAtkKey = DIK_U;
 	int nSpinAtkKey = DIK_I;
 
+	//--------------------------------
+	// 攻撃強化状態の解除
+	//--------------------------------
+	if (CInputKeyboard::Release(DIK_LSHIFT)						//キーが離された
+		|| joypad->Release(CInputJoypad::JOYKEY_RIGHT_SHOULDER)	//ボタンが押された
+		|| m_nNumCombo < nNeedEnhanceCombo)						//コンボ数が足りていない
+	{
+		//非強化状態
+		m_bEnhance = false;
+	}
+
 	switch (m_type)
 	{
 	//------------------------------------------
@@ -822,11 +822,13 @@ void CPlayer::EnhanceAttack()
 	CInputJoypad* joypad = CApplication::GetInput()->GetJoypad();
 
 	if (CInputKeyboard::Press(DIK_LSHIFT)						//キーが押された
-		|| joypad->Press(CInputJoypad::JOYKEY_RIGHT_SHOULDER)	//ボタンが押された
-		&& m_nNumCombo >= nNeedEnhanceCombo)					//コンボ数が足りている
+		|| joypad->Press(CInputJoypad::JOYKEY_RIGHT_SHOULDER))	//ボタンが押された
 	{
-		//強化状態
-		m_bEnhance = true;
+		if (m_nNumCombo >= nNeedEnhanceCombo)
+		{//コンボ数が足りているなら
+			//強化状態
+			m_bEnhance = true;
+		}
 	}
 }
 

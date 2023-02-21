@@ -20,9 +20,11 @@ class CBg : public CObject
 public:
 	enum BGTYPE
 	{
-		BGTYPE_TITLE,	//タイトル
-		BGTYPE_RESULT,	//リザルト
-		BGTYPE_COMBO,	//コンボ
+		BGTYPE_TITLE,		//タイトル
+		BGTYPE_RESULT,		//リザルト
+		BGTYPE_COMBO,		//コンボ
+		BGTYPE_TIMER,		//タイマー
+		BGTYPE_PLAYER_HP,	//プレイヤーHP
 		BGTYPE_MAX
 	};
 

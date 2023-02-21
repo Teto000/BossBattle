@@ -39,6 +39,8 @@ const char* CTexture::s_FileName[] =
 
 	/* « ”wŒi « */
 	"data/TEXTURE/BG/Combo.png",		//ƒRƒ“ƒ{”wŒi
+	"data/TEXTURE/BG/Timer.png",		//ƒ^ƒCƒ}[”wŒi
+	"data/TEXTURE/BG/PlayerHP.png",		//ƒvƒŒƒCƒ„[HP”wŒi
 };
 
 static_assert(sizeof(CTexture::s_FileName) / sizeof(CTexture::s_FileName[0]) == CTexture::TEXTURE_MAX, "aho");

@@ -66,6 +66,18 @@ HRESULT CBg::Init(D3DXVECTOR3 pos)
 			m_pObject2D->SetTexture(CTexture::TEXTURE_BG_COMBO);
 			break;
 
+		case BGTYPE_TIMER:
+			m_fWidth = 200.0f;
+			m_fHeight = 180.0f;
+			m_pObject2D->SetTexture(CTexture::TEXTURE_BG_TIMER);
+			break;
+
+		case BGTYPE_PLAYER_HP:
+			m_fWidth = 350.0f;
+			m_fHeight = 50.0f;
+			m_pObject2D->SetTexture(CTexture::TEXTURE_BG_PLAYERHP);
+			break;
+
 		default:
 			break;
 		}

@@ -176,6 +176,17 @@ void CCombo::SetNumber()
 			//ナンバーの描画を有効・無効にする
 			m_pNumber[i]->SetEnable(nMaxDigits - i <= nDigit);
 
+			if (m_nNumCombo == 0)
+			{//コンボ数が0なら
+				//ナンバーの描画を有効・無効にする
+				m_pNumber[nMaxDigits - 1]->SetEnable(true);
+			}
+
+			if (m_nNumCombo < 0)
+			{
+				int a = 0;
+			}
+
 			//powで桁数を出す。
 			int nCntNumber = nMaxDigits - i - 1;
 			int nNum0 = (int)pow(10, nCntNumber + 1);

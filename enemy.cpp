@@ -240,7 +240,7 @@ void CEnemy::Update()
 				m_state = ENEMYSTATE_NONE;	//ブレイク状態を回復
 				m_nBreakTime = 0;			//時間のリセット
 
-											//ブレイクゲージを最大にする
+				//ブレイクゲージを最大にする
 				m_fBreak = m_fMaxBreak;
 				m_fRemBreak = m_fBreak * 100 / m_fMaxBreak;
 

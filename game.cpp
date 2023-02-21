@@ -109,10 +109,12 @@ HRESULT CGame::Init()
 	m_pPolygon = CPolygon::Create(CPolygon::POLYGONTYPE_AIM);
 
 	//タイマーの生成
-	m_pTime = CTime::Create(D3DXVECTOR3(1120.0f, 650.0f, 0.0f));
+	m_pTime = CTime::Create(D3DXVECTOR3(1088.0f, 592.0f, 0.0f));
 
 	//背景の生成
-	m_pBg = CBg::Create(D3DXVECTOR3(1140.0f, 350.0f, 0.0f), CBg::BGTYPE_COMBO);
+	m_pBg = CBg::Create(D3DXVECTOR3(1140.0f, 350.0f, 0.0f), CBg::BGTYPE_COMBO);		//コンボ背景
+	m_pBg = CBg::Create(D3DXVECTOR3(1140.0f, 580.0f, 0.0f), CBg::BGTYPE_TIMER);		//タイマー背景
+	m_pBg = CBg::Create(D3DXVECTOR3(220.0f, 590.0f, 0.0f), CBg::BGTYPE_PLAYER_HP);	//プレイヤーHP背景
 
 	//BGMの再生
 	CSound::PlaySound(CSound::SOUND_LABEL_GAME);
