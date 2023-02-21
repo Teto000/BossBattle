@@ -85,6 +85,9 @@ void CInputJoypad::Update(void)
 			// トリガー情報を保存
 			m_Joypad.JoyKeyStateTrigger[nCnt].Gamepad.wButtons = ~m_Joypad.JoyKeyState[nCnt].Gamepad.wButtons & JoyKeyState.Gamepad.wButtons;
 
+			// リリース情報を保存
+			m_Joypad.JoyKeyStateRelease[nCnt].Gamepad.wButtons = m_Joypad.JoyKeyState[nCnt].Gamepad.wButtons & ~JoyKeyState.Gamepad.wButtons;
+
 			// プレス情報を保存
 			m_Joypad.JoyKeyState[nCnt] = JoyKeyState;
 
@@ -236,6 +239,15 @@ bool CInputJoypad::IdxTrigger(CInputJoypad::JOYKEY Key, int nPlayer)
 }
 
 //--------------------------------------------------
+// ジョイパッドのリリース処理(プレイヤー指定あり)
+//--------------------------------------------------
+bool CInputJoypad::IdxRelease(CInputJoypad::JOYKEY Key, int nPlayer)
+{
+	bool a = (m_Joypad.JoyKeyStateRelease[nPlayer].Gamepad.wButtons & (0x01 << Key)) ? true : false;
+	return a;
+}
+
+//--------------------------------------------------
 // ジョイパッドのプレス処理(プレイヤー指定なし)
 //--------------------------------------------------
 bool CInputJoypad::Press(CInputJoypad::JOYKEY Key)
@@ -258,6 +270,21 @@ bool CInputJoypad::Trigger(CInputJoypad::JOYKEY Key)
 	for (int nPlayer = 0; nPlayer < PLAYER_MAX; nPlayer++)
 	{
 		if (CInputJoypad::IdxTrigger((CInputJoypad::JOYKEY)Key, nPlayer))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+//--------------------------------------------------
+// ジョイパッドのリリース処理(プレイヤー指定なし)
+//--------------------------------------------------
+bool CInputJoypad::Release(CInputJoypad::JOYKEY Key)
+{
+	for (int nPlayer = 0; nPlayer < PLAYER_MAX; nPlayer++)
+	{
+		if (CInputJoypad::IdxRelease((CInputJoypad::JOYKEY)Key, nPlayer))
 		{
 			return true;
 		}

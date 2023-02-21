@@ -47,7 +47,7 @@ HRESULT COrbit::Init(D3DXVECTOR3 pos)
 {
 	//初期値の設定
 	m_offsetPos = pos;	//位置
-	m_initCol = D3DXCOLOR(0.0f, 1.0f, 0.0f, 0.3f);	//色の初期値
+	m_initCol = D3DXCOLOR(0.0f, 1.0f, 0.0f, 0.4f);	//色の初期値
 
 	LPDIRECT3DDEVICE9 pDevice = CApplication::GetRenderer()->GetDevice();	//デバイスの取得
 
@@ -210,9 +210,10 @@ void COrbit::Draw()
 	pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 }
 
-//==========================
+//=======================================
 // 生成
-//==========================
+// 引数：剣先の座標、マトリックス
+//=======================================
 COrbit* COrbit::Create(D3DXVECTOR3 offset, D3DXMATRIX mtx)
 {
 	COrbit* pOrbit = nullptr;
@@ -233,4 +234,25 @@ COrbit* COrbit::Create(D3DXVECTOR3 offset, D3DXMATRIX mtx)
 	}
 
 	return pOrbit;
+}
+
+//==========================
+// 色の設定
+// 引数：色
+//==========================
+void COrbit::SetColor(D3DXCOLOR colDest)
+{
+	VERTEX_3D*pVtx;		//頂点情報へのポインタ
+
+	//頂点バッファをロックし、頂点情報へのポインタを取得
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	//-------------------------------
+	// 色の変更
+	//-------------------------------
+	pVtx[1].col = colDest;
+	pVtx[0].col = colDest;
+
+	//頂点バッファをアンロックする
+	m_pVtxBuff->Unlock();
 }

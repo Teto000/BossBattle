@@ -153,6 +153,7 @@ private:
 	void SetRot();				//角度の設定
 
 	void AttackManager();		//攻撃の管理
+	void EnhanceAttack();		//攻撃を強化する処理
 	void Attack();				//攻撃処理
 	void HitSword();			//剣が当たった処理
 	bool GetOutAttack(bool equal, bool and);	//攻撃状態かどうかを返す
@@ -169,6 +170,7 @@ private:
 	static const int nMaxLine = 12;				//線の最大数
 	static const int nSwordNumber = 4;			//剣モデルの番号
 	static const int nResetModeTime = 600;		//モードチェンジ終了までの時間
+	static const int nNeedEnhanceCombo = 30;	//攻撃の強化に必要なコンボ数
 	static const float fDefaultAttack;			//基本の攻撃力
 	static const float fDefaultSpeed;			//基本の速度
 
@@ -179,6 +181,7 @@ private:
 	D3DXMATRIX	m_mtxRot;		//回転マトリックス(保存用)
 	D3DXVECTOR3 m_pos;			//位置
 	D3DXVECTOR3 m_posOld;		//前の位置
+	D3DXVECTOR3 m_Offset;		//剣先へのオフセット座標
 	D3DXVECTOR3 m_move;			//移動量
 	D3DXVECTOR3 m_rot;			//向き
 	D3DXVECTOR3 m_rotDest;		//目的の向き
@@ -201,6 +204,7 @@ private:
 	bool m_bFinishAttack;		//攻撃が終わった状態
 	bool m_bHit;				//1ヒットした状態
 	bool m_bNockBack;			//ノックバックしている状態
+	bool m_bEnhance;			//技が強化される状態
 	CHP*  m_pHP;				//HP
 	CCombo* m_pCombo;			//コンボ
 	CDamage* m_pDamage;			//ダメージ
@@ -219,6 +223,7 @@ private:
 	int m_nCntMotion;						//モーションカウンター
 	MOTION_SET m_aMotionSet[MOTION_MAX];	//モーション情報
 	MOTION_TYPE m_type;						//現在のモーション
+	MOTION_TYPE m_typeOld;					//1つ前のモーション
 };
 
 #endif

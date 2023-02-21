@@ -33,13 +33,15 @@ public:
 	// セッター
 	//------------------
 	void SetMtxParent(D3DXMATRIX pMtx) { m_pMtxParent = pMtx; };	//親のマトリックスの設定
+	void SetOffset(D3DXVECTOR3 offset) { m_offsetPos = offset; }	//オフセット座標の設定
+	void SetColor(D3DXCOLOR col);			//色の設定
 
 	//------------------
 	// ゲッター
 	//------------------
 	D3DXVECTOR3 GetPosition() override { return m_offsetPos; }	//位置の取得
-	float GetWidth() override { return 0.0f; }				//幅の取得
-	float GetHeight() override { return 0.0f; }				//高さの取得
+	float GetWidth() override { return 0.0f; }					//幅の取得
+	float GetHeight() override { return 0.0f; }					//高さの取得
 
 	//------------------
 	// 静的メンバ変数

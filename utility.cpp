@@ -47,44 +47,44 @@ CUtility::COLLISION CUtility::Collision(D3DXVECTOR3 targetPos, D3DXVECTOR3 targe
 	//------------------------------------
 	// 行列を元に戻す
 	//------------------------------------
-	////ワールド座標を求める
-	//D3DXVECTOR3 worldPos(0.0f, 0.0f, 0.0f);		//ワールド上の座標
-	//D3DXVec3TransformCoord(&worldPos, &m_pos, &m_mtxWorld);
+	//ワールド座標を求める
+	D3DXVECTOR3 worldPos(0.0f, 0.0f, 0.0f);		//ワールド上の座標
+	D3DXVec3TransformCoord(&worldPos, &m_pos, &m_mtxWorld);
 
-	////逆行列を求める
-	//D3DXMATRIX invMtxWorld;						//逆行列の値を入れる
-	//D3DXMatrixInverse(&invMtxWorld, NULL, &m_mtxWorld);
+	//逆行列を求める
+	D3DXMATRIX invMtxWorld;						//逆行列の値を入れる
+	D3DXMatrixInverse(&invMtxWorld, NULL, &m_mtxWorld);
 
-	////逆行列を使ってローカル座標を求める
-	//D3DXVECTOR3 localPos(0.0f, 0.0f, 0.0f);		//ローカル上の座標
-	//D3DXVec3TransformCoord(&localPos, &worldPos, &invMtxWorld);
+	//逆行列を使ってローカル座標を求める
+	D3DXVECTOR3 localPos(0.0f, 0.0f, 0.0f);		//ローカル上の座標
+	D3DXVec3TransformCoord(&localPos, &worldPos, &invMtxWorld);
 
 	//------------------------------------
 	// 自分の端の設定
 	//------------------------------------
-	float fLeft = m_pos.x - (m_size.x / 2);		//自分の左端
-	float fRight = m_pos.x + (m_size.x / 2);	//自分の右端
-	float fTop = m_pos.y + (m_size.y / 2);		//自分の上端
-	float fBottom = m_pos.y - (m_size.y / 2);	//自分の下端
-	float fFront = m_pos.z - (m_size.z / 2);	//自分の前端
-	float fBack = m_pos.z + (m_size.z / 2);		//自分の後端
+	float fLeft = localPos.x - (m_size.x / 2);		//自分の左端
+	float fRight = localPos.x + (m_size.x / 2);		//自分の右端
+	float fTop = localPos.y + (m_size.y / 2);		//自分の上端
+	float fBottom = localPos.y - (m_size.y / 2);	//自分の下端
+	float fFront = localPos.z - (m_size.z / 2);		//自分の前端
+	float fBack = localPos.z + (m_size.z / 2);		//自分の後端
 
 	//------------------------------------
 	// 相手の行列を元に戻す
 	//------------------------------------
-	/*D3DXVec3TransformCoord(&worldPos, &targetPos, &targetMtx);
+	D3DXVec3TransformCoord(&worldPos, &targetPos, &targetMtx);
 	D3DXMatrixInverse(&invMtxWorld, NULL, &targetMtx);
-	D3DXVec3TransformCoord(&localPos, &worldPos, &invMtxWorld);*/
+	D3DXVec3TransformCoord(&localPos, &worldPos, &invMtxWorld);
 
 	//------------------------------------
 	// 相手の端の設定
 	//------------------------------------
-	float fTargetLeft = targetPos.x + targetSize.x;		//相手の左端
-	float fTargetRight = targetPos.x - targetSize.x;	//相手の右端
-	float fTargetTop = targetPos.y + targetSize.y;		//相手の上端
-	float fTargetBottom = targetPos.y - targetSize.y;	//相手の下端
-	float fTargetFront = targetPos.z + targetSize.z;	//相手の前端
-	float fTargetBack = targetPos.z - targetSize.z;		//相手の後端
+	float fTargetLeft = localPos.x + targetSize.x;		//相手の左端
+	float fTargetRight = localPos.x - targetSize.x;		//相手の右端
+	float fTargetTop = localPos.y + targetSize.y;		//相手の上端
+	float fTargetBottom = localPos.y - targetSize.y;	//相手の下端
+	float fTargetFront = localPos.z + targetSize.z;		//相手の前端
+	float fTargetBack = localPos.z - targetSize.z;		//相手の後端
 
 	//------------------------------------
 	// 当たり判定

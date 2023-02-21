@@ -41,6 +41,7 @@ public:
 	{
 		XINPUT_STATE		JoyKeyState[PLAYER_MAX];						// ジョイパッドのプレス情報
 		XINPUT_STATE		JoyKeyStateTrigger[PLAYER_MAX];					// ジョイパッドのトリガー情報
+		XINPUT_STATE		JoyKeyStateRelease[PLAYER_MAX];					// ジョイパッドのリリース情報
 		D3DXVECTOR3			JoyStickPos[PLAYER_MAX];						// ジョイスティックの傾き
 		XINPUT_VIBRATION	JoyMoter[PLAYER_MAX];							// ジョイパッドのモーター
 		int					nTime[PLAYER_MAX];								// 振動持続時間
@@ -96,6 +97,8 @@ public:
 	bool AllTrigger(void);											// ジョイパッドトリガー処理(キー指定なし)
 	bool Trigger(JOYKEY Key);										// ジョイパッドトリガー処理(プレイヤー指定なし)
 	bool IdxTrigger(JOYKEY Key, int nPlayer);						// ジョイパッドのトリガー処理(プレイヤー指定あり)
+	bool Release(JOYKEY Key);										// ジョイパッドリリース処理(プレイヤー指定なし)
+	bool IdxRelease(JOYKEY Key, int nPlayer);						// ジョイパッドのリリース処理(プレイヤー指定あり)
 	D3DXVECTOR3 Stick(JOYKEY Key, int nPlayer);						// ジョイパッドのスティック処理
 	int TriggerPedal(JOYKEY Key, int nPlayer);						// ジョイパッドのトリガーペダル処理
 	void Vibration(int nTime, WORD nStrength, int nPlayer);			// ジョイパッドの振動制御

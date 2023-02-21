@@ -46,6 +46,7 @@ CPlayer::CPlayer() : CObject(0)
 {
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//位置
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//前の位置
+	m_Offset = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//剣先へのオフセット座標
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//移動量
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//向き
 	m_vtxMax = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//大きさの最大値
@@ -66,6 +67,7 @@ CPlayer::CPlayer() : CObject(0)
 	m_bFinishAttack = false;	//ダメージを与えたか
 	m_bHit = false;				//1ヒットした状態
 	m_bNockBack = false;		//ノックバックしている状態
+	m_bEnhance = false;			//技が強化される状態
 	m_type = MOTION_IDOL;		//現在のモーション
 	m_pHP = nullptr;			//HP
 	m_pCombo = nullptr;			//コンボ
@@ -139,18 +141,19 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	//---------------------------
 	// 初期値の設定
 	//---------------------------
-	m_pos = pos;						//位置
-	m_rot.y = D3DX_PI;					//向き
-	fSizeWidth = 30.0f;					//モデルの幅
-	fSizeDepth = 30.0f;					//モデルの奥行き
-	m_nWheelRotValue = 10;				//タイヤの回転量
-	m_status.fLife = 800.0f;			//体力
-	m_status.fRemLife = 100.0f;			//残り体力(%)
-	m_status.fMaxLife = m_status.fLife;	//最大体力
-	m_status.nAttack = 20;				//攻撃力
-	m_nNumCombo = 0;					//コンボ数
-	m_status.nComboValue = 1;			//コンボの加算値
-	m_status.fSpeed = 7.0f;				//速度
+	m_pos = pos;									//位置
+	m_Offset = D3DXVECTOR3(0.0f, -20.0f, -100.0f);	//剣先へのオフセット座標
+	m_rot.y = D3DX_PI;								//向き
+	fSizeWidth = 30.0f;								//モデルの幅
+	fSizeDepth = 30.0f;								//モデルの奥行き
+	m_nWheelRotValue = 10;							//タイヤの回転量
+	m_status.fLife = 800.0f;						//体力
+	m_status.fRemLife = 100.0f;						//残り体力(%)
+	m_status.fMaxLife = m_status.fLife;				//最大体力
+	m_status.nAttack = 20;							//攻撃力
+	m_nNumCombo = 0;								//コンボ数
+	m_status.nComboValue = 1;						//コンボの加算値
+	m_status.fSpeed = 7.0f;							//速度
 
 	//時刻をもとにしたランダムな値を生成
 	srand((unsigned int)time(NULL));
@@ -198,8 +201,7 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	//--------------------------------
 	// 剣の軌跡の表示
 	//--------------------------------
-	D3DXVECTOR3 offsetPos(0.0f, -20.0f, -120.0f);		//剣先までのオフセット
-	m_pOrbit = COrbit::Create(offsetPos, m_pModel[4]->GetmtxWorld());
+	m_pOrbit = COrbit::Create(m_Offset, m_pModel[4]->GetmtxWorld());
 
 	return S_OK;
 }
@@ -712,9 +714,9 @@ void CPlayer::AttackManager()
 
 	switch (m_type)
 	{
-	//---------------------------
+	//------------------------------------------
 	// 待機中なら
-	//---------------------------
+	//------------------------------------------
 	case MOTION_IDOL:
 		if (CInputKeyboard::Trigger(nNorAtkKey) || joypad->Trigger(CInputJoypad::JOYKEY_B))
 		{
@@ -724,11 +726,16 @@ void CPlayer::AttackManager()
 		{
 			ChangeMotion(MOTION_ATTACK_SPIN);
 		}
+
+		//------------------------------------------
+		// 攻撃の強化
+		//------------------------------------------
+		EnhanceAttack();
 		break;
 
-	//---------------------------
+	//------------------------------------------
 	// 移動中なら
-	//---------------------------
+	//------------------------------------------
 	case MOTION_MOVE:
 		if (CInputKeyboard::Trigger(nNorAtkKey) || joypad->Trigger(CInputJoypad::JOYKEY_B))
 		{
@@ -738,11 +745,16 @@ void CPlayer::AttackManager()
 		{
 			ChangeMotion(MOTION_ATTACK_SPIN);
 		}
+
+		//------------------------------------------
+		// 攻撃の強化
+		//------------------------------------------
+		EnhanceAttack();
 		break;
 
-	//---------------------------
+	//------------------------------------------
 	// 通常攻撃(1)なら
-	//---------------------------
+	//------------------------------------------
 	case MOTION_ATTACK_1:
 		if (CInputKeyboard::Trigger(nNorAtkKey) || joypad->Trigger(CInputJoypad::JOYKEY_B))
 		{
@@ -754,24 +766,32 @@ void CPlayer::AttackManager()
 		}
 		break;
 
-	//---------------------------
+	//------------------------------------------
 	// 通常攻撃(2)なら
-	//---------------------------
+	//------------------------------------------
 	case MOTION_ATTACK_2:
 		if (CInputKeyboard::Trigger(nSpinAtkKey) || joypad->Trigger(CInputJoypad::JOYKEY_Y))
 		{
 			ChangeMotion(MOTION_ATTACK_SPIN);
 		}
+
+		if (m_typeOld == MOTION_ATTACK_1)
+		{//攻撃1からの連携なら
+			//攻撃の強化
+			EnhanceAttack();
+		}
 		break;
 
-	//---------------------------
+	//------------------------------------------
 	// 回転切りなら
-	//---------------------------
+	//------------------------------------------
 	case MOTION_ATTACK_SPIN:
-		/*if (CInputKeyboard::Trigger(nSpinAtkKey) || joypad->Trigger(CInputJoypad::JOYKEY_Y))
-		{
-			ChangeMotion(MOTION_ATTACK_SPIN);
-		}*/
+		if (m_typeOld == MOTION_ATTACK_1
+			|| m_typeOld == MOTION_ATTACK_2)
+		{//攻撃1 か 攻撃2 からの連携なら
+			//攻撃の強化
+			EnhanceAttack();
+		}
 		break;
 
 	default:
@@ -783,10 +803,47 @@ void CPlayer::AttackManager()
 }
 
 //================================
+// 攻撃を強化する処理
+//================================
+void CPlayer::EnhanceAttack()
+{
+	// ジョイパッドでの操作
+	CInputJoypad* joypad = CApplication::GetInput()->GetJoypad();
+
+	if (CInputKeyboard::Press(DIK_LSHIFT)						//キーが押された
+		|| joypad->Press(CInputJoypad::JOYKEY_RIGHT_SHOULDER)	//ボタンが押された
+		&& m_nNumCombo >= nNeedEnhanceCombo)					//コンボ数が足りている
+	{
+		//強化状態
+		m_bEnhance = true;
+	}
+
+	if (CInputKeyboard::Release(DIK_LSHIFT)						//キーが離された
+		|| joypad->Release(CInputJoypad::JOYKEY_RIGHT_SHOULDER)	//ボタンが押された
+		|| m_nNumCombo < nNeedEnhanceCombo)						//コンボ数が足りていない
+	{
+		//非強化状態
+		m_bEnhance = false;
+	}
+}
+
+//================================
 // 攻撃処理
 //================================
 void CPlayer::Attack()
 {
+	//------------------------------------------
+	// 攻撃が強化されている時の処理
+	//------------------------------------------
+	if (m_bEnhance)
+	{//攻撃が強化される状態なら
+		//軌跡の色の変更
+		m_pOrbit->SetColor(D3DXCOLOR(1.0f, 1.0f, 0.0f, 0.4f));
+
+		//軌跡の長さを設定
+		m_pOrbit->SetOffset(D3DXVECTOR3(0.0f, -20.0f, -300.0f));
+	}
+
 	if (GetOutAttack(false, true))
 	{//攻撃モーション中じゃないなら
 		return;
@@ -807,14 +864,6 @@ void CPlayer::Attack()
 			//フレーム数を加算
 			nOutRigor += m_aMotionSet[m_type].aKeySet[i].nFrame;
 		}
-	}
-
-	//------------------------------------------
-	// 攻撃の切り替え
-	//------------------------------------------
-	if (nOutRigor <= m_status.nAttackTime && m_bFinishAttack)
-	{//硬直以外のフレーム数を超えた & 攻撃が終わっているなら
-		//int a = 0;
 	}
 
 	//------------------------------------------
@@ -842,10 +891,9 @@ void CPlayer::Attack()
 //================================
 void CPlayer::HitSword()
 {
-	D3DXVECTOR3 offsetPos(0.0f, 0.0f, -120.0f);		//剣先までのオフセット
-	float fSphereSize = 250.0f;						//球の直径
+	float fSphereSize = 250.0f;		//球の直径
 
-	if (CUtility::ColliaionWeapon(offsetPos, fSphereSize, m_pModel[4]->GetmtxWorld(), CObject::OBJTYPE_ENEMY)
+	if (CUtility::ColliaionWeapon(m_Offset, fSphereSize, m_pModel[4]->GetmtxWorld(), CObject::OBJTYPE_ENEMY)
 		&& !m_bFinishAttack
 		&& m_status.nAttackTime >= m_aMotionSet[m_type].nStartCollision)
 	{//剣と当たっている & 攻撃が終わっていない & 当たり判定の有効時間なら
@@ -858,10 +906,17 @@ void CPlayer::HitSword()
 			// 技ごとのダメージ量を計算
 			//-----------------------------------
 			float fDamage = m_status.nAttack * m_aMotionSet[m_type].fDamageMag;
-			float fComboDamage = (float)m_nNumCombo / 20;
+			float fComboDamage = (float)m_nNumCombo / 30;
 
 			//コンボ数に応じてダメージアップ
 			fDamage += fDamage * fComboDamage;
+
+			//コンボを消費して強攻撃
+			if (m_bEnhance)
+			{//強攻撃なら
+				//ダメージアップ
+				fDamage *= 3.0f;
+			}
 
 			//-----------------------------
 			// クリティカルかどうか
@@ -944,6 +999,15 @@ void CPlayer::HitSword()
 			{//現在のヒット数が攻撃のヒット数以上なら
 				m_bFinishAttack = true;	//攻撃が終わった状態にする
 				m_nCntHit = 0;			//ヒット数をリセット
+
+				if (m_bEnhance)
+				{//強攻撃をしたなら
+					//コンボ数の消費
+					m_nNumCombo = m_pCombo->AddNumber(-nNeedEnhanceCombo);
+
+					//軌跡の長さを設定
+					m_pOrbit->SetOffset(m_Offset);
+				}
 			}
 		}
 		else if (m_bHit && m_nHitTime >= m_aMotionSet[m_type].nHitInterval)
@@ -1468,8 +1532,12 @@ void CPlayer::SetMotion(MOTION_TYPE type, bool bLoop, int nNumKey)
 //==========================================
 void CPlayer::ChangeMotion(MOTION_TYPE type)
 {
-	//モーションの変更
-	m_type = type;
+	m_typeOld = m_type;		//前のモーションを保存
+
+	m_type = type;			//モーションの変更
+
+	//軌跡の長さを設定
+	m_pOrbit->SetOffset(m_Offset);
 
 	//モーション情報の初期化
 	if (GetOutAttack(true, false))
@@ -1481,5 +1549,10 @@ void CPlayer::ChangeMotion(MOTION_TYPE type)
 		m_nCntMotion = 0;
 		m_status.nAttackTime = 0;	//攻撃時間のリセット
 		m_bFinishAttack = false;	//ダメージを与えていない状態にする
+
+		if (m_nNumCombo < nNeedEnhanceCombo)
+		{//コンボ数が足りないなら
+			m_bEnhance = false;		//非強化状態
+		}
 	}
 }
