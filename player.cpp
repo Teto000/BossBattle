@@ -296,7 +296,7 @@ void CPlayer::Update()
 
 		if (m_type == MOTION_IDOL || m_type == MOTION_MOVE)
 		{//UŒ‚ˆÈŠO‚ÌŽž‚È‚ç
-			if (CInputKeyboard::Press(DIK_O) && m_nBulletTime >= 6)
+			if (CInputKeyboard::Press(DIK_O) && m_nBulletTime >= 15)
 			{
 				m_pBullet = CBullet::Create(D3DXVECTOR3(m_pos.x, m_pos.y + 100.0f, m_pos.z));
 				m_nBulletTime = 0;
@@ -838,7 +838,7 @@ void CPlayer::Attack()
 	if (m_bEnhance)
 	{//UŒ‚‚ª‹­‰»‚³‚ê‚éó‘Ô‚È‚ç
 		//‹OÕ‚ÌF‚Ì•ÏX
-		m_pOrbit->SetColor(D3DXCOLOR(1.0f, 1.0f, 0.0f, 0.4f));
+		m_pOrbit->SetColor(D3DXCOLOR(1.0f, 1.0f, 0.0f, 0.5f));
 
 		//‹OÕ‚Ì’·‚³‚ðÝ’è
 		m_pOrbit->SetOffset(D3DXVECTOR3(0.0f, -20.0f, -300.0f));
@@ -891,7 +891,19 @@ void CPlayer::Attack()
 //================================
 void CPlayer::HitSword()
 {
-	float fSphereSize = 250.0f;		//‹…‚Ì’¼Œa
+	//-------------------------------
+	// “–‚½‚è”»’è‚Ì‘å‚«‚³‚ðÝ’è
+	//-------------------------------
+	float fSphereSize;	//‹…‚Ì’¼Œa
+
+	if (m_bEnhance)
+	{//‹­‰»ó‘Ô‚È‚ç
+		fSphereSize = 500.0f;
+	}
+	else
+	{//‹­‰»ó‘Ô‚¶‚á‚È‚¢‚È‚ç
+		fSphereSize = 250.0f;
+	}
 
 	if (CUtility::ColliaionWeapon(m_Offset, fSphereSize, m_pModel[4]->GetmtxWorld(), CObject::OBJTYPE_ENEMY)
 		&& !m_bFinishAttack

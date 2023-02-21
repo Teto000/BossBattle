@@ -47,7 +47,7 @@ HRESULT COrbit::Init(D3DXVECTOR3 pos)
 {
 	//初期値の設定
 	m_offsetPos = pos;	//位置
-	m_initCol = D3DXCOLOR(0.0f, 1.0f, 0.0f, 0.4f);	//色の初期値
+	m_initCol = D3DXCOLOR(0.0f, 1.0f, 0.0f, 0.5f);	//色の初期値
 
 	LPDIRECT3DDEVICE9 pDevice = CApplication::GetRenderer()->GetDevice();	//デバイスの取得
 
@@ -148,13 +148,19 @@ void COrbit::Update()
 	//--------------------------------------
 	//親モデルの原点からオフセット分移動した座標を代入
 	D3DXVec3TransformCoord(&m_worldPos, &m_offsetPos, &m_pMtxParent);
-	pVtx[1].pos = m_worldPos;
-	pVtx[1].col = m_initCol;
+	pVtx[1].pos = m_worldPos;	//座標の設定
+	pVtx[1].col = m_initCol;	//色の設定
 
 	//親モデルの原点の座標を代入
 	D3DXVec3TransformCoord(&m_worldPos, &D3DXVECTOR3(0.0f, -20.0f, 0.0f), &m_pMtxParent);
-	pVtx[0].pos = m_worldPos;
-	pVtx[0].col = m_initCol;
+	pVtx[0].pos = m_worldPos;	//座標の設定
+
+	//色の設定
+	{
+		D3DXCOLOR newCol = m_initCol;
+		newCol.a = 0.1f;
+		pVtx[0].col = newCol;
+	}
 
 	if (m_nNumVtx < nMaxVtx - 2)
 	{//頂点の数が最大値を超えないなら
@@ -251,7 +257,11 @@ void COrbit::SetColor(D3DXCOLOR colDest)
 	// 色の変更
 	//-------------------------------
 	pVtx[1].col = colDest;
-	pVtx[0].col = colDest;
+
+	D3DXCOLOR newCol = colDest;
+	newCol.a = 0.1f;
+
+	pVtx[0].col = newCol;
 
 	//頂点バッファをアンロックする
 	m_pVtxBuff->Unlock();
