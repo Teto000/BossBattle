@@ -201,10 +201,10 @@ int CCombo::AddNumber(int nNum)
 	//”’l‚Ìİ’è
 	SetNumber();
 
-	fInterval = 110.0f;
-	m_pos.x = 1050.0f;
-	m_newWidth = 130.0f;
-	m_newHeight = 150.0f;
+	fInterval = 90.0f;
+	m_pos.x = 1090.0f;
+	m_newWidth = 100.0f;
+	m_newHeight = 120.0f;
 
 	for (int i = 0; i < nMaxDigits; i++)
 	{//Œ…”•ª‰ñ‚·

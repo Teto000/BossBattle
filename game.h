@@ -26,6 +26,7 @@ class CStage;		//ステージ
 class CItem;		//アイテム
 class CTime;		//タイム
 class CMessage;		//メッセージ
+class CBg;			//背景
 
 //================================
 // ゲームクラスの定義
@@ -68,6 +69,7 @@ private:
 	int m_nNumMessage;		//表示するメッセージ番号
 	CItem*		m_pItem;	//アイテム
 	CMessage*	m_pMessage;	//メッセージ
+	CBg*		m_pBg;		//背景
 
 	//-------------------
 	// 静的メンバ変数

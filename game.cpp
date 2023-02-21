@@ -30,6 +30,7 @@
 #include "stage.h"
 #include "item.h"
 #include "time.h"
+#include "bg.h"
 
 //------------------------
 // 静的メンバ変数宣言
@@ -108,7 +109,10 @@ HRESULT CGame::Init()
 	m_pPolygon = CPolygon::Create(CPolygon::POLYGONTYPE_AIM);
 
 	//タイマーの生成
-	m_pTime = CTime::Create(D3DXVECTOR3(1100.0f, 650.0f, 0.0f));
+	m_pTime = CTime::Create(D3DXVECTOR3(1120.0f, 650.0f, 0.0f));
+
+	//背景の生成
+	m_pBg = CBg::Create(D3DXVECTOR3(1140.0f, 350.0f, 0.0f), CBg::BGTYPE_COMBO);
 
 	//BGMの再生
 	CSound::PlaySound(CSound::SOUND_LABEL_GAME);

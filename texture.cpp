@@ -36,6 +36,9 @@ const char* CTexture::s_FileName[] =
 
 	/* ↓ アイテム ↓ */
 	"data/TEXTURE/Item/Heal.png",		//回復
+
+	/* ↓ 背景 ↓ */
+	"data/TEXTURE/BG/Combo.png",		//コンボ背景
 };
 
 static_assert(sizeof(CTexture::s_FileName) / sizeof(CTexture::s_FileName[0]) == CTexture::TEXTURE_MAX, "aho");

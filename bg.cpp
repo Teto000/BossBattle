@@ -60,6 +60,12 @@ HRESULT CBg::Init(D3DXVECTOR3 pos)
 			m_pObject2D->SetTexture(CTexture::TEXTURE_RESULT);
 			break;
 
+		case BGTYPE_COMBO:
+			m_fWidth = 200.0f;
+			m_fHeight = 180.0f;
+			m_pObject2D->SetTexture(CTexture::TEXTURE_BG_COMBO);
+			break;
+
 		default:
 			break;
 		}

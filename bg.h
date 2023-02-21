@@ -13,7 +13,7 @@
 #include "object2D.h"
 
 //--------------------------------
-// バレットクラス
+// 背景クラス
 //--------------------------------
 class CBg : public CObject
 {
@@ -22,6 +22,7 @@ public:
 	{
 		BGTYPE_TITLE,	//タイトル
 		BGTYPE_RESULT,	//リザルト
+		BGTYPE_COMBO,	//コンボ
 		BGTYPE_MAX
 	};
 

@@ -38,6 +38,9 @@ public: /* 定義 */
 		/* ↓ アイテム ↓ */
 		TEXTURE_ITEM_HEAL,		//回復
 
+		/* ↓ 背景 ↓ */
+		TEXTURE_BG_COMBO,		//コンボ背景
+
 		TEXTURE_MAX,
 		TEXTURE_NONE,			//使用しない
 	};

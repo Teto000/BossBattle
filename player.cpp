@@ -196,7 +196,7 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	//------------------------------
 	// ƒRƒ“ƒ{”•\Ž¦
 	//------------------------------
-	m_pCombo = CCombo::Create(D3DXVECTOR3(1100.0f, 360.0f, 0.0f), m_nNumCombo);
+	m_pCombo = CCombo::Create(D3DXVECTOR3(1115.0f, 360.0f, 0.0f), m_nNumCombo);
 
 	//--------------------------------
 	// Œ•‚Ì‹OÕ‚Ì•\Ž¦
@@ -290,18 +290,30 @@ void CPlayer::Update()
 		AttackManager();
 
 		//--------------------------------
+		// UŒ‚‹­‰»ó‘Ô‚Ì‰ðœ
+		//--------------------------------
+		if (CInputKeyboard::Release(DIK_LSHIFT)						//ƒL[‚ª—£‚³‚ê‚½
+			|| joypad->Release(CInputJoypad::JOYKEY_RIGHT_SHOULDER)	//ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½
+			|| m_nNumCombo < nNeedEnhanceCombo)						//ƒRƒ“ƒ{”‚ª‘«‚è‚Ä‚¢‚È‚¢
+		{
+			//”ñ‹­‰»ó‘Ô
+			m_bEnhance = false;
+		}
+
+		//--------------------------------
 		// ’e‚Ì”­ŽË
 		//--------------------------------
 		m_nBulletTime++;
+		int nShotTime = 10;	//’e‚ð”­ŽË‚·‚é‚Ü‚Å‚ÌŽžŠÔ
 
 		if (m_type == MOTION_IDOL || m_type == MOTION_MOVE)
 		{//UŒ‚ˆÈŠO‚ÌŽž‚È‚ç
-			if (CInputKeyboard::Press(DIK_O) && m_nBulletTime >= 15)
+			if (CInputKeyboard::Press(DIK_O) && m_nBulletTime >= nShotTime)
 			{
 				m_pBullet = CBullet::Create(D3DXVECTOR3(m_pos.x, m_pos.y + 100.0f, m_pos.z));
 				m_nBulletTime = 0;
 			}
-			else if (joypad->Press(CInputJoypad::JOYKEY_X) && m_nBulletTime >= 6)
+			else if (joypad->Press(CInputJoypad::JOYKEY_LEFT_SHOULDER) && m_nBulletTime >= nShotTime)
 			{
 				m_pBullet = CBullet::Create(D3DXVECTOR3(m_pos.x, m_pos.y + 100.0f, m_pos.z));
 				m_nBulletTime = 0;
@@ -313,11 +325,6 @@ void CPlayer::Update()
 		//‘Ò‹@ƒ‚[ƒVƒ‡ƒ“‚É‚·‚é
 		ChangeMotion(MOTION_IDOL);
 	}
-
-	//--------------------------------
-	// ƒmƒbƒNƒoƒbƒNˆ—
-	//--------------------------------
-	//NockBack();
 
 	//--------------------------------------
 	// ‰ñ”ðó‘Ô‚Ì‰ðœ
@@ -777,7 +784,9 @@ void CPlayer::AttackManager()
 
 		if (m_typeOld == MOTION_ATTACK_1)
 		{//UŒ‚1‚©‚ç‚Ì˜AŒg‚È‚ç
-			//UŒ‚‚Ì‹­‰»
+			//------------------------------
+			// UŒ‚‚Ì‹­‰»
+			//------------------------------
 			EnhanceAttack();
 		}
 		break;
@@ -789,7 +798,9 @@ void CPlayer::AttackManager()
 		if (m_typeOld == MOTION_ATTACK_1
 			|| m_typeOld == MOTION_ATTACK_2)
 		{//UŒ‚1 ‚© UŒ‚2 ‚©‚ç‚Ì˜AŒg‚È‚ç
-			//UŒ‚‚Ì‹­‰»
+			//------------------------------
+			// UŒ‚‚Ì‹­‰»
+			//------------------------------
 			EnhanceAttack();
 		}
 		break;
@@ -816,14 +827,6 @@ void CPlayer::EnhanceAttack()
 	{
 		//‹­‰»ó‘Ô
 		m_bEnhance = true;
-	}
-
-	if (CInputKeyboard::Release(DIK_LSHIFT)						//ƒL[‚ª—£‚³‚ê‚½
-		|| joypad->Release(CInputJoypad::JOYKEY_RIGHT_SHOULDER)	//ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½
-		|| m_nNumCombo < nNeedEnhanceCombo)						//ƒRƒ“ƒ{”‚ª‘«‚è‚Ä‚¢‚È‚¢
-	{
-		//”ñ‹­‰»ó‘Ô
-		m_bEnhance = false;
 	}
 }
 
