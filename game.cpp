@@ -79,6 +79,7 @@ HRESULT CGame::Init()
 	m_bDeathEnemny = false;
 	m_bDeathPlayer = false;
 	m_bFinish = false;
+	m_bStart = false;
 	m_nNumMessage = 3;
 	m_nCntMessage = 60;
 

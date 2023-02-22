@@ -51,7 +51,7 @@ HRESULT CRanking::Init(D3DXVECTOR3 pos)
 {
 	for (int i = 0; i < nMaxRanking; i++)
 	{
-		pos = D3DXVECTOR3(SCREEN_WIDTH / 2, 100 + (i * 110.0f), 0.0f);
+		pos = D3DXVECTOR3(313.0f, 215 + (i * 110.0f), 0.0f);
 		m_pTime[i] = CTime::Create(pos);
 	}
 
