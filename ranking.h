@@ -64,7 +64,6 @@ private:
 	//------------------
 	// メンバ変数
 	//------------------
-	int m_nCntMove;					//移動までの時間
 	int	m_nRankUpdate;				//更新ランクNo.
 	CTime*	m_pTime[nMaxRanking];	//時間
 

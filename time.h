@@ -37,7 +37,8 @@ public:
 	//----------------
 	// セッター
 	//----------------
-	void SetTime(int nTime);	//時間の設定
+	void SetTime(int nTime);		//時間の設定
+	void SetColor(D3DXCOLOR col);	//色の設定
 
 	//----------------
 	// ゲッター

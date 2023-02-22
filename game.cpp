@@ -145,13 +145,6 @@ void CGame::Uninit()
 //===========================
 void CGame::Update()
 {
-	//画面遷移
-	if (CInputKeyboard::AllTrigger())
-	{
-		//ゲーム画面に移行
-		CApplication::GetFade()->SetFade(CApplication::MODE_RESULT);
-	}
-
 	if (m_bDeathEnemny)
 	{//敵が死んでいるなら
 		m_pEnemy = nullptr;
@@ -161,24 +154,7 @@ void CGame::Update()
 	//----------------------------
 	// 終了処理
 	//----------------------------
-	if (m_bFinish)
-	{//終了フラグが立っているなら
-		m_nCntFinish++;	//カウントを加算
-
-		if (m_nCntFinish >= 300)
-		{//カウントが5秒以上なら
-			//リザルト画面に移行
-			CApplication::GetFade()->SetFade(CApplication::MODE_RESULT);
-		}
-		else if (m_nCntFinish >= 120)
-		{//カウントが2秒以上(クリアの文字が消えたら)
-			if (CInputKeyboard::Trigger(DIK_RETURN))
-			{//ENTERキーが押されたら
-				//リザルト画面に移行
-				CApplication::GetFade()->SetFade(CApplication::MODE_RESULT);
-			}
-		}
-	}
+	Finish();
 
 	//----------------------------
 	// カメラの更新
@@ -196,58 +172,115 @@ void CGame::Update()
 		//----------------------------
 		// メッセージの表示
 		//----------------------------
-		D3DXVECTOR3 pos(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f);
-
-		//時間を数える
-		m_nCntMessage++;
-
-		if (m_nCntMessage >= 60)
-		{
-			if (m_nNumMessage == 3)
-			{//カウント3
-				m_pMessage = CMessage::Create(pos, 600.0f, 300.0f, CMessage::MESSAGE_3);
-			}
-			else if (m_nNumMessage == 2)
-			{//カウント2
-				m_pMessage = CMessage::Create(pos, 600.0f, 300.0f, CMessage::MESSAGE_2);
-			}
-			else if (m_nNumMessage == 1)
-			{//カウント1
-				m_pMessage = CMessage::Create(pos, 600.0f, 300.0f, CMessage::MESSAGE_1);
-			}
-			else if (m_nNumMessage == 0)
-			{//スタート
-				m_pMessage = CMessage::Create(pos, 800.0f, 400.0f, CMessage::MESSAGE_START);
-			}
-			else
-			{
-				//開始フラグを立てる
-				m_bStart = true;
-			}
-
-			//表示する文字を変更
-			m_nNumMessage--;
-
-			m_nCntMessage = 0;
-		}
+		SetMessage();
 	}
 	else
 	{//開始しているなら
 		//----------------------------
 		// アイテムの生成
 		//----------------------------
-		m_nCntItem++;	//カウントの加算
+		SetItem();
+	}
 
-		if (m_nCntItem >= 480)
-		{
-			int nWidth = 1500;
+#ifdef _DEBUG
+	if (CInputKeyboard::Trigger(DIK_1))
+	{
+		m_bFinish = true;	//終了フラグを立てる
 
-			int X = rand() % nWidth - (nWidth / 2);
-			int Z = rand() % nWidth - (nWidth / 2);
+		//ゲーム画面に移行
+		CApplication::GetFade()->SetFade(CApplication::MODE_RESULT);
+	}
+#endif // !_DEBUG
+}
 
-			D3DXVECTOR3 pos((float)X, 100.0f, (float)Z);
-			m_pItem = CItem::Create(pos, CItem::ITEMTYPE_HEAL);
-			m_nCntItem = 0;	//リセット
+//===========================
+// ゲーム終了処理
+//===========================
+void CGame::Finish()
+{
+	if (m_bFinish)
+	{//終了フラグが立っているなら
+		m_nCntFinish++;	//カウントを加算
+
+		//---------------------------
+		// 時間経過で遷移
+		//---------------------------
+		if (m_nCntFinish >= 300)
+		{//カウントが5秒以上なら
+			//リザルト画面に移行
+			CApplication::GetFade()->SetFade(CApplication::MODE_RESULT);
 		}
+		//---------------------------
+		// キーを押して遷移
+		//---------------------------
+		else if (m_nCntFinish >= 120)
+		{//カウントが2秒以上(クリアの文字が消えたら)
+			if (CInputKeyboard::Trigger(DIK_RETURN))
+			{//ENTERキーが押されたら
+				//リザルト画面に移行
+				CApplication::GetFade()->SetFade(CApplication::MODE_RESULT);
+			}
+		}
+	}
+}
+
+//===========================
+// メッセージの表示
+//===========================
+void CGame::SetMessage()
+{
+	D3DXVECTOR3 pos(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f);
+
+	//時間を数える
+	m_nCntMessage++;
+
+	if (m_nCntMessage >= 60)
+	{
+		if (m_nNumMessage == 3)
+		{//カウント3
+			m_pMessage = CMessage::Create(pos, 600.0f, 300.0f, CMessage::MESSAGE_3);
+		}
+		else if (m_nNumMessage == 2)
+		{//カウント2
+			m_pMessage = CMessage::Create(pos, 600.0f, 300.0f, CMessage::MESSAGE_2);
+		}
+		else if (m_nNumMessage == 1)
+		{//カウント1
+			m_pMessage = CMessage::Create(pos, 600.0f, 300.0f, CMessage::MESSAGE_1);
+		}
+		else if (m_nNumMessage == 0)
+		{//スタート
+			m_pMessage = CMessage::Create(pos, 800.0f, 400.0f, CMessage::MESSAGE_START);
+		}
+		else
+		{
+			//開始フラグを立てる
+			m_bStart = true;
+		}
+
+		//表示する文字を変更
+		m_nNumMessage--;
+
+		m_nCntMessage = 0;
+	}
+}
+
+//===========================
+// アイテムの生成
+//===========================
+void CGame::SetItem()
+{
+	m_nCntItem++;	//カウントの加算
+
+	if (m_nCntItem >= 480)
+	{
+		int nWidth = 1500;
+
+		int X = rand() % nWidth - (nWidth / 2);
+		int Z = rand() % nWidth - (nWidth / 2);
+
+		D3DXVECTOR3 pos((float)X, 100.0f, (float)Z);
+		m_pItem = CItem::Create(pos, CItem::ITEMTYPE_HEAL);
+		m_nCntItem = 0;	//リセット
 	}
 }

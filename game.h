@@ -60,6 +60,14 @@ public:
 	static CMeshField*	GetMeshField() { return m_pMeshField; }		//メッシュフィールドの取得
 
 private:
+	//------------------
+	// プライベート関数
+	//------------------
+	void Finish();		//ゲーム終了処理
+	void SetMessage();	//メッセージの表示
+	void SetItem();		//アイテムの生成
+
+private:
 	//-------------------
 	// メンバ変数
 	//-------------------

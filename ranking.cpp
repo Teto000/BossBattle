@@ -15,6 +15,8 @@
 #include "time.h"
 #include "game.h"
 #include "renderer.h"
+#include "input.h"
+#include "input_keyboard.h"
 
 //----------------------
 // 静的メンバ変数宣言
@@ -26,7 +28,6 @@ int CRanking::m_nTime = 0;	//時間
 //=======================
 CRanking::CRanking() : CObject(1)
 {
-	m_nCntMove = 0;			//移動までの時間
 	m_nRankUpdate = 0;		//更新ランクNo.
 
 	for (int i = 0; i < nMaxRanking; i++)
@@ -80,6 +81,26 @@ void CRanking::Update()
 	{
 		m_pTime[i]->Update();
 	}
+
+	//-------------------------------
+	// 今回のスコアを赤くする
+	//-------------------------------
+	if (m_nTime != m_nRankUpdate)
+	{//今回のタイムがランキングの数値と同じなら
+		m_pTime[m_nRankUpdate]->SetColor(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+	}
+
+#ifdef _DEBUG
+	//ランキングの初期化
+	if (CInputKeyboard::Trigger(DIK_1))
+	{
+		for (int i = 0; i < nMaxRanking; i++)
+		{
+			m_pTime[i]->SetTime(999);
+			Save();		//書き込み
+		}
+	}
+#endif // _DEBUG
 }
 
 //=======================

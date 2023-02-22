@@ -89,46 +89,46 @@ void CTime::Update()
 		return;
 	}
 
-	if (CInputKeyboard::Trigger(DIK_P))
-	{
-		//タイムを保存
-		CRanking::SetNewTime(m_nTime);
-	}
-
 	//----------------------
 	// ゲーム終了時に拡大
 	//----------------------
-	if (CGame::GetFinish())
+	if (CApplication::GetMode() == CApplication::MODE_GAME)
 	{
-		m_nCntMove++;
+		if (CGame::GetFinish())
+		{
+			//タイムを保存
+			CRanking::SetNewTime(m_nTime);
 
-		if (m_nCntMove >= 80)
-		{//一定時間が経過したら
-			//--------------------------------------
-			// 目的の位置まで移動する
-			//--------------------------------------
-			m_pos.x += ((SCREEN_WIDTH / 2 - 50.0f) - m_pos.x) * 0.08f;	//減衰処理
-			m_pos.y += ((SCREEN_HEIGHT / 2) - m_pos.y) * 0.08f;
+			m_nCntMove++;
 
-			for (int i = 0; i < nMaxDigits; i++)
-			{
-				m_pNumber[i]->SetPosition(D3DXVECTOR3(m_pos.x + i * 50.0f, m_pos.y, m_pos.z));
+			if (m_nCntMove >= 80)
+			{//一定時間が経過したら
+				//--------------------------------------
+				// 目的の位置まで移動する
+				//--------------------------------------
+				m_pos.x += ((SCREEN_WIDTH / 2 - 50.0f) - m_pos.x) * 0.08f;	//減衰処理
+				m_pos.y += ((SCREEN_HEIGHT / 2) - m_pos.y) * 0.08f;
+
+				for (int i = 0; i < nMaxDigits; i++)
+				{
+					m_pNumber[i]->SetPosition(D3DXVECTOR3(m_pos.x + i * 50.0f, m_pos.y, m_pos.z));
+				}
 			}
 		}
-	}
-	else if(CApplication::GetMode() == CApplication::MODE_GAME)
-	{//ゲーム中なら
-		//フレーム数を数える
-		m_nCntFream++;
+		else
+		{//ゲーム中なら
+			//フレーム数を数える
+			m_nCntFream++;
 
-		//----------------------
-		// 時間の加算
-		//----------------------
-		if (m_nCntFream >= 60)
-		{
-			m_nTime++;
-			SetNumber();
-			m_nCntFream = 0;
+			//----------------------
+			// 時間の加算
+			//----------------------
+			if (m_nCntFream >= 60)
+			{
+				m_nTime++;
+				SetNumber();
+				m_nCntFream = 0;
+			}
 		}
 	}
 }
@@ -208,4 +208,15 @@ void CTime::SetTime(int nTime)
 	m_nTime = nTime;
 
 	SetNumber();
+}
+
+//=======================
+// 色の設定
+//=======================
+void CTime::SetColor(D3DXCOLOR col)
+{
+	for (int i = 0; i < nMaxDigits; i++)
+	{
+		m_pNumber[i]->SetColor(col);
+	}
 }

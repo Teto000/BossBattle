@@ -50,34 +50,40 @@ HRESULT CBg::Init(D3DXVECTOR3 pos)
 		//-------------------------
 		switch (m_type)
 		{
+		//ƒ^ƒCƒgƒ‹‰æ–Ê‚Ì”wŒi
 		case BGTYPE_TITLE:
 			m_pObject2D->SetTexture(CTexture::TEXTURE_TITLE);
 			m_fWidth = 1000.0f;
 			m_fHeight = 300.f;
 			break;
 
+		//ƒŠƒUƒ‹ƒg‰æ–Ê‚Ì”wŒi
 		case BGTYPE_RESULT:
 			m_pObject2D->SetTexture(CTexture::TEXTURE_RESULT);
 			break;
 
+		//ƒRƒ“ƒ{UI‚Ì”wŒi
 		case BGTYPE_COMBO:
 			m_fWidth = 200.0f;
 			m_fHeight = 180.0f;
 			m_pObject2D->SetTexture(CTexture::TEXTURE_BG_COMBO);
 			break;
 
+		//ƒ^ƒCƒ}[UI‚Ì”wŒi
 		case BGTYPE_TIMER:
 			m_fWidth = 200.0f;
 			m_fHeight = 180.0f;
 			m_pObject2D->SetTexture(CTexture::TEXTURE_BG_TIMER);
 			break;
 
+		//ƒvƒŒƒCƒ„[‚ÌHP‚Ì•¶Žš
 		case BGTYPE_PLAYER_HP:
 			m_fWidth = 330.0f;
 			m_fHeight = 50.0f;
 			m_pObject2D->SetTexture(CTexture::TEXTURE_BG_PLAYER_HP);
 			break;
 
+		//“G‚ÌHP‚Ì•¶Žš
 		case BGTYPE_ENEMY_HP:
 			m_fWidth = 330.0f;
 			m_fHeight = 50.0f;
