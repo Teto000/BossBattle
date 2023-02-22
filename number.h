@@ -37,6 +37,11 @@ public:
 	void SetEnable(bool bEnable) { m_bDraw = bEnable; }	//描画するかどうか
 
 	//------------------
+	// ゲッター
+	//------------------
+	int Get() { return m_nValue; }	//数値の取得
+
+	//------------------
 	// 静的メンバ変数
 	//------------------
 	static CNumber* Create(D3DXVECTOR3 pos, int nValue);

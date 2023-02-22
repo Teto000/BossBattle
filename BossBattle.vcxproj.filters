@@ -188,6 +188,9 @@
     <ClCompile Include="title_camera.cpp">
       <Filter>Main\Application\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="ranking.cpp">
+      <Filter>Main\Object\Object2D\Number</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -324,6 +327,9 @@
     </ClInclude>
     <ClInclude Include="title_camera.h">
       <Filter>Main\Application\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="ranking.h">
+      <Filter>Main\Object\Object2D\Number</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -17,6 +17,7 @@
 #include "sound.h"
 #include "bg.h"
 #include "fade.h"
+#include "ranking.h"
 
 //===========================
 // コンストラクタ
@@ -47,6 +48,9 @@ HRESULT CResult::Init()
 
 	//BGMの再生
 	CSound::PlaySound(CSound::SOUND_LABEL_RESULT);
+
+	//ランキングの生成
+	m_pRanking = CRanking::Create();
 
 	return S_OK;
 }

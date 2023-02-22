@@ -1,11 +1,11 @@
 //===================================================
 //
-// タイマーヘッダー
+// ランキングヘッダー
 // Author : Sato Teruto
 //
 //===================================================
-#ifndef _TIME_H_
-#define _TIME_H_	//二重インクルード防止
+#ifndef _RANKING_H_
+#define _RANKING_H_	//二重インクルード防止
 
 //-------------------------------
 // インクルード
@@ -15,16 +15,16 @@
 //-------------------------------
 // 前方宣言
 //-------------------------------
-class CNumber;	//数値
+class CTime;	//時間
 
 //================================
-// タイマークラス
+// ランキングクラス
 //================================
-class CTime : CObject
+class CRanking : CObject
 {
 public:
-	CTime();	//コンストラクタ
-	~CTime();	//デストラクタ
+	CRanking();	//コンストラクタ
+	~CRanking();	//デストラクタ
 
 	//------------------
 	// メンバ関数
@@ -34,44 +34,44 @@ public:
 	void Update();
 	void Draw();
 
+	void Save();
+	void Load();
+	void Ranking();
+
 	//----------------
 	// セッター
 	//----------------
-	void SetTime(int nTime);	//時間の設定
+	static void SetNewTime(int nTime) { m_nTime = nTime; }	//新しい時間を設定
 
 	//----------------
 	// ゲッター
 	//----------------
-	D3DXVECTOR3 GetPosition() override { return m_pos; }	//位置の取得
+	D3DXVECTOR3 GetPosition() override { return D3DXVECTOR3(0.0f, 0.0f, 0.0f); }	//位置の取得
 	float GetWidth() override { return 0.0f; }				//幅の取得
 	float GetHeight() override { return 0.0f; }				//高さの取得
-	int GetTime() { return m_nTime; }		//時間の取得
 
 	//------------------
 	// 静的メンバ変数
 	//------------------
-	static CTime* Create(D3DXVECTOR3 pos);
-
-private:
-	void SetNumber();			//数値の設定
+	static CRanking* Create();
 
 private:
 	//------------------
 	// 定数
 	//------------------
-	static const int nMaxDigits = 3;	//最大桁数
+	static const int nMaxRanking = 5;	//表示するランキングの最大数
 
 	//------------------
 	// メンバ変数
 	//------------------
-	D3DXVECTOR3 m_pos;				//位置
-	D3DXVECTOR3 m_numberPos;		//数字の位置
-	int m_nTime;					//時間
 	int m_nCntMove;					//移動までの時間
-	int m_nCntFream;				//フレーム数のカウント
-	int m_aPosTexU[nMaxDigits];		//今の桁の数値
-	float fInterval;				//数値の間隔
-	CNumber* m_pNumber[nMaxDigits];	//数値
+	int	m_nRankUpdate;				//更新ランクNo.
+	CTime*	m_pTime[nMaxRanking];	//時間
+
+	//------------------
+	// 静的メンバ変数
+	//------------------
+	static int m_nTime;	//時間
 };
 
 #endif

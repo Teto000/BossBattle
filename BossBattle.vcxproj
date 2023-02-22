@@ -157,6 +157,7 @@
     <ClCompile Include="billboard.cpp" />
     <ClCompile Include="bullet.cpp" />
     <ClCompile Include="camera.cpp" />
+    <ClCompile Include="ranking.cpp" />
     <ClCompile Include="title_camera.cpp" />
     <ClCompile Include="combo.cpp" />
     <ClCompile Include="damage.cpp" />
@@ -204,6 +205,7 @@
     <ClInclude Include="billboard.h" />
     <ClInclude Include="bullet.h" />
     <ClInclude Include="camera.h" />
+    <ClInclude Include="ranking.h" />
     <ClInclude Include="title_camera.h" />
     <ClInclude Include="combo.h" />
     <ClInclude Include="damage.h" />

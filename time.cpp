@@ -13,6 +13,9 @@
 #include "number.h"
 #include "game.h"
 #include "renderer.h"
+#include "ranking.h"
+#include "input.h"
+#include "input_keyboard.h"
 
 //=======================
 // コンストラクタ
@@ -86,6 +89,12 @@ void CTime::Update()
 		return;
 	}
 
+	if (CInputKeyboard::Trigger(DIK_P))
+	{
+		//タイムを保存
+		CRanking::SetNewTime(m_nTime);
+	}
+
 	//----------------------
 	// ゲーム終了時に拡大
 	//----------------------
@@ -107,8 +116,8 @@ void CTime::Update()
 			}
 		}
 	}
-	else
-	{
+	else if(CApplication::GetMode() == CApplication::MODE_GAME)
+	{//ゲーム中なら
 		//フレーム数を数える
 		m_nCntFream++;
 
@@ -168,7 +177,7 @@ void CTime::SetNumber()
 		{//nullじゃないなら
 			//桁数を計算
 			//int nDigit = std::to_string(m_nTime).size();
-			int nDigit = log10(m_nTime) + 1;
+			int nDigit = (int)(log10(m_nTime) + 1);
 
 			//ナンバーの描画を有効・無効にする
 			m_pNumber[i]->SetEnable(nMaxDigits - i <= nDigit);
@@ -189,4 +198,14 @@ void CTime::SetNumber()
 			m_pNumber[i]->Set(m_aPosTexU[i]);
 		}
 	}
+}
+
+//=======================
+// 時間の設定
+//=======================
+void CTime::SetTime(int nTime)
+{
+	m_nTime = nTime;
+
+	SetNumber();
 }

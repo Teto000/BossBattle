@@ -145,6 +145,13 @@ void CGame::Uninit()
 //===========================
 void CGame::Update()
 {
+	//‰æ–Ê‘JˆÚ
+	if (CInputKeyboard::AllTrigger())
+	{
+		//ƒQ[ƒ€‰æ–Ê‚ÉˆÚs
+		CApplication::GetFade()->SetFade(CApplication::MODE_RESULT);
+	}
+
 	if (m_bDeathEnemny)
 	{//“G‚ªŽ€‚ñ‚Å‚¢‚é‚È‚ç
 		m_pEnemy = nullptr;
