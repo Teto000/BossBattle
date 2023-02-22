@@ -125,7 +125,7 @@ void CBullet::Update()
 		&& m_pos.z + fRange >= fFront
 		&& m_pos.z - fRange <= fBack)
 	{//プレイヤーが範囲内に入ったら
-		CGame::GetEnemy()->SubGauge(nDamage, CEnemy::GAUGE_HP);	//敵の体力の減少
+		CGame::GetEnemy()->SubGauge((float)nDamage, CEnemy::GAUGE_HP);	//敵の体力の減少
 		CGame::GetPlayer()->AddCombo(1);	//コンボの加算
 
 		//ダメージ数

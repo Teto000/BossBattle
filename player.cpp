@@ -62,8 +62,9 @@ CPlayer::CPlayer() : CObject(0)
 	m_nAvoidStan = 0;			//回避硬直
 	m_nWheelRotValue = 0;		//タイヤの回転量
 	m_nBulletTime = 0;			//弾の発射時間
-	fSizeWidth = 0.0f;			//サイズ(幅)
-	fSizeDepth = 0.0f;			//サイズ(奥行き)
+	m_fSizeWidth = 0.0f;		//サイズ(幅)
+	m_fSizeDepth = 0.0f;		//サイズ(奥行き)
+	m_fGravity = 0.0f;			//重力の値
 	m_bFinishAttack = false;	//ダメージを与えたか
 	m_bHit = false;				//1ヒットした状態
 	m_bNockBack = false;		//ノックバックしている状態
@@ -144,8 +145,8 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	m_pos = pos;									//位置
 	m_Offset = D3DXVECTOR3(0.0f, -20.0f, -100.0f);	//剣先へのオフセット座標
 	m_rot.y = D3DX_PI;								//向き
-	fSizeWidth = 30.0f;								//モデルの幅
-	fSizeDepth = 30.0f;								//モデルの奥行き
+	m_fSizeWidth = 30.0f;							//モデルの幅
+	m_fSizeDepth = 30.0f;							//モデルの奥行き
 	m_nWheelRotValue = 10;							//タイヤの回転量
 	m_status.fLife = 800.0f;						//体力
 	m_status.fRemLife = 100.0f;						//残り体力(%)
@@ -181,8 +182,8 @@ HRESULT CPlayer::Init(D3DXVECTOR3 pos)
 	//------------------------------
 	// モデルの大きさを設定
 	//------------------------------
-	m_vtxMin = D3DXVECTOR3(-fSizeWidth, 10.0f, -fSizeDepth);
-	m_vtxMax = D3DXVECTOR3(fSizeWidth, 150.0f, fSizeDepth);
+	m_vtxMin = D3DXVECTOR3(-m_fSizeWidth, 10.0f, -m_fSizeDepth);
+	m_vtxMax = D3DXVECTOR3(m_fSizeWidth, 150.0f, m_fSizeDepth);
 
 	m_size.x = m_vtxMax.x - m_vtxMin.x;
 	m_size.y = m_vtxMax.y - m_vtxMin.y;
@@ -339,15 +340,17 @@ void CPlayer::Update()
 	//--------------------------------
 	// 重力の加算
 	//--------------------------------
-	//if (m_pos.y > 0.0f)
-	//{//飛んでいるなら
-	//	m_pos.y -= 3.0f;
-	//}
-	//else
-	//{//地面に着いたら
-	//	m_pos.y = 0.0f;		//高さを地面に合わせる
-	//	m_bNockBack = false;
-	//}
+	if (m_pos.y > 0.0f)
+	{//飛んでいるなら
+		m_pos.y -= m_fGravity;
+		m_fGravity += 0.1f;
+	}
+	else
+	{//地面に着いたら
+		m_pos.y = 0.0f;			//高さを地面に合わせる
+		m_fGravity = 0.0f;		//重力の値をリセット
+		m_bNockBack = false;	//ノックバックしていない状態
+	}
 
 	//--------------------------------
 	// 剣の軌跡の更新
@@ -923,7 +926,7 @@ void CPlayer::HitSword()
 			// 技ごとのダメージ量を計算
 			//-----------------------------------
 			float fDamage = m_status.nAttack * m_aMotionSet[m_type].fDamageMag;
-			float fBreakDamage = m_aMotionSet[m_type].nBreakDamage;
+			float fBreakDamage = (float)m_aMotionSet[m_type].nBreakDamage;
 			float fComboDamage = (float)m_nNumCombo / 30;
 
 			//コンボ数に応じてダメージアップ
@@ -1142,29 +1145,20 @@ void CPlayer::AddLife(float fDamage)
 //==========================================
 // ノックバックする処理
 //==========================================
-void CPlayer::NockBack()
+void CPlayer::NockBack(float fHeight)
 {
-	if (CGame::GetEnemy()->GetHitAtk())
-	{
-		//敵の座標を取得
-		D3DXVECTOR3 enemyPos = CGame::GetEnemy()->GetPosition();
+	//プレイヤーの位置を取得
+	D3DXVECTOR3 enemyPos = CGame::GetEnemy()->GetPosition();
 
-		//敵とプレイヤー間のベクトルを計算
-		D3DXVECTOR3 vec = enemyPos - m_pos;
+	//敵とプレイヤー間のベクトルを計算
+	D3DXVECTOR3 vec = enemyPos - m_pos;
 
-		D3DXVec3Normalize(&vec, &vec);	//ベクトルの正規化
+	D3DXVec3Normalize(&vec, &vec);	//ベクトルの正規化
 
-		m_pos += -vec * 20.0f;	//逆ベクトル方向に移動
-		m_pos.y += 200.0f;		//上昇
-
-		m_bNockBack = true;
-
-		ChangeMotion(MOTION_IDOL);
-	}
-	else
-	{
-		m_bNockBack = false;
-	}
+	//ノックバック
+	m_pos += -vec * 2.0f;	//逆ベクトル方向に移動
+	m_pos.y += fHeight;		//上昇
+	m_bNockBack = true;
 }
 
 //=============================

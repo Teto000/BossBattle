@@ -695,6 +695,19 @@ void CEnemy::HitHummer()
 			//プレイヤーのコンボ数を0にする
 			CGame::GetPlayer()->GetCombo()->ResetCombo();
 
+			//--------------------------------
+			// プレイヤーのノックバック
+			//--------------------------------
+			if (m_type == MOTION_ATTACK)
+			{//叩きつけ攻撃なら
+				//ノックバックさせる
+				CGame::GetPlayer()->NockBack(150.0f);
+			}
+			else if (m_type == MOTION_SPIN)
+			{//回転攻撃なら
+				CGame::GetPlayer()->NockBack(100.0f);
+			}
+
 			//SEの再生
 			CSound::PlaySound(CSound::SOUND_LABEL_SE_EXPLOSION);
 		}

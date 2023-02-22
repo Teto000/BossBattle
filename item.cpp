@@ -107,17 +107,8 @@ void CItem::Update()
 //===============================================
 void CItem::Draw()
 {
-	//デバイスの取得
-	LPDIRECT3DDEVICE9 pDevice = CApplication::GetRenderer()->GetDevice();
-
-	//Zバッファのクリア
-	//pDevice->SetRenderState(D3DRS_ZENABLE, false);
-
 	//オブジェクトの描画
 	CBillBoard::Draw();
-
-	// Zバッファの有効化設定
-	//pDevice->SetRenderState(D3DRS_ZENABLE, true);
 }
 
 //===============================================

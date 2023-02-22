@@ -120,7 +120,7 @@ public:
 	void SetComboValue(int nValue)    { m_status.nComboValue = nValue; }	//コンボの加算値の設定
 	void AddCombo(int nNumber);		//コンボ数の加算
 	void AddLife(float fDamage);	//HP減少時の処理
-	void NockBack();				//ノックバック
+	void NockBack(float fHeight);	//ノックバック
 
 	//-------------------------
 	// ゲッター
@@ -198,8 +198,9 @@ private:
 	int m_nAvoidStan;			//回避硬直
 	int m_nWheelRotValue;		//タイヤの回転量
 	int m_nBulletTime;			//弾の発射時間
-	float fSizeWidth;			//サイズ(幅)
-	float fSizeDepth;			//サイズ(奥行き)
+	float m_fSizeWidth;			//サイズ(幅)
+	float m_fSizeDepth;			//サイズ(奥行き)
+	float m_fGravity;			//重力の値
 	float m_rotWheel;			//タイヤの回転量
 	bool m_bFinishAttack;		//攻撃が終わった状態
 	bool m_bHit;				//1ヒットした状態
