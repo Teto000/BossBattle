@@ -373,6 +373,16 @@ void CPlayer::Update()
 		, CObject::OBJTYPE_ENEMY);
 
 	CDebugProc::Print("プレイヤーの位置 %f %f %f", m_pos.x, m_pos.y, m_pos.z);
+
+#ifdef _DEBUG
+	if (CInputKeyboard::Trigger(DIK_3))
+	{
+		//体力の減少
+		m_status.fLife = 10.0f;
+		m_status.fRemLife = m_status.fLife * 100 / m_status.fMaxLife;
+		m_pHP->SetLife(m_status.fLife, m_status.fRemLife);
+	}
+#endif // _DEBUG
 }
 
 //=============================
