@@ -301,7 +301,7 @@ void CEnemy::Update()
 	//----------------------------
 	if (m_fLife <= 0)
 	{//‘Ì—Í‚ªs‚«‚½‚ç
-		CGame::SetEnemyState();	//“G‚ªŽ€‚ñ‚¾ó‘Ô
+		CGame::SetDeathEnemy();	//“G‚ªŽ€‚ñ‚¾ó‘Ô
 
 		//HPƒo[‚ÌÁ‹Ž
 		for (int i = 0; i < GAUGE_MAX; i++)

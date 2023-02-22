@@ -42,6 +42,7 @@ HRESULT CMessage::Init(D3DXVECTOR3 pos)
 	//初期値の設定
 	m_pos = pos;
 	m_col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	m_nCntTime = 0;
 
 	CObject2D::Init(m_pos);
 
@@ -49,26 +50,37 @@ HRESULT CMessage::Init(D3DXVECTOR3 pos)
 
 	switch (m_message)
 	{
+	//クリア
 	case MESSAGE_CLEAR:
 		CObject2D::SetTexture(CTexture::TEXTURE_CLEAR);
 		break;
 
+	//ゲームオーバー
+	case MESSAGE_GAMEOVER:
+		CObject2D::SetTexture(CTexture::TEXTURE_GAMEOVER);
+		break;
+
+	//ブレイク
 	case MESSAGE_BREAK:
 		CObject2D::SetTexture(CTexture::TEXTURE_BREAK);
 		break;
 
+	//スタート
 	case MESSAGE_START:
 		CObject2D::SetTexture(CTexture::TEXTURE_START);
 		break;
 
+	//カウント1
 	case MESSAGE_1:
 		CObject2D::SetTexture(CTexture::TEXTURE_1);
 		break;
 
+	//カウント2
 	case MESSAGE_2:
 		CObject2D::SetTexture(CTexture::TEXTURE_2);
 		break;
 
+	//カウント3
 	case MESSAGE_3:
 		CObject2D::SetTexture(CTexture::TEXTURE_3);
 		break;
@@ -122,13 +134,6 @@ void CMessage::Draw()
 {
 	switch (m_message)
 	{
-	case MESSAGE_CLEAR:
-		if (CGame::GetFinish())
-		{//終了フラグが立っているなら
-			CObject2D::Draw();
-		}
-		break;
-
 	case MESSAGE_BREAK:
 		if (CGame::GetEnemy() != nullptr 
 			&& CGame::GetEnemy()->GetState() == CEnemy::ENEMYSTATE_BREAK)
@@ -142,14 +147,8 @@ void CMessage::Draw()
 		}
 		break;
 
-	case MESSAGE_START:
-	case MESSAGE_1:
-	case MESSAGE_2:
-	case MESSAGE_3:
-		CObject2D::Draw();
-		break;
-
 	default:
+		CObject2D::Draw();
 		break;
 	}
 }

@@ -36,6 +36,7 @@
 // 静的メンバ変数宣言
 //------------------------
 bool CGame::m_bDeathEnemny = false;			//敵が死んでいるか
+bool CGame::m_bDeathPlayer = false;			//プレイヤーが死んでいるか
 bool CGame::m_bFinish = false;				//終了フラグ
 bool CGame::m_bStart = false;				//開始フラグ
 
@@ -150,6 +151,11 @@ void CGame::Update()
 		m_pEnemy = nullptr;
 		m_bFinish = true;	//終了フラグを立てる
 	}
+	else if (m_bDeathPlayer)
+	{//プレイヤーが死んでいるなら
+		//m_pPlayer = nullptr;
+		m_bFinish = true;
+	}
 
 	//----------------------------
 	// 終了処理
@@ -225,7 +231,7 @@ void CGame::Finish()
 }
 
 //===========================
-// メッセージの表示
+// カウントダウンの表示
 //===========================
 void CGame::SetMessage()
 {

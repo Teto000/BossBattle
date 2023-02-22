@@ -30,6 +30,7 @@ public: /* 定義 */
 
 		/* ↓ メッセージ ↓ */
 		TEXTURE_CLEAR,			//クリア
+		TEXTURE_GAMEOVER,		//ゲームオーバー
 		TEXTURE_BREAK,			//ブレイク
 		TEXTURE_START,			//スタート
 		TEXTURE_1,				//1

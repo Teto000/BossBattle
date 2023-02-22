@@ -133,7 +133,4 @@ void CGauge::SetLife(float fLife, float fRemLife)
 {
 	m_fLife = fLife;
 	m_fRemLife = fRemLife;
-
-	//HPŒ¸­‚Ìˆ—
-	//SubHP();
 }

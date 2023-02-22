@@ -99,7 +99,7 @@ void CTime::Update()
 			//タイムを保存
 			CRanking::SetNewTime(m_nTime);
 
-			m_nCntMove++;
+			/*m_nCntMove++;
 
 			if (m_nCntMove >= 80)
 			{//一定時間が経過したら
@@ -113,10 +113,10 @@ void CTime::Update()
 				{
 					m_pNumber[i]->SetPosition(D3DXVECTOR3(m_pos.x + i * 50.0f, m_pos.y, m_pos.z));
 				}
-			}
+			}*/
 		}
 		else
-		{//ゲーム中なら
+		{
 			//フレーム数を数える
 			m_nCntFream++;
 

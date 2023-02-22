@@ -22,6 +22,7 @@ public:
 	{
 		MESSAGE_NONE = 0,
 		MESSAGE_CLEAR,		//クリア
+		MESSAGE_GAMEOVER,	//ゲームオーバー
 		MESSAGE_BREAK,		//ブレイク
 		MESSAGE_START,		//スタート
 		MESSAGE_1,			//1

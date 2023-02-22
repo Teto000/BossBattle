@@ -22,6 +22,7 @@ class CCombo;		//コンボ
 class CDamage;		//ダメージ
 class COrbit;		//軌跡
 class CBullet;		//弾
+class CMessage;		//メッセージ
 
 //--------------------------------
 // マクロ定義
@@ -206,11 +207,12 @@ private:
 	bool m_bHit;				//1ヒットした状態
 	bool m_bNockBack;			//ノックバックしている状態
 	bool m_bEnhance;			//技が強化される状態
-	CHP*  m_pHP;				//HP
-	CCombo* m_pCombo;			//コンボ
-	CDamage* m_pDamage;			//ダメージ
-	COrbit* m_pOrbit;			//軌跡
-	CBullet* m_pBullet;			//弾
+	CHP*		m_pHP;			//HP
+	CCombo*		m_pCombo;		//コンボ
+	CDamage*	m_pDamage;		//ダメージ
+	COrbit*		m_pOrbit;		//軌跡
+	CBullet*	m_pBullet;		//弾
+	CMessage*	m_pMessage;		//メッセージ
 
 	//列挙型
 	PLAYER_STATUS m_status;		//ステータス

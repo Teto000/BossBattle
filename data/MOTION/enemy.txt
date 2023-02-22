@@ -171,13 +171,13 @@ END_MOTIONSET
 MOTIONSET
 	LOOP = 0			# ループするかどうか[0:ループしない / 1:ループする]
 	NUM_KEY = 5		 	# キー数
-	COLLISION = 60 		# 当たり判定の開始時間
+	COLLISION = 70 		# 当たり判定の開始時間
 	NUM_DAMAGE = 180 	# ダメージ量
 	NUM_HIT = 1     	# ヒット数
 	HIT_INTERVAL = 0	# ヒット間隔
 
 	KEYSET			# --- << KEY : 0 / 5 >> ---
-		FRAME = 60 # 振り上げ
+		FRAME = 70 # 振り上げ
 		KEY	# ----- [ 0 ] -----
 			POS = 0.00 0.00 0.00
 			ROT = 0.06 0.00 0.00
@@ -195,7 +195,7 @@ MOTIONSET
 	END_KEYSET
 
 	KEYSET			# --- << KEY : 1 / 5 >> ---
-		FRAME = 5  # 振り落ろし始め
+		FRAME = 3  # 振り落ろし始め
 		KEY	# ----- [ 0 ] -----
 			POS = 0.00 0.00 0.00
 			ROT = 0.28 0.00 0.00
@@ -231,7 +231,7 @@ MOTIONSET
 	END_KEYSET
 
 	KEYSET			# --- << KEY : 3 / 5 >> ---
-		FRAME = 30  # 持ち上げる
+		FRAME = 20  # 持ち上げる
 		KEY	# ----- [ 0 ] -----
 			POS = 0.00 0.00 0.00
 			ROT = -0.31 0.00 0.00
@@ -273,13 +273,13 @@ END_MOTIONSET
 MOTIONSET
 	LOOP = 0			# ループするかどうか[0:ループしない / 1:ループする]
 	NUM_KEY = 12		# キー数
-	COLLISION = 50 		# 当たり判定の開始時間
+	COLLISION = 70 		# 当たり判定の開始時間
 	NUM_DAMAGE = 60 	# ダメージ量
 	NUM_HIT = 3     	# ヒット数
 	HIT_INTERVAL = 20	# ヒット間隔
 
 	KEYSET			# --- << KEY : 0 / 12 >> ---
-		FRAME = 60
+		FRAME = 70
 		KEY	# ----- [ 0 ] -----
 			POS = 0.00 0.00 0.00
 			ROT = 0.00 0.00 0.00
@@ -297,7 +297,7 @@ MOTIONSET
 	END_KEYSET
 
 	KEYSET			# --- << KEY : 1 / 12 >> ---
-		FRAME = 15
+		FRAME = 10
 		KEY	# ----- [ 0 ] -----
 			POS = 0.00 0.00 0.00
 			ROT = 0.00 0.00 0.00
@@ -315,7 +315,7 @@ MOTIONSET
 	END_KEYSET
 
 	KEYSET			# --- << KEY : 2 / 12 >> ---
-		FRAME = 10
+		FRAME = 8
 		KEY	# ----- [ 0 ] -----
 			POS = 0.00 0.00 0.00
 			ROT = 0.00 2.07 0.00
@@ -423,7 +423,7 @@ MOTIONSET
 	END_KEYSET
 
 	KEYSET			# --- << KEY : 8 / 12 >> ---
-		FRAME = 10
+		FRAME = 8
 		KEY	# ----- [ 0 ] -----
 			POS = 0.00 0.00 0.00
 			ROT = 0.00 -0.91 0.00
@@ -441,7 +441,7 @@ MOTIONSET
 	END_KEYSET
 
 	KEYSET			# --- << KEY : 9 / 12 >> ---
-		FRAME = 15
+		FRAME = 10
 		KEY	# ----- [ 0 ] -----
 			POS = 0.00 0.00 0.00
 			ROT = 0.00 0.97 0.00

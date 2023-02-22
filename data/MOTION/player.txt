@@ -380,7 +380,7 @@ MOTIONSET
 	END_KEYSET
 
 	KEYSET			# --- << KEY : 3 / 4 >> ---
-		FRAME = 20	# 剣を振り切ってからの硬直時間
+		FRAME = 40	# 剣を振り切ってからの硬直時間
 		KEY	# ----- [ 0 ] -----
 			POS = 0.00 0.00 0.00
 			ROT = 0.00 0.00 0.00
@@ -473,7 +473,7 @@ MOTIONSET
 	END_KEYSET
 
 	KEYSET			# --- << KEY : 1 / 2 >> ---
-		FRAME = 20
+		FRAME = 40
 		KEY	# ----- [ 0 ] -----
 			POS = 0.00 0.00 0.00
 			ROT = 0.00 0.00 0.00
@@ -870,7 +870,7 @@ MOTIONSET
 	END_KEYSET
 
 	KEYSET			# --- << KEY : 9 / 10 >> ---
-		FRAME = 20
+		FRAME = 40
 		KEY	# ----- [ 0 ] -----
 			POS = 0.00 0.00 0.00
 			ROT = 0.00 0.00 0.00

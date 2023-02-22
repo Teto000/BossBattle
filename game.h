@@ -47,7 +47,8 @@ public:
 	//------------------
 	// セッター
 	//------------------
-	static void SetEnemyState() { m_bDeathEnemny = true; }
+	static void SetDeathEnemy() { m_bDeathEnemny = true; }	//敵が死んでる状態にする
+	static void SetDeathPlayer() { m_bDeathPlayer = true; }	//プレイヤーが死んでる状態にする
 
 	//------------------
 	// ゲッター
@@ -64,7 +65,7 @@ private:
 	// プライベート関数
 	//------------------
 	void Finish();		//ゲーム終了処理
-	void SetMessage();	//メッセージの表示
+	void SetMessage();	//カウントダウンの表示
 	void SetItem();		//アイテムの生成
 
 private:
@@ -83,6 +84,7 @@ private:
 	// 静的メンバ変数
 	//-------------------
 	static bool m_bDeathEnemny;	//敵が死んでいるか
+	static bool m_bDeathPlayer;	//プレイヤーが死んでいるか
 	static bool m_bFinish;		//終了フラグ
 	static bool m_bStart;		//開始フラグ
 

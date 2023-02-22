@@ -29,6 +29,7 @@ const char* CTexture::s_FileName[] =
 
 	/* ↓ メッセージ ↓ */
 	"data/TEXTURE/Message/Clear.png",	//クリア
+	"data/TEXTURE/Message/GameOver.png",//ゲームオーバー
 	"data/TEXTURE/Message/Break.png",	//ブレイク
 	"data/TEXTURE/Message/Start.png",	//スタート
 	"data/TEXTURE/Message/One.png",		//1

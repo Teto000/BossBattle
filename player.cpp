@@ -32,6 +32,7 @@
 #include "sound.h"
 #include "orbit.h"
 #include "bullet.h"
+#include "message.h"
 
 //-------------------------------
 // 静的メンバ変数宣言
@@ -75,6 +76,7 @@ CPlayer::CPlayer() : CObject(0)
 	m_pDamage = nullptr;		//ダメージ
 	m_pOrbit = nullptr;			//軌跡
 	m_pBullet = nullptr;		//弾
+	m_pMessage = nullptr;		//メッセージ
 
 	//ステータス
 	m_status.nAttack = 0;			//攻撃力
@@ -367,6 +369,20 @@ void CPlayer::Update()
 	//--------------------------------
 	m_pos = CUtility::GetCollisionPos(m_pos, m_posOld, m_size, m_mtxWorld
 		, CObject::OBJTYPE_ENEMY);
+
+	//----------------------------
+	// 死亡時処理
+	//----------------------------
+	if (m_status.fLife <= 0)
+	{//体力が尽きたら
+		CGame::SetDeathPlayer();	//プレイヤーが死んだ状態
+
+		//メッセージの表示
+		{
+			D3DXVECTOR3 pos(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f);
+			m_pMessage = CMessage::Create(pos, 800.0f, 200.0f, CMessage::MESSAGE_GAMEOVER);
+		}
+	}
 
 	CDebugProc::Print("プレイヤーの位置 %f %f %f", m_pos.x, m_pos.y, m_pos.z);
 }
