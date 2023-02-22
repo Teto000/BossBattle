@@ -39,6 +39,7 @@ const char* CTexture::s_FileName[] =
 	"data/TEXTURE/Item/Heal.png",		//‰ñ•œ
 
 	/* « ”wŒi « */
+	"data/TEXTURE/BG/PressKey.png",		//PressAnyKey
 	"data/TEXTURE/BG/Combo.png",		//ƒRƒ“ƒ{”wŒi
 	"data/TEXTURE/BG/Timer.png",		//ƒ^ƒCƒ}[”wŒi
 	"data/TEXTURE/BG/PlayerHP.png",		//ƒvƒŒƒCƒ„[HP”wŒi

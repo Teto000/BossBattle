@@ -22,6 +22,7 @@
 #include "stage.h"
 #include "meshfield.h"
 #include "sky.h"
+#include "enemy.h"
 
 //------------------------
 // Ã“Iƒƒ“ƒo•Ï”éŒ¾
@@ -65,6 +66,9 @@ HRESULT CTitle::Init()
 	{
 		D3DXVECTOR3 pos(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 100.0f, 0.0f);
 		m_pBg = CBg::Create(pos, CBg::BGTYPE_TITLE);
+
+		D3DXVECTOR3 pos2(SCREEN_WIDTH / 2,  550.0f, 0.0f);
+		m_pBg = CBg::Create(pos2, CBg::BGTYPE_PRESS);
 	}
 
 	//BGM‚ÌÄ¶

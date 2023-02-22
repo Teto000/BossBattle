@@ -46,7 +46,7 @@ private:
 	//------------------
 	// メンバ変数
 	//------------------
-	CBg* m_pBg;	//背景
+	CBg*	m_pBg;		//背景
 	CStage* m_pStage;	//ステージ
 	CSky*	m_pSky;		//空
 

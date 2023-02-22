@@ -18,9 +18,11 @@
 CBg::CBg() : CObject(1)
 {
 	m_pObject2D = nullptr;
-	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_fWidth = 0.0f;
-	m_fHeight = 0.0f;
+	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//位置
+	m_col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);	//色
+	m_nFlashTime = 0;	//点滅時間
+	m_fWidth = 0.0f;	//幅
+	m_fHeight = 0.0f;	//高さ
 }
 
 //========================
@@ -38,6 +40,7 @@ HRESULT CBg::Init(D3DXVECTOR3 pos)
 {
 	//初期値の設定
 	m_pos = pos;
+	m_nFlashTime = 0;
 	m_fWidth = SCREEN_WIDTH;
 	m_fHeight = SCREEN_HEIGHT;
 
@@ -60,6 +63,13 @@ HRESULT CBg::Init(D3DXVECTOR3 pos)
 		//リザルト画面の背景
 		case BGTYPE_RESULT:
 			m_pObject2D->SetTexture(CTexture::TEXTURE_RESULT);
+			break;
+
+		//キー押下の指示
+		case BGTYPE_PRESS:
+			m_fWidth = 800.0f;
+			m_fHeight = 150.0f;
+			m_pObject2D->SetTexture(CTexture::TEXTURE_BG_PRESS);
 			break;
 
 		//コンボUIの背景
@@ -105,10 +115,7 @@ HRESULT CBg::Init(D3DXVECTOR3 pos)
 //========================
 void CBg::Uninit()
 {
-	/*if (m_pObject2D != nullptr)
-	{
-		m_pObject2D->Uninit();
-	}*/
+
 }
 
 //========================
@@ -116,10 +123,34 @@ void CBg::Uninit()
 //========================
 void CBg::Update()
 {
-	/*if (m_pObject2D != nullptr)
-	{
-		m_pObject2D->Update();
-	}*/
+	if (m_type == BGTYPE_PRESS)
+	{//キー押下指示なら
+		//---------------------------
+		// 点滅処理
+		//---------------------------
+		//点滅時間を数える
+		m_nFlashTime++;
+
+		//透明度の変更
+		if (m_nFlashTime <= 60)
+		{
+			//不透明にする
+			m_col.a -= 0.012f;
+		}
+		else
+		{
+			//半透明にする
+			m_col.a += 0.012f;
+
+			if (m_nFlashTime > 120)
+			{
+				m_nFlashTime = 0;	//時間のリセット
+			}
+		}
+
+		//色の設定
+		m_pObject2D->SetColor(m_col);
+	}
 }
 
 //========================
@@ -127,10 +158,7 @@ void CBg::Update()
 //========================
 void CBg::Draw()
 {
-	/*if (m_pObject2D != nullptr)
-	{
-		m_pObject2D->Draw();
-	}*/
+
 }
 
 //========================

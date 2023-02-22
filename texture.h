@@ -40,6 +40,7 @@ public: /* 定義 */
 		TEXTURE_ITEM_HEAL,		//回復
 
 		/* ↓ 背景 ↓ */
+		TEXTURE_BG_PRESS,		//Press Any Key
 		TEXTURE_BG_COMBO,		//コンボ背景
 		TEXTURE_BG_TIMER,		//タイマー背景
 		TEXTURE_BG_PLAYER_HP,	//プレイヤー背景

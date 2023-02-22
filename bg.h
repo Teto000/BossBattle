@@ -22,6 +22,7 @@ public:
 	{
 		BGTYPE_TITLE,		//タイトル
 		BGTYPE_RESULT,		//リザルト
+		BGTYPE_PRESS,		//キー押下の指示
 		BGTYPE_COMBO,		//コンボ
 		BGTYPE_TIMER,		//タイマー
 		BGTYPE_PLAYER_HP,	//プレイヤーHP
@@ -58,6 +59,8 @@ private:
 	//-------------------
 	CObject2D *m_pObject2D;		//オブジェクト2D
 	D3DXVECTOR3 m_pos;			//位置
+	D3DXCOLOR m_col;			//色
+	int m_nFlashTime;			//点滅時間
 	float m_fWidth;				//幅
 	float m_fHeight;			//高さ
 	BGTYPE m_type;				//種類
