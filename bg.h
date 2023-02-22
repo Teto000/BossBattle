@@ -27,6 +27,7 @@ public:
 		BGTYPE_TIMER,		//タイマー
 		BGTYPE_PLAYER_HP,	//プレイヤーHP
 		BGTYPE_ENEMY_HP,	//エネミーHP
+		BGTYPE_BLACK,		//黒い板
 		BGTYPE_MAX
 	};
 

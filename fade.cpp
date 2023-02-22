@@ -42,7 +42,7 @@ HRESULT CFade::Init(CApplication::MODE modeNext)
 	m_modeNext = modeNext;	//次の画面(モード)を設定
 	m_col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);	//黒いポリゴン(不透明)にしておく
 
-	m_pObject = new CObject2D(2);
+	m_pObject = new CObject2D(3);
 
 	m_pObject->Init(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f));
 
@@ -90,7 +90,7 @@ void CFade::Update()
 				m_fade = FADE_IN;	//フェードイン状態に
 
 				CApplication::SetMode(m_modeNext);
-				m_pObject = new CObject2D(2);
+				m_pObject = new CObject2D(3);
 
 				m_pObject->Init(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f));
 

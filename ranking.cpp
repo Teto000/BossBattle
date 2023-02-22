@@ -86,9 +86,12 @@ void CRanking::Update()
 	//-------------------------------
 	// 今回のスコアを赤くする
 	//-------------------------------
-	if (m_nTime != m_nRankUpdate)
-	{//今回のタイムがランキングの数値と同じなら
-		m_pTime[m_nRankUpdate]->SetColor(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+	if (CGame::GetDeathEnemy())
+	{//敵が死んでたら
+		if (m_nTime != m_nRankUpdate)
+		{//今回のタイムがランキングの数値と同じなら
+			m_pTime[m_nRankUpdate]->SetColor(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+		}
 	}
 
 #ifdef _DEBUG

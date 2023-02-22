@@ -171,7 +171,7 @@ void CCombo::SetNumber()
 		if (m_pNumber[i] != nullptr)
 		{//nullじゃないなら
 			//桁数を計算
-			int nDigit = log10(m_nNumCombo) + 1;
+			int nDigit = (int)(log10(m_nNumCombo) + 1);
 
 			//ナンバーの描画を有効・無効にする
 			m_pNumber[i]->SetEnable(nMaxDigits - i <= nDigit);
@@ -180,11 +180,6 @@ void CCombo::SetNumber()
 			{//コンボ数が0なら
 				//ナンバーの描画を有効・無効にする
 				m_pNumber[nMaxDigits - 1]->SetEnable(true);
-			}
-
-			if (m_nNumCombo < 0)
-			{
-				int a = 0;
 			}
 
 			//powで桁数を出す。

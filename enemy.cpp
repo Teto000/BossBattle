@@ -121,7 +121,7 @@ HRESULT CEnemy::Init(D3DXVECTOR3 pos)
 	//初期値の設定
 	m_pos = pos;
 	m_nCntMotion = 1;
-	m_fLife = 10000.0f;			//体力
+	m_fLife = 8000.0f;			//体力
 	m_fRemLife = 100.0f;		//残り体力(%)
 	m_fMaxLife = m_fLife;		//最大体力
 	m_fGravity = fDefGravity;	//重力の値
@@ -546,8 +546,8 @@ void CEnemy::SubGauge(float fDamage, GAUGE type)
 void CEnemy::EnemyAI()
 {
 	//変数宣言
-	int nMaxAttackTime = 300;		//攻撃時間
-	float fAttackArea = 300.0f;	//敵の攻撃範囲
+	int nMaxAttackTime = 200;		//攻撃時間
+	float fAttackArea = 300.0f;		//敵の攻撃範囲
 	float fMoveArea = 200.0f;
 
 	//プレイヤーの位置を取得

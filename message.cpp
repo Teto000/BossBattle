@@ -16,7 +16,7 @@
 //=======================
 // コンストラクタ
 //=======================
-CMessage::CMessage() : CObject2D(1)
+CMessage::CMessage() : CObject2D(2)
 {
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//位置
 	m_col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);	//色
@@ -107,8 +107,11 @@ void CMessage::Update()
 {
 	CObject2D::Update();
 
-	//時間カウント
-	m_nCntTime++;
+	if (m_message != MESSAGE_GAMEOVER)
+	{
+		//時間カウント
+		m_nCntTime++;
+	}
 
 	//-------------------------
 	// 透明にする

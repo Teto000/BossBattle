@@ -100,6 +100,15 @@ HRESULT CBg::Init(D3DXVECTOR3 pos)
 			m_pObject2D->SetTexture(CTexture::TEXTURE_BG_ENEMY_HP);
 			break;
 
+		//黒い板
+		case BGTYPE_BLACK:
+			m_fWidth = SCREEN_WIDTH;
+			m_fHeight = SCREEN_HEIGHT;
+			m_col.a = 0.0f;
+			m_pObject2D->SetTexture(CTexture::TEXTURE_BG_BLACK);
+			m_pObject2D->SetColor(m_col);
+			break;
+
 		default:
 			break;
 		}
@@ -147,10 +156,17 @@ void CBg::Update()
 				m_nFlashTime = 0;	//時間のリセット
 			}
 		}
-
-		//色の設定
-		m_pObject2D->SetColor(m_col);
 	}
+	else if (m_type == BGTYPE_BLACK)
+	{//黒板なら
+		if (m_col.a <= 1.0f)
+		{
+			m_col.a += 0.005f;
+		}
+	}
+
+	//色の設定
+	m_pObject2D->SetColor(m_col);
 }
 
 //========================

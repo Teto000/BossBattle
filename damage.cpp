@@ -190,7 +190,7 @@ void CDamage::SetNumber()
 	for (int i = 0; i < nMaxDigits; i++)
 	{//桁数分回す
 		//桁数を計算
-		int nDigit = log10(m_nAtkValue) + 1;
+		int nDigit = (int)(log10(m_nAtkValue) + 1);
 
 		//ナンバーの描画を有効・無効にする
 		m_pNumBoard[i]->SetEnable(nMaxDigits - i <= nDigit);

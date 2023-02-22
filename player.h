@@ -23,6 +23,7 @@ class CDamage;		//ダメージ
 class COrbit;		//軌跡
 class CBullet;		//弾
 class CMessage;		//メッセージ
+class CBg;			//背景
 
 //--------------------------------
 // マクロ定義
@@ -213,6 +214,7 @@ private:
 	COrbit*		m_pOrbit;		//軌跡
 	CBullet*	m_pBullet;		//弾
 	CMessage*	m_pMessage;		//メッセージ
+	CBg*		m_pBg;			//背景
 
 	//列挙型
 	PLAYER_STATUS m_status;		//ステータス

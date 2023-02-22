@@ -46,6 +46,7 @@ public: /* 定義 */
 		TEXTURE_BG_TIMER,		//タイマー背景
 		TEXTURE_BG_PLAYER_HP,	//プレイヤー背景
 		TEXTURE_BG_ENEMY_HP,	//エネミーHP背景
+		TEXTURE_BG_BLACK,		//黒い板
 
 		TEXTURE_MAX,
 		TEXTURE_NONE,			//使用しない
