@@ -77,6 +77,7 @@ HRESULT CGame::Init()
 {
 	//初期値の設定
 	m_bDeathEnemny = false;
+	m_bDeathPlayer = false;
 	m_bFinish = false;
 	m_nNumMessage = 3;
 	m_nCntMessage = 60;
@@ -153,7 +154,6 @@ void CGame::Update()
 	}
 	else if (m_bDeathPlayer)
 	{//プレイヤーが死んでいるなら
-		//m_pPlayer = nullptr;
 		m_bFinish = true;
 	}
 

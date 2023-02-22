@@ -182,6 +182,11 @@ void CRanking::Load()
 //=========================================
 void CRanking::Ranking()
 {
+	if (!CGame::GetDeathEnemy())
+	{//“G‚ªŽ€‚ñ‚Å‚¢‚È‚©‚Á‚½‚ç
+		return;
+	}
+
 	m_nRankUpdate = -1;
 	if (m_nTime <= m_pTime[nMaxRanking - 1]->GetTime())
 	{//”äŠr

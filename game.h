@@ -55,6 +55,8 @@ public:
 	//------------------
 	static bool GetFinish()			   { return m_bFinish; }		//終了フラグを取得
 	static bool GetStart()			   { return m_bStart; }			//開始フラグを取得
+	static bool GetDeathEnemy()		   { return m_bDeathEnemny;}	//敵が死んだかどうかを取得
+	static bool GetDeathPlayer()	   { return m_bDeathPlayer; }	//プレイヤーが死んだかどうかを取得
 	static CCamera*	GetCamera()		   { return m_pCamera; }		//カメラの取得
 	static CPlayer*	GetPlayer()		   { return m_pPlayer; }		//プレイヤーの取得
 	static CEnemy*	GetEnemy()		   { return m_pEnemy; }			//エネミーの取得

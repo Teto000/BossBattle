@@ -95,27 +95,11 @@ void CTime::Update()
 	if (CApplication::GetMode() == CApplication::MODE_GAME)
 	{
 		if (CGame::GetFinish())
-		{
+		{//ゲームが終了しているなら
 			//タイムを保存
 			CRanking::SetNewTime(m_nTime);
-
-			/*m_nCntMove++;
-
-			if (m_nCntMove >= 80)
-			{//一定時間が経過したら
-				//--------------------------------------
-				// 目的の位置まで移動する
-				//--------------------------------------
-				m_pos.x += ((SCREEN_WIDTH / 2 - 50.0f) - m_pos.x) * 0.08f;	//減衰処理
-				m_pos.y += ((SCREEN_HEIGHT / 2) - m_pos.y) * 0.08f;
-
-				for (int i = 0; i < nMaxDigits; i++)
-				{
-					m_pNumber[i]->SetPosition(D3DXVECTOR3(m_pos.x + i * 50.0f, m_pos.y, m_pos.z));
-				}
-			}*/
 		}
-		else
+		else if (!CGame::GetDeathPlayer())
 		{
 			//フレーム数を数える
 			m_nCntFream++;
