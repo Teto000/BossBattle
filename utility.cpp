@@ -317,10 +317,11 @@ D3DXVECTOR3 CUtility::LimitMove(D3DXVECTOR3 pos)
 	//---------------------
 	// ˆÚ“®‚ÌŒÀŠE’l
 	//---------------------
-	float fLeft = -1000.0f;
-	float fRight = 1000.0f;
-	float fFlont = -1000.0f;
-	float fBack = 1000.0f;
+	float fValue = 1800.0f;
+	float fLeft = -fValue;
+	float fRight = fValue;
+	float fFlont = -fValue;
+	float fBack = fValue;
 
 	//---------------------
 	// XŽ²‚ÌŒÀŠE

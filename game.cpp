@@ -272,12 +272,12 @@ void CGame::SetItem()
 {
 	m_nCntItem++;	//ƒJƒEƒ“ƒg‚Ì‰ÁŽZ
 
-	if (m_nCntItem >= 480)
+	if (m_nCntItem >= 300)
 	{
 		int nWidth = 1500;
 
-		int X = rand() % nWidth - (nWidth / 2);
-		int Z = rand() % nWidth - (nWidth / 2);
+		int X = rand() % (nWidth * 2) - nWidth;
+		int Z = rand() % (nWidth * 2) - nWidth;
 
 		D3DXVECTOR3 pos((float)X, 100.0f, (float)Z);
 		m_pItem = CItem::Create(pos, CItem::ITEMTYPE_HEAL);

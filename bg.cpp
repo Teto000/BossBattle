@@ -15,7 +15,7 @@
 //========================
 // コンストラクタ
 //========================
-CBg::CBg() : CObject(0)
+CBg::CBg() : CObject(1)
 {
 	m_pObject2D = nullptr;
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -105,10 +105,10 @@ HRESULT CBg::Init(D3DXVECTOR3 pos)
 //========================
 void CBg::Uninit()
 {
-	if (m_pObject2D != nullptr)
+	/*if (m_pObject2D != nullptr)
 	{
 		m_pObject2D->Uninit();
-	}
+	}*/
 }
 
 //========================
@@ -116,10 +116,10 @@ void CBg::Uninit()
 //========================
 void CBg::Update()
 {
-	if (m_pObject2D != nullptr)
+	/*if (m_pObject2D != nullptr)
 	{
 		m_pObject2D->Update();
-	}
+	}*/
 }
 
 //========================
@@ -127,10 +127,10 @@ void CBg::Update()
 //========================
 void CBg::Draw()
 {
-	if (m_pObject2D != nullptr)
+	/*if (m_pObject2D != nullptr)
 	{
 		m_pObject2D->Draw();
-	}
+	}*/
 }
 
 //========================
@@ -144,7 +144,7 @@ CBg* CBg::Create(D3DXVECTOR3 pos, BGTYPE type)
 	// ポリゴンの生成と初期化
 	//----------------------------------
 	pBg = new CBg;	//生成
-	pBg->m_pObject2D = new CObject2D(0);
+	pBg->m_pObject2D = new CObject2D(1);
 
 	if (pBg != nullptr)
 	{//NULLチェック
