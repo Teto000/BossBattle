@@ -84,7 +84,6 @@ void CTutorial::Update()
 	{
 		if (m_nNumber < TYPE_GAME && m_pBg[m_nNumber])
 		{
-			m_pBg[m_nNumber]->Uninit();
 			m_pBg[m_nNumber] = nullptr;
 
 			m_nNumber++;
@@ -93,19 +92,18 @@ void CTutorial::Update()
 		//SE‚ÌÄ¶
 		CSound::PlaySound(CSound::SOUND_LABEL_SE_BUTTOM);
 	}
-	else if (CInputKeyboard::Trigger(DIK_BACK) || joypad->Trigger(CInputJoypad::JOYKEY_A))
-	{
-		if (m_nNumber > 0 && m_pBg[m_nNumber])
-		{
-			m_pBg[m_nNumber]->Uninit();
-			m_pBg[m_nNumber] = nullptr;
+	//else if (CInputKeyboard::Trigger(DIK_BACK) || joypad->Trigger(CInputJoypad::JOYKEY_A))
+	//{
+	//	if (m_nNumber > 0 && m_pBg[m_nNumber])
+	//	{
+	//		m_pBg[m_nNumber] = nullptr;
 
-			m_nNumber--;
-		}
+	//		m_nNumber--;
+	//	}
 
-		//SE‚ÌÄ¶
-		CSound::PlaySound(CSound::SOUND_LABEL_SE_BUTTOM);
-	}
+	//	//SE‚ÌÄ¶
+	//	CSound::PlaySound(CSound::SOUND_LABEL_SE_BUTTOM);
+	//}
 
 	//-------------------------------
 	// ‰æ–ÊØ‚è‘Ö‚¦
