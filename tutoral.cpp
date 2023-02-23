@@ -53,8 +53,8 @@ HRESULT CTutorial::Init()
 		m_pBg[m_nNumber] = CBg::Create(pos, CBg::BGTYPE_MANUAL);
 	}
 
-	//BGMの再生
-	CSound::PlaySound(CSound::SOUND_LABEL_TITLE);
+	////BGMの再生
+	//CSound::PlaySound(CSound::SOUND_LABEL_TITLE);
 
 	return S_OK;
 }
@@ -80,11 +80,28 @@ void CTutorial::Update()
 	D3DXVECTOR3 pos(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f);
 
 	//画面遷移
-	if (CInputKeyboard::AllTrigger() || joypad->AllTrigger())
+	if (CInputKeyboard::Trigger(DIK_RETURN) || joypad->Trigger(CInputJoypad::JOYKEY_B))
 	{
-		m_pBg[m_nNumber]->Uninit();
+		if (m_nNumber < TYPE_GAME && m_pBg[m_nNumber])
+		{
+			m_pBg[m_nNumber]->Uninit();
+			m_pBg[m_nNumber] = nullptr;
 
-		m_nNumber++;
+			m_nNumber++;
+		}
+
+		//SEの再生
+		CSound::PlaySound(CSound::SOUND_LABEL_SE_BUTTOM);
+	}
+	else if (CInputKeyboard::Trigger(DIK_BACK) || joypad->Trigger(CInputJoypad::JOYKEY_A))
+	{
+		if (m_nNumber > 0 && m_pBg[m_nNumber])
+		{
+			m_pBg[m_nNumber]->Uninit();
+			m_pBg[m_nNumber] = nullptr;
+
+			m_nNumber--;
+		}
 
 		//SEの再生
 		CSound::PlaySound(CSound::SOUND_LABEL_SE_BUTTOM);
@@ -93,15 +110,19 @@ void CTutorial::Update()
 	//-------------------------------
 	// 画面切り替え
 	//-------------------------------
-	if (m_nNumber == TYPE_TUTORIAL1)
-	{//チュートリアル1番なら
+	if (m_nNumber == TYPE_MANUAL)
+	{//0番なら
+		m_pBg[m_nNumber] = CBg::Create(pos, CBg::BGTYPE_MANUAL);
+	}
+	else if (m_nNumber == TYPE_TUTORIAL1)
+	{//1番なら
 		m_pBg[m_nNumber] = CBg::Create(pos, CBg::BGTYPE_TUTORIAL1);
 	}
 	else if (m_nNumber == TYPE_TUTORIAL2)
-	{//チュートリアル2番なら
+	{//2番なら
 		m_pBg[m_nNumber] = CBg::Create(pos, CBg::BGTYPE_TUTORIAL2);
 	}
-	else if(m_nNumber == TYPE_GAME)
+	else
 	{
 		//ゲーム画面に移行
 		CApplication::GetFade()->SetFade(CApplication::MODE_GAME);

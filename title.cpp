@@ -82,8 +82,8 @@ HRESULT CTitle::Init()
 //===========================
 void CTitle::Uninit()
 {
-	//BGM‚Ì’â~
-	CSound::StopSound();
+	////BGM‚Ì’â~
+	//CSound::StopSound();
 
 	//ƒJƒƒ‰‚ÌI—¹
 	if (m_pCamera != nullptr)
