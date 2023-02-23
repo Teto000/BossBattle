@@ -24,7 +24,12 @@
 //===========================
 CTutorial::CTutorial()
 {
+	m_nNumber = 0;	//î‘çÜ
 
+	for (int i = 0; i < nMaxBg; i++)
+	{
+		m_pBg[i] = nullptr;	//îwåi
+	}
 }
 
 //===========================
@@ -32,12 +37,7 @@ CTutorial::CTutorial()
 //===========================
 CTutorial::~CTutorial()
 {
-	m_nNumber = 0;	//î‘çÜ
 
-	for (int i = 0; i < nMaxBg; i++)
-	{
-		m_pBg[i] = nullptr;	//îwåi
-	}
 }
 
 //===========================
@@ -110,15 +110,24 @@ void CTutorial::Update()
 	//-------------------------------
 	if (m_nNumber == TYPE_MANUAL)
 	{//0î‘Ç»ÇÁ
-		m_pBg[m_nNumber] = CBg::Create(pos, CBg::BGTYPE_MANUAL);
+		if (!m_pBg[0])
+		{//nullÇ»ÇÁ
+			m_pBg[0] = CBg::Create(pos, CBg::BGTYPE_MANUAL);
+		}
 	}
 	else if (m_nNumber == TYPE_TUTORIAL1)
 	{//1î‘Ç»ÇÁ
-		m_pBg[m_nNumber] = CBg::Create(pos, CBg::BGTYPE_TUTORIAL1);
+		if (!m_pBg[1])
+		{//nullÇ»ÇÁ
+			m_pBg[1] = CBg::Create(pos, CBg::BGTYPE_TUTORIAL1);
+		}
 	}
 	else if (m_nNumber == TYPE_TUTORIAL2)
 	{//2î‘Ç»ÇÁ
-		m_pBg[m_nNumber] = CBg::Create(pos, CBg::BGTYPE_TUTORIAL2);
+		if (!m_pBg[2])
+		{//nullÇ»ÇÁ
+			m_pBg[2] = CBg::Create(pos, CBg::BGTYPE_TUTORIAL2);
+		}
 	}
 	else
 	{
