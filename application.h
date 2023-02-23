@@ -17,6 +17,7 @@
 //------------------------------
 class CGame;		//ゲーム
 class CTitle;		//タイトル
+class CTutorial;	//チュートリアル
 class CResult;		//リザルト
 class CFade;		//フェード
 
@@ -39,6 +40,7 @@ public:
 	enum MODE
 	{
 		MODE_TITLE = 0,		//タイトル
+		MODE_TUTORIAL,		//チュートリアル
 		MODE_GAME,			//ゲーム
 		MODE_RESULT,		//リザルト
 		MODE_FADE,			//フェード
@@ -83,6 +85,7 @@ private:
 	//------------------
 	static CGame*		m_pGame;		//ゲームクラス
 	static CTitle*		m_pTitle;		//タイトルクラス
+	static CTutorial*	m_pTutorial;	//チュートリアル
 	static CResult*		m_pResult;		//リザルトクラス
 	static CFade*		m_pFade;		//フェードクラス
 	static MODE			m_mode;			//モード

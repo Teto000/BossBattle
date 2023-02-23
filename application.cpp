@@ -18,6 +18,7 @@
 #include "input_joypad.h"
 #include "game.h"
 #include "title.h"
+#include "tutorial.h"
 #include "result.h"
 #include "fade.h"
 #include "light.h"
@@ -27,10 +28,11 @@
 //------------------------
 // 静的メンバ変数宣言
 //------------------------
-CTitle*				CApplication::m_pTitle = nullptr;	//タイトルクラス
-CGame*				CApplication::m_pGame = nullptr;	//ゲームクラス
-CResult*			CApplication::m_pResult = nullptr;	//リザルトクラス
-CFade*				CApplication::m_pFade = nullptr;	//フェードクラス
+CTitle*			CApplication::m_pTitle = nullptr;		//タイトルクラス
+CTutorial*		CApplication::m_pTutorial = nullptr;	//チュートリアル
+CGame*			CApplication::m_pGame = nullptr;		//ゲームクラス
+CResult*		CApplication::m_pResult = nullptr;		//リザルトクラス
+CFade*			CApplication::m_pFade = nullptr;		//フェードクラス
 CApplication::MODE	CApplication::m_mode = MODE_MAX;	//ゲームモード
 
 CRenderer*		CApplication::m_pRenderer = nullptr;	//レンダラー
@@ -180,6 +182,16 @@ void CApplication::Uninit()
 	}
 
 	//----------------------------
+	// チュートリアルの終了
+	//----------------------------
+	if (m_pTutorial != nullptr)
+	{
+		m_pTutorial->Uninit();
+		delete m_pTutorial;
+		m_pTutorial = nullptr;
+	}
+
+	//----------------------------
 	// ゲームの終了
 	//----------------------------
 	if (m_pGame != nullptr)
@@ -238,6 +250,10 @@ void CApplication::Update()
 		m_pTitle->Update();
 		break;
 
+	case MODE_TUTORIAL:
+		m_pTutorial->Update();
+		break;
+
 	case MODE_GAME:
 		m_pGame->Update();
 		break;
@@ -276,6 +292,12 @@ void CApplication::SetMode(MODE mode)
 		m_pTitle = nullptr;
 		break;
 
+	case MODE_TUTORIAL:
+		m_pTutorial->Uninit();
+		delete m_pTutorial;
+		m_pTutorial = nullptr;
+		break;
+
 	case MODE_GAME:
 		m_pGame->Uninit();
 		delete m_pGame;
@@ -305,6 +327,12 @@ void CApplication::SetMode(MODE mode)
 		m_pTitle = nullptr;
 		m_pTitle = new CTitle;
 		m_pTitle->Init();
+		break;
+
+	case MODE_TUTORIAL:
+		m_pTutorial = nullptr;
+		m_pTutorial = new CTutorial;
+		m_pTutorial->Init();
 		break;
 
 	case MODE_GAME:

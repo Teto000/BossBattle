@@ -22,6 +22,9 @@ public:
 	{
 		BGTYPE_TITLE,		//タイトル
 		BGTYPE_RESULT,		//リザルト
+		BGTYPE_MANUAL,		//操作説明
+		BGTYPE_TUTORIAL1,	//チュートリアル1
+		BGTYPE_TUTORIAL2,	//チュートリアル2
 		BGTYPE_PRESS,		//キー押下の指示
 		BGTYPE_COMBO,		//コンボ
 		BGTYPE_TIMER,		//タイマー

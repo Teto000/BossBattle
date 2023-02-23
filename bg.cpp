@@ -65,9 +65,24 @@ HRESULT CBg::Init(D3DXVECTOR3 pos)
 			m_pObject2D->SetTexture(CTexture::TEXTURE_RESULT);
 			break;
 
+		//操作説明画面
+		case BGTYPE_MANUAL:
+			m_pObject2D->SetTexture(CTexture::TEXTURE_BG_MANUAL);
+			break;
+
+		//チュートリアル1
+		case BGTYPE_TUTORIAL1:
+			m_pObject2D->SetTexture(CTexture::TEXTURE_BG_TUTORIAL1);
+			break;
+
+		//チュートリアル2
+		case BGTYPE_TUTORIAL2:
+			m_pObject2D->SetTexture(CTexture::TEXTURE_BG_TUTORIAL2);
+			break;
+
 		//キー押下の指示
 		case BGTYPE_PRESS:
-			m_fWidth = 800.0f;
+			m_fWidth = 1000.0f;
 			m_fHeight = 150.0f;
 			m_pObject2D->SetTexture(CTexture::TEXTURE_BG_PRESS);
 			break;

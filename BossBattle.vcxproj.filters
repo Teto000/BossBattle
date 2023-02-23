@@ -191,6 +191,9 @@
     <ClCompile Include="ranking.cpp">
       <Filter>Main\Object\Object2D\Number</Filter>
     </ClCompile>
+    <ClCompile Include="tutoral.cpp">
+      <Filter>Main\Application\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -330,6 +333,9 @@
     </ClInclude>
     <ClInclude Include="ranking.h">
       <Filter>Main\Object\Object2D\Number</Filter>
+    </ClInclude>
+    <ClInclude Include="tutorial.h">
+      <Filter>Main\Application\Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

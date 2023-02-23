@@ -41,12 +41,15 @@ public: /* 定義 */
 		TEXTURE_ITEM_HEAL,		//回復
 
 		/* ↓ 背景 ↓ */
-		TEXTURE_BG_PRESS,		//Press Any Key
+		TEXTURE_BG_PRESS,		//Press AnyKey
 		TEXTURE_BG_COMBO,		//コンボ背景
 		TEXTURE_BG_TIMER,		//タイマー背景
 		TEXTURE_BG_PLAYER_HP,	//プレイヤー背景
 		TEXTURE_BG_ENEMY_HP,	//エネミーHP背景
 		TEXTURE_BG_BLACK,		//黒い板
+		TEXTURE_BG_MANUAL,		//マニュアル
+		TEXTURE_BG_TUTORIAL1,	//チュートリアル1
+		TEXTURE_BG_TUTORIAL2,	//チュートリアル2
 
 		TEXTURE_MAX,
 		TEXTURE_NONE,			//使用しない
