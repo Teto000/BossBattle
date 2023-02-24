@@ -80,9 +80,8 @@ void CTutorial::Update()
 	D3DXVECTOR3 pos(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f);
 
 	//‰æ–Ê‘JˆÚ
-	if (CInputKeyboard::Trigger(DIK_RETURN)
-		|| joypad->Trigger(CInputJoypad::JOYKEY_B)
-		|| joypad->Trigger(CInputJoypad::JOYKEY_A))
+	if (CInputKeyboard::AllTrigger()
+		|| joypad->AllTrigger())
 	{
 		if (m_nNumber < TYPE_GAME && m_pBg[m_nNumber])
 		{
