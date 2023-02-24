@@ -685,7 +685,7 @@ void CEnemy::HitHummer()
 	D3DXMATRIX mtxR = m_pModel[1]->GetmtxWorld();		//右ハンマーのマトリックス
 	D3DXMATRIX mtxL = m_pModel[2]->GetmtxWorld();		//左ハンマーのマトリックス
 	CObject::EObjType player = CObject::OBJTYPE_PLAYER;	//叩く相手がプレイヤー
-	float fSphereSize = 250.0f;	//球の直径
+	float fSphereSize = 280.0f;	//球の直径
 
 	//----------------------------------
 	// 当たり判定
