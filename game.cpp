@@ -35,6 +35,7 @@
 //------------------------
 // 静的メンバ変数宣言
 //------------------------
+int CGame::nNum = 0;
 bool CGame::m_bDeathEnemny = false;			//敵が死んでいるか
 bool CGame::m_bDeathPlayer = false;			//プレイヤーが死んでいるか
 bool CGame::m_bFinish = false;				//終了フラグ
@@ -58,6 +59,7 @@ CGame::CGame()
 	m_nCntItem = 0;
 	m_nCntMessage = 0;		//メッセージを表示するまでの時間
 	m_nNumMessage = 0;		//表示するメッセージ番号
+	nNum = 0;
 	m_pItem = nullptr;		//アイテム
 	m_pMessage = nullptr;	//メッセージ
 }
@@ -183,10 +185,13 @@ void CGame::Update()
 	}
 	else
 	{//開始しているなら
-		//----------------------------
-		// アイテムの生成
-		//----------------------------
-		SetItem();
+		if (nNum <= 20)
+		{
+			//----------------------------
+			// アイテムの生成
+			//----------------------------
+			SetItem();
+		}
 	}
 
 #ifdef _DEBUG
@@ -288,6 +293,7 @@ void CGame::SetItem()
 
 		D3DXVECTOR3 pos((float)X, 100.0f, (float)Z);
 		m_pItem = CItem::Create(pos, CItem::ITEMTYPE_HEAL);
+		nNum++;
 		m_nCntItem = 0;	//リセット
 	}
 }

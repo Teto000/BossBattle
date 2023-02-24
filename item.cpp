@@ -97,6 +97,8 @@ void CItem::Update()
 			break;
 		}
 
+		CGame::SubNum();
+
 		//ƒAƒCƒeƒ€‚ÌÁ‹
 		Uninit();
 	}

@@ -49,6 +49,7 @@ public:
 	//------------------
 	static void SetDeathEnemy() { m_bDeathEnemny = true; }	//敵が死んでる状態にする
 	static void SetDeathPlayer() { m_bDeathPlayer = true; }	//プレイヤーが死んでる状態にする
+	static void SubNum() { nNum--; }
 
 	//------------------
 	// ゲッター
@@ -85,6 +86,7 @@ private:
 	//-------------------
 	// 静的メンバ変数
 	//-------------------
+	static int nNum;
 	static bool m_bDeathEnemny;	//敵が死んでいるか
 	static bool m_bDeathPlayer;	//プレイヤーが死んでいるか
 	static bool m_bFinish;		//終了フラグ
