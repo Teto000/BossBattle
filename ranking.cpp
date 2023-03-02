@@ -90,7 +90,10 @@ void CRanking::Update()
 	{//敵が死んでたら
 		if (m_nTime != m_nRankUpdate)
 		{//今回のタイムがランキングの数値と同じなら
-			m_pTime[m_nRankUpdate]->SetColor(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+			if (m_nRankUpdate != -1)
+			{//ランキング外じゃなかった
+				m_pTime[m_nRankUpdate]->SetColor(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+			}
 		}
 	}
 

@@ -669,7 +669,7 @@ void CEnemy::Attack()
 	//------------------------------------------
 	if (!CGame::GetPlayer()->GetAvoidance())
 	{//ƒvƒŒƒCƒ„[‚Ì‰ñ”ğó‘Ô‚¶‚á‚È‚¢‚È‚ç
-		HitHummer();
+		//HitHummer();
 	}
 }
 
