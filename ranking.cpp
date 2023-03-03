@@ -91,7 +91,7 @@ void CRanking::Update()
 		if (m_nTime != m_nRankUpdate)
 		{//今回のタイムがランキングの数値と同じなら
 			if (m_nRankUpdate != -1)
-			{//ランキング外じゃなかった
+			{//ランキング外じゃなかったら
 				m_pTime[m_nRankUpdate]->SetColor(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
 			}
 		}
