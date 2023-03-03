@@ -64,6 +64,7 @@ CPlayer::CPlayer() : CObject(0)
 	m_nAvoidStan = 0;			//回避硬直
 	m_nWheelRotValue = 0;		//タイヤの回転量
 	m_nBulletTime = 0;			//弾の発射時間
+	m_nCntAttack = 0;			//連撃数を数える
 	m_fSizeWidth = 0.0f;		//サイズ(幅)
 	m_fSizeDepth = 0.0f;		//サイズ(奥行き)
 	m_fGravity = 0.0f;			//重力の値
@@ -71,6 +72,7 @@ CPlayer::CPlayer() : CObject(0)
 	m_bHit = false;				//1ヒットした状態
 	m_bNockBack = false;		//ノックバックしている状態
 	m_bEnhance = false;			//技が強化される状態
+	m_bCntAttack = false;		//連撃数を数える状態
 	m_type = MOTION_IDOL;		//現在のモーション
 	m_pHP = nullptr;			//HP
 	m_pCombo = nullptr;			//コンボ
@@ -328,7 +330,7 @@ void CPlayer::Update()
 		m_nAvoidTime++;				//回避時間の加算
 		ChangeMotion(MOTION_MOVE);	//移動モーション
 
-		if (m_nAvoidTime >= 12)
+		if (m_nAvoidTime >= 14)
 		{//一定時間経過したら
 			m_status.fSpeed = fDefaultSpeed;	//減速
 			m_status.bAvoidance = false;		//回避していない状態
@@ -802,6 +804,15 @@ void CPlayer::AttackManager()
 		if (m_typeOld == MOTION_ATTACK_1)
 		{//攻撃1からの連携なら
 			//------------------------------
+			// 連撃数の加算
+			//------------------------------
+			if (!m_bCntAttack)
+			{//連撃数を加算できる状態なら
+				m_nCntAttack++;			//連撃数を加算
+				m_bCntAttack = true;	//出来ない状態にする
+			}
+
+			//------------------------------
 			// 攻撃の強化
 			//------------------------------
 			EnhanceAttack();
@@ -815,6 +826,15 @@ void CPlayer::AttackManager()
 		if (m_typeOld == MOTION_ATTACK_1
 			|| m_typeOld == MOTION_ATTACK_2)
 		{//攻撃1 か 攻撃2 からの連携なら
+			//------------------------------
+			// 連撃数の加算
+			//------------------------------
+			if (!m_bCntAttack)
+			{//連撃数を加算できる状態なら
+				m_nCntAttack++;			//連撃数を加算
+				m_bCntAttack = true;	//出来ない状態にする
+			}
+
 			//------------------------------
 			// 攻撃の強化
 			//------------------------------
@@ -893,6 +913,9 @@ void CPlayer::Attack()
 	//------------------------------------------
 	if (nAttackFream <= m_status.nAttackTime)
 	{//攻撃時間が攻撃モーションのフレーム数の合計を超えたら
+		//連撃数をリセット
+		m_nCntAttack = 0;
+
 		//待機モーションにする
 		ChangeMotion(MOTION_IDOL);
 	}
@@ -945,6 +968,9 @@ void CPlayer::HitSword()
 
 			//コンボ数に応じてダメージアップ
 			fDamage += fDamage * fComboDamage;
+
+			//連撃数に応じてダメージアップ
+			fDamage += (10 * m_nCntAttack);
 
 			//-----------------------------------
 			// コンボを消費して強攻撃
@@ -1599,6 +1625,7 @@ void CPlayer::ChangeMotion(MOTION_TYPE type)
 		m_nCntMotion = 0;
 		m_status.nAttackTime = 0;	//攻撃時間のリセット
 		m_bFinishAttack = false;	//ダメージを与えていない状態にする
+		m_bCntAttack = false;		//連撃数を数えられる状態にする
 
 		if (m_nNumCombo < nNeedEnhanceCombo)
 		{//コンボ数が足りないなら

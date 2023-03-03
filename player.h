@@ -200,6 +200,7 @@ private:
 	int m_nAvoidStan;			//回避硬直
 	int m_nWheelRotValue;		//タイヤの回転量
 	int m_nBulletTime;			//弾の発射時間
+	int m_nCntAttack;			//連撃数を数える
 	float m_fSizeWidth;			//サイズ(幅)
 	float m_fSizeDepth;			//サイズ(奥行き)
 	float m_fGravity;			//重力の値
@@ -208,6 +209,7 @@ private:
 	bool m_bHit;				//1ヒットした状態
 	bool m_bNockBack;			//ノックバックしている状態
 	bool m_bEnhance;			//技が強化される状態
+	bool m_bCntAttack;			//連撃数を数える状態
 	CHP*		m_pHP;			//HP
 	CCombo*		m_pCombo;		//コンボ
 	CDamage*	m_pDamage;		//ダメージ
