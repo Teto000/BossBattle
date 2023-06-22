@@ -118,13 +118,13 @@ public:
 	static CEnemy* Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot);
 
 private:
-	void SetModel();	//モデルの設定
-	void SetLine();		//線の設置
-	void UpdateLine();	//線の更新
-	void EnemyAI();		//敵の動きを管理
-	void Attack();		//攻撃処理
-	void HitHummer();	//ハンマーの当たり判定
-	void NockBack();	//ノックバックする処理
+	void SetModel();			//モデルの設定
+	void SetLine();				//線の設置
+	void UpdateLine();			//線の更新
+	void EnemyAI();				//敵の動きを管理
+	void Attack();				//攻撃処理
+	void HitHummer();			//ハンマーの当たり判定
+	void NockBack(float fUp);	//ノックバックする処理
 	void Move(D3DXVECTOR3 targetPos);		//移動
 	void Rotation(D3DXVECTOR3 targetPos);	//回転
 

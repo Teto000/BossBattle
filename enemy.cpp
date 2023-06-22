@@ -229,7 +229,7 @@ void CEnemy::Update()
 			//----------------------------
 			// ノックバックする処理
 			//----------------------------
-			NockBack();
+			NockBack(70.0f);
 
 			//------------------------
 			// ブレイク状態から復帰
@@ -259,6 +259,15 @@ void CEnemy::Update()
 			// 敵の行動
 			//------------------------
 			EnemyAI();
+
+			//----------------------------
+			// ノックバックする処理
+			//----------------------------
+			if (m_type != MOTION_ATTACK
+				&& m_type != MOTION_SPIN)
+			{//敵が攻撃状態じゃないなら
+				NockBack(30.0f);
+			}
 
 			//移動限界の確認
 			m_pos = CUtility::LimitMove(m_pos);
@@ -753,14 +762,19 @@ void CEnemy::HitHummer()
 
 //==========================================
 // ノックバックする処理
+// 引数：上昇値
 //==========================================
-void CEnemy::NockBack()
+void CEnemy::NockBack(float fUp)
 {
 	if (CGame::GetPlayer()->GetHitAttack())
 	{//プレイヤーが攻撃を当てた状態なら
 		//リセット
-		m_nAttackTime = 0;			//攻撃までの時間
 		m_fGravity = fDefGravity;	//重力の値
+
+		if (m_state == ENEMYSTATE_BREAK)
+		{
+			m_nAttackTime = 0;			//攻撃までの時間
+		}
 
 		//--------------------------------
 		// ノックバックする処理
@@ -776,7 +790,7 @@ void CEnemy::NockBack()
 		if (!m_bNockBack)
 		{//ノックバックしていないなら
 			m_pos += -vec * 2.0f;	//逆ベクトル方向に移動
-			m_pos.y += 100.0f;		//上昇
+			m_pos.y += fUp;		//上昇
 			m_bNockBack = true;
 		}
 	}
