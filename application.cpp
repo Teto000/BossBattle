@@ -67,7 +67,7 @@ HRESULT CApplication::Init(HINSTANCE hInstance, HWND hWnd)
 	// ƒŒƒ“ƒ_ƒŠƒ“ƒO‚Ì¶¬‚Æ‰Šú‰»
 	//----------------------------
 	m_pRenderer = new CRenderer;
-	if (FAILED(m_pRenderer->Init(hWnd, TRUE)))
+	if (FAILED(m_pRenderer->Init(hWnd, FALSE)))
 	{//‰Šú‰»ˆ—‚ª¸”s‚µ‚½ê‡
 		return -1;
 	}
