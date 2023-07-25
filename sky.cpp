@@ -18,10 +18,14 @@
 CSky::CSky() : CObject(0)
 {
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//位置
-	m_VtxPos[nMaxVtx] = {};						//頂点の位置
 	m_Normal = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//面法線ベクトル格納用
-	m_VtxNor[nMaxVtx] = {};						//頂点の法線ベクトル格納用
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		//向き
+
+	for (int i = 0; i < nMaxVtx; i++)
+	{
+		m_VtxPos[i] = {};	//頂点の位置
+		m_VtxNor[i] = {};	//頂点の法線ベクトル格納用
+	}
 
 	m_nNumVtx = 0;			//頂点数
 	m_nNumPolygon = 0;		//ポリゴン数

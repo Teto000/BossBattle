@@ -200,7 +200,7 @@ void CGame::Update()
 		m_bFinish = true;	//終了フラグを立てる
 
 		//ゲーム画面に移行
-		CApplication::GetFade()->SetFade(CApplication::MODE_RESULT);
+		CMode::GetFade()->SetFade(CMode::MODE_RESULT);
 	}
 #endif // !_DEBUG
 }
@@ -220,7 +220,7 @@ void CGame::Finish()
 		if (m_nCntFinish >= 300)
 		{//カウントが5秒以上なら
 			//リザルト画面に移行
-			CApplication::GetFade()->SetFade(CApplication::MODE_RESULT);
+			CMode::GetFade()->SetFade(CMode::MODE_RESULT);
 		}
 		//---------------------------
 		// キーを押して遷移
@@ -230,7 +230,7 @@ void CGame::Finish()
 			if (CInputKeyboard::Trigger(DIK_RETURN))
 			{//ENTERキーが押されたら
 				//リザルト画面に移行
-				CApplication::GetFade()->SetFade(CApplication::MODE_RESULT);
+				CMode::GetFade()->SetFade(CMode::MODE_RESULT);
 			}
 		}
 	}

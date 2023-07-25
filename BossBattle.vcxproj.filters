@@ -194,6 +194,9 @@
     <ClCompile Include="tutoral.cpp">
       <Filter>Main\Application\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="mode.cpp">
+      <Filter>Main\Application\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -335,6 +338,9 @@
       <Filter>Main\Object\Object2D\Number</Filter>
     </ClInclude>
     <ClInclude Include="tutorial.h">
+      <Filter>Main\Application\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="mode.h">
       <Filter>Main\Application\Scene</Filter>
     </ClInclude>
   </ItemGroup>

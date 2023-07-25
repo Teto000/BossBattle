@@ -23,6 +23,7 @@
 #include "game.h"
 #include "title.h"
 #include "title_camera.h"
+#include "mode.h"
 
 //-----------------------
 // 静的メンバ変数宣言
@@ -192,13 +193,13 @@ void CRenderer::Draw()
 	if (SUCCEEDED(m_pD3DDevice->BeginScene()))
 	{
 		//現在の画面を取得
-		CApplication::MODE mode = CApplication::GetMode();
+		CMode::MODE mode = CMode::GetMode();
 
 		switch (mode)
 		{
 		//タイトル画面なら
-		case CApplication::MODE_TITLE:
-			if (CApplication::GetTitle())
+		case CMode::MODE_TITLE:
+			if (CMode::GetTitle())
 			{
 				//カメラの取得
 				m_pTitleCamera = CTitle::GetCamera();
@@ -209,8 +210,8 @@ void CRenderer::Draw()
 			break;
 
 		//ゲーム画面なら
-		case CApplication::MODE_GAME:
-			if (CApplication::GetGame())
+		case CMode::MODE_GAME:
+			if (CMode::GetGame())
 			{
 				//カメラの取得
 				m_pCamera = CGame::GetCamera();

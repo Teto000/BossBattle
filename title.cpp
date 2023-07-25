@@ -111,10 +111,10 @@ void CTitle::Update()
 	CInputJoypad* joypad = CApplication::GetInput()->GetJoypad();
 
 	//âÊñ ëJà⁄
-	if (CInputKeyboard::AllTrigger() || joypad->AllTrigger())
+	if (CInputKeyboard::Trigger(DIK_RETURN) || joypad->AllTrigger())
 	{
 		//ÉQÅ[ÉÄâÊñ Ç…à⁄çs
-		CApplication::GetFade()->SetFade(CApplication::MODE_TUTORIAL);
+		CMode::GetFade()->SetFade(CMode::MODE_TUTORIAL);
 
 		//SEÇÃçƒê∂
 		CSound::PlaySound(CSound::SOUND_LABEL_SE_BUTTOM);

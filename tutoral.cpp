@@ -133,6 +133,6 @@ void CTutorial::Update()
 	else
 	{
 		//ƒQ[ƒ€‰æ–Ê‚ÉˆÚs
-		CApplication::GetFade()->SetFade(CApplication::MODE_GAME);
+		CMode::GetFade()->SetFade(CMode::MODE_GAME);
 	}
 }

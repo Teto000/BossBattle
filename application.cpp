@@ -16,25 +16,14 @@
 #include "input.h"
 #include "input_keyboard.h"
 #include "input_joypad.h"
-#include "game.h"
-#include "title.h"
-#include "tutorial.h"
-#include "result.h"
-#include "fade.h"
 #include "light.h"
 #include "debug_proc.h"
 #include "camera.h"
+#include "mode.h"
 
 //------------------------
 // 静的メンバ変数宣言
 //------------------------
-CTitle*			CApplication::m_pTitle = nullptr;		//タイトルクラス
-CTutorial*		CApplication::m_pTutorial = nullptr;	//チュートリアル
-CGame*			CApplication::m_pGame = nullptr;		//ゲームクラス
-CResult*		CApplication::m_pResult = nullptr;		//リザルトクラス
-CFade*			CApplication::m_pFade = nullptr;		//フェードクラス
-CApplication::MODE	CApplication::m_mode = MODE_MAX;	//ゲームモード
-
 CRenderer*		CApplication::m_pRenderer = nullptr;	//レンダラー
 CInput*			CApplication::m_pInput = nullptr;		//インプット
 CTexture*		CApplication::m_pTexture = nullptr;		//テクスチャ
@@ -98,9 +87,7 @@ HRESULT CApplication::Init(HINSTANCE hInstance, HWND hWnd)
 	//----------------------------
 	// モードの設定
 	//----------------------------
-	m_pFade = new CFade;
-	SetMode(MODE_TITLE);
-	m_pFade->Init(MODE_TITLE);
+	CMode::Init();
 
 	//----------------------------
 	// デバッグ用文字の生成
@@ -172,54 +159,9 @@ void CApplication::Uninit()
 	}
 
 	//----------------------------
-	// タイトルの終了
+	// モードの終了
 	//----------------------------
-	if (m_pTitle != nullptr)
-	{
-		m_pTitle->Uninit();
-		delete m_pTitle;
-		m_pTitle = nullptr;
-	}
-
-	//----------------------------
-	// チュートリアルの終了
-	//----------------------------
-	if (m_pTutorial != nullptr)
-	{
-		m_pTutorial->Uninit();
-		delete m_pTutorial;
-		m_pTutorial = nullptr;
-	}
-
-	//----------------------------
-	// ゲームの終了
-	//----------------------------
-	if (m_pGame != nullptr)
-	{
-		m_pGame->Uninit();
-		delete m_pGame;
-		m_pGame = nullptr;
-	}
-
-	//----------------------------
-	// リザルトの終了
-	//----------------------------
-	if (m_pResult != nullptr)
-	{
-		m_pResult->Uninit();
-		delete m_pResult;
-		m_pResult = nullptr;
-	}
-
-	//----------------------------
-	// フェードの終了
-	//----------------------------
-	if (m_pFade != nullptr)
-	{
-		m_pFade->Uninit();
-		delete m_pFade;
-		m_pFade = nullptr;
-	}
+	CMode::Uninit();
 
 	//----------------------------
 	// デバッグ用文字の終了
@@ -243,31 +185,8 @@ void CApplication::Update()
 	//レンダリングの更新
 	m_pRenderer->Update();
 
-	//モードごとの更新
-	switch (m_mode)
-	{
-	case MODE_TITLE:
-		m_pTitle->Update();
-		break;
-
-	case MODE_TUTORIAL:
-		m_pTutorial->Update();
-		break;
-
-	case MODE_GAME:
-		m_pGame->Update();
-		break;
-
-	case MODE_RESULT:
-		m_pResult->Update();
-		break;
-
-	default:
-		break;
-	}
-
-	//フェードの更新
-	m_pFade->Update();
+	//モードの更新
+	CMode::Update();
 }
 
 //===========================
@@ -277,77 +196,4 @@ void CApplication::Draw()
 {
 	//レンダリングの描画
 	m_pRenderer->Draw();
-}
-
-//===========================
-// モードの設定
-//===========================
-void CApplication::SetMode(MODE mode)
-{
-	switch (m_mode)
-	{
-	case MODE_TITLE:
-		m_pTitle->Uninit();
-		delete m_pTitle;
-		m_pTitle = nullptr;
-		break;
-
-	case MODE_TUTORIAL:
-		m_pTutorial->Uninit();
-		delete m_pTutorial;
-		m_pTutorial = nullptr;
-		break;
-
-	case MODE_GAME:
-		m_pGame->Uninit();
-		delete m_pGame;
-		m_pGame = nullptr;
-		break;
-
-	case MODE_RESULT:
-		m_pResult->Uninit();
-		delete m_pResult;
-		m_pResult = nullptr;
-		break;
-
-	default:
-		break;
-	}
-
-	//オブジェクトの全解放
-	CObject::ReleaseAll(true);
-
-	//モードの切り替え
-	m_mode = mode;
-
-	//新しいモードの生成
-	switch (m_mode)
-	{
-	case MODE_TITLE:
-		m_pTitle = nullptr;
-		m_pTitle = new CTitle;
-		m_pTitle->Init();
-		break;
-
-	case MODE_TUTORIAL:
-		m_pTutorial = nullptr;
-		m_pTutorial = new CTutorial;
-		m_pTutorial->Init();
-		break;
-
-	case MODE_GAME:
-		m_pGame = nullptr;
-		m_pGame = new CGame;
-		m_pGame->Init();
-		break;
-
-	case MODE_RESULT:
-		m_pResult = nullptr;
-		m_pResult = new CResult;
-		m_pResult->Init();
-		break;
-
-	default:
-		break;
-	}
 }

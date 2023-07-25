@@ -16,6 +16,7 @@
 #include "ranking.h"
 #include "input.h"
 #include "input_keyboard.h"
+#include "mode.h"
 
 //=======================
 // コンストラクタ
@@ -92,7 +93,7 @@ void CTime::Update()
 	//----------------------
 	// ゲーム終了時に拡大
 	//----------------------
-	if (CApplication::GetMode() == CApplication::MODE_GAME)
+	if (CMode::GetMode() == CMode::MODE_GAME)
 	{
 		if (CGame::GetFinish())
 		{//ゲームが終了しているなら
