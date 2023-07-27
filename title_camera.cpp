@@ -120,9 +120,9 @@ void CTitleCamera::SetCamera(LPDIRECT3DDEVICE9 pDevice)
 
 	//ビューマトリックスの作成
 	D3DXMatrixLookAtLH(&m_mtxView,
-					   &m_worldPosV,		//視点
-					   &m_worldPosR,		//注視点
-					   &m_vecU);	//上の向き
+					   &m_worldPosV,	//視点
+					   &m_worldPosR,	//注視点
+					   &m_vecU);		//上の向き
 
 	//ビューマトリックスの設定
 	pDevice->SetTransform(D3DTS_VIEW, &m_mtxView);

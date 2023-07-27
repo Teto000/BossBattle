@@ -232,8 +232,10 @@ void CCamera::SetCamera(LPDIRECT3DDEVICE9 pDevice)
 	//フォグカラーの設定
 	pDevice->SetRenderState(D3DRS_FOGCOLOR, D3DXCOLOR(1.f, 1.f, 1.f, 1.f));
 
-	//フォグモードの設定
-	//範囲指定:D3DFOG_LINEAR , 密度指定:D3DFOG_EXP
+	//----------------------------
+	// フォグモードの設定
+	// 範囲指定:D3DFOG_LINEAR , 密度指定:D3DFOG_EXP
+	//----------------------------
 	//pDevice->SetRenderState(D3DRS_FOGTABLEMODE, D3DFOG_LINEAR);	//範囲指定
 	pDevice->SetRenderState(D3DRS_FOGTABLEMODE, D3DFOG_EXP);	//密度指定
 

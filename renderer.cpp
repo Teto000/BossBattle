@@ -160,6 +160,7 @@ void CRenderer::Update()
 	//オブジェクトの更新
 	CObject::UpdateAll();
 
+#ifdef _DEBUG
 	if (CInputKeyboard::Trigger(DIK_F4))
 	{//F4キーが押された
 		if (m_bWIRE == false)
@@ -174,6 +175,7 @@ void CRenderer::Update()
 		}
 		m_bWIRE = !m_bWIRE;		//ワイヤーの状態を切り替える
 	}
+#endif // _DEBUG
 }
 
 //=============================================================================

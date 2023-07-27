@@ -53,9 +53,6 @@ HRESULT CTutorial::Init()
 		m_pBg[m_nNumber] = CBg::Create(pos, CBg::BGTYPE_MANUAL);
 	}
 
-	////BGM‚ÌÄ¶
-	//CSound::PlaySound(CSound::SOUND_LABEL_TITLE);
-
 	return S_OK;
 }
 
@@ -93,18 +90,6 @@ void CTutorial::Update()
 		//SE‚ÌÄ¶
 		CSound::PlaySound(CSound::SOUND_LABEL_SE_BUTTOM);
 	}
-	//else if (CInputKeyboard::Trigger(DIK_BACK) || joypad->Trigger(CInputJoypad::JOYKEY_A))
-	//{
-	//	if (m_nNumber > 0 && m_pBg[m_nNumber])
-	//	{
-	//		m_pBg[m_nNumber] = nullptr;
-
-	//		m_nNumber--;
-	//	}
-
-	//	//SE‚ÌÄ¶
-	//	CSound::PlaySound(CSound::SOUND_LABEL_SE_BUTTOM);
-	//}
 
 	//-------------------------------
 	// ‰æ–ÊØ‚è‘Ö‚¦
